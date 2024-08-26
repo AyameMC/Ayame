@@ -50,6 +50,18 @@ subprojects {
                 url = "https://maven.terraformersmc.com/"
             }
         }
+        // Modrinth Maven
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
     }
 
     loom {

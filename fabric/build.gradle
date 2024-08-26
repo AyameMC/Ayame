@@ -32,7 +32,10 @@ dependencies {
 
     // Fabric Mod Menu
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
-
+    // GeckoLib
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+    // too-many-shortcuts
+    modImplementation "maven.modrinth:too-many-shortcuts:0.0.5+mc.1.21.1"
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

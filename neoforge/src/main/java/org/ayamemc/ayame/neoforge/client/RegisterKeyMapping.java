@@ -15,9 +15,9 @@ import org.lwjgl.glfw.GLFW;
 public class RegisterKeyMapping {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
             TranslatableName.SELECT_MODEL_MENU,
-            InputConstants.Type.KEYSYM, // Default mapping is on the keyboard
-            GLFW.GLFW_KEY_Y, // Default key is P
-            TranslatableName.MOD_KEY_MENU_NAME // Mapping will be in the misc category
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_Y,
+            TranslatableName.MOD_KEY_MENU_NAME
     ));
     @SubscribeEvent
     public static void onKeyPressed(RegisterKeyMappingsEvent event) {

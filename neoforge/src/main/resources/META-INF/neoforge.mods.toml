@@ -1,18 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-displayURL = "https://github.com/AyameMC/Ayame"
-issueTrackerURL = "https://github.com/AyameMC/Ayame"
 license = "LGPL-3.0-or-later"
+issueTrackerURL = "https://github.com/AyameMC/Ayame/issues/"
 
 [[mods]]
 modId = "ayame"
 version = "${version}"
 displayName = "Ayame"
+displayURL = "https://github.com/AyameMC/Ayame/"
 authors = '''
-CSneko
-HappyRespawnanchor
+CSneko, HappyRespawnanchor
 '''
-description = '''
+description =    '''
 Custom player model mod. Based on GeckoLib.
 '''
 #logoFile = ""
@@ -33,15 +32,15 @@ side = "BOTH"
 
 [[dependencies.ayame]]
 modId = "geckolib"
-type = "optional"
-versionRange = ""
+type = "required"
+versionRange = "[4.5.8,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.ayame]]
 modId = "optifine"
 type = "incompatible"
-versionRange = ""
+versionRange = "[0,)"
 ordering = "NONE"
 side = "BOTH"
 
