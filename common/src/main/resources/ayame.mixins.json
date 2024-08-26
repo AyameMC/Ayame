@@ -1,11 +1,14 @@
 {
   "required": true,
-  "package": "org.ayamemc.ayame.mixin",
+  "package": "org.ayamemc.ayame.mixins",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "ClientEntityRenderersMixin",
+    "ClientItemInHandRendererMixin"
   ],
   "mixins": [
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
