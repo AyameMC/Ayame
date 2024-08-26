@@ -31,5 +31,19 @@ versionRange = "[1.21,)"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.ayame]]
+modId = "geckolib"
+type = "optional"
+versionRange = ""
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ayame]]
+modId = "optifine"
+type = "incompatible"
+versionRange = ""
+ordering = "NONE"
+side = "BOTH"
+
 [[mixins]]
 config = "ayame.mixins.json"

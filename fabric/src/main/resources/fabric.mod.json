@@ -10,7 +10,8 @@
   ],
   "contact": {
     "homepage": "https://github.com/AyameMC/Ayame",
-    "sources": "https://github.com/AyameMC/Ayame"
+    "sources": "https://github.com/AyameMC/Ayame",
+    "issues": "https://github.com/AyameMC/Ayame/issues"
   },
   "license": "LGPL-3.0-or-later",
   "icon": "assets/ayame/icon.png",
@@ -32,7 +33,11 @@
     "java": ">=21",
     "fabric-api": "*"
   },
-  "suggests": {
-    "another-mod": "*"
+  "breaks": {
+    "optifabric": "*",
+    "optifine": "*"
+  },
+  "recommends": {
+    "geckolib": ">=4.5.8"
   }
 }
