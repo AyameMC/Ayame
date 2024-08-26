@@ -7,7 +7,10 @@ license = "LGPL-3.0-or-later"
 modId = "ayame"
 version = "${version}"
 displayName = "Ayame"
-authors = "Me!"
+authors = '''
+CSneko
+HappyRespawnanchor
+'''
 description = '''
 This is an example description! Tell everyone what your mod is about!
 '''
