@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "ayame",
+  "version": "${version}",
+  "name": "Ayame",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "LGPL-3.0-or-later",
+  "icon": "assets/ayame/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.ayamemc.ayame.fabric.ExampleModFabric"
+    ],
+    "client": [
+      "org.ayamemc.ayame.fabric.client.ExampleModFabricClient"
+    ]
+  },
+  "mixins": [
+    "ayame.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.2",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
