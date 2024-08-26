@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
+displayURL = "https://github.com/AyameMC/Ayame"
+issueTrackerURL = "https://github.com/AyameMC/Ayame"
 license = "LGPL-3.0-or-later"
 
 [[mods]]
@@ -12,7 +13,7 @@ CSneko
 HappyRespawnanchor
 '''
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Custom player model mod. Based on GeckoLib.
 '''
 #logoFile = ""
 

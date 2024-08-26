@@ -3,13 +3,14 @@
   "id": "ayame",
   "version": "${version}",
   "name": "Ayame",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Custom player model mod. Based on GeckoLib.",
   "authors": [
-    "Me!"
+    "CSneko",
+    "HappyRespawnanchor"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/AyameMC/Ayame",
+    "sources": "https://github.com/AyameMC/Ayame"
   },
   "license": "LGPL-3.0-or-later",
   "icon": "assets/ayame/icon.png",
