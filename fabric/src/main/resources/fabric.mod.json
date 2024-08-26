@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "org.ayamemc.ayame.fabric.ExampleModFabric"
+      "org.ayamemc.ayame.fabric.AyameFabric"
     ],
     "client": [
-      "org.ayamemc.ayame.fabric.client.ExampleModFabricClient"
+      "org.ayamemc.ayame.fabric.client.AyameFabricClient"
     ]
   },
   "mixins": [
