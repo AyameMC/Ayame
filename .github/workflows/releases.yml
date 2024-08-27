@@ -2,7 +2,7 @@ name: Publish Release Artifacts
 
 on:
   release:
-    types: [created]
+    types: [ created ]
 
 jobs:
   build-and-upload:
@@ -28,10 +28,10 @@ jobs:
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            tag_name: ${{ github.event.release.tag_name }}
-            name: ${{ github.event.release.tag_name }} 更新
-            body: 发布 ${{ github.event.release.tag_name }}
-            files: |
-              result/*
-            generate_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.tag_name }} 更新
+          body: 发布 ${{ github.event.release.tag_name }}
+          files: |
+            result/*
+          generate_notes: true

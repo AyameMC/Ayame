@@ -36,7 +36,7 @@ public class AyameKeyMappings {
     );
 
     public static KeyMapping registerKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
-        KeyMapping keyMapping = null;
+        KeyMapping keyMapping;
         if (IS_TMS_INSTALLED && modifier != null) {
             keyMapping = AyameTMSKeyMappings.registerTMSKeyMapping(name, type, keyCode, category, modifier);
         } else {

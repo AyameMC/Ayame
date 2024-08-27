@@ -11,7 +11,7 @@ displayURL = "https://github.com/AyameMC/Ayame/"
 authors = '''
 CSneko, HappyRespawnanchor
 '''
-description =    '''
+description = '''
 Custom player model mod. Based on GeckoLib.
 '''
 #logoFile = ""

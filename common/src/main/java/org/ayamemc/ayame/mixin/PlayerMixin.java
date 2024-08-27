@@ -25,7 +25,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity {
     @Unique
-    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -49,7 +49,7 @@ public abstract class PlayerMixin implements GeoEntity {
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return geoCache;
+        return ayame$geoCache;
     }
 
 }
