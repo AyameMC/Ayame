@@ -22,13 +22,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(EntityRenderers.class)
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)
     private static void createPlayerRenderers(EntityRendererProvider.Context context, CallbackInfoReturnable<Map<PlayerSkin.Model, EntityRenderer<? extends Player>>> cir) {
-        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new java.util.HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context)));
+        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context)));
         m.put(PlayerSkin.Model.SLIM, new GeoPlayerRender(context));
         cir.setReturnValue(ImmutableMap.copyOf(m));
     }

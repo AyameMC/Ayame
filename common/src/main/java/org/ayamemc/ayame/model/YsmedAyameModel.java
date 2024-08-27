@@ -17,12 +17,10 @@ public class YsmedAyameModel implements AyameModel{
     private final ResourceLocation model;
     private final ResourceLocation texture;
     private final ResourceLocation animation;
-    private final ModelMetaData metaData;
-    public YsmedAyameModel(@NotNull ResourceLocation model,@NotNull ResourceLocation texture,@NotNull ResourceLocation animation,/*这里可能不应该传入它*/ @NotNull ModelMetaData metaData) {
+    public YsmedAyameModel(@NotNull ResourceLocation model,@NotNull ResourceLocation texture,@NotNull ResourceLocation animation) {
         this.model = model;
         this.texture = texture;
         this.animation = animation;
-        this.metaData = metaData;
     }
     @Override
     public ResourceLocation getGeoModel() {
@@ -42,6 +40,6 @@ public class YsmedAyameModel implements AyameModel{
     // TODO 完善YSM模型metadata创建
     @Override
     public ModelMetaData getMetaData() {
-        return this.metaData;
+        return ModelMetaData.Builder.create().setType(ModelMetaData.DefaultModelTypes.YSM).build();
     }
 }

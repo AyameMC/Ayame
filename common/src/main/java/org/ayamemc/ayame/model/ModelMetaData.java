@@ -23,5 +23,57 @@ import org.jetbrains.annotations.Nullable;
  * @param links 链接
  */
 public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nullable String description,
-                            @Nullable String license, @Nullable String[] links, @NotNull String type) {
+                            @Nullable String license, @Nullable String[] links,@Nullable String[] tags, @NotNull String type) {
+
+
+    public static class Builder {
+        private String[] authors = new String[]{};
+        private String name = "Unknown";
+        private String description = "Unknown";
+        private String license = "Unknown";
+        private String[] links = new String[]{};
+        private String[] tags = new String[]{};
+        private String type = "ayame";
+
+        public Builder setAuthors(String[] authors) {
+            this.authors = authors;
+            return this;
+        }
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+        public Builder setLicense(String license) {
+            this.license = license;
+            return this;
+        }
+        public Builder setLinks(String[] links) {
+            this.links = links;
+            return this;
+        }
+        public Builder setTags(String[] tags) {
+            this.tags = tags;
+            return this;
+        }
+        public Builder setType(String type) {
+            this.type = type;
+            return this;
+        }
+        public ModelMetaData build() {
+            return new ModelMetaData(authors, name, description, license, links, tags, type);
+        }
+
+        public static Builder create() {
+            return new Builder();
+        }
+    }
+
+    public static class DefaultModelTypes{
+        public static final String AYAME = "ayame";
+        public static final String YSM = "ysm";
+    }
 }

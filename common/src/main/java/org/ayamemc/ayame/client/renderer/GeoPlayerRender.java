@@ -24,8 +24,9 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 public class GeoPlayerRender extends GeoEntityRenderer<Player> {
     private final GeoPlayerModel pModel = new GeoPlayerModel();
     // TODO : 完善代码 & 添加API
-    public GeoPlayerRender(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new GeoPlayerModel());
+    public GeoPlayerRender(EntityRendererProvider.Context context) {
+        super(context, new GeoPlayerModel());
+
     }
 
 
