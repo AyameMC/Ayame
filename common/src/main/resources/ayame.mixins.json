@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "org.ayamemc.ayame.mixins",
+  "package": "org.ayamemc.ayame.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
