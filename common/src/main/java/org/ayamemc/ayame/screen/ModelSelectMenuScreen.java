@@ -12,7 +12,6 @@ package org.ayamemc.ayame.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -28,19 +27,15 @@ public class ModelSelectMenuScreen extends Screen {
             // When the button is clicked, we can display a toast to the screen.
 
             // 行为这里改
-            this.minecraft.getToasts().addToast(
-                    SystemToast.multiline(this.minecraft, SystemToast.SystemToastId.NARRATOR_TOGGLE, Component.literal("Hello World!"), Component.literal("This is a toast."))
-            );
-        }).bounds(40, 40, 120, 20).build();
+            this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
+        }).bounds(150, 40, 120, 20).build();
 
         Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
             // When the button is clicked, we can display a toast to the screen.
 
             // 行为这里改
-            this.minecraft.getToasts().addToast(
-                    SystemToast.multiline(this.minecraft, SystemToast.SystemToastId.NARRATOR_TOGGLE, Component.literal("Hello World!"), Component.literal("This is a toast."))
-            );
-        }).bounds(40, 60, 120, 20).build();
+            this.minecraft.player.connection.sendChat("大家好啊昨天给大家来点不想看的东西");
+        }).bounds(200, 60, 120, 20).build();
 
         // x, y, width, height
         // It's recommended to use the fixed height of 20 to prevent rendering issues with the button
@@ -60,7 +55,7 @@ public class ModelSelectMenuScreen extends Screen {
         // We'll subtract the font height from the Y position to make the text appear above the button.
         // Subtracting an extra 10 pixels will give the text some padding.
         // textRenderer, text, x, y, color, hasShadow
-        context.drawString(this.font, "Model Select Menu", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+        context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }

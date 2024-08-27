@@ -1,13 +1,13 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 license = "LGPL-3.0-or-later"
-issueTrackerURL = "https://github.com/AyameMC/Ayame/issues/"
+issueTrackerURL = "https://github.com/AyameMC/Ayame/issues"
 
 [[mods]]
 modId = "ayame"
 version = "${version}"
 displayName = "Ayame"
-displayURL = "https://github.com/AyameMC/Ayame/"
+displayURL = "https://github.com/AyameMC/Ayame"
 authors = '''
 CSneko, HappyRespawnanchor
 '''
