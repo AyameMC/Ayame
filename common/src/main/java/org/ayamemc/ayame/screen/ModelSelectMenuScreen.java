@@ -23,18 +23,32 @@ public class ModelSelectMenuScreen extends Screen {
 
     @Override
     protected void init() {
-        Button buttonWidget = Button.builder(Component.literal("Hello World"), (btn) -> {
+        // TODO: 模型切换
+        Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
             // When the button is clicked, we can display a toast to the screen.
+
+            // 行为这里改
             this.minecraft.getToasts().addToast(
                     SystemToast.multiline(this.minecraft, SystemToast.SystemToastId.NARRATOR_TOGGLE, Component.literal("Hello World!"), Component.literal("This is a toast."))
             );
         }).bounds(40, 40, 120, 20).build();
+
+        Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
+            // When the button is clicked, we can display a toast to the screen.
+
+            // 行为这里改
+            this.minecraft.getToasts().addToast(
+                    SystemToast.multiline(this.minecraft, SystemToast.SystemToastId.NARRATOR_TOGGLE, Component.literal("Hello World!"), Component.literal("This is a toast."))
+            );
+        }).bounds(40, 60, 120, 20).build();
+
         // x, y, width, height
         // It's recommended to use the fixed height of 20 to prevent rendering issues with the button
         // textures.
 
         // Register the button widget.
         this.addRenderableWidget(buttonWidget);
+        this.addRenderableWidget(buttonWidget1);
 
     }
 
@@ -46,6 +60,7 @@ public class ModelSelectMenuScreen extends Screen {
         // We'll subtract the font height from the Y position to make the text appear above the button.
         // Subtracting an extra 10 pixels will give the text some padding.
         // textRenderer, text, x, y, color, hasShadow
-        context.drawString(this.font, "Special Button", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+        context.drawString(this.font, "Model Select Menu", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+        //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 }
