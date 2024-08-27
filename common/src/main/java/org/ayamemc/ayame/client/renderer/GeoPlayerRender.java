@@ -15,15 +15,23 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.model.AyameModel;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 public class GeoPlayerRender extends GeoEntityRenderer<Player> {
+    private final GeoPlayerModel pModel = new GeoPlayerModel();
     // TODO : 完善代码 & 添加API
     public GeoPlayerRender(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GeoPlayerModel());
+    }
+
+
+    @Override
+    public GeoPlayerModel getGeoModel() {
+        return this.pModel;
     }
 
     @Override
@@ -33,6 +41,15 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
 
     // TODO : 添加API
     public static class GeoPlayerModel extends GeoModel<Player> {
+        public ResourceLocation geoModel;
+        public ResourceLocation texture;
+        public ResourceLocation animation;
+        public void switchModel(AyameModel model) {
+            this.geoModel = model.getGeoModel();
+            this.texture = model.getTexture();
+            this.animation = model.getAnimation();
+        }
+
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             // TODO 替换test
