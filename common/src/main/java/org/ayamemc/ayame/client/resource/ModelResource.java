@@ -18,7 +18,6 @@ import org.ayamemc.ayame.model.ModelMetaData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -29,24 +28,25 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  */
 public class ModelResource {
     private final Path file;
-    private final Map<String,String> zip;
+    private final Map<String, String> zip;
     private final ModelMetaData metaData;
+
     /**
      * @param file 模型文件
      */
-    public ModelResource(Path file){
+    public ModelResource(Path file) {
         this.file = file;
         this.zip = FileUtil.readZipFile(file);
         this.metaData = getMetaData();
     }
 
-    public Map<String,String> readZip(){
+    public Map<String, String> readZip() {
         return FileUtil.readZipFile(file);
     }
 
-    public ModelMetaData getMetaData(){
+    public ModelMetaData getMetaData() {
         String type = getType();
-        if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)){
+        if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)) {
             JsonInterpreter json = JsonInterpreter.of(zip.get("metadata.json"));
             return ModelMetaData.Builder.create()
                     .parseJson(json)
@@ -56,36 +56,37 @@ public class ModelResource {
         return ModelMetaData.Builder.create().build();
     }
 
-    public String getType(){
+    public String getType() {
         if (zip.containsKey("metadata.json")) return ModelMetaData.DefaultModelTypes.AYAME;
         // TODO 完成ysm格式
         return ModelMetaData.DefaultModelTypes.AYAME;
     }
 
-    public void loadModel(){
+    public void loadModel() {
         String type = metaData.type();
         String name = metaData.name();
         ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID,"geo/"+type+"/"+name+".json")
-                ,zip.get("model.json")
+                ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/" + type + "/" + name + ".json")
+                , zip.get("model.json")
         );
         ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID,"textures/"+type+"/"+name+".png")
-                ,zip.get("texture.png")
+                ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/" + type + "/" + name + ".png")
+                , zip.get("texture.png")
         );
         ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID,"animations/"+type+"/"+name+".json")
-                ,zip.get("animation.json")
+                ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/" + type + "/" + name + ".json")
+                , zip.get("animation.json")
         );
         ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID,"model_metadata/"+type+"/"+name+".json")
-                ,this.metaData.conversion().toString()
+                ResourceLocation.fromNamespaceAndPath(MOD_ID, "model_metadata/" + type + "/" + name + ".json")
+                , this.metaData.conversion().toString()
         );
         // TODO 完成ysm格式
     }
-    public AyameModel getModel(){
+
+    public AyameModel getModel() {
         // 为ayame模型读取
-        if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)){
+        if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
             return DefaultAyameModel.of(metaData);
         }
         // TODO 完成ysm格式

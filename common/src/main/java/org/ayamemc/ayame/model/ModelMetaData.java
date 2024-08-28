@@ -10,21 +10,22 @@
 
 package org.ayamemc.ayame.model;
 
-import net.jpountz.xxhash.StreamingXXHash64;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * 模型元数据
- * @param authors 作者
- * @param name 名称
+ *
+ * @param authors     作者
+ * @param name        名称
  * @param description 描述
- * @param license 许可证
- * @param links 链接
+ * @param license     许可证
+ * @param links       链接
  */
 public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nullable String description,
-                            @Nullable String license, @Nullable String[] links,@Nullable String[] tags, @NotNull String type, @NotNull String version, @Nullable String[] animations) {
+                            @Nullable String license, @Nullable String[] links, @Nullable String[] tags,
+                            @NotNull String type, @NotNull String version, @Nullable String[] animations) {
 
 
     public JsonInterpreter conversion() {
@@ -52,42 +53,55 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
         private String version = "1.0.0";
         private String[] animations = new String[]{};
 
+        public static Builder create() {
+            return new Builder();
+        }
+
         public Builder setAuthors(String[] authors) {
             this.authors = authors;
             return this;
         }
+
         public Builder setName(String name) {
             this.name = name;
             return this;
         }
+
         public Builder setDescription(String description) {
             this.description = description;
             return this;
         }
+
         public Builder setLicense(String license) {
             this.license = license;
             return this;
         }
+
         public Builder setLinks(String[] links) {
             this.links = links;
             return this;
         }
+
         public Builder setTags(String[] tags) {
             this.tags = tags;
             return this;
         }
+
         public Builder setType(String type) {
             this.type = type;
             return this;
         }
+
         public Builder setVersion(String version) {
             this.version = version;
             return this;
         }
+
         public Builder setAnimations(String[] animations) {
             this.animations = animations;
             return this;
         }
+
         public Builder parseJson(JsonInterpreter json) {
             return this.setName(json.getString("name"))
                     .setType(type)
@@ -102,13 +116,9 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
         public ModelMetaData build() {
             return new ModelMetaData(authors, name, description, license, links, tags, type, version, animations);
         }
-
-        public static Builder create() {
-            return new Builder();
-        }
     }
 
-    public static class DefaultModelTypes{
+    public static class DefaultModelTypes {
         public static final String AYAME = "ayame";
         public static final String YSM = "ysm";
     }

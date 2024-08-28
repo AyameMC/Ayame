@@ -24,9 +24,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
+
 public class FileUtil {
     // 读取文件
-    public static String readFileWithException(Path path){
+    public static String readFileWithException(Path path) {
         try {
             byte[] bytes = Files.readAllBytes(path);
             return new String(bytes, StandardCharsets.UTF_8);
@@ -55,7 +56,6 @@ public class FileUtil {
             LOGGER.error(e.getMessage());
         }
     }
-
 
 
     /**
@@ -95,7 +95,7 @@ public class FileUtil {
     }
 
 
-    public static void copyResource(String resourcePath,Path targetPath) {
+    public static void copyResource(String resourcePath, Path targetPath) {
         try {
             // 使用ClassLoader读取资源文件
             InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(resourcePath);

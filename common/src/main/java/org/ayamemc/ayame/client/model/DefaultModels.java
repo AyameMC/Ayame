@@ -10,16 +10,8 @@
 
 package org.ayamemc.ayame.client.model;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.DefaultAyameModel;
 import org.ayamemc.ayame.model.ModelMetaData;
-import org.ayamemc.ayame.util.JsonInterpreter;
-
-import java.io.IOException;
-
-import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 public class DefaultModels {
     public static final DefaultAyameModel TEST_MODEL = new DefaultAyameModel(ModelMetaData.Builder.create()
@@ -30,7 +22,7 @@ public class DefaultModels {
             .setAnimations(new String[0])
             .setLinks(new String[]{"https://github.com/CSneko/toNeko/blob/main/models/grmmy_neko.bbmodel"})
             .setDescription("From toNeko, just for example and test")
-            .setTags(new String[]{"test","vanilla-like"})
+            .setTags(new String[]{"test", "vanilla-like"})
             .build());
 
 }

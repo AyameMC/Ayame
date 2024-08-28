@@ -18,29 +18,29 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  * Ayame通用模型接口，适用于所有Geo模型
  * 所有模型必须先加载到内存中
  * 路径&命名标准：
- *    Geo模型文件 -> assets/ayame/geo/{模型类型}/{模型名称}.json
- *    纹理文件 -> assets/ayame/textures/{模型类型}/{模型名称}.png
- *    动画文件 -> assets/ayame/animations/{模型类型}/{模型名称}.json
- *    模型元数据文件 -> assets/ayame/model_metadata/{模型类型}/{模型名称}.json
- *    // 注：模型类型指的是使用了哪种模型，例如ayame的模型类型为"ayame"，兼容ysm的为"ysm"，值与ModelMetaData中的type()的值对应
- *    // 无论何种格式，元数据文件必须转为Ayame的元数据文件格式
+ * Geo模型文件 -> assets/ayame/geo/{模型类型}/{模型名称}.json
+ * 纹理文件 -> assets/ayame/textures/{模型类型}/{模型名称}.png
+ * 动画文件 -> assets/ayame/animations/{模型类型}/{模型名称}.json
+ * 模型元数据文件 -> assets/ayame/model_metadata/{模型类型}/{模型名称}.json
+ * // 注：模型类型指的是使用了哪种模型，例如ayame的模型类型为"ayame"，兼容ysm的为"ysm"，值与ModelMetaData中的type()的值对应
+ * // 无论何种格式，元数据文件必须转为Ayame的元数据文件格式
  */
 public interface AyameModel {
-    default ResourceLocation getGeoModel(){
+    default ResourceLocation getGeoModel() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
                 "geo/" + getMetaData().type() + "/" + getMetaData().name() + ".json"
         );
     }
 
-    default ResourceLocation getTexture(){
+    default ResourceLocation getTexture() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
                 "textures/" + getMetaData().type() + "/" + getMetaData().name() + ".png"
         );
     }
 
-    default ResourceLocation getAnimation(){
+    default ResourceLocation getAnimation() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
                 "animations/" + getMetaData().type() + "/" + getMetaData().name() + ".json"

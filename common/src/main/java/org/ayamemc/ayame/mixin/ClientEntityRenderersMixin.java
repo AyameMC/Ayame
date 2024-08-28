@@ -30,8 +30,8 @@ import java.util.Map;
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)
     private static void createPlayerRenderers(EntityRendererProvider.Context context, CallbackInfoReturnable<Map<PlayerSkin.Model, EntityRenderer<? extends Player>>> cir) {
-        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context,new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL))));
-        m.put(PlayerSkin.Model.SLIM, new GeoPlayerRender(context,new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL)));
+        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL))));
+        m.put(PlayerSkin.Model.SLIM, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL)));
         cir.setReturnValue(ImmutableMap.copyOf(m));
     }
 }

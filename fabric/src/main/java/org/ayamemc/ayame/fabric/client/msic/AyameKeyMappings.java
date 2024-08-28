@@ -51,7 +51,7 @@ public class AyameKeyMappings {
     public static void processKeyPressed() {
         while (AyameKeyMappings.MODEL_SELECT_MENU.consumeClick()) {
             // TODO open model select menu
-            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(),false, null));
+            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), false, null));
         }
     }
 }

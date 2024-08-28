@@ -17,10 +17,11 @@ import net.minecraft.server.packs.resources.ResourceManager;
 public class ResourceUtil {
     /**
      * 写入资源
-     * @param loc 资源位置
+     *
+     * @param loc     资源位置
      * @param content 内容
      */
-    public static void writeResource (ResourceLocation loc, String content){
+    public static void writeResource(ResourceLocation loc, String content) {
         // 获取ResourceManager
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         // TODO 动态加载资源

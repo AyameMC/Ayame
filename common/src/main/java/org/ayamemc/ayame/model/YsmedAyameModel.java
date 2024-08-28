@@ -13,15 +13,17 @@ package org.ayamemc.ayame.model;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class YsmedAyameModel implements AyameModel{
+public class YsmedAyameModel implements AyameModel {
     private final ResourceLocation model;
     private final ResourceLocation texture;
     private final ResourceLocation animation;
-    public YsmedAyameModel(@NotNull ResourceLocation model,@NotNull ResourceLocation texture,@NotNull ResourceLocation animation) {
+
+    public YsmedAyameModel(@NotNull ResourceLocation model, @NotNull ResourceLocation texture, @NotNull ResourceLocation animation) {
         this.model = model;
         this.texture = texture;
         this.animation = animation;
     }
+
     @Override
     public ResourceLocation getGeoModel() {
         return this.model;

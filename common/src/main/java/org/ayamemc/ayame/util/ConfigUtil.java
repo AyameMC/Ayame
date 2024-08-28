@@ -15,27 +15,29 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
+
 public class ConfigUtil {
     public static final File CONFIG_FILE = new File("config/Ayame/config.json");
     public static JsonInterpreter config = JsonInterpreter.of("{}");
 
     public static boolean SKIP_AYAME_WARNING = false;
+
     public static void init() {
         if (!CONFIG_FILE.exists()) {
             // 写入默认配置文件
-            FileUtil.copyResource("assets/ayame/config.json",CONFIG_FILE.toPath());
+            FileUtil.copyResource("assets/ayame/config.json", CONFIG_FILE.toPath());
         }
         try {
             config = JsonInterpreter.fromFile(CONFIG_FILE);
         } catch (IOException e) {
-            LOGGER.error("Unable to read config file",e);
+            LOGGER.error("Unable to read config file", e);
         }
 
-        SKIP_AYAME_WARNING = config.getBoolean("skipAyameWarning",false);
+        SKIP_AYAME_WARNING = config.getBoolean("skipAyameWarning", false);
     }
 
-    public static void save(){
-        config.set("skipAyameWarning",SKIP_AYAME_WARNING);
+    public static void save() {
+        config.set("skipAyameWarning", SKIP_AYAME_WARNING);
         config.save(CONFIG_FILE.toPath());
     }
 

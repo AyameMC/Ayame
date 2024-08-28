@@ -22,11 +22,13 @@ public class JsonInterpreter {
     private final String original;
     private final JsonObject jsonObject;
     private Path filePath;
+
     /**
      * 将json字符串转换为JsonInterpreter
+     *
      * @param jsonString json字符串
      */
-    public JsonInterpreter(String jsonString){
+    public JsonInterpreter(String jsonString) {
         this.original = jsonString;
         // 创建 Gson 对象
         Gson gson = new Gson();
@@ -36,15 +38,17 @@ public class JsonInterpreter {
 
     /**
      * 将JsonObject转换为JsonInterpreter
+     *
      * @param jsonObject JsonObject
      */
-    public JsonInterpreter(JsonObject jsonObject){
+    public JsonInterpreter(JsonObject jsonObject) {
         this.original = jsonObject.toString();
         this.jsonObject = jsonObject;
     }
 
     /**
      * 将文件转换为JsonInterpreter
+     *
      * @param file 文件
      * @throws IOException 文件读取失败
      */
@@ -54,6 +58,7 @@ public class JsonInterpreter {
 
     /**
      * 将文件转换为JsonInterpreter
+     *
      * @param filePath 文件路径
      */
     public JsonInterpreter(Path filePath) throws IOException {
@@ -61,8 +66,21 @@ public class JsonInterpreter {
         this.filePath = filePath;
     }
 
+    public static JsonInterpreter of(String jsonString) {
+        return new JsonInterpreter(jsonString);
+    }
+
+    public static JsonInterpreter fromFile(File file) throws IOException {
+        return new JsonInterpreter(file);
+    }
+
+    public static JsonInterpreter fromFile(Path filePath) throws IOException {
+        return new JsonInterpreter(filePath);
+    }
+
     /**
      * 读取值
+     *
      * @param path 键
      * @return 值
      */
@@ -72,10 +90,11 @@ public class JsonInterpreter {
 
     /**
      * 获取JsonPrimitive
+     *
      * @param path 键
      * @return JsonPrimitive或空JsonPrimitive
      */
-    public JsonPrimitive getJsonPrimitive(String path){
+    public JsonPrimitive getJsonPrimitive(String path) {
         JsonElement element = get(path);
         if (element != null && element.isJsonPrimitive()) {
             return element.getAsJsonPrimitive();
@@ -85,10 +104,11 @@ public class JsonInterpreter {
 
     /**
      * 获取JsonArray
+     *
      * @param path 键
      * @return JsonArray或空JsonArray
      */
-    public JsonArray getJsonArray(String path){
+    public JsonArray getJsonArray(String path) {
         JsonElement element = get(path);
         if (element != null && element.isJsonArray()) {
             return element.getAsJsonArray();
@@ -98,7 +118,8 @@ public class JsonInterpreter {
 
     /**
      * 设置值
-     * @param path 键
+     *
+     * @param path  键
      * @param value 值
      */
     public void set(String path, Object value) {
@@ -123,7 +144,7 @@ public class JsonInterpreter {
             jsonObject.addProperty(path, (Boolean) value);
             return;
         }
-        if (value instanceof Character){
+        if (value instanceof Character) {
             jsonObject.addProperty(path, (Character) value);
             return;
         }
@@ -171,7 +192,7 @@ public class JsonInterpreter {
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof Character){
+            if (list.get(0) instanceof Character) {
                 for (Object o : list) {
                     jsonArray.add((Character) o);
                 }
@@ -185,10 +206,11 @@ public class JsonInterpreter {
 
     /**
      * 保存到指定文件(如果可以的话)
+     *
      * @param filePath 文件路径
      */
     public void save(Path filePath) {
-        if(filePath != null){
+        if (filePath != null) {
             FileUtil.overwriteFile(filePath, this.jsonObject.toString());
         }
     }
@@ -202,19 +224,21 @@ public class JsonInterpreter {
 
     /**
      * 获取String值
+     *
      * @param path 键
      * @return String
      */
     public String getString(String path) {
         try {
             return getJsonPrimitive(path).getAsString();
-        }catch (Exception e) {
+        } catch (Exception e) {
             return "";
         }
     }
 
     /**
      * 获取String列表
+     *
      * @param path 键
      * @return List或空List
      */
@@ -231,86 +255,92 @@ public class JsonInterpreter {
 
     /**
      * 获取Float值
+     *
      * @param path 键
      * @return Float或0
      */
     public float getFloat(String path) {
         try {
             return getJsonPrimitive(path).getAsFloat();
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
     /**
      * 获取Double值
+     *
      * @param path 键
      * @return Double或0
      */
     public double getDouble(String path) {
         try {
             return getJsonPrimitive(path).getAsDouble();
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
     /**
      * 获取Int值
+     *
      * @param path 键
      * @return Int或0
      */
     public int getInt(String path) {
         try {
             return getJsonPrimitive(path).getAsInt();
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
     /**
      * 获取Boolean值
+     *
      * @param path 键
      * @return Boolean或false
      */
     public boolean getBoolean(String path) {
         try {
             return getJsonPrimitive(path).getAsBoolean();
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     /**
      * 获取Boolean值
-     * @param path 键
+     *
+     * @param path     键
      * @param defValue 默认值
      * @return boolean或defValue
      */
     public boolean getBoolean(String path, boolean defValue) {
         try {
             return getJsonPrimitive(path).getAsBoolean();
-        }catch (Exception e){
+        } catch (Exception e) {
             return defValue;
         }
     }
 
     /**
      * 获取JsonInterpreter
+     *
      * @param path 键
      * @return JsonInterpreter或空JsonInterpreter
      */
     public JsonInterpreter getJsonInterpreter(String path) {
         try {
             return new JsonInterpreter(getJsonPrimitive(path).getAsJsonObject());
-        }catch (Exception e){
+        } catch (Exception e) {
             return new JsonInterpreter("{}");
         }
     }
 
-
     /**
      * 判断是否包含key
+     *
      * @param key key
      * @return 是否包含key
      */
@@ -320,6 +350,7 @@ public class JsonInterpreter {
 
     /**
      * 获取Int列表
+     *
      * @param path 键
      * @return List或空List
      */
@@ -336,6 +367,7 @@ public class JsonInterpreter {
 
     /**
      * 获取Double列表
+     *
      * @param path 键
      * @return List或空List
      */
@@ -352,6 +384,7 @@ public class JsonInterpreter {
 
     /**
      * 获取Float列表
+     *
      * @param path 键
      * @return List或空List
      */
@@ -368,6 +401,7 @@ public class JsonInterpreter {
 
     /**
      * 获取一个JsonInterpreter列表
+     *
      * @param path 键
      * @return JsonInterpreter列表或空List
      */
@@ -378,6 +412,7 @@ public class JsonInterpreter {
 
     /**
      * 获取List
+     *
      * @param path 键
      * @return List或空List
      */
@@ -394,14 +429,16 @@ public class JsonInterpreter {
 
     /**
      * 获取原始Json字符串
+     *
      * @return 原始Json字符串
      */
-    public String getOriginal(){
+    public String getOriginal() {
         return this.original;
     }
 
     /**
      * 判断值是否相等(忽略大小写)
+     *
      * @param obj 对象
      * @return 是否相等
      */
@@ -415,6 +452,7 @@ public class JsonInterpreter {
 
     /**
      * 判断值是否相等
+     *
      * @param obj 对象
      * @return 是否相等
      */
@@ -428,10 +466,11 @@ public class JsonInterpreter {
 
     /**
      * 转换为JsonInterpreter列表(如果是的话)
+     *
      * @return JsonInterpreter列表
      */
     public List<JsonInterpreter> toJsonList() {
-        if (jsonObject.isJsonArray()){
+        if (jsonObject.isJsonArray()) {
             return jsonObject.getAsJsonArray().asList().stream().map(e -> {
                 return new JsonInterpreter(e.getAsJsonObject());
             }).collect(Collectors.toList());
@@ -441,12 +480,12 @@ public class JsonInterpreter {
 
     /**
      * 转换为Gson
+     *
      * @return Gson
      */
     public JsonObject toGson() {
         return jsonObject;
     }
-    
 
     private Object convertJsonElementToJavaType(JsonElement element) {
         if (element.isJsonPrimitive()) {
@@ -479,17 +518,5 @@ public class JsonInterpreter {
     @Override
     public String toString() {
         return jsonObject.toString();
-    }
-
-    public static JsonInterpreter of(String jsonString) {
-        return new JsonInterpreter(jsonString);
-    }
-
-    public static JsonInterpreter fromFile(File file) throws IOException {
-        return new JsonInterpreter(file);
-    }
-
-    public static JsonInterpreter fromFile(Path filePath) throws IOException {
-        return new JsonInterpreter(filePath);
     }
 }

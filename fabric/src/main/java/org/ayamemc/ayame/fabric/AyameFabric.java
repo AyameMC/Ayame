@@ -11,11 +11,6 @@
 package org.ayamemc.ayame.fabric;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ModResourcePack;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.ClientPackSource;
-import net.minecraft.server.packs.PackType;
 import org.ayamemc.ayame.Ayame;
 
 public final class AyameFabric implements ModInitializer {

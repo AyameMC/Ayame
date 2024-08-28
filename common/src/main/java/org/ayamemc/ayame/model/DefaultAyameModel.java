@@ -10,18 +10,19 @@
 
 package org.ayamemc.ayame.model;
 
-public class DefaultAyameModel implements AyameModel{
+public class DefaultAyameModel implements AyameModel {
     private final ModelMetaData metaData;
+
     public DefaultAyameModel(ModelMetaData metaData) {
         this.metaData = metaData;
+    }
+
+    public static DefaultAyameModel of(ModelMetaData metaData) {
+        return new DefaultAyameModel(metaData);
     }
 
     @Override
     public ModelMetaData getMetaData() {
         return metaData;
-    }
-
-    public static DefaultAyameModel of(ModelMetaData metaData){
-        return new DefaultAyameModel(metaData);
     }
 }
