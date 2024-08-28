@@ -17,16 +17,18 @@ import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.util.ConfigUtil;
 
 public class ModelSelectMenuScreen extends Screen {
-    private boolean skipWarning;
-    public ModelSelectMenuScreen(Component title, boolean skipWarning) {
+    public final Screen lastScreen;
+    private final boolean skipWarning;
+    public ModelSelectMenuScreen(Component title,boolean skipWarning,  Screen lastScreen) {
         super(title);
         this.skipWarning = skipWarning;
+        this.lastScreen = lastScreen;
     }
 
     @Override
     protected void init() {
         if (!skipWarning && !ConfigUtil.SKIP_AYAME_WARNING) {
-            this.minecraft.setScreen(new CopyrightCautionScreen(this));
+            this.minecraft.setScreen(new CopyrightCautionScreen(this, this));
             return;
         }
 

@@ -16,21 +16,27 @@ import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.WarningScreen;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
 
 public class CopyrightCautionScreen extends WarningScreen {
-
     private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.caution.title").withStyle(ChatFormatting.BOLD);
-    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.caution.content");
+    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.caution.content" ).withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
+
+    //private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.caution.content");
+    
     private static final Component CHECK = Component.translatable("multiplayerWarning.check");
     private static final Component NARRATION = TITLE.copy().append("\n").append(CONTENT);
-    private final Screen previous;
+    public final Screen lastScreen;;
+    public final Screen lastLastScreen;
 
-    public CopyrightCautionScreen(Screen previous) {
+    public CopyrightCautionScreen(Screen lastScreen, Screen lastLastScreen) {
         super(TITLE, CONTENT, CHECK, NARRATION);
-        this.previous = previous;
+        this.lastScreen = lastScreen;
+        this.lastLastScreen = lastLastScreen;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class CopyrightCautionScreen extends WarningScreen {
                 ConfigUtil.SKIP_AYAME_WARNING = true;
             }
 
-            this.minecraft.setScreen(new ModelSelectMenuScreen(Component.empty(),true));
+            this.minecraft.setScreen(lastLastScreen);
         }).build());
         linearLayout.addChild(Button.builder(CommonComponents.GUI_BACK, button -> this.onClose()).build());
         return linearLayout;
@@ -49,8 +55,14 @@ public class CopyrightCautionScreen extends WarningScreen {
 
     @Override
     public void onClose() {
-        // 不要setScreen，否则ESC退出不去
+        if(ConfigUtil.SKIP_AYAME_WARNING) {
+            minecraft.setScreen(lastScreen);
+        }else{
+            minecraft.setScreen(lastLastScreen);
+        }
+        //minecraft.setScreen(null);
         ConfigUtil.save(); // 保存配置
+
     }
 
 }
