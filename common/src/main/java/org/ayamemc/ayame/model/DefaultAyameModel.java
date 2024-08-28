@@ -8,16 +8,20 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame;
+package org.ayamemc.ayame.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class DefaultAyameModel implements AyameModel{
+    private final ModelMetaData metaData;
+    public DefaultAyameModel(ModelMetaData metaData) {
+        this.metaData = metaData;
+    }
 
-public final class Ayame {
-    public static final String MOD_ID = "ayame";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    @Override
+    public ModelMetaData getMetaData() {
+        return metaData;
+    }
 
-    public static void init() {
-        // Write common init code here.
+    public static DefaultAyameModel of(ModelMetaData metaData){
+        return new DefaultAyameModel(metaData);
     }
 }

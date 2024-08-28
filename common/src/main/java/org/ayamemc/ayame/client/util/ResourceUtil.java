@@ -8,16 +8,22 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame;
+package org.ayamemc.ayame.client.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.ResourceManager;
 
-public final class Ayame {
-    public static final String MOD_ID = "ayame";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+public class ResourceUtil {
+    /**
+     * 写入资源
+     * @param loc 资源位置
+     * @param content 内容
+     */
+    public static void writeResource (ResourceLocation loc, String content){
+        // 获取ResourceManager
+        ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-    public static void init() {
-        // Write common init code here.
     }
 }

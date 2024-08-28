@@ -5,8 +5,18 @@
   "name": "Ayame",
   "description": "Custom player model mod. Based on GeckoLib.",
   "authors": [
-    "CSneko",
-    "HappyRespawnanchor"
+    {
+      "name": "CrystalNeko",
+      "contact": {
+        "homepage": "https://github.com/CSNeko"
+      }
+    },
+    {
+      "name": "HappyRespawnanchor",
+      "contact": {
+        "homepage": "https://github.com/HappyRespawnanchor"
+      }
+    }
   ],
   "contact": {
     "homepage": "https://github.com/AyameMC/Ayame",
