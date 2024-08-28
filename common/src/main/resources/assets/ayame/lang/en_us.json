@@ -2,5 +2,21 @@
   "modmenu.descriptionTranslation.ayame": "Custom player model mod. Based on GeckoLib.",
   "fml.menu.mods.info.description.ayame": "Custom player model mod. Based on GeckoLib.",
   "key.categories.ayame": "Ayame",
-  "key.ayame.model_select_menu": "Open Model Select Menu"
+  "key.ayame.model_select_menu": "Open Model Select Menu",
+  "ayame.screen.warningscreen.caution.title": "警告：版权声明",
+  "ayame.screen.warningscreen.caution.content": {
+    "text": "Ayame 是自由软件：您可以按照自由软件基金会发布的 GNU 宽通用公共许可证的条款重新分发和/或修改本程序；许可证的第 3 版或（根据您的选择）任何更高版本均适用。\nAyame 的发布是为了希望它能够发挥作用，但并不提供任何担保；甚至不包含适销性或针对特定用途的适用性的默示担保。有关详细信息，请参阅 GNU 宽通用公共许可证。\n您应该已经随 Ayame 一同收到了 GNU 宽通用公共许可证的副本。如果没有，请参阅 ",
+    "extra": [
+      {
+        "text": "https://www.gnu.org/licenses/",
+        "color": "blue",
+        "underlined": true,
+        "clickEvent": {
+          "action": "open_url",
+          "value": "https://www.gnu.org/licenses/"
+        }
+      }
+    ]
+  }
+
 }
