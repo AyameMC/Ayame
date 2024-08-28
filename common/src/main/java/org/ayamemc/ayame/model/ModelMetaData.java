@@ -11,6 +11,7 @@
 package org.ayamemc.ayame.model;
 
 import net.jpountz.xxhash.StreamingXXHash64;
+import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +24,22 @@ import org.jetbrains.annotations.Nullable;
  * @param links 链接
  */
 public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nullable String description,
-                            @Nullable String license, @Nullable String[] links,@Nullable String[] tags, @NotNull String type) {
+                            @Nullable String license, @Nullable String[] links,@Nullable String[] tags, @NotNull String type, @NotNull String version, @Nullable String[] animations) {
 
+
+    public JsonInterpreter conversion() {
+        JsonInterpreter json = new JsonInterpreter("{}");
+        json.set("authors", authors);
+        json.set("name", name);
+        json.set("description", description);
+        json.set("license", license);
+        json.set("links", links);
+        json.set("tags", tags);
+        json.set("type", type);
+        json.set("version", version);
+        json.set("animations", animations);
+        return json;
+    }
 
     public static class Builder {
         private String[] authors = new String[]{};
@@ -34,6 +49,8 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
         private String[] links = new String[]{};
         private String[] tags = new String[]{};
         private String type = "ayame";
+        private String version = "1.0.0";
+        private String[] animations = new String[]{};
 
         public Builder setAuthors(String[] authors) {
             this.authors = authors;
@@ -63,8 +80,26 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
             this.type = type;
             return this;
         }
+        public Builder setVersion(String version) {
+            this.version = version;
+            return this;
+        }
+        public Builder setAnimations(String[] animations) {
+            this.animations = animations;
+            return this;
+        }
+        public Builder parseJson(JsonInterpreter json) {
+            return this.setName(json.getString("name"))
+                    .setType(type)
+                    .setAuthors(json.getStringList("authors").toArray(new String[0]))
+                    .setDescription(json.getString("description"))
+                    .setLinks(json.getStringList("links").toArray(new String[0]))
+                    .setLicense(json.getString("license"))
+                    .setAnimations(json.getStringList("animations").toArray(new String[0]))
+                    .setVersion(json.getString("version"));
+        }
         public ModelMetaData build() {
-            return new ModelMetaData(authors, name, description, license, links, tags, type);
+            return new ModelMetaData(authors, name, description, license, links, tags, type, version, animations);
         }
 
         public static Builder create() {
