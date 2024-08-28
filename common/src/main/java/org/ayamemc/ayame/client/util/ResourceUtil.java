@@ -11,9 +11,24 @@
 package org.ayamemc.ayame.client.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.FilePackResources;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.client.resources.ClientPackSource;
+
+import java.io.ByteArrayInputStream;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 public class ResourceUtil {
     /**
@@ -24,6 +39,6 @@ public class ResourceUtil {
     public static void writeResource (ResourceLocation loc, String content){
         // 获取ResourceManager
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-
+        // TODO 动态加载资源
     }
 }
