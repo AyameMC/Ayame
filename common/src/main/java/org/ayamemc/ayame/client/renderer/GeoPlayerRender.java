@@ -1,7 +1,7 @@
 /*
  *      This file is part of Ayame.
  *
- *     Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ *     Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  *     Ayame is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
  *
@@ -54,17 +54,17 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             // TODO 替换test
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/test.geo.json");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/main.json");
         }
 
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/test.png");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/default.png");
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/test.animation.json");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/main.animation.json");
         }
 
     }
