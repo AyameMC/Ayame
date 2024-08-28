@@ -10,90 +10,33 @@
 
 package org.ayamemc.ayame.util;
 
-import com.google.gson.JsonObject;
 
 import java.io.File;
+import java.io.IOException;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 public class ConfigUtil {
+    public static final File CONFIG_FILE = new File("config/Ayame/config.json");
+    public static JsonInterpreter config = JsonInterpreter.of("{}");
 
-    private static final File CONFIG_FILE = new File("config/Ayame/config.json"); // 写死的配置文件路径
-    private JsonObject config; // 用于缓存配置文件内容
-    private final boolean defaultSkipAyameWarning = false; // 默认值
-
-    // 构造函数
-    public ConfigUtil() {
-        ensureConfigDirectoryExists();
-        loadConfig();
-    }
-
-    /**
-     * 确保配置文件目录存在，如果不存在，则创建它。
-     */
-    private void ensureConfigDirectoryExists() {
-        File parentDir = CONFIG_FILE.getParentFile();
-        if (!parentDir.exists()) {
-            if (parentDir.mkdirs()) {
-                System.out.println("创建配置文件目录: " + parentDir.getAbsolutePath());
-            } else {
-                System.err.println("无法创建配置文件目录: " + parentDir.getAbsolutePath());
-            }
-        }
-    }
-
-    /**
-     * 加载配置文件内容到内存中。
-     */
-    private void loadConfig() {
+    public static boolean SKIP_AYAME_WARNING = false;
+    public static void init() {
         if (!CONFIG_FILE.exists()) {
-            config = new JsonObject();
-            initializeDefaults();
-            saveConfig(); // 如果文件不存在，创建一个包含默认值的配置文件
-        } else {
-            config = JsonUtil.readJsonFile(CONFIG_FILE);
-            ensureDefaults(); // 确保默认值存在
+            // 写入默认配置文件
+            FileUtil.copyResource("assets/ayame/config.json",CONFIG_FILE.toPath());
         }
-    }
-
-    /**
-     * 初始化默认配置值。
-     */
-    private void initializeDefaults() {
-        config.addProperty("skipAyameWarning", defaultSkipAyameWarning);
-    }
-
-    /**
-     * 确保配置文件中存在默认值。
-     */
-    private void ensureDefaults() {
-        if (!config.has("skipAyameWarning")) {
-            config.addProperty("skipAyameWarning", defaultSkipAyameWarning);
-            saveConfig(); // 保存更新后的配置文件
+        try {
+            config = JsonInterpreter.fromFile(CONFIG_FILE);
+        } catch (IOException e) {
+            LOGGER.error("Unable to read config file",e);
         }
+
+        SKIP_AYAME_WARNING = config.getBoolean("skipAyameWarning",false);
     }
 
-    /**
-     * 保存当前内存中的配置内容到配置文件。
-     */
-    private void saveConfig() {
-        JsonUtil.writeJsonFile(CONFIG_FILE, config);
+    public static void save(){
+        config.set("skipAyameWarning",SKIP_AYAME_WARNING);
+        config.save(CONFIG_FILE.toPath());
     }
 
-    /**
-     * 获取 skipAyameWarning 配置项的值。
-     *
-     * @return 如果配置项存在且为 true，返回 true；否则返回 false。
-     */
-    public boolean getSkipAyameWarning() {
-        return config.has("skipAyameWarning") && config.get("skipAyameWarning").getAsBoolean();
-    }
-
-    /**
-     * 设置 skipAyameWarning 配置项的值。
-     *
-     * @param skip 设置为 true 或 false。
-     */
-    public void setSkipAyameWarning(boolean skip) {
-        config.addProperty("skipAyameWarning", skip);
-        saveConfig(); // 更新配置文件
-    }
 }

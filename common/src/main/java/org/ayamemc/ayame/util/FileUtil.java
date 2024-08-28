@@ -38,13 +38,25 @@ public class FileUtil {
     }
 
     // 覆盖文件
-    public static void overwriteFile(Path path,String content){
+    public static void overwriteFile(Path path, String content) {
         try {
+            // 检查文件夹是否存在，如果不存在则创建
+            if (Files.notExists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
+
+            // 检查文件是否存在，如果不存在则创建
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+            }
+
+            // 写入文件内容
             Files.write(path, content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
     }
+
 
 
     /**
@@ -82,4 +94,30 @@ public class FileUtil {
 
         return fileContents;
     }
+
+
+    public static void copyResource(String resourcePath,Path targetPath) {
+        try {
+            // 使用ClassLoader读取资源文件
+            InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(resourcePath);
+
+            if (inputStream != null) {
+                // 读取资源文件内容，指定编码为UTF-8
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+                reader.close();
+                // 将读取到的内容写入文件
+                FileUtil.overwriteFile(targetPath, content.toString());
+            } else {
+                LOGGER.error("Cannot find resource: {}", resourcePath);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Cannot copy resource: ", e);
+        }
+    }
+
 }

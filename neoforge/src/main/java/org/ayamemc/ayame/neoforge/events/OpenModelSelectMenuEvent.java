@@ -19,13 +19,14 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.neoforge.client.RegisterKeyMapping;
 import org.ayamemc.ayame.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.util.ConfigUtil;
 
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
 public class OpenModelSelectMenuEvent {
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
         while (RegisterKeyMapping.MODEL_SELECT_MENU.get().consumeClick()) {
-            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty()));
+            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), ConfigUtil.SKIP_AYAME_WARNING));
         }
     }
 }

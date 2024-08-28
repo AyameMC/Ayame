@@ -25,7 +25,7 @@ public class ModelSelectMenuScreen extends Screen {
 
     @Override
     protected void init() {
-        if (!skipWarning && !new ConfigUtil().getSkipAyameWarning()) {
+        if (!skipWarning && !ConfigUtil.SKIP_AYAME_WARNING) {
             this.minecraft.setScreen(new CopyrigCautionScreen(this));
             return;
         }

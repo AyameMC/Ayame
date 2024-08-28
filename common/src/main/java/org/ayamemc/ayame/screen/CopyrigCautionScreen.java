@@ -38,8 +38,7 @@ public class CopyrigCautionScreen extends WarningScreen {
         LinearLayout linearLayout = LinearLayout.horizontal().spacing(8);
         linearLayout.addChild(Button.builder(CommonComponents.GUI_PROCEED, button -> {
             if (this.stopShowing.selected()) {
-                ConfigUtil configUtil = new ConfigUtil();
-                configUtil.setSkipAyameWarning(true);
+                ConfigUtil.SKIP_AYAME_WARNING = true;
             }
 
             this.minecraft.setScreen(new ModelSelectMenuScreen(Component.empty(),true));
@@ -48,9 +47,10 @@ public class CopyrigCautionScreen extends WarningScreen {
         return linearLayout;
     }
 
-//        @Override
-//        public void onClose() {
-//        this.minecraft.setScreen(e);
-//    }
+    @Override
+    public void onClose() {
+        this.minecraft.setScreen(previous);
+        ConfigUtil.save(); // 保存配置
+    }
 
 }

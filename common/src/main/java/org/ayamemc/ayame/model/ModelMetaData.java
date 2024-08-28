@@ -98,6 +98,7 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
                     .setAnimations(json.getStringList("animations").toArray(new String[0]))
                     .setVersion(json.getString("version"));
         }
+
         public ModelMetaData build() {
             return new ModelMetaData(authors, name, description, license, links, tags, type, version, animations);
         }
