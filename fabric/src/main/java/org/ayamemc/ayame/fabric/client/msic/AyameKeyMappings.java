@@ -1,7 +1,7 @@
 /*
  *      This file is part of Ayame.
  *
- *     Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+ *     Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
  *     Ayame is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
  *
@@ -51,7 +51,7 @@ public class AyameKeyMappings {
     public static void processKeyPressed() {
         while (AyameKeyMappings.MODEL_SELECT_MENU.consumeClick()) {
             // TODO open model select menu
-            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty()));
+            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(),false));
         }
     }
 }

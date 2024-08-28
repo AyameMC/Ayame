@@ -14,14 +14,23 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.ayamemc.ayame.util.ConfigUtil;
 
 public class ModelSelectMenuScreen extends Screen {
-    public ModelSelectMenuScreen(Component title) {
+    private boolean skipWarning;
+    public ModelSelectMenuScreen(Component title, boolean skipWarning) {
         super(title);
+        this.skipWarning = skipWarning;
     }
 
     @Override
     protected void init() {
+        if (!skipWarning && !new ConfigUtil().getSkipAyameWarning()) {
+            this.minecraft.setScreen(new CopyrigCautionScreen(this));
+            return;
+        }
+
+
         // TODO: 模型切换
         Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
             // When the button is clicked, we can display a toast to the screen.
