@@ -19,7 +19,8 @@ import org.ayamemc.ayame.util.ConfigUtil;
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     private final boolean skipWarning;
-    public ModelSelectMenuScreen(Component title,boolean skipWarning,  Screen lastScreen) {
+
+    public ModelSelectMenuScreen(Component title, boolean skipWarning, Screen lastScreen) {
         super(title);
         this.skipWarning = skipWarning;
         this.lastScreen = lastScreen;
