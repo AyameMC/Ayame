@@ -34,7 +34,7 @@ public class ModelSelectMenuScreen extends Screen {
     @Override
     protected void init() {
         if (!ConfigUtil.SKIP_AYAME_WARNING && !skipWarningOnce) {
-            this.minecraft.setScreen(new CopyrightCautionScreen(this, lastScreen));
+            this.minecraft.setScreen(new StatementnScreen(this, lastScreen));
             return;
         }
 

@@ -1,3 +1,13 @@
+/*
+ *      This file is part of Ayame.
+ *
+ *     Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ *     Ayame is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.ayamemc.ayame.screen;
 
 import net.minecraft.ChatFormatting;
@@ -13,9 +23,9 @@ import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class CopyrightCautionScreen extends WarningScreen {
-    private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.caution.title").withStyle(ChatFormatting.BOLD);
-    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.caution.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
+public class StatementnScreen extends WarningScreen {
+    private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statement.title").withStyle(ChatFormatting.BOLD);
+    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.statement.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
     private static final Component CHECK = Component.translatable("multiplayerWarning.check");
     private static final Component NARRATION = TITLE.copy().append("\n").append(CONTENT);
 
@@ -24,7 +34,7 @@ public class CopyrightCautionScreen extends WarningScreen {
     private boolean open = false;
     private boolean skipWarningOnce = false; // 新增变量用于控制单次跳过
 
-    public CopyrightCautionScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
+    public StatementnScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
         super(TITLE, CONTENT, CHECK, NARRATION);
         this.lastScreen = lastScreen;
         this.lastLastScreen = lastLastScreen;
@@ -32,7 +42,7 @@ public class CopyrightCautionScreen extends WarningScreen {
 
     @Override
     protected Layout addFooterButtons() {
-        this.stopShowing.selected = true;
+        this.stopShowing.selected = true; // 默认勾选“不再显示此屏幕”
         LinearLayout linearLayout = LinearLayout.horizontal().spacing(8);
         linearLayout.addChild(Button.builder(CommonComponents.GUI_PROCEED, button -> {
             if (this.stopShowing.selected()) {
