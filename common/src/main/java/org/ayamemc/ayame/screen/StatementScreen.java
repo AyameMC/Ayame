@@ -24,8 +24,8 @@ import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class StatementScreen extends WarningScreen {
-    private static final Component TITLE = Component.translatable("ayame.screen.statementscreen.title").withStyle(ChatFormatting.BOLD);
-    private static final Component CONTENT = Component.translatable("ayame.screen.statementscreen.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
+    private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statementscreen.title").withStyle(ChatFormatting.BOLD);
+    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.statementscreen.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
     private static final Component CHECK = Component.translatable("multiplayerWarning.check");
     private static final Component NARRATION = TITLE.copy().append("\n").append(CONTENT);
 
