@@ -15,21 +15,20 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.jetbrains.annotations.Nullable;
 
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
-    private final boolean skipWarning;
 
-    public ModelSelectMenuScreen(Component title, boolean skipWarning, Screen lastScreen) {
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen) {
         super(title);
-        this.skipWarning = skipWarning;
         this.lastScreen = lastScreen;
     }
 
     @Override
     protected void init() {
-        if (!skipWarning && !ConfigUtil.SKIP_AYAME_WARNING) {
-            this.minecraft.setScreen(new CopyrightCautionScreen(this, this));
+        if (!ConfigUtil.SKIP_AYAME_WARNING) {
+            this.minecraft.setScreen(new CopyrightCautionScreen(this, lastScreen));
             return;
         }
 
@@ -69,5 +68,11 @@ public class ModelSelectMenuScreen extends Screen {
         // textRenderer, text, x, y, color, hasShadow
         context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        minecraft.setScreen(lastScreen);
     }
 }

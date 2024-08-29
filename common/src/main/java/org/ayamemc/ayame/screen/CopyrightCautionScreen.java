@@ -21,6 +21,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.jetbrains.annotations.Nullable;
 
 public class CopyrightCautionScreen extends WarningScreen {
     private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.caution.title").withStyle(ChatFormatting.BOLD);
@@ -33,8 +34,9 @@ public class CopyrightCautionScreen extends WarningScreen {
     public final Screen lastScreen;
     ;
     public final Screen lastLastScreen;
+    private boolean open = false;
 
-    public CopyrightCautionScreen(Screen lastScreen, Screen lastLastScreen) {
+    public CopyrightCautionScreen(@Nullable Screen lastScreen,@Nullable Screen lastLastScreen) {
         super(TITLE, CONTENT, CHECK, NARRATION);
         this.lastScreen = lastScreen;
         this.lastLastScreen = lastLastScreen;
@@ -47,9 +49,7 @@ public class CopyrightCautionScreen extends WarningScreen {
             if (this.stopShowing.selected()) {
                 ConfigUtil.SKIP_AYAME_WARNING = true;
             }
-
-
-
+            open = true;
             this.onClose();
             //this.minecraft.setScreen(lastScreen);
         }).build());
@@ -59,8 +59,7 @@ public class CopyrightCautionScreen extends WarningScreen {
 
     @Override
     public void onClose() {
-        minecraft.setScreen(null);
-        if (ConfigUtil.SKIP_AYAME_WARNING) {
+        if (open){
             minecraft.setScreen(lastScreen);
         } else {
             minecraft.setScreen(lastLastScreen);

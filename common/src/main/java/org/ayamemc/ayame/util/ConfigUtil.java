@@ -17,7 +17,7 @@ import java.io.IOException;
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class ConfigUtil {
-    public static final File CONFIG_FILE = new File("config/Ayame/config.json");
+    public static final File CONFIG_FILE = new File("config/ayame/config.json");
     public static JsonInterpreter config = JsonInterpreter.of("{}");
 
     public static boolean SKIP_AYAME_WARNING = false;
