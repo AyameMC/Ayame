@@ -23,9 +23,9 @@ import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class StatementnScreen extends WarningScreen {
-    private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statement.title").withStyle(ChatFormatting.BOLD);
-    private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.statement.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
+public class StatementScreen extends WarningScreen {
+    private static final Component TITLE = Component.translatable("ayame.screen.statementscreen.title").withStyle(ChatFormatting.BOLD);
+    private static final Component CONTENT = Component.translatable("ayame.screen.statementscreen.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));
     private static final Component CHECK = Component.translatable("multiplayerWarning.check");
     private static final Component NARRATION = TITLE.copy().append("\n").append(CONTENT);
 
@@ -34,7 +34,7 @@ public class StatementnScreen extends WarningScreen {
     private boolean open = false;
     private boolean skipWarningOnce = false; // 新增变量用于控制单次跳过
 
-    public StatementnScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
+    public StatementScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
         super(TITLE, CONTENT, CHECK, NARRATION);
         this.lastScreen = lastScreen;
         this.lastLastScreen = lastLastScreen;

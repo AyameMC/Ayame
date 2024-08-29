@@ -3,6 +3,6 @@
   "fml.menu.mods.info.description.ayame": "Custom player model mod. Based on GeckoLib.",
   "key.categories.ayame": "Ayame",
   "key.ayame.model_select_menu": "Open Player Model GUI",
-  "ayame.screen.warningscreen.statement.title": "Statement",
+  "ayame.screen.statementscreen.title": "Statement",
   "ayame.screen.warningscreen.statement.content": "Ayame is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nAyame is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>."
 }
