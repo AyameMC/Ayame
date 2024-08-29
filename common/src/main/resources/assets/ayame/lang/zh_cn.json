@@ -2,7 +2,7 @@
   "modmenu.descriptionTranslation.ayame": "基于 GeckoLib 的玩家模型自定义模组。",
   "fml.menu.mods.info.description.ayame": "基于 GeckoLib 的玩家模型自定义模组。",
   "key.categories.ayame": "Ayame",
-  "key.ayame.model_select_menu": "打开模型选择菜单",
-  "ayame.screen.warningscreen.caution.title": "警告：版权声明",
-  "ayame.screen.warningscreen.caution.content": "Ayame是自由软件：您可以按照自由软件基金会发布的GNU宽通用公共许可证的条款重新分发和/或修改Ayame；\n许可证的第3版或（根据您的选择）任何更高版本均适用。\n\nAyame的发布是为了希望它能够发挥作用，但并不提供任何担保；甚至不包含适销性或针对特定用途的适用性的默示担保。有关详细信息，请参阅GNU宽通用公共许可证。\n\n您应该已经随Ayame一同收到了GNU宽通用公共许可证的副本。如果没有，请参阅\n<https://www.gnu.org/licenses/>。"
+  "key.ayame.model_select_menu": "打开玩家模型界面",
+  "ayame.screen.warningscreen.statementscreen.title": "声明",
+  "ayame.screen.warningscreen.statementscreen.content": "Ayame是自由软件：您可以按照自由软件基金会发布的GNU宽通用公共许可证的条款重新分发和/或修改Ayame；\n许可证的第3版或（根据您的选择）任何更高版本均适用。\n\nAyame的发布是为了希望它能够发挥作用，但并不提供任何担保；甚至不包含适销性或针对特定用途的适用性的默示担保。有关详细信息，请参阅GNU宽通用公共许可证。\n\n您应该已经随Ayame一同收到了GNU宽通用公共许可证的副本。如果没有，请参阅 <https://www.gnu.org/licenses/>。"
 }

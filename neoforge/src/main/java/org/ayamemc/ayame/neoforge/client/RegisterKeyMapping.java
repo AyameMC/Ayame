@@ -37,5 +37,6 @@ public class RegisterKeyMapping {
     @SubscribeEvent
     public static void onKeyPressed(RegisterKeyMappingsEvent event) {
         event.register(MODEL_SELECT_MENU.get());
+
     }
 }

@@ -69,3 +69,8 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
+
+// 配置访问加宽器
+loom {
+    accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+}
