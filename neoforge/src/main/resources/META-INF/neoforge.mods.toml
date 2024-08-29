@@ -11,10 +11,14 @@ displayURL = "https://github.com/AyameMC/Ayame"
 authors = '''
 CSneko, HappyRespawnanchor
 '''
+credits = '''
+pertaz(Icon Desiger)
+'''
+
 description = '''
 Custom player model mod. Based on GeckoLib.
 '''
-#logoFile = ""
+logoFile = "ayame_logo.png"
 
 [[dependencies.ayame]]
 modId = "neoforge"
@@ -46,3 +50,5 @@ side = "BOTH"
 
 [[mixins]]
 config = "ayame.mixins.json"
+
+# 配置fabric系的AW访问加宽器，见neoforge的build.gradle

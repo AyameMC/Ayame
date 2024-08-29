@@ -4,6 +4,7 @@
   "version": "${version}",
   "name": "Ayame",
   "description": "Custom player model mod. Based on GeckoLib.",
+  "accessWidener" : "ayame.accesswidener",
   "authors": [
     {
       "name": "CrystalNeko",
@@ -15,6 +16,14 @@
       "name": "HappyRespawnanchor",
       "contact": {
         "homepage": "https://github.com/HappyRespawnanchor"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "pertaz(Icon Desiger)",
+      "contact": {
+        "homepage": "https://github.com/pltision"
       }
     }
   ],

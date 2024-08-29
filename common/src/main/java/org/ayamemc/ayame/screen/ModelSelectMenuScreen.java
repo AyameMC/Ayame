@@ -19,15 +19,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
-
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen) {
+    public final boolean skipWarningOnce;
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
         super(title);
         this.lastScreen = lastScreen;
+        this.skipWarningOnce = skipWarningOnce;
+    }
+
+    // 重载构造方法，默认 skipWarningOnce 为 false
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen) {
+        this(title, lastScreen, false);
     }
 
     @Override
     protected void init() {
-        if (!ConfigUtil.SKIP_AYAME_WARNING) {
+        if (!ConfigUtil.SKIP_AYAME_WARNING && !skipWarningOnce) {
             this.minecraft.setScreen(new CopyrightCautionScreen(this, lastScreen));
             return;
         }
@@ -73,6 +79,6 @@ public class ModelSelectMenuScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-        minecraft.setScreen(lastScreen);
+        // minecraft.setScreen(lastScreen); 有必要吗，换完模型直接关就行，没必要这样
     }
 }
