@@ -30,7 +30,7 @@ public abstract class PlayerMixin implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
-        controllers.add(new AnimationController<>(this, 40, state -> {
+        controllers.add(new AnimationController<>(this, 20, state -> {
             // 没有移动，则播放idle动画
             if (!state.isMoving()) {
                 state.getController().setAnimation(DefaultAnimations.IDLE);
