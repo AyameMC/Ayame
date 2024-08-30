@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
+
     public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
         super(title);
         this.lastScreen = lastScreen;
