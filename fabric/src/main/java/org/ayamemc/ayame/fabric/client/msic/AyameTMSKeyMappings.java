@@ -17,12 +17,15 @@ import com.mojang.blaze3d.platform.InputConstants;
 import dev.kingtux.tms.api.TMSKeyBinding;
 import dev.kingtux.tms.api.modifiers.BindingModifiers;
 import dev.kingtux.tms.api.modifiers.KeyModifier;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
+@Environment(EnvType.CLIENT)
 public class AyameTMSKeyMappings {
 
     public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull String modifier) {

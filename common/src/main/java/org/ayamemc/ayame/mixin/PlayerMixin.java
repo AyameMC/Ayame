@@ -14,6 +14,8 @@
 package org.ayamemc.ayame.mixin;
 
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,6 +27,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity {
     @Unique

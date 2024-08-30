@@ -13,6 +13,8 @@
 
 package org.ayamemc.ayame.client.renderer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +22,7 @@ import org.ayamemc.ayame.model.AyameModel;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
+@Environment(EnvType.CLIENT)
 public class GeoPlayerRender extends GeoEntityRenderer<Player> {
     private final GeoPlayerModel pModel;
 

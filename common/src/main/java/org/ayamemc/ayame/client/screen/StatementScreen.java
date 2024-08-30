@@ -11,8 +11,10 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.screen;
+package org.ayamemc.ayame.client.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.Layout;
@@ -26,6 +28,7 @@ import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
+@Environment(EnvType.CLIENT)
 public class StatementScreen extends WarningScreen {
     private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statementscreen.title").withStyle(ChatFormatting.BOLD);
     private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.statementscreen.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));

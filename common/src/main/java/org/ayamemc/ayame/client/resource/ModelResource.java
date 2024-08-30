@@ -13,8 +13,9 @@
 
 package org.ayamemc.ayame.client.resource;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.util.ResourceUtil;
 import org.ayamemc.ayame.model.AyameModel;
 import org.ayamemc.ayame.model.DefaultAyameModel;
 import org.ayamemc.ayame.model.ModelMetaData;
@@ -29,6 +30,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 /**
  * 模型资源
  */
+@Environment(EnvType.CLIENT)
 public class ModelResource {
     private final Path file;
     private final Map<String, String> zip;

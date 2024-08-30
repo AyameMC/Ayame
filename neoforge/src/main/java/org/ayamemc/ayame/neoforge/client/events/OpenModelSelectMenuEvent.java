@@ -11,7 +11,7 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge.events;
+package org.ayamemc.ayame.neoforge.client.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -20,8 +20,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.neoforge.client.RegisterKeyMapping;
-import org.ayamemc.ayame.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
 public class OpenModelSelectMenuEvent {

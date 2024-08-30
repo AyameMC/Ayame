@@ -11,7 +11,7 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge.client;
+package org.ayamemc.ayame.neoforge.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -25,6 +25,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.lwjgl.glfw.GLFW;
+
 
 @EventBusSubscriber(modid = Ayame.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RegisterKeyMapping {

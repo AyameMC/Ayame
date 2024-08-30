@@ -13,10 +13,13 @@
 
 package org.ayamemc.ayame.fabric.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
 
+@Environment(EnvType.CLIENT)
 public class AyameFabricClientEvents {
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(AyameFabricClientEvents::endClientTickEvent);

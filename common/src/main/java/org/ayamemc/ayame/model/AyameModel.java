@@ -28,6 +28,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  * // 注：模型类型指的是使用了哪种模型，例如ayame的模型类型为"ayame"，兼容ysm的为"ysm"，值与ModelMetaData中的type()的值对应
  * // 无论何种格式，元数据文件必须转为Ayame的元数据文件格式
  */
+
 public interface AyameModel {
     default ResourceLocation getGeoModel() {
         return ResourceLocation.fromNamespaceAndPath(

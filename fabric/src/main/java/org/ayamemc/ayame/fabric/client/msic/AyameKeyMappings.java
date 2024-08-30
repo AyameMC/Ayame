@@ -14,11 +14,13 @@
 package org.ayamemc.ayame.fabric.client.msic;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.ayamemc.ayame.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +29,7 @@ import org.lwjgl.glfw.GLFW;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
-
+@Environment(EnvType.CLIENT)
 public class AyameKeyMappings {
     public static final boolean IS_TMS_INSTALLED = JavaUtil.tryClass("dev.kingtux.tms.api.TMSKeyBinding");
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(

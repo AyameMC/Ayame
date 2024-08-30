@@ -14,6 +14,8 @@
 package org.ayamemc.ayame.mixin;
 
 import com.google.common.collect.ImmutableMap;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -29,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Environment(EnvType.CLIENT)
 @Mixin(EntityRenderers.class)
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)

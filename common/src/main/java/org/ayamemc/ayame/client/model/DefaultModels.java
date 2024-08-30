@@ -13,9 +13,12 @@
 
 package org.ayamemc.ayame.client.model;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.model.DefaultAyameModel;
 import org.ayamemc.ayame.model.ModelMetaData;
 
+@Environment(EnvType.CLIENT)
 public class DefaultModels {
     public static final DefaultAyameModel TEST_MODEL = new DefaultAyameModel(ModelMetaData.Builder.create()
             .setVersion("0.0.1")

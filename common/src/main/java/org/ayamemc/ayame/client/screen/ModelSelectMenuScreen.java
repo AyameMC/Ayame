@@ -11,15 +11,22 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.screen;
+package org.ayamemc.ayame.client.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.resource.ResourceUtil;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
+import static org.ayamemc.ayame.Ayame.MOD_ID;
+
+@Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
@@ -41,6 +48,11 @@ public class ModelSelectMenuScreen extends Screen {
             this.minecraft.setScreen(new StatementScreen(this, lastScreen));
             return;
         }
+
+        // TODO ：删除这段代码，我只是拿来测试的
+        ResourceUtil.writeResource(ResourceLocation.fromNamespaceAndPath(
+                MOD_ID, "geo/ayame/"
+        ), "Hello World!");
 
 
         // TODO: 模型切换

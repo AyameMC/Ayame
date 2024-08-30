@@ -14,6 +14,8 @@
 package org.ayamemc.ayame.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Environment(EnvType.CLIENT)
 @Mixin(ItemInHandRenderer.class)
 public class ClientItemInHandRendererMixin {
     @Inject(method = "renderPlayerArm", at = @At("HEAD"), cancellable = true)
