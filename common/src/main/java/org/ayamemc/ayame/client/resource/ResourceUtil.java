@@ -23,6 +23,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 @Environment(EnvType.CLIENT)
 public class ResourceUtil {
@@ -51,7 +54,7 @@ public class ResourceUtil {
 //            }
 //        });
 
-//        resourceManager.listResources("a  ssets/ayame/geo/ayame", (path) -> path.getPath().endsWith(".json")).forEach((rl,r)->{
+//        resourceManager.listResources("assets/ayame/geo/ayame", (path) -> path.getPath().endsWith(".json")).forEach((rl,r)->{
 //            LOGGER.info(rl.toString());
 //            try {
 //                LOGGER.info(convertInputStreamToString(r.open()));
