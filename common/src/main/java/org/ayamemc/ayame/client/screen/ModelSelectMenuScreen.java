@@ -25,12 +25,16 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.InactiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
+import org.ayamemc.ayame.client.renderer.GeoPlayerRender;
+import org.ayamemc.ayame.client.resource.ModelResource;
 import org.ayamemc.ayame.client.resource.ResourceUtil;
+import org.ayamemc.ayame.client.util.GeckoLibCacheWriteMapUtil;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.GeckoLibCache;
 
+import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -59,24 +63,24 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
             return;
         }
 
-        // TODO ：删除这段代码，我只是拿来测试的
-        ResourceUtil.writeResource(ResourceLocation.fromNamespaceAndPath(
-                MOD_ID, "geo/ayame/"
-        ), "Hello World!");
-
 
         // TODO: 模型切换
         // TODO: 调用GeckoLib 的reload方法
         // 创建按钮
         Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
-            Minecraft minecraft = this.minecraft;
-            ResourceManager resourceManager = minecraft.getResourceManager();
-            Executor backgroundExecutor = minecraft;
-            Executor gameExecutor = minecraft;
-            ProfilerFiller preparationsProfiler = InactiveProfiler.INSTANCE;
-            ProfilerFiller reloadProfiler = InactiveProfiler.INSTANCE;
+//            Minecraft minecraft = this.minecraft;
+//            ResourceManager resourceManager = minecraft.getResourceManager();
+//            Executor backgroundExecutor = minecraft;
+//            Executor gameExecutor = minecraft;
+//            ProfilerFiller preparationsProfiler = InactiveProfiler.INSTANCE;
+//            ProfilerFiller reloadProfiler = InactiveProfiler.INSTANCE;
             // 想办法调用this.reload
 
+
+            // 加载模型
+            ModelResource modelRes = ModelResource.fromFile(Path.of("config/ayame/models/classic_neko.zip"));
+            GeckoLibCacheWriteMapUtil.addModelResource(MOD_ID,modelRes);
+            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes.getModel());
 
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
         }).bounds(150, 40, 120, 20).build();

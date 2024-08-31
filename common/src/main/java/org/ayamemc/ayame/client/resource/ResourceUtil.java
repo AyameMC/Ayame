@@ -85,7 +85,7 @@ public class ResourceUtil {
             GeckoLibCache.getBakedModels().put(ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/ayame.json"), bakedGeoModel);
 
         }catch (IOException e){
-            LOGGER.error("Error reading resource: " + loc, e);
+            LOGGER.error("Error reading resource:{} ", loc, e);
         }
 
     }

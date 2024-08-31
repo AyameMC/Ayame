@@ -45,18 +45,18 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
 
     // TODO : 添加API
     public static class GeoPlayerModel extends GeoModel<Player> {
-        public ResourceLocation geoModel;
-        public ResourceLocation texture;
-        public ResourceLocation animation;
+        public static ResourceLocation geoModel;
+        public static ResourceLocation texture;
+        public static ResourceLocation animation;
 
         public GeoPlayerModel(AyameModel model) {
             switchModel(model);
         }
 
-        public void switchModel(AyameModel model) {
-            this.geoModel = model.getGeoModel();
-            this.texture = model.getTexture();
-            this.animation = model.getAnimation();
+        public static void switchModel(AyameModel model) {
+            geoModel = model.getGeoModel();
+            texture = model.getTexture();
+            animation = model.getAnimation();
         }
 
         @Override

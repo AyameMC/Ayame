@@ -22,6 +22,8 @@ import org.ayamemc.ayame.model.ModelMetaData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -41,7 +43,7 @@ public class ModelResource {
      */
     public ModelResource(Path file) {
         this.file = file;
-        this.zip = FileUtil.readZipFile(file);
+        this.zip = readZip();
         this.metaData = getMetaData();
     }
 
@@ -67,27 +69,27 @@ public class ModelResource {
         return ModelMetaData.DefaultModelTypes.AYAME;
     }
 
-    public void loadModel() {
-        String type = metaData.type();
-        String name = metaData.name();
-        ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/" + type + "/" + name + ".json")
-                , zip.get("model.json")
-        );
-        ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/" + type + "/" + name + ".png")
-                , zip.get("texture.png")
-        );
-        ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/" + type + "/" + name + ".json")
-                , zip.get("animation.json")
-        );
-        ResourceUtil.writeResource(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, "model_metadata/" + type + "/" + name + ".json")
-                , this.metaData.conversion().toString()
-        );
-        // TODO 完成ysm格式
-    }
+//    public void loadModel() {
+//        String type = metaData.type();
+//        String name = metaData.name();
+//        ResourceUtil.writeResource(
+//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/" + type + "/" + name + ".json")
+//                , zip.get("model.json")
+//        );
+//        ResourceUtil.writeResource(
+//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/" + type + "/" + name + ".png")
+//                , zip.get("texture.png")
+//        );
+//        ResourceUtil.writeResource(
+//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/" + type + "/" + name + ".json")
+//                , zip.get("animation.json")
+//        );
+//        ResourceUtil.writeResource(
+//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "model_metadata/" + type + "/" + name + ".json")
+//                , this.metaData.conversion().toString()
+//        );
+//        // TODO 完成ysm格式
+//    }
 
     public AyameModel getModel() {
         // 为ayame模型读取
@@ -96,5 +98,29 @@ public class ModelResource {
         }
         // TODO 完成ysm格式
         return null;
+    }
+
+
+    public JsonInterpreter getModelJson() {
+        return JsonInterpreter.of(zip.get("model.json"));
+    }
+
+    public JsonInterpreter getAnimationJson() {
+        return JsonInterpreter.of(zip.get("animation.json"));
+    }
+
+    public JsonInterpreter getMetaDataJson() {
+        return JsonInterpreter.of(zip.get("metadata.json"));
+    }
+
+    public String getTexture() {
+        return zip.get("texture.png");
+    }
+
+    public static ModelResource fromFile(Path file){
+        return new ModelResource(file);
+    }
+    public static ModelResource fromFile(File file){
+        return new ModelResource(file.toPath());
     }
 }
