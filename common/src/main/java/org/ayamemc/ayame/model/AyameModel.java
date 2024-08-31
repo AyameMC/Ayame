@@ -33,23 +33,23 @@ public interface AyameModel {
     default ResourceLocation getGeoModel() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
-                "geo/" + getMetaData().type() + "/" + getMetaData().name() + ".json"
+                "geo/" + metaData().type() + "/" + metaData().name() + ".json"
         );
     }
 
     default ResourceLocation getTexture() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
-                "textures/" + getMetaData().type() + "/" + getMetaData().name() + ".png"
+                "textures/" + metaData().type() + "/" + metaData().name() + ".png"
         );
     }
 
     default ResourceLocation getAnimation() {
         return ResourceLocation.fromNamespaceAndPath(
                 MOD_ID,
-                "animations/" + getMetaData().type() + "/" + getMetaData().name() + ".json"
+                "animations/" + metaData().type() + "/" + metaData().name() + ".json"
         );
     }
 
-    ModelMetaData getMetaData();
+    ModelMetaData metaData();
 }

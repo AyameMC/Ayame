@@ -11,7 +11,7 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model;
+package org.ayamemc.ayame.client.util;
 
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.GeckoLibCache;
@@ -20,7 +20,7 @@ import software.bernie.geckolib.loading.object.BakedAnimations;
 
 import java.util.Map;
 
-public class GeckoLibCacheOverride {
+public class GeckoLibCacheWriteMapUtil {
 
     // 向模型缓存中添加新条目
     public static void addBakedModel(ResourceLocation resourceLocation, BakedGeoModel model) {
