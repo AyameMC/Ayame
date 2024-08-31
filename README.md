@@ -8,4 +8,4 @@
 
 [<img src="docs_img/Requires_GeckoLib.png" alt="Requires GeckoLib" width="169">](https://modrinth.com/mod/geckolib)<img src="docs_img/Breaks_With_Optifine.png" alt="Requires GeckoLib" width="164">
 
-Custom player model mod. Powered by GeckoLib.
+Custom player model mod. Powered by [GeckoLib](https://modrinth.com/mod/geckolib).
