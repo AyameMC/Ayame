@@ -1,6 +1,6 @@
 <div align="right">
 
-[![LGPL-v3 logo](docs_img/LGPL-v3_logo.png)](COPYING.LESSER)
+[![LGPL-v3 logo](docs_img/LGPL-v3_logo.svg)](COPYING.LESSER)
 
 </div>
 
