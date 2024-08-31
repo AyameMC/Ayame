@@ -16,7 +16,7 @@ pertaz(Icon Desiger)
 '''
 
 description = '''
-A Mod That You Can Custom Your Model.
+Custom player model mod. Powered by GeckoLib.
 '''
 logoFile = "ayame_logo.png"
 

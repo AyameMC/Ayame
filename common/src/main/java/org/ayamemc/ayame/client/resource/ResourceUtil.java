@@ -13,34 +13,17 @@
 
 package org.ayamemc.ayame.client.resource;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.GsonHelper;
-import org.ayamemc.ayame.util.JsonInterpreter;
-import software.bernie.geckolib.cache.GeckoLibCache;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.loading.json.raw.Model;
-import software.bernie.geckolib.loading.json.typeadapter.KeyFramesAdapter;
-import software.bernie.geckolib.loading.object.BakedAnimations;
-import software.bernie.geckolib.loading.object.BakedModelFactory;
-import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
@@ -56,20 +39,6 @@ public class ResourceUtil {
         // 获取ResourceManager
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         // TODO 动态加载资源
-
-
-//        try {
-//            BakedAnimations animations = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(JsonInterpreter.fromFile(Path.of("config/ayame/custom/retest/animations.json")).toGson(), "animations"), BakedAnimations.class);
-//            GeckoLibCache.getBakedAnimations().put(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "animations/retest.json"), animations);
-//
-//            Model model = KeyFramesAdapter.GEO_GSON.fromJson(JsonInterpreter.fromFile(Path.of("config/ayame/custom/retest/model.json")).toGson(),Model.class);
-//            BakedGeoModel bakedModel = BakedModelFactory.getForNamespace(loc.getNamespace()).constructGeoModel(GeometryTree.fromModel(model));
-//            GeckoLibCache.getBakedModels().put(loc.withPath("geo/ayame/retest.json"), bakedModel);
-//        }catch (Exception e){
-//            LOGGER.error("Error reading resource: {}", loc, e);
-//        }
-
-
 
 //        try {
 //            System.out.println(convertInputStreamToString(resourceManager.open(loc)));
@@ -94,32 +63,8 @@ public class ResourceUtil {
 //            }
 //        });
 
-
-
     }
 
-
-
-    private static <T> CompletableFuture<Void> loadResources(Executor executor, ResourceManager resourceManager,
-                                                             String type, Function<ResourceLocation, T> loader, BiConsumer<ResourceLocation, T> map) {
-        return CompletableFuture.supplyAsync(
-                        () -> resourceManager.listResources(type, fileName -> fileName.toString().endsWith(".json")), executor)
-                .thenApplyAsync(resources -> {
-                    Map<ResourceLocation, CompletableFuture<T>> tasks = new Object2ObjectOpenHashMap<>();
-
-                    for (ResourceLocation resource : resources.keySet()) {
-                        tasks.put(resource, CompletableFuture.supplyAsync(() -> loader.apply(resource), executor));
-                    }
-
-                    return tasks;
-                }, executor)
-                .thenAcceptAsync(tasks -> {
-                    for (Map.Entry<ResourceLocation, CompletableFuture<T>> entry : tasks.entrySet()) {
-                        // Skip known namespaces that use an "animation" or "geo" folder as well
-                        map.accept(entry.getKey(), entry.getValue().join());
-                    }
-                }, executor);
-    }
 
     public static String convertInputStreamToString(InputStream inputStream) throws IOException {
         StringBuilder resultStringBuilder = new StringBuilder();
