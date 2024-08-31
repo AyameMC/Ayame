@@ -40,7 +40,6 @@ public class ResourceUtil {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         // TODO 动态加载资源
 
-
 //        try {
 //            System.out.println(convertInputStreamToString(resourceManager.open(loc)));
 //        } catch (IOException e) {

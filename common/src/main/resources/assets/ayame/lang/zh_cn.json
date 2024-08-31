@@ -1,6 +1,6 @@
 {
-  "modmenu.descriptionTranslation.ayame": "基于 GeckoLib 的玩家模型自定义模组。",
-  "fml.menu.mods.info.description.ayame": "基于 GeckoLib 的玩家模型自定义模组。",
+  "modmenu.descriptionTranslation.ayame": "自定义你的模型！",
+  "fml.menu.mods.info.description.ayame": "自定义你的模型！",
   "key.categories.ayame": "Ayame",
   "key.ayame.model_select_menu": "打开玩家模型界面",
   "ayame.screen.warningscreen.statementscreen.title": "声明",

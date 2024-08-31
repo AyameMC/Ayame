@@ -1,6 +1,6 @@
 {
-  "modmenu.descriptionTranslation.ayame": "Custom player model mod. Based on GeckoLib.",
-  "fml.menu.mods.info.description.ayame": "Custom player model mod. Based on GeckoLib.",
+  "modmenu.descriptionTranslation.ayame": "A Mod That You Can Custom Your Model.",
+  "fml.menu.mods.info.description.ayame": "A Mod That You Can Custom Your Model.",
   "key.categories.ayame": "Ayame",
   "key.ayame.model_select_menu": "Open Player Model GUI",
   "ayame.screen.warningscreen.statementscreen.title": "Statement",
