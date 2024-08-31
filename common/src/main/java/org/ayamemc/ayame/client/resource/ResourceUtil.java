@@ -17,15 +17,27 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import org.ayamemc.ayame.util.JsonInterpreter;
+import software.bernie.geckolib.cache.GeckoLibCache;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.loading.json.raw.Model;
+import software.bernie.geckolib.loading.json.typeadapter.KeyFramesAdapter;
+import software.bernie.geckolib.loading.object.BakedAnimations;
+import software.bernie.geckolib.loading.object.BakedModelFactory;
+import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
+import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 @Environment(EnvType.CLIENT)
 public class ResourceUtil {
@@ -62,6 +74,19 @@ public class ResourceUtil {
 //                LOGGER.error("Error reading resource: " + loc, e);
 //            }
 //        });
+
+        try {
+
+            BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(JsonInterpreter.fromFile(Path.of("file/to/path")).toGson(), "animations"), BakedAnimations.class);
+            GeckoLibCache.getBakedAnimations().put(ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/ani.json"), ani);
+
+            Model model = KeyFramesAdapter.GEO_GSON.fromJson(JsonInterpreter.fromFile(Path.of("path/to/file")).toGson(), Model.class);
+            BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace("ayame").constructGeoModel(GeometryTree.fromModel(model));
+            GeckoLibCache.getBakedModels().put(ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/ayame.json"), bakedGeoModel);
+
+        }catch (IOException e){
+            LOGGER.error("Error reading resource: " + loc, e);
+        }
 
     }
 
