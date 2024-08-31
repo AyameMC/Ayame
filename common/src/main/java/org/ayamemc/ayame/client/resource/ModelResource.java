@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.SortedMap;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 

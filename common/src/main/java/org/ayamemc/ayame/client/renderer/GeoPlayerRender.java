@@ -45,6 +45,7 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
 
     // TODO : 添加API
     public static class GeoPlayerModel extends GeoModel<Player> {
+        // TODO 改成static只是为了测试，请改回来
         public static ResourceLocation geoModel;
         public static ResourceLocation texture;
         public static ResourceLocation animation;

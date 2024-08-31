@@ -19,7 +19,9 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +60,7 @@ public class AyameKeyMappings {
             LOGGER.warn("key passed");
             // TODO open model select menu
             Minecraft mc = Minecraft.getInstance();
-
+            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
 
 
             if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager){
