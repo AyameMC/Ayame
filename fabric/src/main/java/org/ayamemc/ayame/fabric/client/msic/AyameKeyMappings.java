@@ -19,14 +19,14 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 @Environment(EnvType.CLIENT)
@@ -55,8 +55,35 @@ public class AyameKeyMappings {
 
     public static void processKeyPressed() {
         while (AyameKeyMappings.MODEL_SELECT_MENU.consumeClick()) {
+            LOGGER.warn("key passed");
             // TODO open model select menu
-            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
+            Minecraft mc = Minecraft.getInstance();
+
+
+
+            if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager){
+                LOGGER.info("Reloading resources");
+
+            }
+            //Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
+//            GeckoLibCache.loadAnimations();
+//            ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+//                    .registerReloadListener(new IdentifiableResourceReloadListener() {
+//                        @Override
+//                        public ResourceLocation getFabricId() {
+//                            LOGGER.error("fabric resource reload");
+//
+//                            return GeckoLibConstants.id("models_animations");
+//                        }
+//
+//                        @Override
+//                        public CompletableFuture<Void> reload(PreparationBarrier synchronizer, ResourceManager manager,
+//                                                              ProfilerFiller prepareProfiler, ProfilerFiller applyProfiler, Executor prepareExecutor,
+//                                                              Executor applyExecutor) {
+//                            LOGGER.error("reload");
+//                            return GeckoLibCache.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor);
+//                        }
+//                    });
         }
     }
 }
