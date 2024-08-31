@@ -15,19 +15,29 @@ package org.ayamemc.ayame.client.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.InactiveProfiler;
+import net.minecraft.util.profiling.ProfilerFiller;
 import org.ayamemc.ayame.client.resource.ResourceUtil;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.cache.GeckoLibCache;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 @Environment(EnvType.CLIENT)
-public class ModelSelectMenuScreen extends Screen {
+public class ModelSelectMenuScreen extends Screen  implements PreparableReloadListener, AutoCloseable {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
 
@@ -56,12 +66,22 @@ public class ModelSelectMenuScreen extends Screen {
 
 
         // TODO: 模型切换
+        // TODO: 调用GeckoLib 的reload方法
+        // 创建按钮
         Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
-            // When the button is clicked, we can display a toast to the screen.
+            Minecraft minecraft = this.minecraft;
+            ResourceManager resourceManager = minecraft.getResourceManager();
+            Executor backgroundExecutor = minecraft;
+            Executor gameExecutor = minecraft;
+            ProfilerFiller preparationsProfiler = InactiveProfiler.INSTANCE;
+            ProfilerFiller reloadProfiler = InactiveProfiler.INSTANCE;
+            // 想办法调用this.reload
 
-            // 行为这里改
+
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
         }).bounds(150, 40, 120, 20).build();
+
+
 
         Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
             // When the button is clicked, we can display a toast to the screen.
@@ -96,5 +116,22 @@ public class ModelSelectMenuScreen extends Screen {
     public void onClose() {
         super.onClose();
         // minecraft.setScreen(lastScreen); 有必要吗，换完模型直接关就行，没必要这样
+    }
+
+    @Override
+    public void close() throws Exception {
+
+    }
+
+    @Override
+    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+        return GeckoLibCache.reload(
+                preparationBarrier,
+                resourceManager,
+                preparationsProfiler,
+                reloadProfiler,
+                backgroundExecutor,
+                gameExecutor
+        );
     }
 }
