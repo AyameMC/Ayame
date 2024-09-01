@@ -16,6 +16,11 @@ package org.ayamemc.ayame.model;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * 兼容YSM模组格式的模型
+ * 暂未使用
+ */
 public class YsmedAyameModel implements AyameModel {
     private final ResourceLocation model;
     private final ResourceLocation texture;

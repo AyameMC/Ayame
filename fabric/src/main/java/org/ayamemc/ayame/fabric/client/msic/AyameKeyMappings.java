@@ -20,7 +20,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
@@ -31,6 +30,11 @@ import org.lwjgl.glfw.GLFW;
 import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
+/**
+ * 注册Ayame所使用的按键，若安装了 <a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>组则会使用其提供的组合按键绑定。
+ * @see AyameTMSKeyMappings
+ * @see JavaUtil
+ */
 @Environment(EnvType.CLIENT)
 public class AyameKeyMappings {
     public static final boolean IS_TMS_INSTALLED = JavaUtil.tryClass("dev.kingtux.tms.api.TMSKeyBinding");
@@ -42,6 +46,10 @@ public class AyameKeyMappings {
             "alt"
     );
 
+    /**
+     * 注册按键
+     * @see KeyMapping
+     */
     public static KeyMapping registerKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
         KeyMapping keyMapping;
         if (IS_TMS_INSTALLED && modifier != null) {
@@ -55,37 +63,15 @@ public class AyameKeyMappings {
     public static void init() {
     }
 
+    /**
+     * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
+     * @see KeyMapping
+     */
     public static void processKeyPressed() {
         while (AyameKeyMappings.MODEL_SELECT_MENU.consumeClick()) {
             LOGGER.warn("key passed");
             // TODO open model select menu
-            Minecraft mc = Minecraft.getInstance();
             Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
-
-
-            if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager){
-                LOGGER.info("Reloading resources");
-
-            }
-            //Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
-//            GeckoLibCache.loadAnimations();
-//            ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
-//                    .registerReloadListener(new IdentifiableResourceReloadListener() {
-//                        @Override
-//                        public ResourceLocation getFabricId() {
-//                            LOGGER.error("fabric resource reload");
-//
-//                            return GeckoLibConstants.id("models_animations");
-//                        }
-//
-//                        @Override
-//                        public CompletableFuture<Void> reload(PreparationBarrier synchronizer, ResourceManager manager,
-//                                                              ProfilerFiller prepareProfiler, ProfilerFiller applyProfiler, Executor prepareExecutor,
-//                                                              Executor applyExecutor) {
-//                            LOGGER.error("reload");
-//                            return GeckoLibCache.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor);
-//                        }
-//                    });
         }
     }
 }

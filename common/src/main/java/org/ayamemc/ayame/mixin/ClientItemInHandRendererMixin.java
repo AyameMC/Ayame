@@ -24,6 +24,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+
+/**
+ * 不渲染默认的手，这会导致崩溃
+ */
 @Environment(EnvType.CLIENT)
 @Mixin(ItemInHandRenderer.class)
 public class ClientItemInHandRendererMixin {

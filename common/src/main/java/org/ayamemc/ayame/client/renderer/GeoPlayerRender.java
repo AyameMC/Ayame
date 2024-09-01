@@ -66,6 +66,10 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
             metaData = model.metaData();
         }
 
+        /**
+         * 将玩家模型切换为对应外观
+         * @param model 传入{@link ModelResource}类型的模型资源
+         */
         public static void switchModel(ModelResource model){
             switchModel(model.getModel());
             try {

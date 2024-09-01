@@ -13,10 +13,18 @@
 
 package org.ayamemc.ayame.util;
 
+/**
+ * 检测Java类是否存在的工具类
+ */
 public class JavaUtil {
-    public static boolean tryClass(String clazz) {
+    /**
+     * 检测Java类是否存在
+     * @param clasName 需要检测的目标类，传入{@link String}类型，例如{@code dev.kingtux.tms.api.TMSKeyBinding}
+     * @return {@code boolean}类型，代表该类是否存在
+     */
+    public static boolean tryClass(String clasName) {
         try {
-            Class.forName(clazz);
+            Class.forName(clasName);
             return true;
         } catch (ClassNotFoundException e) {
             return false;

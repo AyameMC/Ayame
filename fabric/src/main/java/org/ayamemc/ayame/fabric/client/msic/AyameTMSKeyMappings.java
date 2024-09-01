@@ -25,9 +25,16 @@ import org.jetbrains.annotations.NotNull;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
+
+/**
+ * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyMappings}。
+ */
 @Environment(EnvType.CLIENT)
 public class AyameTMSKeyMappings {
-
+    /**
+     * 注册{@code too-many-shortcuts}的组合按键
+     * @see AyameKeyMappings
+     */
     public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull String modifier) {
         BindingModifiers bindingModifiers = null;
         if (modifier.equalsIgnoreCase("alt")) {

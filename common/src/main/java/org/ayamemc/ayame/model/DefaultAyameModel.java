@@ -13,8 +13,16 @@
 
 package org.ayamemc.ayame.model;
 
+
+/**
+ * 它将被取代
+ * @param metaData 传入{@link ModelMetaData}类型
+ */
+
+@Deprecated
 public record DefaultAyameModel(ModelMetaData metaData) implements AyameModel {
 
+    @Deprecated
     public static DefaultAyameModel of(ModelMetaData metaData) {
         return new DefaultAyameModel(metaData);
     }

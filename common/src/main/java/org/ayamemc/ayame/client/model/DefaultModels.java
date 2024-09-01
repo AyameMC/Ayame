@@ -18,6 +18,11 @@ import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.model.DefaultAyameModel;
 import org.ayamemc.ayame.model.ModelMetaData;
 
+/**
+ * Ayame的默认演示模型
+ * 它将在未来被取代
+ */
+@Deprecated
 @Environment(EnvType.CLIENT)
 public class DefaultModels {
     public static final DefaultAyameModel TEST_MODEL = new DefaultAyameModel(ModelMetaData.Builder.create()

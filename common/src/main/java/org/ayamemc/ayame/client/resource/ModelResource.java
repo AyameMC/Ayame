@@ -26,15 +26,11 @@ import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.SortedMap;
 
-import static org.ayamemc.ayame.Ayame.MOD_ID;
 import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
 
 /**
@@ -110,10 +106,20 @@ public class ModelResource {
         return Minecraft.getInstance().getTextureManager().register(metaData.name(),new CustomModelTexture(NativeImage.read(this.getTexture())));
     }
 
-    public static ModelResource fromFile(Path file){
+    private static ModelResource fromFile(Path file){
         return new ModelResource(file);
     }
-    public static ModelResource fromFile(File file){
+
+    public static ModelResource addModel(String resourcePath) {
+        return ModelResource.fromFile(Path.of(resourcePath));
+    }
+
+    public static ModelResource addModel(String resourcePath, boolean fromFile) {
+        return ModelResource.fromFile(new File(resourcePath));
+    }
+
+
+    private static ModelResource fromFile(File file){
         return new ModelResource(file.toPath());
     }
 }

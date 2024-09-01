@@ -26,7 +26,10 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.lwjgl.glfw.GLFW;
 
-
+/**
+ * 注册Ayame所使用的按键，由于NeoForge提供了组合按键绑定的支持，因此不依赖<a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>。
+ * @see KeyModifier
+ */
 @EventBusSubscriber(modid = Ayame.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RegisterKeyMapping {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
@@ -38,9 +41,12 @@ public class RegisterKeyMapping {
             TranslatableName.MOD_KEY_MENU_NAME
     ));
 
+    /**
+     * 在NeoForge中注册该按键按下的行为，按下后行为位于{@link OpenModelSelectMenuEvent}
+     * @see RegisterKeyMappingsEvent
+     */
     @SubscribeEvent
     public static void onKeyPressed(RegisterKeyMappingsEvent event) {
         event.register(MODEL_SELECT_MENU.get());
-
     }
 }

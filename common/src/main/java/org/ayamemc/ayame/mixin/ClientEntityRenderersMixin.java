@@ -31,6 +31,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * 使用自定义模组取代默认的史蒂夫
+ */
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRenderers.class)
 public class ClientEntityRenderersMixin {

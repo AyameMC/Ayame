@@ -27,6 +27,10 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+
+/**
+ * 玩家的动画
+ */
 @Environment(EnvType.CLIENT)
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity {

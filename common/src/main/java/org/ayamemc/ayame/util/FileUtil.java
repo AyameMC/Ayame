@@ -26,7 +26,11 @@ import java.util.zip.ZipFile;
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class FileUtil {
-    // 读取文件
+    /**
+     * 读取文件
+     * @param path {@link Path}类型，文件路径
+     * @return {@link String}
+     */
     public static String readFileWithException(Path path) {
         try {
             byte[] bytes = Files.readAllBytes(path);
@@ -37,7 +41,11 @@ public class FileUtil {
         }
     }
 
-    // 覆盖文件
+    /**
+     * 覆盖文件
+     * @param path {@link Path}类型，文件路径
+     * @param content{@link String}
+     */
     public static void overwriteFile(Path path, String content) {
         try {
             // 检查文件夹是否存在，如果不存在则创建

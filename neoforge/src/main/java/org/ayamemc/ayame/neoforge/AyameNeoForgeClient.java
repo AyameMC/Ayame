@@ -11,18 +11,12 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric;
+package org.ayamemc.ayame.neoforge;
 
-import net.fabricmc.api.ModInitializer;
-import org.ayamemc.ayame.Ayame;
 
-/**
- * Fabric初始化使用的类，包括客户端与服务端
- * @see ModInitializer
- */
-public final class AyameFabric implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        Ayame.init();
+// 虽然现在没用但万一以后用得上呢
+public final class AyameNeoForgeClient {
+    public static void init() {
+
     }
 }

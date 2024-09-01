@@ -30,11 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.GeckoLibCache;
 
-import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-
-import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 @Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends Screen  implements PreparableReloadListener, AutoCloseable {
@@ -74,8 +71,8 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
 
 
             // 加载模型
-            ModelResource modelRes = ModelResource.fromFile(Path.of("config/ayame/models/classic_neko.zip"));
-            GeckoLibCacheWriteMapUtil.addModelResource(MOD_ID,modelRes);
+            ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
+            GeckoLibCacheWriteMapUtil.addModelResource(modelRes);
             GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
 
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
@@ -99,6 +96,8 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
         this.addRenderableWidget(buttonWidget1);
 
     }
+
+
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {

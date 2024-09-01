@@ -22,8 +22,15 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 
+
+/**
+ * 存放NeoForge按下按键后的行为的类
+ */
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
 public class OpenModelSelectMenuEvent {
+    /**
+     * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
+     */
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
         while (RegisterKeyMapping.MODEL_SELECT_MENU.get().consumeClick()) {

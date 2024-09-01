@@ -39,6 +39,9 @@ public class ConfigUtil {
         SKIP_AYAME_WARNING = config.getBoolean("skipAyameWarning", false);
     }
 
+    /**
+     * 保存配置
+     */
     public static void save() {
         config.set("skipAyameWarning", SKIP_AYAME_WARNING);
         config.save(CONFIG_FILE.toPath());

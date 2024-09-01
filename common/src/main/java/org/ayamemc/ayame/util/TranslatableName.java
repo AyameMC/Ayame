@@ -13,6 +13,12 @@
 
 package org.ayamemc.ayame.util;
 
+import net.minecraft.network.chat.Component;
+
+/**
+ * 存放适合共用的本地化键名
+ * @see Component
+ */
 public class TranslatableName {
     // 按键绑定界面显示的名称 Ayame
     public static final String MOD_KEY_MENU_NAME = "key.categories.ayame";

@@ -19,6 +19,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
 
+/**
+ * Fabric客户端初始化所使用的类
+ * @see ClientModInitializer
+ */
 @Environment(EnvType.CLIENT)
 public final class AyameFabricClient implements ClientModInitializer {
     private static KeyMapping keyMapping;

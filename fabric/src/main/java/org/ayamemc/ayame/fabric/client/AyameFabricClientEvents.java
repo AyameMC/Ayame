@@ -19,13 +19,21 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
 
+
+/**
+ * Fabric客户端初始化时用于注册时间的类
+ * @see AyameFabricClient
+ */
 @Environment(EnvType.CLIENT)
 public class AyameFabricClientEvents {
+    /**
+     * 注册Fabric事件
+     */
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(AyameFabricClientEvents::endClientTickEvent);
     }
 
-    public static void endClientTickEvent(Minecraft minecraft) {
+    private static void endClientTickEvent(Minecraft minecraft) {
         AyameKeyMappings.processKeyPressed();
     }
 }

@@ -28,6 +28,11 @@ import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
+
+/**
+ * 显示Ayame模型选择界面的警告屏幕
+ * @see WarningScreen
+ */
 @Environment(EnvType.CLIENT)
 public class StatementScreen extends WarningScreen {
     private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statementscreen.title").withStyle(ChatFormatting.BOLD);
@@ -40,6 +45,11 @@ public class StatementScreen extends WarningScreen {
     private boolean open = false;
     private boolean skipWarningOnce = false; // 新增变量用于控制单次跳过
 
+    /**
+     *
+     * @param lastScreen 上一个显示的屏幕
+     * @param lastLastScreen 上上个显示的屏幕
+     */
     public StatementScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
         super(TITLE, CONTENT, CHECK, NARRATION);
         this.lastScreen = lastScreen;
@@ -63,6 +73,10 @@ public class StatementScreen extends WarningScreen {
         return linearLayout;
     }
 
+
+    /**
+     * 当屏幕退出时执行的代码
+     */
     @Override
     public void onClose() {
         if (open) {
