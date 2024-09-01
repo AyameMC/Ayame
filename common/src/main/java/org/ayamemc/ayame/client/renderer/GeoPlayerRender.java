@@ -13,14 +13,21 @@
 
 package org.ayamemc.ayame.client.renderer;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.client.resource.ModelResource;
 import org.ayamemc.ayame.model.AyameModel;
+import org.ayamemc.ayame.model.ModelMetaData;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Environment(EnvType.CLIENT)
 public class GeoPlayerRender extends GeoEntityRenderer<Player> {
@@ -49,6 +56,7 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
         public static ResourceLocation geoModel;
         public static ResourceLocation texture;
         public static ResourceLocation animation;
+        public static ModelMetaData metaData;
 
         public GeoPlayerModel(AyameModel model) {
             switchModel(model);
@@ -58,6 +66,16 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
             geoModel = model.getGeoModel();
             texture = model.getTexture();
             animation = model.getAnimation();
+            metaData = model.metaData();
+        }
+
+        public static void switchModel(ModelResource model){
+            switchModel(model.getModel());
+            try {
+                model.registerTexture();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @Override

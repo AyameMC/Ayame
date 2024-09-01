@@ -13,9 +13,12 @@
 
 package org.ayamemc.ayame.client.resource;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.renderer.CustomModelTexture;
 import org.ayamemc.ayame.model.AyameModel;
 import org.ayamemc.ayame.model.DefaultAyameModel;
 import org.ayamemc.ayame.model.ModelMetaData;
@@ -24,6 +27,8 @@ import org.ayamemc.ayame.util.JsonInterpreter;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.SortedMap;
@@ -116,6 +121,10 @@ public class ModelResource {
 
     public String getTexture() {
         return zip.get("texture.png");
+    }
+
+    public ResourceLocation registerTexture() throws IOException {
+        return Minecraft.getInstance().getTextureManager().register(metaData.name(),new CustomModelTexture(NativeImage.read(this.getTexture().getBytes(StandardCharsets.UTF_8))));
     }
 
     public static ModelResource fromFile(Path file){

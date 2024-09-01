@@ -80,7 +80,7 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
             // 加载模型
             ModelResource modelRes = ModelResource.fromFile(Path.of("config/ayame/models/classic_neko.zip"));
             GeckoLibCacheWriteMapUtil.addModelResource(MOD_ID,modelRes);
-            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes.getModel());
+            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
 
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
         }).bounds(150, 40, 120, 20).build();
