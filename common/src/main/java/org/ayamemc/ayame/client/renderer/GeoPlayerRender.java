@@ -72,7 +72,7 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
         public static void switchModel(ModelResource model){
             switchModel(model.getModel());
             try {
-                model.registerTexture();
+                texture = model.registerTexture();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

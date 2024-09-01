@@ -13,10 +13,7 @@
 
 package org.ayamemc.ayame.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,8 +64,8 @@ public class FileUtil {
      * @param path ZIP文件的路径
      * @return 包含文件名和内容的Map
      */
-    public static Map<String, String> readZipFile(Path path) {
-        Map<String, String> fileContents = new HashMap<>();
+    public static Map<String, InputStream> readZipFile(Path path) {
+        Map<String, InputStream> fileContents = new HashMap<>();
 
         try (ZipFile zipFile = new ZipFile(path.toFile())) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -78,23 +75,52 @@ public class FileUtil {
 
                 if (!entry.isDirectory()) { // 忽略目录
                     try (InputStream is = zipFile.getInputStream(entry)) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                        StringBuilder content = new StringBuilder();
-                        String line;
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        byte[] buffer = new byte[1024];
+                        int len;
 
-                        while ((line = reader.readLine()) != null) {
-                            content.append(line).append("\n");
+                        while ((len = is.read(buffer)) != -1) {
+                            baos.write(buffer, 0, len);
                         }
 
-                        fileContents.put(entry.getName(), content.toString());
+                        // 将内容转换为字节数组输入流并存储在 Map 中
+                        InputStream contentStream = new ByteArrayInputStream(baos.toByteArray());
+                        fileContents.put(entry.getName(), contentStream);
                     }
                 }
             }
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
 
         return fileContents;
+    }
+
+    /**
+     * 将 InputStream 转换为 String
+     *
+     * @param inputStream 输入流
+     * @return 转换后的字符串
+     */
+    public static String inputStreamToString(InputStream inputStream) {
+        try {
+            if (inputStream == null) {
+                return "";
+            }
+
+            StringBuilder content = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+
+            return content.toString();
+        }catch (IOException e){
+            LOGGER.error("Cannot convert inputStream to String: ", e);
+            return "";
+        }
     }
 
 

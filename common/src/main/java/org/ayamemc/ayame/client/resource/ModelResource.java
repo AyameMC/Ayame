@@ -28,12 +28,14 @@ import org.ayamemc.ayame.util.JsonInterpreter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.SortedMap;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
+import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
 
 /**
  * 模型资源
@@ -41,7 +43,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class ModelResource {
     private final Path file;
-    private final Map<String, String> zip;
+    private final Map<String, InputStream> zip;
     private final ModelMetaData metaData;
 
     /**
@@ -50,17 +52,17 @@ public class ModelResource {
     public ModelResource(Path file) {
         this.file = file;
         this.zip = readZip();
-        this.metaData = getMetaData();
+        this.metaData = createMetaData();
     }
 
-    public Map<String, String> readZip() {
+    public Map<String, InputStream> readZip() {
         return FileUtil.readZipFile(file);
     }
 
-    public ModelMetaData getMetaData() {
+    public ModelMetaData createMetaData() {
         String type = getType();
         if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)) {
-            JsonInterpreter json = JsonInterpreter.of(zip.get("metadata.json"));
+            JsonInterpreter json =this.getMetaDataJson();
             return ModelMetaData.Builder.create()
                     .parseJson(json)
                     .build();
@@ -68,34 +70,15 @@ public class ModelResource {
         // TODO 完成ysm
         return ModelMetaData.Builder.create().build();
     }
+    public ModelMetaData getMetaData() {
+        return metaData;
+    }
 
     public String getType() {
         if (zip.containsKey("metadata.json")) return ModelMetaData.DefaultModelTypes.AYAME;
         // TODO 完成ysm格式
         return ModelMetaData.DefaultModelTypes.AYAME;
     }
-
-//    public void loadModel() {
-//        String type = metaData.type();
-//        String name = metaData.name();
-//        ResourceUtil.writeResource(
-//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/" + type + "/" + name + ".json")
-//                , zip.get("model.json")
-//        );
-//        ResourceUtil.writeResource(
-//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/" + type + "/" + name + ".png")
-//                , zip.get("texture.png")
-//        );
-//        ResourceUtil.writeResource(
-//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/" + type + "/" + name + ".json")
-//                , zip.get("animation.json")
-//        );
-//        ResourceUtil.writeResource(
-//                ResourceLocation.fromNamespaceAndPath(MOD_ID, "model_metadata/" + type + "/" + name + ".json")
-//                , this.metaData.conversion().toString()
-//        );
-//        // TODO 完成ysm格式
-//    }
 
     public AyameModel getModel() {
         // 为ayame模型读取
@@ -108,23 +91,23 @@ public class ModelResource {
 
 
     public JsonInterpreter getModelJson() {
-        return JsonInterpreter.of(zip.get("model.json"));
+        return JsonInterpreter.of(inputStreamToString(zip.get("model.json")));
     }
 
     public JsonInterpreter getAnimationJson() {
-        return JsonInterpreter.of(zip.get("animation.json"));
+        return JsonInterpreter.of(inputStreamToString(zip.get("animation.json")));
     }
 
     public JsonInterpreter getMetaDataJson() {
-        return JsonInterpreter.of(zip.get("metadata.json"));
+        return JsonInterpreter.of(inputStreamToString(zip.get("metadata.json")));
     }
 
-    public String getTexture() {
+    public InputStream getTexture() {
         return zip.get("texture.png");
     }
 
     public ResourceLocation registerTexture() throws IOException {
-        return Minecraft.getInstance().getTextureManager().register(metaData.name(),new CustomModelTexture(NativeImage.read(this.getTexture().getBytes(StandardCharsets.UTF_8))));
+        return Minecraft.getInstance().getTextureManager().register(metaData.name(),new CustomModelTexture(NativeImage.read(this.getTexture())));
     }
 
     public static ModelResource fromFile(Path file){
