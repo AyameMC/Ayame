@@ -22,6 +22,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
@@ -32,8 +33,13 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class AyameTMSKeyMappings {
     /**
-     * 注册{@code too-many-shortcuts}的组合按键
-     * @see AyameKeyMappings
+     * 使用TMS注册按键
+     * @param name 按键绑定页面显示的键位名称
+     * @param type 输入类型，见{@link InputConstants}
+     * @param keyCode 键位，见{@link GLFW}
+     * @param category 按键绑定页面的种类
+     * @param modifier TMS提供的组合键位，见{@link AyameTMSKeyMappings}
+     * @return AyameKeyMappings
      */
     public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull String modifier) {
         BindingModifiers bindingModifiers = null;

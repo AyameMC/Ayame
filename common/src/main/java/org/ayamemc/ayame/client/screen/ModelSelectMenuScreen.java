@@ -19,47 +19,67 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.renderer.GeoPlayerRender;
 import org.ayamemc.ayame.client.resource.ModelResource;
 import org.ayamemc.ayame.client.util.GeckoLibCacheWriteMapUtil;
 import org.ayamemc.ayame.util.ConfigUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.cache.GeckoLibCache;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * 显示Ayame模型选择界面
+ *
  * @see StatementScreen
  */
 @Environment(EnvType.CLIENT)
-public class ModelSelectMenuScreen extends Screen implements PreparableReloadListener, AutoCloseable {
+public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
 
+    /**
+     * 重载构造方法，包含skipWarningOnce的布尔值
+     *
+     * @param title           {@link Component}类型，为屏幕标题
+     * @param lastScreen      上个显示的屏幕
+     * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
+     */
     public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
         super(title);
         this.lastScreen = lastScreen;
         this.skipWarningOnce = skipWarningOnce;
     }
 
-    // 重载构造方法，默认 skipWarningOnce 为 false
+    /**
+     * 重载构造方法，没有skipWarningOnce参数
+     *
+     * @param title      {@link Component}类型，为屏幕标题
+     * @param lastScreen 上个显示的屏幕
+     */
     public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen) {
         this(title, lastScreen, false);
     }
 
+    /**
+     * Ayame 本体使用的模型添加方法，<b><font color="red">Ayame以外的模组不应该调用</font></b>
+     * <p>
+     * <s>{@code private}的你也调不了啊，难道上访问加宽器？你访问它干嘛</s>
+     * @param modelRes 传入{@link ModelResource}类型，模型资源（如json）的路径
+     */
+    private static void addModelResource(ModelResource modelRes) {
+        final String MOD_ID = Ayame.MOD_ID;
+        GeckoLibCacheWriteMapUtil.addModelResource(MOD_ID, modelRes);
+    }
+
+
+    /**
+     * 屏幕初始化，按钮注册和{@code builder}都在里面
+     */
     @Override
     protected void init() {
         if (!ConfigUtil.SKIP_AYAME_WARNING && !skipWarningOnce) {
             this.minecraft.setScreen(new StatementScreen(this, lastScreen));
             return;
         }
-
 
         // TODO: 模型切换
         // TODO: 调用GeckoLib 的reload方法
@@ -69,7 +89,7 @@ public class ModelSelectMenuScreen extends Screen implements PreparableReloadLis
 
             // 加载模型
             ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
-            GeckoLibCacheWriteMapUtil.addModelResource(modelRes);
+            ModelSelectMenuScreen.addModelResource(modelRes);
             GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
 
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
@@ -88,7 +108,13 @@ public class ModelSelectMenuScreen extends Screen implements PreparableReloadLis
 
     }
 
-
+    /**
+     * 渲染屏幕的方法，继承自{@link Screen}
+     * @param context the GuiGraphics object used for rendering.
+     * @param mouseX the x-coordinate of the mouse cursor.
+     * @param mouseY the y-coordinate of the mouse cursor.
+     * @param delta the partial tick time.
+     */
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
@@ -101,26 +127,12 @@ public class ModelSelectMenuScreen extends Screen implements PreparableReloadLis
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 
+    /**
+     * 当屏幕退出时执行的代码
+     */
     @Override
     public void onClose() {
         super.onClose();
         // minecraft.setScreen(lastScreen); 有必要吗，换完模型直接关就行，没必要这样
-    }
-
-    @Override
-    public void close() throws Exception {
-
-    }
-
-    @Override
-    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-        return GeckoLibCache.reload(
-                preparationBarrier,
-                resourceManager,
-                preparationsProfiler,
-                reloadProfiler,
-                backgroundExecutor,
-                gameExecutor
-        );
     }
 }

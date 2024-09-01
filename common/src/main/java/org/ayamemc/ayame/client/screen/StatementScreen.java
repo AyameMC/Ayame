@@ -26,11 +26,14 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
 /**
  * 显示Ayame模型选择界面的警告屏幕
+ *
+ * @see ModelSelectMenuScreen
  * @see WarningScreen
  */
 @Environment(EnvType.CLIENT)
@@ -46,8 +49,7 @@ public class StatementScreen extends WarningScreen {
     private boolean skipWarningOnce = false; // 新增变量用于控制单次跳过
 
     /**
-     *
-     * @param lastScreen 上一个显示的屏幕
+     * @param lastScreen     上一个显示的屏幕
      * @param lastLastScreen 上上个显示的屏幕
      */
     public StatementScreen(@Nullable Screen lastScreen, @Nullable Screen lastLastScreen) {
@@ -56,8 +58,13 @@ public class StatementScreen extends WarningScreen {
         this.lastLastScreen = lastLastScreen;
     }
 
+    /**
+     * 方法中的的{@code selected}通过访问拓宽器修改为{@code true}，以实现“【✔❌】不再显示此屏幕”默认【✔】勾选的效果
+     *
+     * @return 返回 {@link LinearLayout}类型
+     */
     @Override
-    protected Layout addFooterButtons() {
+    protected @NotNull Layout addFooterButtons() {
         this.stopShowing.selected = true; // 默认勾选“不再显示此屏幕”
         LinearLayout linearLayout = LinearLayout.horizontal().spacing(8);
         linearLayout.addChild(Button.builder(CommonComponents.GUI_PROCEED, button -> {

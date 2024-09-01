@@ -48,6 +48,12 @@ public class AyameKeyMappings {
 
     /**
      * 注册按键
+     * @param name 按键绑定页面显示的键位名称
+     * @param type 输入类型，见{@link InputConstants}
+     * @param keyCode 键位，见{@link GLFW}
+     * @param category 按键绑定页面的种类
+     * @param modifier 组合键位，见{@link AyameTMSKeyMappings}
+     * @return 调用 {@link AyameTMSKeyMappings}
      * @see KeyMapping
      */
     public static KeyMapping registerKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
