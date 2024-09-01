@@ -13,43 +13,43 @@
 
 package org.ayamemc.ayame.model;
 
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.resource.ModelResource;
 
 /**
- * 兼容YSM模组格式的模型
- * 暂未使用
+ * 默认模型类型，适用于Ayame模型
+ * @param geoModel 模型文件
+ * @param animation 动画文件
+ * @param texture 贴图文件
+ * @param metaData 模型元数据
  */
-public class YsmedAyameModel implements AyameModel {
-    private final ResourceLocation model;
-    private final ResourceLocation texture;
-    private final ResourceLocation animation;
 
-    public YsmedAyameModel(@NotNull ResourceLocation model, @NotNull ResourceLocation texture, @NotNull ResourceLocation animation) {
-        this.model = model;
-        this.texture = texture;
-        this.animation = animation;
+public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ModelMetaData metaData) implements AyameModelType {
+
+
+    public static DefaultAyameModelType createModel(ModelResource res) {
+        res.createModel();
+        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getTextureLocation(), res.getAnimationLocation(), res.getMetaData());
     }
 
     @Override
     public ResourceLocation getGeoModel() {
-        return this.model;
+        return geoModel;
     }
 
     @Override
     public ResourceLocation getTexture() {
-        return this.texture;
+        return texture;
     }
 
     @Override
     public ResourceLocation getAnimation() {
-        return this.animation;
+        return animation;
     }
 
-    // TODO 完善YSM模型metadata创建
     @Override
     public ModelMetaData metaData() {
-        return ModelMetaData.Builder.create().setType(ModelMetaData.DefaultModelTypes.YSM).build();
+        return metaData;
     }
 }

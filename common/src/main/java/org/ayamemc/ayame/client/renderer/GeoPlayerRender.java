@@ -19,8 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.resource.ModelResource;
-import org.ayamemc.ayame.model.AyameModel;
-import org.ayamemc.ayame.model.ModelMetaData;
+import org.ayamemc.ayame.model.AyameModelType;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -42,56 +41,36 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
         return this.pModel;
     }
 
-//    @Override
-//    public void render(Player entity, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-//        super.render(entity, f, g, poseStack, multiBufferSource, i);
-//    }
 
     // TODO : 添加API
     public static class GeoPlayerModel extends GeoModel<Player> {
-        // TODO 改成static只是为了测试，请改回来
-        public static ResourceLocation geoModel;
-        public static ResourceLocation texture;
-        public static ResourceLocation animation;
-        public static ModelMetaData metaData;
 
-        public GeoPlayerModel(AyameModel model) {
-            switchModel(model);
+        public GeoPlayerModel(AyameModelType model) {
+//            switchModel(model);
         }
 
-        public static void switchModel(AyameModel model) {
-            geoModel = model.getGeoModel();
-            texture = model.getTexture();
-            animation = model.getAnimation();
-            metaData = model.metaData();
-        }
 
         /**
-         * 将玩家模型切换为对应外观
-         * @param model 传入{@link ModelResource}类型的模型资源
+         * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
+         * @param model 传入{@link AyameModelType}类型的模型资源
          */
-        public static void switchModel(ModelResource model){
-            switchModel(model.getModel());
-            try {
-                texture = model.registerTexture();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        public static void switchModel(Player player,AyameModelType model){
+            AyameModelRenderingCache.addPlayerModel(player,model);
         }
 
         @Override
         public ResourceLocation getModelResource(Player animatable) {
-            return geoModel;
+            return AyameModelRenderingCache.getPlayerModel(animatable).getGeoModel();
         }
 
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            return texture;
+            return AyameModelRenderingCache.getPlayerModel(animatable).getTexture();
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            return animation;
+            return AyameModelRenderingCache.getPlayerModel(animatable).getAnimation();
         }
 
     }

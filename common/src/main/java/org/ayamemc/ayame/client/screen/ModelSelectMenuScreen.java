@@ -20,9 +20,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.renderer.GeoPlayerRender;
 import org.ayamemc.ayame.client.resource.ModelResource;
-import org.ayamemc.ayame.client.util.GeckoLibCacheWriteMapUtil;
+import org.ayamemc.ayame.client.resource.ModelResourceWriterUtil;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +66,7 @@ public class ModelSelectMenuScreen extends Screen {
      */
     private static void addModelResource(ModelResource modelRes) {
         final String MOD_ID = Ayame.MOD_ID;
-        GeckoLibCacheWriteMapUtil.addModelResource(MOD_ID, modelRes);
+        ModelResourceWriterUtil.addModelResource(MOD_ID, modelRes);
     }
 
 
@@ -87,10 +86,10 @@ public class ModelSelectMenuScreen extends Screen {
         Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
 
 
-            // 加载模型
-            ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
-            ModelSelectMenuScreen.addModelResource(modelRes);
-            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
+//            // 加载模型
+//            ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
+//            ModelSelectMenuScreen.addModelResource(modelRes);
+//            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
 
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
         }).bounds(150, 40, 120, 20).build();

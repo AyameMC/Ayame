@@ -21,7 +21,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.client.model.DefaultModels;
+import org.ayamemc.ayame.model.DefaultAyameModels;
 import org.ayamemc.ayame.client.renderer.GeoPlayerRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,8 +40,8 @@ import java.util.Map;
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)
     private static void createPlayerRenderers(EntityRendererProvider.Context context, CallbackInfoReturnable<Map<PlayerSkin.Model, EntityRenderer<? extends Player>>> cir) {
-        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL))));
-        m.put(PlayerSkin.Model.SLIM, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultModels.TEST_MODEL)));
+        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultAyameModels.TEST_MODEL))));
+        m.put(PlayerSkin.Model.SLIM, new GeoPlayerRender(context, new GeoPlayerRender.GeoPlayerModel(DefaultAyameModels.TEST_MODEL)));
         cir.setReturnValue(ImmutableMap.copyOf(m));
     }
 }

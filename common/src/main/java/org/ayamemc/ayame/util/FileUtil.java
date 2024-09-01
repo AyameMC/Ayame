@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -59,7 +60,7 @@ public class FileUtil {
             }
 
             // 写入文件内容
-            Files.write(path, content.getBytes(StandardCharsets.UTF_8));
+            Files.writeString(path, content);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
@@ -103,6 +104,32 @@ public class FileUtil {
 
         return fileContents;
     }
+
+
+    /**
+     * 将指定文件夹中的文件以名称和内容的形式保存到 Map 中。
+     *
+     * @param folderPath 文件夹路径
+     * @return 包含文件名称和内容的 Map
+     * @throws IOException 如果读取文件或目录时发生错误
+     */
+    public static Map<String, InputStream> convertFilesToMap(Path folderPath) throws IOException {
+        Map<String, InputStream> fileMap = new HashMap<>();
+
+        Stream<Path> files = Files.list(folderPath);
+        files.filter(Files::isRegularFile)
+                .forEach(file -> {
+                    try {
+                        fileMap.put(file.getFileName().toString(), Files.newInputStream(file));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+
+        return fileMap;
+    }
+
 
     /**
      * 将 InputStream 转换为 String
