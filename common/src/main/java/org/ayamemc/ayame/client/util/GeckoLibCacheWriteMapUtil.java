@@ -16,8 +16,6 @@ package org.ayamemc.ayame.client.util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.ayamemc.ayame.client.resource.ModelResource;
-import org.ayamemc.ayame.model.AyameModel;
-import org.ayamemc.ayame.util.JsonInterpreter;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.json.raw.Model;
@@ -25,9 +23,6 @@ import software.bernie.geckolib.loading.json.typeadapter.KeyFramesAdapter;
 import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
-
-import java.nio.file.Path;
-import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
