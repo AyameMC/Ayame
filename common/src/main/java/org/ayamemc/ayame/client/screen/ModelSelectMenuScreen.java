@@ -33,8 +33,12 @@ import software.bernie.geckolib.cache.GeckoLibCache;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+/**
+ * 显示Ayame模型选择界面
+ * @see StatementScreen
+ */
 @Environment(EnvType.CLIENT)
-public class ModelSelectMenuScreen extends Screen  implements PreparableReloadListener, AutoCloseable {
+public class ModelSelectMenuScreen extends Screen implements PreparableReloadListener, AutoCloseable {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
 
@@ -61,13 +65,6 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
         // TODO: 调用GeckoLib 的reload方法
         // 创建按钮
         Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
-//            Minecraft minecraft = this.minecraft;
-//            ResourceManager resourceManager = minecraft.getResourceManager();
-//            Executor backgroundExecutor = minecraft;
-//            Executor gameExecutor = minecraft;
-//            ProfilerFiller preparationsProfiler = InactiveProfiler.INSTANCE;
-//            ProfilerFiller reloadProfiler = InactiveProfiler.INSTANCE;
-            // 想办法调用this.reload
 
 
             // 加载模型
@@ -79,24 +76,17 @@ public class ModelSelectMenuScreen extends Screen  implements PreparableReloadLi
         }).bounds(150, 40, 120, 20).build();
 
 
-
         Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
-            // When the button is clicked, we can display a toast to the screen.
-
             // 行为这里改
             this.minecraft.player.connection.sendChat("大家好啊昨天给大家来点不想看的东西");
         }).bounds(200, 60, 120, 20).build();
 
-        // x, y, width, height
-        // It's recommended to use the fixed height of 20 to prevent rendering issues with the button
-        // textures.
 
-        // Register the button widget.
+        // 注册按钮组件
         this.addRenderableWidget(buttonWidget);
         this.addRenderableWidget(buttonWidget1);
 
     }
-
 
 
     @Override
