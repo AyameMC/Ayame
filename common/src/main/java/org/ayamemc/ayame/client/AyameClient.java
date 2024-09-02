@@ -11,12 +11,15 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge;
+package org.ayamemc.ayame.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 
-// 虽然现在没用但万一以后用得上呢
-public final class AyameNeoForgeClient {
-    public static void init() {
-
+@Environment(EnvType.CLIENT)
+public class AyameClient {
+    public static void init(){
+        DefaultAyameModels.init();
     }
 }

@@ -27,6 +27,8 @@
 package org.ayamemc.ayame.client.resource;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -49,6 +51,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  *
  * @see GeckoLibCache
  */
+@Environment(EnvType.CLIENT)
 public class ModelResourceWriterUtil {
     /**
      * @param namespace {@link String}类型的命名空间

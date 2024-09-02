@@ -15,7 +15,6 @@ package org.ayamemc.ayame.model;
 
 
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.resource.ModelResource;
 
 /**
  * 默认模型类型，适用于Ayame模型
@@ -26,12 +25,6 @@ import org.ayamemc.ayame.client.resource.ModelResource;
  */
 
 public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ModelMetaData metaData) implements AyameModelType {
-
-
-    public static DefaultAyameModelType createModel(ModelResource res) {
-        res.createModel();
-        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getTextureLocation(), res.getAnimationLocation(), res.getMetaData());
-    }
 
     @Override
     public ResourceLocation getGeoModel() {
@@ -51,5 +44,9 @@ public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation 
     @Override
     public ModelMetaData metaData() {
         return metaData;
+    }
+
+    public static AyameModelType of(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ResourceLocation metaData) {
+        return new DefaultAyameModelType(geoModel, animation, texture, ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
     }
 }

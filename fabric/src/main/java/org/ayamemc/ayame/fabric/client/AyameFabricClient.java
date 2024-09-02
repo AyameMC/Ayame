@@ -17,6 +17,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
 
 /**
@@ -29,7 +30,9 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // 不要动这个KeyMap的init方法
         AyameKeyMappings.init();
         AyameFabricClientEvents.init();
+        AyameClient.init();
     }
 }

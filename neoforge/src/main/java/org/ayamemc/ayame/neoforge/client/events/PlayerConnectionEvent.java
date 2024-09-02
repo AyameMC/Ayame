@@ -11,19 +11,26 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge;
+package org.ayamemc.ayame.neoforge.client.events;
 
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.neoforge.client.AyameNeoForgeClient;
+import org.ayamemc.ayame.util.TaskManager;
 
-@Mod(Ayame.MOD_ID)
-public final class AyameNeoForge {
-    public AyameNeoForge(IEventBus modBus) {
-        // Run our common setup.
-        Ayame.init();
+@EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
+public class PlayerConnectionEvent {
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        // 执行所有任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
     }
 }

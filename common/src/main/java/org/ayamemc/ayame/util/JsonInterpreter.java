@@ -17,6 +17,7 @@ import com.google.gson.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -521,5 +522,13 @@ public class JsonInterpreter {
     @Override
     public String toString() {
         return jsonObject.toString();
+    }
+
+    public static JsonInterpreter fromResource(String path){
+        InputStream content = FileUtil.getResourceAsStream(path);
+        return JsonInterpreter.of(content);
+    }
+    public static JsonInterpreter of(InputStream content) {
+        return new JsonInterpreter(FileUtil.inputStreamToString(content));
     }
 }

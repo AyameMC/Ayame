@@ -18,36 +18,26 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-import java.io.IOException;
-
 @Environment(EnvType.CLIENT)
 public class GeoPlayerRender extends GeoEntityRenderer<Player> {
-    private final GeoPlayerModel pModel;
 
     // TODO : 完善代码 & 添加API
-    public GeoPlayerRender(EntityRendererProvider.Context context, GeoPlayerModel model) {
-        super(context, model);
-        this.pModel = model;
+    public GeoPlayerRender(EntityRendererProvider.Context context) {
+        super(context, new GeoPlayerModel());
+
     }
 
-
-    @Override
-    public GeoPlayerModel getGeoModel() {
-        return this.pModel;
-    }
 
 
     // TODO : 添加API
     public static class GeoPlayerModel extends GeoModel<Player> {
 
-        public GeoPlayerModel(AyameModelType model) {
-//            switchModel(model);
-        }
+        public GeoPlayerModel() {}
 
 
         /**
@@ -55,22 +45,22 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
          * @param model 传入{@link AyameModelType}类型的模型资源
          */
         public static void switchModel(Player player,AyameModelType model){
-            AyameModelRenderingCache.addPlayerModel(player,model);
+            AyameModelCache.addPlayerModel(player,model);
         }
 
         @Override
         public ResourceLocation getModelResource(Player animatable) {
-            return AyameModelRenderingCache.getPlayerModel(animatable).getGeoModel();
+            return AyameModelCache.getPlayerModel(animatable).getGeoModel();
         }
 
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            return AyameModelRenderingCache.getPlayerModel(animatable).getTexture();
+            return AyameModelCache.getPlayerModel(animatable).getTexture();
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            return AyameModelRenderingCache.getPlayerModel(animatable).getAnimation();
+            return AyameModelCache.getPlayerModel(animatable).getAnimation();
         }
 
     }

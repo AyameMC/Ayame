@@ -16,12 +16,17 @@ package org.ayamemc.ayame.fabric.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
+import org.ayamemc.ayame.util.TaskManager;
 
 
 /**
- * Fabric客户端初始化时用于注册时间的类
+ * Fabric客户端初始化时用于注册事件的类
  * @see AyameFabricClient
  */
 @Environment(EnvType.CLIENT)
@@ -31,6 +36,19 @@ public class AyameFabricClientEvents {
      */
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(AyameFabricClientEvents::endClientTickEvent);
+        ClientPlayConnectionEvents.JOIN.register((AyameFabricClientEvents::joinServer));
+        ClientPlayConnectionEvents.DISCONNECT.register((AyameFabricClientEvents::quitServer));
+    }
+
+    private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
+        // 停止执行玩家进入世界的任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+    }
+
+    private static void joinServer(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
+        // 执行玩家进入世界的任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {

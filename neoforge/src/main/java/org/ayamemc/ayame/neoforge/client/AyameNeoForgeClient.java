@@ -24,42 +24,17 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model;
+package org.ayamemc.ayame.neoforge.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.ayamemc.ayame.client.resource.ModelResource;
-import org.ayamemc.ayame.util.FileUtil;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.AyameClient;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
-/**
- * Ayame的默认演示模型
- */
-@Environment(EnvType.CLIENT)
-public class DefaultAyameModels {
-    public static final String MODEL_PATH = "config/ayame/models/";
-    public static AyameModelType TEST_MODEL;
-    public static ModelResource TEST_MODEL_RESOURCE;
-
-    public static void init(){
-        createModel("grmmy_neko");
-        try {
-            TEST_MODEL_RESOURCE = ModelResource.fromFile(Path.of(MODEL_PATH + "grmmy_neko.zip"));
-            TEST_MODEL = DefaultAyameModelType.createModel(TEST_MODEL_RESOURCE);
-        } catch (IOException e) {
-            LOGGER.error("Cannot create model: {}", "grmmy_neko" , e);
-        }
-    }
-
-    private static void createModel(String name){
-        Path path = Path.of(MODEL_PATH + name + ".zip");
-        // 检查文件是否存在
-        if (!Files.exists(path)){
-            FileUtil.copyResource("assets/ayame/models/" + name + ".zip", path);
-        }
+@Mod(value = Ayame.MOD_ID,dist = Dist.CLIENT)
+public class AyameNeoForgeClient {
+    public AyameNeoForgeClient() {
+        AyameClient.init();
     }
 }

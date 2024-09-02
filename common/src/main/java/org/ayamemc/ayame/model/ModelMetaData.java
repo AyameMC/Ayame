@@ -13,6 +13,7 @@
 
 package org.ayamemc.ayame.model;
 
+import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -114,6 +115,10 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
                     .setLicense(json.getString("license"))
                     .setAnimations(json.getStringList("animations").toArray(new String[0]))
                     .setVersion(json.getString("version"));
+        }
+
+        public Builder parseJsonFromResource(ResourceLocation resourceLocation){
+            return parseJson(JsonInterpreter.fromResource("assets/"+resourceLocation.getNamespace()+"/"+resourceLocation.getPath()));
         }
 
         public ModelMetaData build() {

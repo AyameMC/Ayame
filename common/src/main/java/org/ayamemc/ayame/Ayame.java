@@ -13,7 +13,6 @@
 
 package org.ayamemc.ayame;
 
-import org.ayamemc.ayame.model.DefaultAyameModels;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,5 @@ public final class Ayame {
 
     public static void init() {
         ConfigUtil.init();
-        DefaultAyameModels.init();
     }
 }

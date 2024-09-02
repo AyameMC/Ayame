@@ -13,13 +13,11 @@
 
 package org.ayamemc.ayame.client.resource;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.model.AyameModelType;
+import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.ModelMetaData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
@@ -77,15 +75,18 @@ public class ModelResource {
     }
 
     public void createModel() {
-        // 为ayame模型读取
-        if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
-            // 创建模型
-            ModelResourceWriterUtil.ModelResourceLocationRecord locations = ModelResourceWriterUtil.addModelResource(MOD_ID, this);
-            this.animation = locations.animationLocation();
-            this.geoModel = locations.modelLocation();
-            this.texture = locations.textureLocation();
-        }
-        // TODO 完成ysm格式
+        // 创建任务，在Minecraft能够启动后执行
+        Minecraft.getInstance().execute(()-> {
+            // 为ayame模型读取
+            if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
+                // 创建模型
+                ModelResourceWriterUtil.ModelResourceLocationRecord locations = ModelResourceWriterUtil.addModelResource(MOD_ID, this);
+                this.animation = locations.animationLocation();
+                this.geoModel = locations.modelLocation();
+                this.texture = locations.textureLocation();
+            }
+            // TODO 完成ysm格式
+        });
     }
 
 
@@ -144,5 +145,10 @@ public class ModelResource {
 
     private static Map<String, InputStream> readZip(Path file) {
         return FileUtil.readZipFile(file);
+    }
+
+    public static DefaultAyameModelType createModelFromResource(ModelResource res) {
+        res.createModel();
+        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
     }
 }

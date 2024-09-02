@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -159,24 +160,39 @@ public class FileUtil {
     }
 
 
-    public static void copyResource(String resourcePath, Path targetPath) {
+    // 返回资源的 InputStream
+    public static InputStream getResourceAsStream(String resourcePath) {
         try {
             // 使用ClassLoader读取资源文件
             InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(resourcePath);
 
-            if (inputStream != null) {
-                // 读取资源文件内容，指定编码为UTF-8
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                StringBuilder content = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-                reader.close();
-                // 将读取到的内容写入文件
-                FileUtil.overwriteFile(targetPath, content.toString());
-            } else {
+            if (inputStream == null) {
                 LOGGER.error("Cannot find resource: {}", resourcePath);
+                return null;
+            }
+
+            return inputStream;
+        } catch (Exception e) {
+            LOGGER.error("Cannot get resource stream: ", e);
+            return null;
+        }
+    }
+
+    // 将资源复制到指定路径
+    public static void copyResource(String resourcePath, Path targetPath) {
+        try (InputStream inputStream = getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                return; // 资源未找到，直接返回
+            }
+
+            // 创建输出流
+            try (OutputStream outputStream = Files.newOutputStream(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                // 读取并写入二进制数据
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
             }
         } catch (IOException e) {
             LOGGER.error("Cannot copy resource: ", e);
