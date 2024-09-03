@@ -22,8 +22,12 @@ import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.resource.ModelResource;
 import org.ayamemc.ayame.client.resource.ModelResourceWriterUtil;
+import org.ayamemc.ayame.client.resource.ModelScreenCache;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 显示Ayame模型选择界面
@@ -124,6 +128,16 @@ public class ModelSelectMenuScreen extends Screen {
         // textRenderer, text, x, y, color, hasShadow
         context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+    }
+
+    /**
+     * 获取所有模型资源
+     * @param sort 是否排序
+     * @return 所有模型资源
+     */
+    public List<ModelResource> getModels(boolean sort) {
+        // TODO 添加事件
+        return ModelScreenCache.getAllModelResource(sort);
     }
 
     /**

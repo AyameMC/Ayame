@@ -74,21 +74,16 @@ public class ModelScreenCache {
         return cache.get(name);
     }
 
-    /**
-     * 获取所有模型资源，但是不保证插入顺序
-     * @return 所有模型资源
-     */
-    public static List<ModelResource> getAllModelResource() {
-        return cache.values().stream().toList();
-    }
 
     /**
-     * 获取所有模型资源，保证插入顺序
+     * 获取所有模型资源
+     * @param sorted 是否要保证插入顺序
      * @return 所有模型资源
      */
-    public static List<ModelResource> getSortedAllModelResource(){
-        return sortedCache.stream().map(ModelScreenCache::getModelResource).toList();
+    public static List<ModelResource> getAllModelResource(boolean sorted){
+        return sorted ? sortedCache.stream().map(ModelScreenCache::getModelResource).toList() : cache.values().stream().toList();
     }
+
 
     /**
      * 清空缓存
