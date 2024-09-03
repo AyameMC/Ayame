@@ -131,6 +131,12 @@ public class ModelResource {
         return texture;
     }
 
+    /**
+     * 从文件创建模型资源
+     * @param file 文件
+     * @return 模型资源
+     * @throws IOException 读取文件时发生错误
+     */
     public static ModelResource fromFile(Path file) throws IOException {
         return new ModelResource(readZip(file));
     }
@@ -139,9 +145,6 @@ public class ModelResource {
         return fromFile(file.toPath());
     }
 
-    public static ModelResource fromDirectory(Path dir) throws IOException {
-        return new ModelResource(FileUtil.convertFilesToMap(dir));
-    }
 
     private static Map<String, InputStream> readZip(Path file) {
         return FileUtil.readZipFile(file);

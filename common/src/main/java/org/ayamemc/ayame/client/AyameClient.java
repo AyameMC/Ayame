@@ -16,10 +16,13 @@ package org.ayamemc.ayame.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import org.ayamemc.ayame.client.resource.ModelScanner;
 
 @Environment(EnvType.CLIENT)
 public class AyameClient {
     public static void init(){
         DefaultAyameModels.init();
+        // 扫描模型
+        ModelScanner.scanModel();
     }
 }

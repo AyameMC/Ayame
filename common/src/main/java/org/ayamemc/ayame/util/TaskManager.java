@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 任务管理器，用于管理任务列表和执行任务
+ * 任务管理器，用于管理任务列表和执行一次性任务
  * @param <T> 任务的类型
  */
 public class TaskManager<T extends TaskManager.Task> {
@@ -58,7 +58,7 @@ public class TaskManager<T extends TaskManager.Task> {
         this.canExecute = canExecute;
     }
 
-    public class TaskManagerImpls {
+    public static class TaskManagerImpls {
         /**
          * 客户端在游戏世界时使用的任务管理器，只有加入世界后才能执行任务
          */
