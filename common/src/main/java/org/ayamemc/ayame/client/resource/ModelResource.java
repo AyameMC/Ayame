@@ -17,6 +17,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.AyameClientEvents;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.ModelMetaData;
 import org.ayamemc.ayame.util.FileUtil;
@@ -49,6 +50,7 @@ public class ModelResource {
     public ModelResource(Map<String, InputStream> content) throws IOException {
         this.content = content;
         this.metaData = createMetaData();
+        AyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
     }
 
 

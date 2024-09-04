@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 客户端模型资源的缓存
  */
-public class ModelScreenCache {
+public class ModelResourceCache {
     /** 使用ConcurrentHashMap来保证线程安全
         String 为模型名， ModelResource 为模型资源
      */
@@ -54,7 +54,7 @@ public class ModelScreenCache {
      * @param modelRes 模型资源
      */
     public static void addModelResource(Collection<ModelResource> modelRes){
-        modelRes.forEach(ModelScreenCache::addModelResource);
+        modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
     /**
@@ -62,7 +62,7 @@ public class ModelScreenCache {
      * @param modelRes 模型资源
      */
     public static void addModelResource(Map<String,ModelResource> modelRes){
-        modelRes.forEach(ModelScreenCache::addModelResource);
+        modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ModelScreenCache {
      * @return 所有模型资源
      */
     public static List<ModelResource> getAllModelResource(boolean sorted){
-        return sorted ? sortedCache.stream().map(ModelScreenCache::getModelResource).toList() : cache.values().stream().toList();
+        return sorted ? sortedCache.stream().map(ModelResourceCache::getModelResource).toList() : cache.values().stream().toList();
     }
 
 

@@ -11,22 +11,24 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric;
+package org.ayamemc.ayame.client;
 
-import net.fabricmc.api.ModInitializer;
-import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.AyameClientEvents;
-import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
-import org.ayamemc.ayame.fabric.client.AyameFabricClientEvents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import org.ayamemc.ayame.client.resource.ModelResource;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.List;
 
 /**
- * Fabric初始化使用的类，包括客户端与服务端
- * @see ModInitializer
+ * 内部事件，实现见 AyameClientEventsFabricImpl 和 AyameClientEventsNeoForgeImpl
  */
-public final class AyameFabric implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        Ayame.init();
-        AyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+@ApiStatus.Internal
+@Environment(EnvType.CLIENT)
+public interface AyameClientEvents {
+    class Instance{
+        public static AyameClientEvents INSTANCE;
     }
+    void ModelResource_onResourceCreate(ModelResource modelResource);
+    void ModelResource_onListResource(List<ModelResource> modelResources,boolean sorted);
 }

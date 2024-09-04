@@ -35,7 +35,7 @@ public class ModelScanner {
                 try {
                     ModelResource res = ModelResource.fromFile(path);
                     // 添加到缓存
-                    ModelScreenCache.addModelResource(res);
+                    ModelResourceCache.addModelResource(res);
                 } catch (Exception e) {
                     // 忽略错误
                 }

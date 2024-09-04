@@ -11,22 +11,27 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric;
+package org.ayamemc.ayame.fabric.client;
 
-import net.fabricmc.api.ModInitializer;
-import org.ayamemc.ayame.Ayame;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.client.AyameClientEvents;
-import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
-import org.ayamemc.ayame.fabric.client.AyameFabricClientEvents;
+import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.fabric.client.api.event.ModelResourceEvents;
+import org.jetbrains.annotations.ApiStatus;
 
-/**
- * Fabric初始化使用的类，包括客户端与服务端
- * @see ModInitializer
- */
-public final class AyameFabric implements ModInitializer {
+import java.util.List;
+
+@ApiStatus.Internal
+@Environment(EnvType.CLIENT)
+public class AyameClientEventsFabricImpl implements AyameClientEvents {
     @Override
-    public void onInitialize() {
-        Ayame.init();
-        AyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+    public void ModelResource_onResourceCreate(ModelResource modelResource) {
+        ModelResourceEvents.ON_RESOURCE_CREATE.invoker().onResourceCreate(modelResource);
+    }
+
+    @Override
+    public void ModelResource_onListResource(List<ModelResource> modelResources, boolean sorted) {
+        ModelResourceEvents.ON_LIST_RESOURCE.invoker().onListResource(modelResources, sorted);
     }
 }

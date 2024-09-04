@@ -34,7 +34,7 @@ public class OpenModelSelectMenuEvent {
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
         while (RegisterKeyMapping.MODEL_SELECT_MENU.get().consumeClick()) {
-            Minecraft.getInstance().setScreen(new ModelSelectMenuScreen(Component.empty(), Minecraft.getInstance().screen));
+           ModelSelectMenuScreen.openDefaultModelSelectMenu(Minecraft.getInstance().screen);
         }
     }
 }

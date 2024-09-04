@@ -15,22 +15,24 @@ package org.ayamemc.ayame.client.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.resource.ModelResource;
 import org.ayamemc.ayame.client.resource.ModelResourceWriterUtil;
-import org.ayamemc.ayame.client.resource.ModelScreenCache;
+import org.ayamemc.ayame.client.resource.ModelResourceCache;
+import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * 显示Ayame模型选择界面
+ * 显示Ayame模型选择界面，此屏幕不直接设置玩家模型，需要在CloseCallback中处理
  *
  * @see StatementScreen
  */
@@ -38,7 +40,8 @@ import java.util.Map;
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
-
+    public final List<ModelResource> modelResources;
+    public CloseCallback closeCallback;
     /**
      * 重载构造方法，包含skipWarningOnce的布尔值
      *
@@ -50,6 +53,24 @@ public class ModelSelectMenuScreen extends Screen {
         super(title);
         this.lastScreen = lastScreen;
         this.skipWarningOnce = skipWarningOnce;
+        this.modelResources = ModelResourceAPI.listModels(true);
+    }
+
+    /**
+     * 带有关闭回调函数的构造方法
+     * @param title      {@link Component}类型，为屏幕标题
+     * @param lastScreen 上个显示的屏幕
+     * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
+     * @param callback  关闭回调函数<br></br>
+     * 回调示例
+     * <pre>{@code
+     * (resources, selectedModel)->{
+     *     // 你的代码
+     * }}</pre>
+     */
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce, CloseCallback callback) {
+        this(title, lastScreen, skipWarningOnce);
+        this.closeCallback = callback;
     }
 
     /**
@@ -130,22 +151,37 @@ public class ModelSelectMenuScreen extends Screen {
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 
-    /**
-     * 获取所有模型资源
-     * @param sort 是否排序
-     * @return 所有模型资源
-     */
-    public List<ModelResource> getModels(boolean sort) {
-        // TODO 添加事件
-        return ModelScreenCache.getAllModelResource(sort);
-    }
 
     /**
      * 当屏幕退出时执行的代码
      */
     @Override
     public void onClose() {
-        super.onClose();
-        // minecraft.setScreen(lastScreen); 有必要吗，换完模型直接关就行，没必要这样
+        minecraft.setScreen(lastScreen);
+        if (closeCallback != null) {
+            // TODO 完成模型选择
+            closeCallback.close(modelResources, null);
+        }
+    }
+
+    /**
+     * 关闭回调函数
+     */
+    @FunctionalInterface
+    public interface CloseCallback {
+        void close(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
+    }
+
+    /**
+     * 打开模型选择菜单并在选择后切换模型
+     * @param lastScreen 上一个屏幕
+     */
+    public static void openDefaultModelSelectMenu(Screen lastScreen) {
+        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false,(resources, model)->{
+            if (model != null) {
+                // TODO: 设置模型
+            }
+        });
+        Minecraft.getInstance().setScreen(screen);
     }
 }
