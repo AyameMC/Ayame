@@ -189,7 +189,7 @@ public class ModelSelectMenuScreen extends Screen {
             // close的callback,也许以后用的上
         }, (modelResources, selectedModel) ->{
             if (selectedModel != null) {
-
+                // TODO: 在这里切换模型
             }
         });
         Minecraft.getInstance().setScreen(screen);
