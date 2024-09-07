@@ -24,6 +24,7 @@ public class ModelScanner {
      * 从指定目录扫描模型
      * @param dir 目录
      */
+    private static int modelCount = 0;
     public static void scanModel(Path dir) {
         // 遍历目录
         for (File path : Objects.requireNonNull(dir.toFile().listFiles())) {
@@ -36,6 +37,8 @@ public class ModelScanner {
                     ModelResource res = ModelResource.fromFile(path);
                     // 添加到缓存
                     ModelResourceCache.addModelResource(res);
+                    // 增加数量
+                    addModelCount(1);
                 } catch (Exception e) {
                     // 忽略错误
                 }
@@ -50,4 +53,10 @@ public class ModelScanner {
         scanModel(Path.of(DefaultAyameModels.MODEL_PATH));
     }
 
+    public static int getModelCount() {
+        return modelCount;
+    }
+    private static void addModelCount(int count) {
+        modelCount++;
+    }
 }
