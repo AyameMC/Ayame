@@ -41,6 +41,7 @@ public class ModelSelectMenuScreen extends Screen {
     public final boolean skipWarningOnce;
     public final List<ModelResource> modelResources;
     public CloseCallback closeCallback;
+    public SwitchModelCallback switchModelCallback;
     /**
      * 重载构造方法，包含skipWarningOnce的布尔值
      *
@@ -67,9 +68,10 @@ public class ModelSelectMenuScreen extends Screen {
      *     // 你的代码
      * }}</pre>
      */
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce, CloseCallback callback) {
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce, CloseCallback callback, SwitchModelCallback switchModelCallback) {
         this(title, lastScreen, skipWarningOnce);
         this.closeCallback = callback;
+        this.switchModelCallback = switchModelCallback;
     }
 
     /**
@@ -159,7 +161,7 @@ public class ModelSelectMenuScreen extends Screen {
         minecraft.setScreen(lastScreen);
         if (closeCallback != null) {
             // TODO 完成模型选择
-            closeCallback.close(modelResources, null);
+            closeCallback.close();
         }
     }
 
@@ -168,7 +170,12 @@ public class ModelSelectMenuScreen extends Screen {
      */
     @FunctionalInterface
     public interface CloseCallback {
-        void close(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
+        void close();
+    }
+
+    @FunctionalInterface
+    public interface SwitchModelCallback{
+        void switchModel(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
 
     /**
@@ -176,9 +183,11 @@ public class ModelSelectMenuScreen extends Screen {
      * @param lastScreen 上一个屏幕
      */
     public static void openDefaultModelSelectMenu(Screen lastScreen) {
-        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false,(resources, model)->{
-            if (model != null) {
-                // TODO: 设置模型
+        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, () -> {
+            // close的callback,也许以后用的上
+        }, (modelResources, selectedModel) ->{
+            if (selectedModel != null) {
+
             }
         });
         Minecraft.getInstance().setScreen(screen);
