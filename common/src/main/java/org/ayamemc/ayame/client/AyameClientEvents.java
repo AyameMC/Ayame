@@ -20,15 +20,17 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-/**
- * 内部事件，实现见 AyameClientEventsFabricImpl 和 AyameClientEventsNeoForgeImpl
- */
+///
+/// 内部事件，实现见 `AyameClientEventsFabricImpl` 与 `AyameClientEventsNeoForgeImpl`
+///
 @ApiStatus.Internal
 @Environment(EnvType.CLIENT)
 public interface AyameClientEvents {
-    class Instance{
+    void ModelResource_onResourceCreate(ModelResource modelResource);
+
+    void ModelResource_onListResource(List<ModelResource> modelResources, boolean sorted);
+
+    class Instance {
         public static AyameClientEvents INSTANCE;
     }
-    void ModelResource_onResourceCreate(ModelResource modelResource);
-    void ModelResource_onListResource(List<ModelResource> modelResources,boolean sorted);
 }

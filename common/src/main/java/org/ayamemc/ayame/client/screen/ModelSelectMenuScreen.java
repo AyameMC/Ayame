@@ -42,6 +42,7 @@ public class ModelSelectMenuScreen extends Screen {
     public final List<ModelResource> modelResources;
     public CloseCallback closeCallback;
     public SwitchModelCallback switchModelCallback;
+
     /**
      * 重载构造方法，包含skipWarningOnce的布尔值
      *
@@ -75,7 +76,7 @@ public class ModelSelectMenuScreen extends Screen {
     }
 
     /**
-     * 重载构造方法，没有skipWarningOnce参数
+     * 重载构造方法，没有{@code skipWarningOnce}参数
      *
      * @param title      {@link Component}类型，为屏幕标题
      * @param lastScreen 上个显示的屏幕
@@ -85,9 +86,8 @@ public class ModelSelectMenuScreen extends Screen {
     }
 
     /**
-     * Ayame 本体使用的模型添加方法，<b><font color="red">Ayame以外的模组不应该调用</font></b>
-     * <p>
-     * <s>{@code private}的你也调不了啊，难道上访问加宽器？你访问它干嘛</s>
+     * Ayame 本体使用的模型添加方法，其他模组不应（也不能）使用
+     *
      * @param modelRes 传入{@link ModelResource}类型，模型资源（如json）的路径
      */
     private static void addModelResource(ModelResource modelRes) {
@@ -95,6 +95,21 @@ public class ModelSelectMenuScreen extends Screen {
         ModelResourceWriterUtil.addModelResource(MOD_ID, modelRes);
     }
 
+    /**
+     * 打开模型选择菜单并在选择后切换模型
+     *
+     * @param lastScreen 上一个屏幕
+     */
+    public static void openDefaultModelSelectMenu(Screen lastScreen) {
+        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, () -> {
+            // close的callback,也许以后用的上
+        }, (modelResources, selectedModel) -> {
+            if (selectedModel != null) {
+                // TODO: 在这里切换模型
+            }
+        });
+        Minecraft.getInstance().setScreen(screen);
+    }
 
     /**
      * 屏幕初始化，按钮注册和{@code builder}都在里面
@@ -137,10 +152,11 @@ public class ModelSelectMenuScreen extends Screen {
 
     /**
      * 渲染屏幕的方法，继承自{@link Screen}
+     *
      * @param context the GuiGraphics object used for rendering.
-     * @param mouseX the x-coordinate of the mouse cursor.
-     * @param mouseY the y-coordinate of the mouse cursor.
-     * @param delta the partial tick time.
+     * @param mouseX  the x-coordinate of the mouse cursor.
+     * @param mouseY  the y-coordinate of the mouse cursor.
+     * @param delta   the partial tick time.
      */
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
@@ -153,7 +169,6 @@ public class ModelSelectMenuScreen extends Screen {
         context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
-
 
     /**
      * 当屏幕退出时执行的代码
@@ -176,22 +191,7 @@ public class ModelSelectMenuScreen extends Screen {
     }
 
     @FunctionalInterface
-    public interface SwitchModelCallback{
+    public interface SwitchModelCallback {
         void switchModel(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
-    }
-
-    /**
-     * 打开模型选择菜单并在选择后切换模型
-     * @param lastScreen 上一个屏幕
-     */
-    public static void openDefaultModelSelectMenu(Screen lastScreen) {
-        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, () -> {
-            // close的callback,也许以后用的上
-        }, (modelResources, selectedModel) ->{
-            if (selectedModel != null) {
-                // TODO: 在这里切换模型
-            }
-        });
-        Minecraft.getInstance().setScreen(screen);
     }
 }
