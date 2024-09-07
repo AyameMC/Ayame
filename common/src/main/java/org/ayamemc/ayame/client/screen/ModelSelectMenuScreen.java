@@ -116,8 +116,10 @@ public class ModelSelectMenuScreen extends Screen {
 //            ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
 //            ModelSelectMenuScreen.addModelResource(modelRes);
 //            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
-
+            List<ModelResource> availableModels = this.modelResources; // 假设你已经有模型资源列表
+            //AyameModelType selectedModel = ;
             this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
+            switchModelCallback.switchModel(availableModels, selectedModel);
         }).bounds(150, 40, 120, 20).build();
 
 
