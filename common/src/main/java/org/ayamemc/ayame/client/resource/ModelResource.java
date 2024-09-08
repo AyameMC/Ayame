@@ -37,101 +37,76 @@ import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
  * 模型资源
  */
 @Environment(EnvType.CLIENT)
-public class ModelResource {
-    private final Map<String, InputStream> content;
-    private final ModelMetaData metaData;
-    private @Nullable ResourceLocation texture;
-    private @Nullable ResourceLocation geoModel;
-    private @Nullable ResourceLocation animation;
-
+public interface ModelResource {
     /**
-     * @param content 模型内容
+     * 获取模型元数据
+     *
+     * @return 模型元数据
      */
-    public ModelResource(Map<String, InputStream> content) throws IOException {
-        this.content = content;
-        this.metaData = createMetaData();
-        AyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
-    }
-
-
-
-    private ModelMetaData createMetaData() {
-        String type = getType();
-        if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)) {
-            JsonInterpreter json =this.getMetaDataJson();
-            return ModelMetaData.Builder.create()
-                    .parseJson(json)
-                    .build();
-        }
-        // TODO 完成ysm
-        return ModelMetaData.Builder.create().build();
-    }
-    public ModelMetaData getMetaData() {
-        return metaData;
-    }
-
-    public String getType() {
-        if (content.containsKey("metadata.json")) return ModelMetaData.DefaultModelTypes.AYAME;
-        // TODO 完成ysm格式
-        return ModelMetaData.DefaultModelTypes.AYAME;
-    }
-
-    public void createModel() {
-        // 创建任务，在Minecraft能够启动后执行
-        Minecraft.getInstance().execute(()-> {
-            // 为ayame模型读取
-            if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
-                // 创建模型
-                ModelResourceWriterUtil.ModelResourceLocationRecord locations = ModelResourceWriterUtil.addModelResource(MOD_ID, this);
-                this.animation = locations.animationLocation();
-                this.geoModel = locations.modelLocation();
-                this.texture = locations.textureLocation();
-            }
-            // TODO 完成ysm格式
-        });
-    }
-
-
-    public JsonInterpreter getModelJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("model.json")));
-    }
-
-    public JsonInterpreter getAnimationJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("animation.json")));
-    }
-
-    public JsonInterpreter getMetaDataJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("metadata.json")));
-    }
-
-    public InputStream getTextureContent() {
-        return content.get("texture.png");
-    }
+    ModelMetaData getMetaData();
 
     /**
-     * 获取模型资源，仅在{@link #createModel}后调用
-     * @return 模型资源
+     * 获取模型类型
+     *
+     * @return 模型类型字符串
+     */
+    String getType();
+
+    /**
+     * 创建模型资源
+     */
+    void createModel();
+
+    /**
+     * 获取模型JSON解析器
+     *
+     * @return 模型JSON解析器
+     */
+    JsonInterpreter getModelJson();
+
+    /**
+     * 获取动画JSON解析器
+     *
+     * @return 动画JSON解析器
+     */
+    JsonInterpreter getAnimationJson();
+
+    /**
+     * 获取元数据JSON解析器
+     *
+     * @return 元数据JSON解析器
+     */
+    JsonInterpreter getMetaDataJson();
+
+    /**
+     * 获取纹理内容输入流
+     *
+     * @return 纹理内容输入流
+     */
+    InputStream getTextureContent();
+
+    /**
+     * 获取几何模型资源位置
+     *
+     * @return 几何模型资源位置
      */
     @Nullable
-    public ResourceLocation getGeoModelLocation() {
-        return geoModel;
-    }
-    /**
-     * 获取动画资源，仅在{@link #createModel}后调用
-     * @return 动画资源
-     */
-    @Nullable
-    public ResourceLocation getAnimationLocation() {
-        return animation;
-    }
+    ResourceLocation getGeoModelLocation();
 
     /**
-     * 获取材质资源，仅在{@link #createModel}后调用
-     * @return 材质资源
+     * 获取动画资源位置
+     *
+     * @return 动画资源位置
      */
-    public ResourceLocation getTextureLocation() {
-        return texture;
-    }
+    @Nullable
+    ResourceLocation getAnimationLocation();
+
+    /**
+     * 获取纹理资源位置
+     *
+     * @return 纹理资源位置
+     */
+    ResourceLocation getTextureLocation();
 
     /**
      * 从文件创建模型资源
@@ -139,11 +114,11 @@ public class ModelResource {
      * @return 模型资源
      * @throws IOException 读取文件时发生错误
      */
-    public static ModelResource fromFile(Path file) throws IOException {
-        return new ModelResource(readZip(file));
+    static ModelResource fromFile(Path file) throws IOException {
+        return new AyameModelResource(readZip(file));
     }
 
-    public static ModelResource fromFile(File file) throws IOException {
+    static ModelResource fromFile(File file) throws IOException {
         return fromFile(file.toPath());
     }
 
@@ -152,7 +127,7 @@ public class ModelResource {
         return FileUtil.readZipFile(file);
     }
 
-    public static DefaultAyameModelType createModelFromResource(ModelResource res) {
+    static DefaultAyameModelType createModelFromResource(ModelResource res) {
         res.createModel();
         return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
     }

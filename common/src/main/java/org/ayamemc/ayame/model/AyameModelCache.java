@@ -54,7 +54,7 @@ public class AyameModelCache {
      * @return 玩家模型
      */
     @NotNull
-    public static AyameModelType getPlayerModel(@NotNull Player player) {
+    public static AyameModelType getPlayerModel(Player player) {
         return playerModelCache.getOrDefault(player, DefaultAyameModels.DEFAULT_MODEL);
     }
 

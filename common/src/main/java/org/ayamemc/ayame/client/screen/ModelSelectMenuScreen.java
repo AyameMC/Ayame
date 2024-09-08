@@ -20,11 +20,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.resource.ModelResourceCache;
 import org.ayamemc.ayame.client.resource.ModelResourceWriterUtil;
+import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
+import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +44,9 @@ public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
     public final List<ModelResource> modelResources;
-    public CloseCallback closeCallback;
-    public SwitchModelCallback switchModelCallback;
+    public @Nullable CloseCallback closeCallback;
+    public @Nullable SwitchModelCallback switchModelCallback;
+    public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
 
     /**
      * 重载构造方法，包含skipWarningOnce的布尔值
@@ -58,18 +63,24 @@ public class ModelSelectMenuScreen extends Screen {
     }
 
     /**
-     * 带有关闭回调函数的构造方法
+     * 带有回调函数的构造方法
      * @param title      {@link Component}类型，为屏幕标题
      * @param lastScreen 上个显示的屏幕
      * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
-     * @param callback  关闭回调函数<br></br>
+     * @param callback  关闭回调函数，在屏幕关闭时会执行<br></br>
      * 回调示例
      * <pre>{@code
      * (resources, selectedModel)->{
      *     // 你的代码
      * }}</pre>
+     * @param switchModelCallback  切换模型回调函数，在切换模型时会执行<br></br>
+     * 回调示例
+     * <pre>{@code
+     * (resources, selectedModel)->{
+     *     // 你的代码
+     * }}
      */
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce, CloseCallback callback, SwitchModelCallback switchModelCallback) {
+    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce,@Nullable CloseCallback callback,@Nullable SwitchModelCallback switchModelCallback) {
         this(title, lastScreen, skipWarningOnce);
         this.closeCallback = callback;
         this.switchModelCallback = switchModelCallback;
@@ -85,15 +96,6 @@ public class ModelSelectMenuScreen extends Screen {
         this(title, lastScreen, false);
     }
 
-    /**
-     * Ayame 本体使用的模型添加方法，其他模组不应（也不能）使用
-     *
-     * @param modelRes 传入{@link ModelResource}类型，模型资源（如json）的路径
-     */
-    private static void addModelResource(ModelResource modelRes) {
-        final String MOD_ID = Ayame.MOD_ID;
-        ModelResourceWriterUtil.addModelResource(MOD_ID, modelRes);
-    }
 
     /**
      * 打开模型选择菜单并在选择后切换模型
@@ -101,7 +103,7 @@ public class ModelSelectMenuScreen extends Screen {
      * @param lastScreen 上一个屏幕
      */
     public static void openDefaultModelSelectMenu(Screen lastScreen) {
-        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, () -> {
+        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, (modelResources,selectedModel) -> {
             // close的callback,也许以后用的上
         }, (modelResources, selectedModel) -> {
             if (selectedModel != null) {
@@ -121,32 +123,34 @@ public class ModelSelectMenuScreen extends Screen {
             return;
         }
 
-        // TODO: 模型切换
-        // TODO: 调用GeckoLib 的reload方法
-        // 创建按钮
-        Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
-
-
-//            // 加载模型
-//            ModelResource modelRes = ModelResource.addModel("config/ayame/models/classic_neko.zip");
-//            ModelSelectMenuScreen.addModelResource(modelRes);
-//            GeoPlayerRender.GeoPlayerModel.switchModel(modelRes);
-            List<ModelResource> availableModels = this.modelResources; // 假设你已经有模型资源列表
-            //AyameModelType selectedModel = ;
-            this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
-            switchModelCallback.switchModel(availableModels, selectedModel);
-        }).bounds(150, 40, 120, 20).build();
-
-
-        Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
-            // 行为这里改
-            this.minecraft.player.connection.sendChat("大家好啊昨天给大家来点不想看的东西");
-        }).bounds(200, 60, 120, 20).build();
-
-
-        // 注册按钮组件
-        this.addRenderableWidget(buttonWidget);
-        this.addRenderableWidget(buttonWidget1);
+        for (ModelResource res : modelResources){
+            AyameModelType model = ModelResource.createModelFromResource(res);
+            // TODO 完成按钮
+            this.addRenderableWidget(Button.builder(Component.literal(model.metaData().name()), (btn) -> {
+                if (switchModelCallback != null) {
+                    // 执行回调
+                    switchModelCallback.switchModel(modelResources, model);
+                }
+                // TODO 切换预览模型
+            }).bounds(50, 40, 120, 20).build());
+        }
+//        // 创建按钮
+//        Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
+//
+//            this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
+//            switchModelCallback.switchModel(availableModels, selectedModel);
+//        }).bounds(150, 40, 120, 20).build();
+//
+//
+//        Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
+//            // 行为这里改
+//            this.minecraft.player.connection.sendChat("大家好啊昨天给大家来点不想看的东西");
+//        }).bounds(200, 60, 120, 20).build();
+//
+//
+//        // 注册按钮组件
+//        this.addRenderableWidget(buttonWidget);
+//        this.addRenderableWidget(buttonWidget1);
 
     }
 
@@ -177,8 +181,7 @@ public class ModelSelectMenuScreen extends Screen {
     public void onClose() {
         minecraft.setScreen(lastScreen);
         if (closeCallback != null) {
-            // TODO 完成模型选择
-            closeCallback.close();
+            closeCallback.close(modelResources, selectedModel);
         }
     }
 
@@ -187,7 +190,7 @@ public class ModelSelectMenuScreen extends Screen {
      */
     @FunctionalInterface
     public interface CloseCallback {
-        void close();
+        void close(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
 
     @FunctionalInterface
