@@ -23,5 +23,5 @@ cp -r fabric/build/libs/* result
 cp -r neoforge/build/libs/* result
 cp -r common/build/libs/* result
 cd result
-echo "Unstable Nightly Development Build, DO NOT Use for Normal Play!" > " A_Unstable Nightly Development Build, DO NOT Use for Normal Play!"
-echo "不稳定每夜开发构建，切勿用于正常游玩！" > " A不稳定每夜开发构建，切勿用于正常游玩！"
+echo "Unstable Nightly Development Build, DO NOT Use for Normal Play!" > " A_Unstable Nightly Development Build，DO NOT Use for Normal Play！.txt"
+echo "不稳定每夜开发构建，切勿用于正常游玩！" > " A不稳定每夜开发构建，切勿用于正常游玩！.txt"
