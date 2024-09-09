@@ -14,6 +14,7 @@
 
 package org.ayamemc.ayame.client.resource;
 
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -53,8 +54,6 @@ public class ModelResourceWriterUtil {
         addBakedModel(modelLocation, modelRes);
         addBakedAnimation(animationLocation, modelRes);
 
-        int record = 0;
-
         return new ModelResourceLocationRecord(modelLocation, animationLocation, addTexture(modelRes));
     }
 
@@ -66,7 +65,7 @@ public class ModelResourceWriterUtil {
      *
      */
     public static void addBakedModel(ResourceLocation resourceLocation, IModelResource modelRes) {
-        Model m = KeyFramesAdapter.GEO_GSON.fromJson(modelRes.getModelJson().toGson(), Model.class);
+        Model m = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON,modelRes.getModelJson().toString(), JsonObject.class), Model.class);
         BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
 
         GeckoLibCache.getBakedModels().put(resourceLocation, bakedGeoModel);

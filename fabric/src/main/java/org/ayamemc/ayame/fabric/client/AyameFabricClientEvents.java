@@ -21,6 +21,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import org.ayamemc.ayame.client.resource.ModelScanner;
 import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
 import org.ayamemc.ayame.util.TaskManager;
 
@@ -49,6 +50,8 @@ public class AyameFabricClientEvents {
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
+//        // 开新线程扫描模型
+//        new Thread(ModelScanner::scanModel).start();
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {
