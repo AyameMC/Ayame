@@ -13,13 +13,18 @@
 
 package org.ayamemc.ayame.client.renderer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -29,9 +34,16 @@ public class GeoPlayerRender extends GeoEntityRenderer<Player> {
     // TODO : 完善代码 & 添加API
     public GeoPlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
-
     }
 
+    @Override
+    public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+//        // 坐下时向下移动
+//        if (animatable.ayame$isSitting()) {
+//            poseStack.translate(0, -0.7, 0);
+//        }
+    }
 
 
     // TODO : 添加API

@@ -26,17 +26,17 @@ public class ModelResourceCache {
     /** 使用ConcurrentHashMap来保证线程安全
         String 为模型名， ModelResource 为模型资源
      */
-    public static Map<String,ModelResource> cache = new ConcurrentHashMap<>();
+    public static Map<String, IModelResource> cache = new ConcurrentHashMap<>();
     /**
      * 用来保证插入顺序的List
      */
     public static List<String> sortedCache = new CopyOnWriteArrayList<>();
     /**
-     * 添加模型资源到缓存，最好使用{@link #addModelResource(ModelResource)}这个方法
+     * 添加模型资源到缓存，最好使用{@link #addModelResource(IModelResource)}这个方法
      * @param name 模型名称
      * @param modelRes 模型资源
      */
-    public static void addModelResource(String name,ModelResource modelRes) {
+    public static void addModelResource(String name, IModelResource modelRes) {
         cache.put(name,modelRes);
         sortedCache.add(name);
     }
@@ -45,7 +45,7 @@ public class ModelResourceCache {
      * 添加模型资源到缓存
      * @param modelRes 模型资源
      */
-    public static void addModelResource(ModelResource modelRes) {
+    public static void addModelResource(IModelResource modelRes) {
         addModelResource(modelRes.getMetaData().name(),modelRes);
     }
 
@@ -53,7 +53,7 @@ public class ModelResourceCache {
      * 批量添加模型资源到缓存
      * @param modelRes 模型资源
      */
-    public static void addModelResource(Collection<ModelResource> modelRes){
+    public static void addModelResource(Collection<IModelResource> modelRes){
         modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
@@ -61,7 +61,7 @@ public class ModelResourceCache {
      * 批量添加模型资源到缓存
      * @param modelRes 模型资源
      */
-    public static void addModelResource(Map<String,ModelResource> modelRes){
+    public static void addModelResource(Map<String, IModelResource> modelRes){
         modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
@@ -70,7 +70,7 @@ public class ModelResourceCache {
      * @param name 模型名称
      * @return 模型资源
      */
-    public static ModelResource getModelResource(String name) {
+    public static IModelResource getModelResource(String name) {
         return cache.get(name);
     }
 
@@ -80,7 +80,7 @@ public class ModelResourceCache {
      * @param sorted 是否要保证插入顺序
      * @return 所有模型资源
      */
-    public static List<ModelResource> getAllModelResource(boolean sorted){
+    public static List<IModelResource> getAllModelResource(boolean sorted){
         return sorted ? sortedCache.stream().map(ModelResourceCache::getModelResource).toList() : cache.values().stream().toList();
     }
 

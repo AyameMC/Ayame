@@ -15,9 +15,7 @@ package org.ayamemc.ayame.client.resource;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.AyameClientEvents;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.ModelMetaData;
 import org.ayamemc.ayame.util.FileUtil;
@@ -30,14 +28,12 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Map;
 
-import static org.ayamemc.ayame.Ayame.MOD_ID;
-import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
 
 /**
  * 模型资源
  */
 @Environment(EnvType.CLIENT)
-public interface ModelResource {
+public interface IModelResource {
     /**
      * 获取模型元数据
      *
@@ -114,11 +110,11 @@ public interface ModelResource {
      * @return 模型资源
      * @throws IOException 读取文件时发生错误
      */
-    static ModelResource fromFile(Path file) throws IOException {
+    static IModelResource fromFile(Path file) throws IOException {
         return new AyameModelResource(readZip(file));
     }
 
-    static ModelResource fromFile(File file) throws IOException {
+    static IModelResource fromFile(File file) throws IOException {
         return fromFile(file.toPath());
     }
 
@@ -127,7 +123,7 @@ public interface ModelResource {
         return FileUtil.readZipFile(file);
     }
 
-    static DefaultAyameModelType createModelFromResource(ModelResource res) {
+    static DefaultAyameModelType createModelFromResource(IModelResource res) {
         res.createModel();
         return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
     }

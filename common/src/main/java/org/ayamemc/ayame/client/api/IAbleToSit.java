@@ -11,26 +11,13 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.client.api;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.ayamemc.ayame.client.resource.ModelResource;
-import org.jetbrains.annotations.ApiStatus;
+public interface IAbleToSit {
+    default void ayame$setSitting(boolean sitting){
+    }
 
-import java.util.List;
-
-///
-/// 内部事件，实现见 `AyameClientEventsFabricImpl` 与 `AyameClientEventsNeoForgeImpl`
-///
-@ApiStatus.Internal
-@Environment(EnvType.CLIENT)
-public interface AyameClientEvents {
-    void ModelResource_onResourceCreate(ModelResource modelResource);
-
-    void ModelResource_onListResource(List<ModelResource> modelResources, boolean sorted);
-
-    class Instance {
-        public static AyameClientEvents INSTANCE;
+    default boolean ayame$isSitting(){
+        return false;
     }
 }

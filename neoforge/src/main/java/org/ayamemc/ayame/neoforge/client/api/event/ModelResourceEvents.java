@@ -15,7 +15,7 @@ package org.ayamemc.ayame.neoforge.client.api.event;
 
 import net.neoforged.bus.api.Event;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.resource.IModelResource;
 
 import java.util.List;
 import java.util.Map;
@@ -25,14 +25,14 @@ public class ModelResourceEvents {
      * 模型资源创建时的回调<br></br>
      * 参数：<br></br>
      *    modelResource：模型资源
-     * @see ModelResource#ModelResource(Map)
+     * @see IModelResource#ModelResource(Map)
      */
     public static class OnResourceCreate extends Event{
-        private final ModelResource modelResource;
-        public OnResourceCreate(ModelResource modelResource) {
+        private final IModelResource modelResource;
+        public OnResourceCreate(IModelResource modelResource) {
             this.modelResource = modelResource;
         }
-        public ModelResource getModelResource() {
+        public IModelResource getModelResource() {
             return modelResource;
         }
     }
@@ -44,13 +44,13 @@ public class ModelResourceEvents {
      * @see ModelResourceAPI#listModels(boolean)
      */
     public static class OnListResource extends Event{
-        private final List<ModelResource> modelResources;
+        private final List<IModelResource> modelResources;
         private final boolean sorted;
-        public OnListResource(List<ModelResource> modelResources, boolean sorted) {
+        public OnListResource(List<IModelResource> modelResources, boolean sorted) {
             this.modelResources = modelResources;
             this.sorted = sorted;
         }
-        public List<ModelResource> getModelResources() {
+        public List<IModelResource> getModelResources() {
             return modelResources;
         }
         public boolean isSorted() {

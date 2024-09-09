@@ -43,11 +43,11 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 public class ModelResourceWriterUtil {
     /**
      * @param namespace {@link String}类型的命名空间
-     * @param modelRes  传入{@link ModelResource}类型，模型资源（如json）的路径
+     * @param modelRes  传入{@link IModelResource}类型，模型资源（如json）的路径
      *
      * @return {@link ModelResourceLocationRecord} 模型资源路径和动画路径的记录
      */
-    public static ModelResourceLocationRecord addModelResource(String namespace, ModelResource modelRes) {
+    public static ModelResourceLocationRecord addModelResource(String namespace, IModelResource modelRes) {
         ResourceLocation modelLocation = ResourceLocation.fromNamespaceAndPath(namespace, "geo/ayame/" + modelRes.getMetaData().name() + ".json");
         ResourceLocation animationLocation = ResourceLocation.fromNamespaceAndPath(namespace, "animations/ayame/" + modelRes.getMetaData().name() + ".json");
         addBakedModel(modelLocation, modelRes);
@@ -62,10 +62,10 @@ public class ModelResourceWriterUtil {
      * 向模型缓存中添加新条目
      *
      * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
-     * @param modelRes         传入{@link ModelResource}类型，模型资源（如json）的路径
+     * @param modelRes         传入{@link IModelResource}类型，模型资源（如json）的路径
      *
      */
-    public static void addBakedModel(ResourceLocation resourceLocation, ModelResource modelRes) {
+    public static void addBakedModel(ResourceLocation resourceLocation, IModelResource modelRes) {
         Model m = KeyFramesAdapter.GEO_GSON.fromJson(modelRes.getModelJson().toGson(), Model.class);
         BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
 
@@ -76,10 +76,10 @@ public class ModelResourceWriterUtil {
      * 向动画缓存中添加新条目
      *
      * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
-     * @param modelRes         传入{@link ModelResource}类型，模型资源（如json）的路径
+     * @param modelRes         传入{@link IModelResource}类型，模型资源（如json）的路径
      * @see ResourceLocation
      */
-    public static void addBakedAnimation(ResourceLocation resourceLocation, ModelResource modelRes) {
+    public static void addBakedAnimation(ResourceLocation resourceLocation, IModelResource modelRes) {
         BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(modelRes.getAnimationJson().toGson(), "animations"), BakedAnimations.class);
         GeckoLibCache.getBakedAnimations().put(resourceLocation, ani);
     }
@@ -89,7 +89,7 @@ public class ModelResourceWriterUtil {
      * @param res 模型资源
      * @return {@link ResourceLocation} 资源的路径
      */
-    public static ResourceLocation addTexture(ModelResource res) {
+    public static ResourceLocation addTexture(IModelResource res) {
         try {
             return Minecraft.getInstance().getTextureManager().register(res.getMetaData().name(),new DynamicTexture(NativeImage.read(res.getTextureContent())));
         } catch (IOException e) {

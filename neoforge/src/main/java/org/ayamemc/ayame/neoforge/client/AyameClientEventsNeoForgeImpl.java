@@ -14,22 +14,22 @@
 package org.ayamemc.ayame.neoforge.client;
 
 import net.neoforged.neoforge.common.NeoForge;
-import org.ayamemc.ayame.client.AyameClientEvents;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.neoforge.client.api.event.ModelResourceEvents;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
 @ApiStatus.Internal
-public class AyameClientEventsNeoForgeImpl implements AyameClientEvents {
+public class AyameClientEventsNeoForgeImpl implements IAyameClientEvents {
     @Override
-    public void ModelResource_onResourceCreate(ModelResource modelResource) {
+    public void ModelResource_onResourceCreate(IModelResource modelResource) {
         NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnResourceCreate(modelResource));
     }
 
     @Override
-    public void ModelResource_onListResource(List<ModelResource> modelResources, boolean sorted) {
+    public void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted) {
         NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnListResource(modelResources, sorted));
     }
 }

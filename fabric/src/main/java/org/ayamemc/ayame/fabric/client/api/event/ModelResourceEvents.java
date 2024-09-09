@@ -15,7 +15,7 @@ package org.ayamemc.ayame.fabric.client.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class ModelResourceEvents {
      * 模型资源创建时的回调<br></br>
      * 参数：<br></br>
      *    modelResource：模型资源
-     * @see ModelResource#ModelResource(Map)
+     * @see IModelResource#ModelResource(Map)
      */
     public static Event<OnResourceCreate> ON_RESOURCE_CREATE = EventFactory.createArrayBacked(OnResourceCreate.class, (listeners) -> (modelResource) ->{
         for (OnResourceCreate listener : listeners) {
@@ -50,9 +50,9 @@ public class ModelResourceEvents {
 
 
     public interface OnResourceCreate {
-        void onResourceCreate(ModelResource modelResource);
+        void onResourceCreate(IModelResource modelResource);
     }
     public interface OnListResource {
-        void onListResource(List<ModelResource> modelResources, boolean sorted);
+        void onListResource(List<IModelResource> modelResources, boolean sorted);
     }
 }

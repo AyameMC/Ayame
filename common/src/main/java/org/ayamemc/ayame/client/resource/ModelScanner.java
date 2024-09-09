@@ -34,7 +34,7 @@ public class ModelScanner {
             } else {
                 // 如果是文件，尝试解析为模型资源
                 try {
-                    ModelResource res = ModelResource.fromFile(path);
+                    IModelResource res = IModelResource.fromFile(path);
                     // 添加到缓存
                     ModelResourceCache.addModelResource(res);
                     // 增加数量

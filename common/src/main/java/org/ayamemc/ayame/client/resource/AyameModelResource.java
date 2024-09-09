@@ -15,23 +15,19 @@ package org.ayamemc.ayame.client.resource;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.AyameClientEvents;
-import org.ayamemc.ayame.model.DefaultAyameModelType;
+import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.model.ModelMetaData;
-import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
 
-public class AyameModelResource implements ModelResource{
+public class AyameModelResource implements IModelResource {
     private final Map<String, InputStream> content;
     private final ModelMetaData metaData;
     private @Nullable ResourceLocation texture;
@@ -44,7 +40,7 @@ public class AyameModelResource implements ModelResource{
     public AyameModelResource(Map<String, InputStream> content) throws IOException {
         this.content = content;
         this.metaData = createMetaData();
-        AyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
+        IAyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
     }
 
 

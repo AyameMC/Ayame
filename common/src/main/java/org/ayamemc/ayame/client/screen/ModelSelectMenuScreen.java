@@ -20,15 +20,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.client.resource.ModelResource;
-import org.ayamemc.ayame.client.resource.ModelResourceCache;
-import org.ayamemc.ayame.client.resource.ModelResourceWriterUtil;
+import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
-import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +38,7 @@ import java.util.List;
 public class ModelSelectMenuScreen extends Screen {
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
-    public final List<ModelResource> modelResources;
+    public final List<IModelResource> modelResources;
     public @Nullable CloseCallback closeCallback;
     public @Nullable SwitchModelCallback switchModelCallback;
     public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
@@ -123,8 +118,8 @@ public class ModelSelectMenuScreen extends Screen {
             return;
         }
 
-        for (ModelResource res : modelResources){
-            AyameModelType model = ModelResource.createModelFromResource(res);
+        for (IModelResource res : modelResources){
+            AyameModelType model = IModelResource.createModelFromResource(res);
             // TODO 完成按钮
             this.addRenderableWidget(Button.builder(Component.literal(model.metaData().name()), (btn) -> {
                 if (switchModelCallback != null) {
@@ -190,11 +185,11 @@ public class ModelSelectMenuScreen extends Screen {
      */
     @FunctionalInterface
     public interface CloseCallback {
-        void close(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
+        void close(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
 
     @FunctionalInterface
     public interface SwitchModelCallback {
-        void switchModel(List<ModelResource> modelResources, @Nullable AyameModelType selectedModel);
+        void switchModel(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
 }

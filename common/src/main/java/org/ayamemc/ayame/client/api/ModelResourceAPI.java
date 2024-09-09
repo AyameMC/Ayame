@@ -13,8 +13,8 @@
 
 package org.ayamemc.ayame.client.api;
 
-import org.ayamemc.ayame.client.AyameClientEvents;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.client.resource.ModelResourceCache;
 
 import java.util.List;
@@ -28,11 +28,11 @@ public class ModelResourceAPI {
      * @param sorted 是否排序
      * @return 模型列表
      */
-    public static List<ModelResource> listModels(boolean sorted){
+    public static List<IModelResource> listModels(boolean sorted){
         // 从缓存中获取
-        List<ModelResource> modelResources = ModelResourceCache.getAllModelResource(sorted);
+        List<IModelResource> modelResources = ModelResourceCache.getAllModelResource(sorted);
         // 处理事件
-        AyameClientEvents.Instance.INSTANCE.ModelResource_onListResource(modelResources, sorted);
+        IAyameClientEvents.Instance.INSTANCE.ModelResource_onListResource(modelResources, sorted);
         return modelResources;
     }
 }

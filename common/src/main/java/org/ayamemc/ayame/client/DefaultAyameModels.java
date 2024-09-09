@@ -42,18 +42,16 @@ package org.ayamemc.ayame.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.resource.ModelResource;
+import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.TaskManager;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 /**
@@ -73,7 +71,7 @@ public class DefaultAyameModels {
             ResourceLocation.fromNamespaceAndPath(MOD_ID,"metadata/ayame/default.json")
     );
 
-    public static ModelResource GRMMY_NEKO_MODEL_RESOURCE;
+    public static IModelResource GRMMY_NEKO_MODEL_RESOURCE;
     public static AyameModelType TEST_MODEL ;
 
     public static void init(){
@@ -83,21 +81,21 @@ public class DefaultAyameModels {
         });
     }
 
-    private static ModelResource createModelResource(String name){
+    private static IModelResource createModelResource(String name){
         Path path = Path.of(MODEL_PATH + name + ".zip");
         // 检查文件是否存在
         if (!Files.exists(path)){
             FileUtil.copyResource("assets/ayame/models/" + name + ".zip", path);
         }
         try {
-            return ModelResource.fromFile(path);
+            return IModelResource.fromFile(path);
         } catch (IOException e) {
             // 直接抛出异常
             throw new RuntimeException(e);
         }
     }
 
-    private static AyameModelType createModel(ModelResource res){
-        return ModelResource.createModelFromResource(res);
+    private static AyameModelType createModel(IModelResource res){
+        return IModelResource.createModelFromResource(res);
     }
 }

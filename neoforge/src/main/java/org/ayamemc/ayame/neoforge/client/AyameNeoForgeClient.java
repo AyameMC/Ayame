@@ -31,12 +31,12 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.client.AyameClientEvents;
+import org.ayamemc.ayame.client.IAyameClientEvents;
 
 @Mod(value = Ayame.MOD_ID,dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
     public AyameNeoForgeClient() {
         AyameClient.init();
-        AyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
+        IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
     }
 }

@@ -11,27 +11,26 @@
  *     You should have received a copy of the GNU Lesser General Public License along with Ayame. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client;
+package org.ayamemc.ayame.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.resource.IModelResource;
-import org.ayamemc.ayame.fabric.client.api.event.ModelResourceEvents;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
+///
+/// 内部事件，实现见 `AyameClientEventsFabricImpl` 与 `AyameClientEventsNeoForgeImpl`
+///
 @ApiStatus.Internal
 @Environment(EnvType.CLIENT)
-public class AyameClientEventsFabricImpl implements IAyameClientEvents {
-    @Override
-    public void ModelResource_onResourceCreate(IModelResource modelResource) {
-        ModelResourceEvents.ON_RESOURCE_CREATE.invoker().onResourceCreate(modelResource);
-    }
+public interface IAyameClientEvents {
+    void ModelResource_onResourceCreate(IModelResource modelResource);
 
-    @Override
-    public void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted) {
-        ModelResourceEvents.ON_LIST_RESOURCE.invoker().onListResource(modelResources, sorted);
+    void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted);
+
+    class Instance {
+        public static IAyameClientEvents INSTANCE;
     }
 }

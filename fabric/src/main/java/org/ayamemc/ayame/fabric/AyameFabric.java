@@ -15,9 +15,8 @@ package org.ayamemc.ayame.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.AyameClientEvents;
+import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
-import org.ayamemc.ayame.fabric.client.AyameFabricClientEvents;
 
 /**
  * Fabric初始化使用的类，包括客户端与服务端
@@ -27,6 +26,6 @@ public final class AyameFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Ayame.init();
-        AyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+        IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
     }
 }

@@ -17,6 +17,7 @@ package org.ayamemc.ayame.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -24,6 +25,7 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -33,7 +35,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
  */
 @Environment(EnvType.CLIENT)
 @Mixin(Player.class)
-public abstract class PlayerMixin implements GeoEntity {
+public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
+    @Unique
+    private boolean ayame$isSitting = false;
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -41,16 +45,13 @@ public abstract class PlayerMixin implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
         controllers.add(new AnimationController<>(this, 20, state -> {
-            // 没有移动，则播放idle动画
-            if (!state.isMoving()) {
-                state.getController().setAnimation(DefaultAnimations.IDLE);
-            } else if (state.isMoving()) {
-//                if (this.getDeltaMovement().lengthSqr()< 0.01){
-//                    state.getController().setAnimation(DefaultAnimations.WALK);
-//                }else if (this.getDeltaMovement().lengthSqr() >= 0.01){
-//                    state.getController().setAnimation(DefaultAnimations.RUN);
-//                }
-                state.getController().setAnimation(DefaultAnimations.WALK);
+            // 没有移动
+            if (!state.isMoving()){
+                // 是否为sit
+                if (this.ayame$isSitting()) return state.setAndContinue(RawAnimation.begin().thenLoop("misc.sit"));
+                return state.setAndContinue(DefaultAnimations.IDLE);
+            }else if (state.isMoving()){
+                return state.setAndContinue(DefaultAnimations.WALK);
             }
             return PlayState.CONTINUE;
         }));
@@ -61,5 +62,15 @@ public abstract class PlayerMixin implements GeoEntity {
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return ayame$geoCache;
     }
+
+    @Override
+    public void ayame$setSitting(boolean sitting) {
+        ayame$isSitting = sitting;
+    }
+    @Override
+    public boolean ayame$isSitting() {
+        return ayame$isSitting;
+    }
+
 
 }
