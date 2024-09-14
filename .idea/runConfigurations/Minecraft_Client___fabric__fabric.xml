@@ -3,7 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="dev.architectury.transformer.TransformerRuntime"/>
     <module name="ayame.fabric.main"/>
     <option name="PROGRAM_PARAMETERS" value=""/>
-    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=/media/crystalneko/data/java/Ayame/fabric/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Darchitectury.main.class=/media/crystalneko/data/java/Ayame/fabric/.gradle/architectury/.main_class -Darchitectury.runtime.transformer=/media/crystalneko/data/java/Ayame/fabric/.gradle/architectury/.transforms -Darchitectury.properties=/media/crystalneko/data/java/Ayame/fabric/.gradle/architectury/.properties -Djdk.attach.allowAttachSelf=true -javaagent:/media/crystalneko/data/java/Ayame/.gradle/architectury/architectury-transformer-agent.jar"/>
+    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=/home/Daniel/dev/java/mc/Ayame/Ayame/fabric/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Darchitectury.main.class=/home/Daniel/dev/java/mc/Ayame/Ayame/fabric/.gradle/architectury/.main_class -Darchitectury.runtime.transformer=/home/Daniel/dev/java/mc/Ayame/Ayame/fabric/.gradle/architectury/.transforms -Darchitectury.properties=/home/Daniel/dev/java/mc/Ayame/Ayame/fabric/.gradle/architectury/.properties -Djdk.attach.allowAttachSelf=true -javaagent:/home/Daniel/dev/java/mc/Ayame/Ayame/.gradle/architectury/architectury-transformer-agent.jar"/>
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/fabric/run/"/>
     <method v="2">
       <option enabled="true" name="Make"/>

@@ -98,3 +98,14 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 /common/run/
+/.idea/modules/
+/.idea/runConfigurations/
+/.idea/.name
+/.idea/compiler.xml
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/kotlinc.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
