@@ -20,21 +20,21 @@
 
 pluginManagement {
     repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.architectury.dev/")
+        maven("https://files.minecraftforge.net/maven/")
         gradlePluginPortal()
     }
     plugins {
-        id 'org.jetbrains.kotlin.jvm' version '2.0.20'
+        id("org.jetbrains.kotlin.jvm") version "2.0.20"
     }
 }
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = 'ayame'
+rootProject.name = "ayame"
 
-include 'common'
-include 'fabric'
-include 'neoforge'
+include("common")
+include("fabric")
+include("neoforge")
