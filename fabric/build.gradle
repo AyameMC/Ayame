@@ -20,6 +20,7 @@
 
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 architectury {
@@ -61,6 +62,7 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 processResources {
@@ -83,4 +85,10 @@ remapJar {
 // 配置访问加宽器
 loom {
     accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(21)
 }

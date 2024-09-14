@@ -1,4 +1,6 @@
-/*
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}/*
  *     Custom player model mod. Powered by GeckoLib.
  *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
@@ -30,8 +32,15 @@ dependencies {
 
     // GeckoLib
     modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 // 配置访问加宽器
 loom {
     accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(21)
 }
