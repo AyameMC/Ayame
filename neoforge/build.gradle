@@ -20,7 +20,6 @@
 
 plugins {
     id 'com.github.johnrengelman.shadow'
-    id 'org.jetbrains.kotlin.jvm'
 }
 
 architectury {
@@ -61,7 +60,6 @@ dependencies {
 
     // GeckoLib
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 processResources {
@@ -83,7 +81,4 @@ remapJar {
 // 配置fabric系的AW访问加宽器
 loom {
     accessWidenerPath = file("src/main/resources/META-INF/ayame.accesswidener")
-}
-kotlin {
-    jvmToolchain(21)
 }

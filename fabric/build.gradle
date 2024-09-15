@@ -20,7 +20,6 @@
 
 plugins {
     id 'com.github.johnrengelman.shadow'
-    id 'org.jetbrains.kotlin.jvm'
 }
 
 architectury {
@@ -57,12 +56,12 @@ dependencies {
     modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
     // too-many-shortcuts
     modImplementation "maven.modrinth:too-many-shortcuts:0.0.5+mc.1.21.1"
-    // Fabric Language Kotlin，它是too-many-shortcuts的前置，不是我们模组的前置，在这里只是为了让too-many-shortcuts正常加载
+    // Fabric Language Kotlin 它是too-many-shortcuts的前置，不是我们模组的前置，在这里只是为了让too-many-shortcuts正常加载
     modImplementation("net.fabricmc:fabric-language-kotlin:1.12.1+kotlin.2.0.20")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
 }
 
 processResources {
@@ -88,7 +87,4 @@ loom {
 }
 repositories {
     mavenCentral()
-}
-kotlin {
-    jvmToolchain(21)
 }

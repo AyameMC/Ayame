@@ -19,12 +19,8 @@
  */
 
 buildscript {
-    ext.kotlin_version = '2.0.20'
     repositories {
         mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 plugins {
@@ -32,7 +28,7 @@ plugins {
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
-apply plugin: 'kotlin'
+
 
 architectury {
     minecraft = project.minecraft_version
@@ -74,12 +70,11 @@ subprojects {
             }
         }
         // Fabric Mod Menu
-        repositories {
-            maven {
-                name = "Terraformers"
-                url = "https://maven.terraformersmc.com/"
-            }
+        maven {
+            name = "Terraformers"
+            url = "https://maven.terraformersmc.com/"
         }
+
         // Modrinth Maven
         exclusiveContent {
             forRepository {
@@ -141,9 +136,4 @@ subprojects {
 repositories {
     mavenCentral()
 }
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-}
-kotlin {
-    jvmToolchain(8)
-}
+
