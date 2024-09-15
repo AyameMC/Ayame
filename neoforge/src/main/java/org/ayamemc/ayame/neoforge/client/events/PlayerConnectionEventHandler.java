@@ -28,7 +28,7 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.TaskManager;
 
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
-public class PlayerConnectionEvent {
+public class PlayerConnectionEventHandler {
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         // 执行所有任务

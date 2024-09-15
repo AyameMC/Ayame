@@ -20,13 +20,12 @@
 
 package org.ayamemc.ayame.neoforge.client.events;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
 
 
@@ -34,14 +33,14 @@ import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
  * 存放NeoForge按下按键后的行为的类
  */
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
-public class OpenModelSelectMenuEvent {
+public class OpenModelSelectMenuEventHandler {
     /**
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
      */
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
-        while (RegisterKeyMapping.MODEL_SELECT_MENU.get().consumeClick()) {
-           ModelSelectMenuScreen.openDefaultModelSelectMenu(Minecraft.getInstance().screen);
+        while (RegisterKeyMappingEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
+            AyameClient.openSelectMenuKeyPressed();
         }
     }
 }

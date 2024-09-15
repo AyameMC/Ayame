@@ -18,7 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.msic;
+package org.ayamemc.ayame.fabric.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.kingtux.tms.api.TMSKeyBinding;
@@ -28,6 +28,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.fabric.client.events.AyameKeyMappingEventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -35,7 +36,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 
 /**
- * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyMappings}。
+ * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyMappingEventHandler}。
  */
 @Environment(EnvType.CLIENT)
 public class AyameTMSKeyMappings {

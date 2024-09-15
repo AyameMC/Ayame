@@ -24,12 +24,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import org.ayamemc.ayame.client.resource.ModelScanner;
-import org.ayamemc.ayame.fabric.client.msic.AyameKeyMappings;
+import org.ayamemc.ayame.fabric.client.events.AyameKeyMappingEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
 
 
@@ -62,6 +60,6 @@ public class AyameFabricClientEvents {
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {
-        AyameKeyMappings.processKeyPressed();
+        AyameKeyMappingEventHandler.processKeyPressed();
     }
 }

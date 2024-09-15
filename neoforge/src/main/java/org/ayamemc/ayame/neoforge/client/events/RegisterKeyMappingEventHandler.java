@@ -38,7 +38,7 @@ import org.lwjgl.glfw.GLFW;
  * @see KeyModifier
  */
 @EventBusSubscriber(modid = Ayame.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class RegisterKeyMapping {
+public class RegisterKeyMappingEventHandler {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
             "key." + Ayame.MOD_ID + "." + TranslatableName.SELECT_MODEL_MENU,
             KeyConflictContext.IN_GAME,
@@ -49,7 +49,7 @@ public class RegisterKeyMapping {
     ));
 
     /**
-     * 在NeoForge中注册该按键按下的行为，按下后行为位于{@link OpenModelSelectMenuEvent}
+     * 在NeoForge中注册该按键按下的行为，按下后行为位于{@link OpenModelSelectMenuEventHandler}
      * @see RegisterKeyMappingsEvent
      */
     @SubscribeEvent

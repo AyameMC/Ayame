@@ -18,7 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.msic;
+package org.ayamemc.ayame.fabric.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.EnvType;
@@ -26,15 +26,15 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.fabric.client.util.AyameTMSKeyMappings;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 /**
@@ -43,7 +43,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  * @see JavaUtil
  */
 @Environment(EnvType.CLIENT)
-public class AyameKeyMappings {
+public class AyameKeyMappingEventHandler {
     public static final boolean IS_TMS_INSTALLED = JavaUtil.tryClass("dev.kingtux.tms.api.TMSKeyBinding");
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(
             TranslatableName.SELECT_MODEL_MENU,
@@ -81,8 +81,8 @@ public class AyameKeyMappings {
      * @see KeyMapping
      */
     public static void processKeyPressed() {
-        while (AyameKeyMappings.MODEL_SELECT_MENU.consumeClick()) {
-            ModelSelectMenuScreen.openDefaultModelSelectMenu(Minecraft.getInstance().screen);
+        while (AyameKeyMappingEventHandler.MODEL_SELECT_MENU.consumeClick()) {
+            AyameClient.openSelectMenuKeyPressed();
         }
     }
 }
