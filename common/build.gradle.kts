@@ -1,6 +1,4 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm'
-}/*
+/*
  *     Custom player model mod. Powered by GeckoLib.
  *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
@@ -20,27 +18,34 @@ plugins {
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+}
+
 architectury {
-    common rootProject.enabled_platforms.split(',')
+    common(rootProject.ext["enabled_platforms"].toString().split(","))
 }
 
 dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.ext["fabric_loader_version"]}")
 
     // GeckoLib
-    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${rootProject.ext["minecraft_version"]}:${rootProject.ext["geckolib_version"]}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
+
 // 配置访问加宽器
 loom {
-    accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+    accessWidenerPath.set(file("src/main/resources/ayame.accesswidener"))
 }
+
 repositories {
     mavenCentral()
 }
+
 kotlin {
     jvmToolchain(21)
 }
