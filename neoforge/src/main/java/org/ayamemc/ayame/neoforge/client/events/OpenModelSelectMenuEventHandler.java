@@ -26,7 +26,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.client.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 
 
 /**

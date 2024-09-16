@@ -18,7 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.screen;
+package org.ayamemc.ayame.client.gui.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -95,7 +95,7 @@ public class StatementScreen extends WarningScreen {
     public void onClose() {
         if (open) {
             // 将 skipWarningOnce 传递给下一个屏幕
-            minecraft.setScreen(new ModelSelectMenuScreen(Component.literal("Model Select"), lastScreen, skipWarningOnce));
+            minecraft.setScreen(new ModelSelectMenuScreen(lastScreen, skipWarningOnce));
         } else {
             minecraft.setScreen(lastLastScreen);
         }

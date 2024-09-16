@@ -18,9 +18,8 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.screen;
+package org.ayamemc.ayame.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -29,7 +28,9 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
+import org.ayamemc.ayame.client.gui.widget.BlurredWidget;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
@@ -48,24 +49,27 @@ public class ModelSelectMenuScreen extends Screen {
 
     public static final ResourceLocation MENU_BACKGROUND = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation SETTINGS_ICON = withAyameNamespace("textures/gui/settings.png");
-    public static final int YSM_LIKE_BACKGROUND_COLOR = 0xFF212121;
-
+    public static final int BACKGROUND_COLOR = 0xCC212121;
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
     public @Nullable CloseCallback closeCallback;
     public @Nullable SwitchModelCallback switchModelCallback;
     public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
+    int rectWidth;
+    int rectHeight;
+    int rectX;
+    int rectY;
+
 
     /**
      * 重载构造方法，包含skipWarningOnce的布尔值
      *
-     * @param title           {@link Component}类型，为屏幕标题
      * @param lastScreen      上个显示的屏幕
      * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
      */
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
-        super(title);
+    public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
+        super(Component.empty());
         this.lastScreen = lastScreen;
         this.skipWarningOnce = skipWarningOnce;
         this.modelResources = ModelResourceAPI.listModels(true);
@@ -73,7 +77,6 @@ public class ModelSelectMenuScreen extends Screen {
 
     /**
      * 带有回调函数的构造方法
-     * @param title      {@link Component}类型，为屏幕标题
      * @param lastScreen 上个显示的屏幕
      * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
      * @param callback  关闭回调函数，在屏幕关闭时会执行<br></br>
@@ -89,8 +92,8 @@ public class ModelSelectMenuScreen extends Screen {
      *     // 你的代码
      * }}
      */
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce,@Nullable CloseCallback callback,@Nullable SwitchModelCallback switchModelCallback) {
-        this(title, lastScreen, skipWarningOnce);
+    public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce, @Nullable CloseCallback callback, @Nullable SwitchModelCallback switchModelCallback) {
+        this(lastScreen, skipWarningOnce);
         this.closeCallback = callback;
         this.switchModelCallback = switchModelCallback;
     }
@@ -98,11 +101,10 @@ public class ModelSelectMenuScreen extends Screen {
     /**
      * 重载构造方法，没有{@code skipWarningOnce}参数
      *
-     * @param title      {@link Component}类型，为屏幕标题
      * @param lastScreen 上个显示的屏幕
      */
-    public ModelSelectMenuScreen(Component title, @Nullable Screen lastScreen) {
-        this(title, lastScreen, false);
+    public ModelSelectMenuScreen(@Nullable Screen lastScreen) {
+        this(lastScreen, false);
     }
 
 
@@ -112,7 +114,7 @@ public class ModelSelectMenuScreen extends Screen {
      * @param lastScreen 上一个屏幕
      */
     public static void openDefaultModelSelectMenu(Screen lastScreen) {
-        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(Component.empty(), lastScreen, false, (modelResources,selectedModel) -> {
+        ModelSelectMenuScreen screen = new ModelSelectMenuScreen(lastScreen, false, (modelResources, selectedModel) -> {
             // close的callback,也许以后用的上
         }, (modelResources, selectedModel) -> {
             if (selectedModel != null) {
@@ -156,6 +158,14 @@ public class ModelSelectMenuScreen extends Screen {
                 y += buttonHeight + buttonSpacing; // 下一个按钮的位置
             }
         }
+//        rectWidth = (int) (this.width * 0.8);
+//        rectHeight = (int) (this.height * 0.78);
+//
+//        // 屏幕居中：矩形的左上角坐标 (x1, y1)
+//        rectX = (this.width - rectWidth) / 2;
+//        rectY = (this.height - rectHeight) / 2;
+//        BlurredWidget blurredBackgroundWidget = new BlurredWidget(rectX, rectY, rectWidth, rectHeight);
+//        this.addRenderableOnly(blurredBackgroundWidget);
 
     }
 
@@ -181,20 +191,23 @@ public class ModelSelectMenuScreen extends Screen {
     }
 
     /**
-     * 渲染背景，填充背景颜色为YSM同款灰色
+     * 渲染背景，填充背景颜色
      */
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         // 调整矩形的宽度为屏幕宽度的 80%，高度为屏幕高度的 78%
-        int rectWidth = (int) (this.width * 0.8);
-        int rectHeight = (int) (this.height * 0.78);
 
-        // 屏幕居中：矩形的左上角坐标 (x1, y1)
-        int rectX = (this.width - rectWidth) / 2;
-        int rectY = (this.height - rectHeight) / 2;
 
         // 绘制灰色的背景矩形
-        guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, YSM_LIKE_BACKGROUND_COLOR);
+        rectWidth = (int) (this.width * 0.8);
+        rectHeight = (int) (this.height * 0.78);
+
+        // 屏幕居中：矩形的左上角坐标 (x1, y1)
+        rectX = (this.width - rectWidth) / 2;
+        rectY = (this.height - rectHeight) / 2;
+        BlurredWidget blurredBackgroundWidget = new BlurredWidget(rectX, rectY, rectWidth, rectHeight);
+        this.addRenderableOnly(blurredBackgroundWidget);
+        guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, BACKGROUND_COLOR);
     }
 
     /**
@@ -221,6 +234,7 @@ public class ModelSelectMenuScreen extends Screen {
         void switchModel(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
     private static ResourceLocation withAyameNamespace(String location) {
-        return ResourceLocation.withDefaultNamespace(location);
+        return ResourceLocation.fromNamespaceAndPath(Ayame.MOD_ID, location);
     }
+
 }
