@@ -23,7 +23,6 @@ package org.ayamemc.ayame.client.renderer;
 import net.minecraft.world.entity.Entity;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +40,8 @@ public class AnimationTask {
     }
 
     public static boolean shouldAnimationProcess(Entity entity){
+        if (!pendingAnimations.containsKey(entity))
+            return false;
         return pendingAnimations.get(entity).processTicks() > 0;
     }
 
@@ -49,9 +50,11 @@ public class AnimationTask {
     }
 
     public static PlayState handle(Entity entity,AnimationController<?> controller){
-        var data = pendingAnimations.get(entity);
-        data.runATick();
-        return pendingAnimations.get(entity).handler().handle(controller);
+        if (pendingAnimations.containsKey(entity)) {
+            var data = pendingAnimations.get(entity);
+            data.runATick();
+            return pendingAnimations.get(entity).handler().handle(controller);
+        }else return PlayState.STOP;
     }
 
     public static class AnimationTaskData{
