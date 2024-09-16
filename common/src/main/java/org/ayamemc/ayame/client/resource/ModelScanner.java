@@ -23,16 +23,26 @@ package org.ayamemc.ayame.client.resource;
 import org.ayamemc.ayame.client.DefaultAyameModels;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 public class ModelScanner {
     /**
      * 从指定目录扫描模型
      * @param dir 目录
      */
-    private static int modelCount = 0;
     public static void scanModel(Path dir) {
+        // 如果目录不存在，创建
+        if (!Files.exists(dir)) {
+            try {
+                Files.createDirectories(dir);
+            } catch (IOException e) {
+                LOGGER.error("Failed to create directory:{}", dir, e);
+            }
+        }
         // 遍历目录
         for (File path : Objects.requireNonNull(dir.toFile().listFiles())) {
             // 如果是目录，递归扫描
@@ -44,8 +54,6 @@ public class ModelScanner {
                     IModelResource res = IModelResource.fromFile(path);
                     // 添加到缓存
                     ModelResourceCache.addModelResource(res);
-                    // 增加数量
-                    addModelCount(1);
                 } catch (Exception e) {
                     // 忽略错误
                 }
@@ -60,10 +68,4 @@ public class ModelScanner {
         scanModel(Path.of(DefaultAyameModels.MODEL_PATH));
     }
 
-    public static int getModelCount() {
-        return modelCount;
-    }
-    private static void addModelCount(int count) {
-        modelCount++;
-    }
 }

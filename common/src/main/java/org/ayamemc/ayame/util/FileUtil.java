@@ -192,6 +192,9 @@ public class FileUtil {
                 return; // 资源未找到，直接返回
             }
 
+            // 创建目标路径的父目录
+            Files.createDirectories(targetPath.getParent());
+
             // 创建输出流
             try (OutputStream outputStream = Files.newOutputStream(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
                 byte[] buffer = new byte[1024];
