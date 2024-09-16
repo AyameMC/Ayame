@@ -193,7 +193,7 @@ public class ModelSelectMenuScreen extends Screen {
         int rectX = (this.width - rectWidth) / 2;
         int rectY = (this.height - rectHeight) / 2;
 
-        // 绘制灰色的背景矩形，颜色为 0xFF3A3A3A
+        // 绘制灰色的背景矩形
         guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, YSM_LIKE_BACKGROUND_COLOR);
     }
 
