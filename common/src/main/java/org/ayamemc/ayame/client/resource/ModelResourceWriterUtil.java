@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.json.raw.Model;
@@ -38,6 +39,7 @@ import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
@@ -55,53 +57,60 @@ public class ModelResourceWriterUtil {
      *
      * @return {@link ModelResourceLocationRecord} 模型资源路径和动画路径的记录
      */
-    public static ModelResourceLocationRecord addModelResource(String namespace, IModelResource modelRes) {
+    public static ModelResourceLocationRecord addModelResource(String namespace,@NotNull IModelResource modelRes) {
         ResourceLocation modelLocation = ResourceLocation.fromNamespaceAndPath(namespace, "geo/ayame/" + modelRes.getMetaData().name() + ".json");
         ResourceLocation animationLocation = ResourceLocation.fromNamespaceAndPath(namespace, "animations/ayame/" + modelRes.getMetaData().name() + ".json");
+        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(namespace, "textures/ayame/" + modelRes.getMetaData().name() + ".png");
         addBakedModel(modelLocation, modelRes);
         addBakedAnimation(animationLocation, modelRes);
+        addTexture(textureLocation, modelRes);
 
-        return new ModelResourceLocationRecord(modelLocation, animationLocation, addTexture(modelRes));
+        return new ModelResourceLocationRecord(modelLocation, animationLocation, textureLocation);
     }
 
     /**
      * 向模型缓存中添加新条目
      *
      * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
-     * @param modelRes         传入{@link IModelResource}类型，模型资源（如json）的路径
+     * @param modelRes         传入{@link IModelResource}类型的模型资源
      *
      */
-    public static void addBakedModel(ResourceLocation resourceLocation, IModelResource modelRes) {
+    public static void addBakedModel(ResourceLocation resourceLocation,@NotNull IModelResource modelRes) {
+        Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
+        // 如果已经存在了
+        if (models.containsKey(resourceLocation)) return;
+
         Model m = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON,modelRes.getModelJson().toString(), JsonObject.class), Model.class);
         BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
 
-        GeckoLibCache.getBakedModels().put(resourceLocation, bakedGeoModel);
+        models.put(resourceLocation, bakedGeoModel);
     }
 
     /**
      * 向动画缓存中添加新条目
      *
      * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
-     * @param modelRes         传入{@link IModelResource}类型，模型资源（如json）的路径
+     * @param modelRes         传入{@link IModelResource}类型的模型资源
      * @see ResourceLocation
      */
-    public static void addBakedAnimation(ResourceLocation resourceLocation, IModelResource modelRes) {
+    public static void addBakedAnimation(ResourceLocation resourceLocation,@NotNull IModelResource modelRes) {
+        Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
+        if (animations.containsKey(resourceLocation)) return;
         BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(modelRes.getAnimationJson().toGson(), "animations"), BakedAnimations.class);
-        GeckoLibCache.getBakedAnimations().put(resourceLocation, ani);
+        animations.put(resourceLocation, ani);
     }
 
     /**
      * 注册贴图
-     * @param res 模型资源
-     * @return {@link ResourceLocation} 资源的路径
+     * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
+     * @param modelRes 传入{@link IModelResource}类型的模型资源
      */
-    public static ResourceLocation addTexture(IModelResource res) {
+    public static void addTexture(ResourceLocation resourceLocation ,@NotNull IModelResource modelRes) {
         try {
-            return Minecraft.getInstance().getTextureManager().register(res.getMetaData().name(),new DynamicTexture(NativeImage.read(res.getTextureContent())));
+            Minecraft.getInstance().getTextureManager().register(resourceLocation,new DynamicTexture(NativeImage.read(modelRes.getTextureContent())));
         } catch (IOException e) {
-            LOGGER.error("Failed to load texture for model :{}", res.getMetaData().name(),e);
+            LOGGER.error("Failed to load texture for model :{}", modelRes.getMetaData().name(),e);
         }
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID,"missing");
     }
 
     /**

@@ -109,7 +109,7 @@ public class ModelSelectMenuScreen extends Screen {
             // close的callback,也许以后用的上
         }, (modelResources, selectedModel) -> {
             if (selectedModel != null) {
-                // TODO: 在这里切换模型
+                AyameModelCache.setPlayerModel(Minecraft.getInstance().player,selectedModel);
             }
         });
         Minecraft.getInstance().setScreen(screen);
@@ -124,8 +124,16 @@ public class ModelSelectMenuScreen extends Screen {
             this.minecraft.setScreen(new StatementScreen(this, lastScreen));
             return;
         }
+        int buttonWidth = 100; // 每个按钮的宽度
+        int buttonHeight = 20; // 每个按钮的高度
+        int buttonSpacing = 10; // 按钮之间的间距
+        int y = this.height / 8; // 计算起始y坐标
+
+        int count = 0;
 
         for (IModelResource res : modelResources){
+            int x = (this.width / 3); // 一排显示3个按钮
+            x = x*count + ( x - buttonWidth) / 2;
             AyameModelType model = IModelResource.createModelFromResource(res);
             // TODO 完成按钮
             this.addRenderableWidget(Button.builder(Component.literal(model.metaData().name()), (btn) -> {
@@ -134,7 +142,12 @@ public class ModelSelectMenuScreen extends Screen {
                     switchModelCallback.switchModel(modelResources, model);
                 }
                 // TODO 切换预览模型
-            }).bounds(50, 40, 120, 20).build());
+            }).bounds(x, y, buttonWidth, buttonHeight).build());
+            count++;
+            if (count == 3) {
+                count = 0;
+                y += buttonHeight + buttonSpacing; // 下一个按钮的位置
+            }
         }
 //        // 创建按钮
 //        Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
@@ -174,6 +187,11 @@ public class ModelSelectMenuScreen extends Screen {
         // textRenderer, text, x, y, color, hasShadow
         context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        // 不渲染背景
     }
 
     /**

@@ -41,6 +41,6 @@ public class PlayerModelAPI {
      * @param model 模型
      */
     public static void switchModelOnClient(Player player, AyameModelType model) {
-        AyameModelCache.addPlayerModel(player, model);
+        AyameModelCache.setPlayerModel(player, model);
     }
 }

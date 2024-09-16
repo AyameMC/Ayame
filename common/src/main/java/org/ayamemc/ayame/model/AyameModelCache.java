@@ -34,7 +34,7 @@ public class AyameModelCache {
     // 考虑到未来可能涩及多线程操作，所以使用 ConcurrentHashMap
     public static Map<Player, AyameModelType> playerModelCache = new ConcurrentHashMap<>();
 
-    public static void addPlayerModel(Player player, AyameModelType model) {
+    public static void setPlayerModel(Player player, AyameModelType model) {
         playerModelCache.put(player, model);
     }
 
