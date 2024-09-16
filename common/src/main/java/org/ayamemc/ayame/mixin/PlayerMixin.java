@@ -28,6 +28,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.api.IAbleToSit;
+import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -59,6 +60,10 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
         // TODO 完善默认动画，支持自定义动画
         Player self = (Player) (Object) this;
         controllers.add(new AnimationController<>(self, 20, state -> {
+            // 处理待处理动画
+            if (AnimationTask.shouldAnimationProcess(self)){
+                return AnimationTask.handle(self, state.getController());
+            }
             // 地上趴着
             if (self.getPose() == Pose.SWIMMING && !self.isInLiquid()){
                 return state.setAndContinue(DefaultAnimations.CRAWL);
