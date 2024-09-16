@@ -140,6 +140,16 @@ public class ModelSelectMenuScreen extends Screen {
 
         int count = 0;
 
+        rectWidth = (int) (this.width * 0.8);
+        rectHeight = (int) (this.height * 0.78);
+
+        // 屏幕居中：矩形的左上角坐标 (x1, y1)
+        rectX = (this.width - rectWidth) / 2;
+        rectY = (this.height - rectHeight) / 2;
+        BlurredWidget blurredBackgroundWidget = new BlurredWidget(rectX, rectY, rectWidth, rectHeight);
+        this.addRenderableOnly(blurredBackgroundWidget);
+
+
         for (IModelResource res : modelResources){
             int x = (this.width / 3); // 一排显示3个按钮
             x = x*count + ( x - buttonWidth) / 2;
@@ -158,14 +168,7 @@ public class ModelSelectMenuScreen extends Screen {
                 y += buttonHeight + buttonSpacing; // 下一个按钮的位置
             }
         }
-        rectWidth = (int) (this.width * 0.8);
-        rectHeight = (int) (this.height * 0.78);
 
-        // 屏幕居中：矩形的左上角坐标 (x1, y1)
-        rectX = (this.width - rectWidth) / 2;
-        rectY = (this.height - rectHeight) / 2;
-        BlurredWidget blurredBackgroundWidget = new BlurredWidget(rectX, rectY, rectWidth, rectHeight);
-        this.addRenderableOnly(blurredBackgroundWidget);
 
     }
 
