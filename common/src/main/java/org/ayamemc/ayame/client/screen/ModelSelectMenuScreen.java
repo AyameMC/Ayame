@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
@@ -43,6 +45,11 @@ import java.util.List;
  */
 @Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends Screen {
+
+    public static final ResourceLocation MENU_BACKGROUND = withAyameNamespace("textures/gui/background.png");
+    public static final ResourceLocation SETTINGS_ICON = withAyameNamespace("textures/gui/settings.png");
+    public static final int YSM_LIKE_BACKGROUND_COLOR = 0xFF212121;
+
     public final Screen lastScreen;
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
@@ -149,25 +156,9 @@ public class ModelSelectMenuScreen extends Screen {
                 y += buttonHeight + buttonSpacing; // 下一个按钮的位置
             }
         }
-//        // 创建按钮
-//        Button buttonWidget = Button.builder(Component.literal("Model 1"), (btn) -> {
-//
-//            this.minecraft.player.connection.sendChat("大家好啊今天给大家来点想看的东西");
-//            switchModelCallback.switchModel(availableModels, selectedModel);
-//        }).bounds(150, 40, 120, 20).build();
-//
-//
-//        Button buttonWidget1 = Button.builder(Component.literal("Model 2"), (btn) -> {
-//            // 行为这里改
-//            this.minecraft.player.connection.sendChat("大家好啊昨天给大家来点不想看的东西");
-//        }).bounds(200, 60, 120, 20).build();
-//
-//
-//        // 注册按钮组件
-//        this.addRenderableWidget(buttonWidget);
-//        this.addRenderableWidget(buttonWidget1);
 
     }
+
 
     /**
      * 渲染屏幕的方法，继承自{@link Screen}
@@ -189,9 +180,21 @@ public class ModelSelectMenuScreen extends Screen {
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 
+    /**
+     * 渲染背景，填充背景颜色为YSM同款灰色
+     */
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // 不渲染背景
+        // 调整矩形的宽度为屏幕宽度的 80%，高度为屏幕高度的 78%
+        int rectWidth = (int) (this.width * 0.8);
+        int rectHeight = (int) (this.height * 0.78);
+
+        // 屏幕居中：矩形的左上角坐标 (x1, y1)
+        int rectX = (this.width - rectWidth) / 2;
+        int rectY = (this.height - rectHeight) / 2;
+
+        // 绘制灰色的背景矩形，颜色为 0xFF3A3A3A
+        guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, YSM_LIKE_BACKGROUND_COLOR);
     }
 
     /**
@@ -216,5 +219,8 @@ public class ModelSelectMenuScreen extends Screen {
     @FunctionalInterface
     public interface SwitchModelCallback {
         void switchModel(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);
+    }
+    private static ResourceLocation withAyameNamespace(String location) {
+        return ResourceLocation.withDefaultNamespace(location);
     }
 }
