@@ -152,6 +152,7 @@ public class ModelSelectMenuScreen extends Screen {
         OutlineWidget outline = new OutlineWidget(rectX, rectY, rectWidth, rectHeight, 0xFF4e4e4e); // 淡灰色轮廓
         this.addRenderableOnly(outline);
 
+
         for (IModelResource res : modelResources){
             int x = (this.width / 3); // 一排显示3个按钮
             x = x*count + ( x - buttonWidth) / 2;
@@ -179,14 +180,14 @@ public class ModelSelectMenuScreen extends Screen {
     /**
      * 渲染屏幕的方法，继承自{@link Screen}
      *
-     * @param context the GuiGraphics object used for rendering.
+     * @param guiGraphics the GuiGraphics object used for rendering.
      * @param mouseX  the x-coordinate of the mouse cursor.
      * @param mouseY  the y-coordinate of the mouse cursor.
      * @param delta   the partial tick time.
      */
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.render(guiGraphics, mouseX, mouseY, delta);
 
         // Minecraft doesn't have a "label" widget, so we'll have to draw our own text.
         // We'll subtract the font height from the Y position to make the text appear above the button.
@@ -194,6 +195,7 @@ public class ModelSelectMenuScreen extends Screen {
         // textRenderer, text, x, y, color, hasShadow
         //context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+
     }
 
     /**
