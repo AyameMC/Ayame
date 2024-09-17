@@ -9,9 +9,9 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
-public class BlurredWidget extends AbstractWidget {
+public class BlurWidget extends AbstractWidget {
     Minecraft minecraft = Minecraft.getInstance();
-    public BlurredWidget(int x, int y, int width, int height) {
+    public BlurWidget(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
     }
 

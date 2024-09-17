@@ -30,7 +30,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.client.gui.widget.BlurredWidget;
+import org.ayamemc.ayame.client.gui.widget.BlurWidget;
+import org.ayamemc.ayame.client.gui.widget.OutlineWidget;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
@@ -146,9 +147,10 @@ public class ModelSelectMenuScreen extends Screen {
         // 屏幕居中：矩形的左上角坐标 (x1, y1)
         rectX = (this.width - rectWidth) / 2;
         rectY = (this.height - rectHeight) / 2;
-        BlurredWidget blurredBackgroundWidget = new BlurredWidget(rectX, rectY, rectWidth, rectHeight);
+        BlurWidget blurredBackgroundWidget = new BlurWidget(rectX, rectY, rectWidth , rectHeight );
         this.addRenderableOnly(blurredBackgroundWidget);
-
+        OutlineWidget outline = new OutlineWidget(rectX, rectY, rectWidth, rectHeight, 0xFF4e4e4e); // 淡灰色轮廓
+        this.addRenderableOnly(outline);
 
         for (IModelResource res : modelResources){
             int x = (this.width / 3); // 一排显示3个按钮
@@ -170,6 +172,7 @@ public class ModelSelectMenuScreen extends Screen {
         }
 
 
+
     }
 
 
@@ -189,7 +192,7 @@ public class ModelSelectMenuScreen extends Screen {
         // We'll subtract the font height from the Y position to make the text appear above the button.
         // Subtracting an extra 10 pixels will give the text some padding.
         // textRenderer, text, x, y, color, hasShadow
-        context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
+        //context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
     }
 
@@ -211,6 +214,7 @@ public class ModelSelectMenuScreen extends Screen {
 
 
         guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, BACKGROUND_COLOR);
+//        guiGraphics.renderOutline(rectX, rectY, rectWidth, rectHeight, 0xFFfa1f54);
     }
 
     /**
