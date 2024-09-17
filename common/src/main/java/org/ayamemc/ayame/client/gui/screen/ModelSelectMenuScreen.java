@@ -48,7 +48,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends Screen {
 
-    public static final ResourceLocation MENU_BACKGROUND = withAyameNamespace("textures/gui/background.png");
+    public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation SETTINGS_ICON = withAyameNamespace("textures/gui/settings.png");
     public static final int BACKGROUND_COLOR = 0xCC212121;
     public final Screen lastScreen;
@@ -149,8 +149,8 @@ public class ModelSelectMenuScreen extends Screen {
         rectY = (this.height - rectHeight) / 2;
         BlurWidget blurredBackgroundWidget = new BlurWidget(rectX, rectY, rectWidth , rectHeight );
         this.addRenderableOnly(blurredBackgroundWidget);
-        OutlineWidget outline = new OutlineWidget(rectX, rectY, rectWidth, rectHeight, 0xFF4e4e4e); // 淡灰色轮廓
-        this.addRenderableOnly(outline);
+//        OutlineWidget outline = new OutlineWidget(rectX, rectY, rectWidth, rectHeight, 0xFF4e4e4e); // 淡灰色轮廓
+//        this.addRenderableOnly(outline);
 
 
         for (IModelResource res : modelResources){
@@ -195,7 +195,7 @@ public class ModelSelectMenuScreen extends Screen {
         // textRenderer, text, x, y, color, hasShadow
         //context.drawString(this.font, "Model Select Menu", 200, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
         //context.drawString(this.font, "Model 2", 40, 40 - this.font.lineHeight - 10, 0xFFFFFFFF, true);
-
+        //guiGraphics.blit(MENU_BACKGROUND_TEXTURE, 90, 90, 0, 0, 16, 16, 16, 16);
     }
 
     /**
@@ -206,16 +206,16 @@ public class ModelSelectMenuScreen extends Screen {
         // 调整矩形的宽度为屏幕宽度的 80%，高度为屏幕高度的 78%
 
 
-        // 绘制灰色的背景矩形
+        // 绘制灰色的背景矩形    
         rectWidth = (int) (this.width * 0.8);
         rectHeight = (int) (this.height * 0.78);
 
         // 屏幕居中：矩形的左上角坐标 (x1, y1)
         rectX = (this.width - rectWidth) / 2;
         rectY = (this.height - rectHeight) / 2;
-
-
-        guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, BACKGROUND_COLOR);
+        // TODO 解决贴图没有透明度以及外了的问题
+        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, rectX, rectY, 0,0, rectWidth, rectHeight  );
+        //guiGraphics.fill(rectX, rectY, rectX + rectWidth, rectY + rectHeight, BACKGROUND_COLOR);
 //        guiGraphics.renderOutline(rectX, rectY, rectWidth, rectHeight, 0xFFfa1f54);
     }
 
