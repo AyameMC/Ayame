@@ -20,17 +20,11 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.client.gui.widget.BlurWidget;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
@@ -40,73 +34,66 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * 显示Ayame模型选择界面，此屏幕不直接设置玩家模型，需要在CloseCallback中处理
+ * {@code ModelSelectMenuScreen} 负责处理 Ayame 模型的选择界面。
+ * <p>
+ * 该类继承自 {@link AbstractModelMenuScreen}，主要功能是：
+ * <ul>
+ *     <li>显示可供选择的模型列表</li>
+ *     <li>处理模型选择的逻辑</li>
+ *     <li>提供回调接口用于处理屏幕关闭或模型切换时的操作</li>
+ * </ul>
  *
- * @see StatementScreen
+ * <p>
+ * 在模型选择菜单关闭时，可通过 {@link CloseCallback} 进行关闭时的自定义处理；
+ * 在模型切换时，可通过 {@link SwitchModelCallback} 进行切换时的自定义处理。
+ * </p>
+ *
+ * @see AbstractModelMenuScreen
  */
 @Environment(EnvType.CLIENT)
-public class ModelSelectMenuScreen extends Screen {
-    // Points to 'assets/ayame/textures/gui/sprites/"
-    public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
-    public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
-
-    public static final ResourceLocation SETTINGS_ICON = withAyameNamespace("textures/gui/settings.png");
-    public static final int BACKGROUND_COLOR = 0xCC212121;
-    public final Screen lastScreen;
+public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
-    final int textureWidth = 410;  // 纹理的宽度
-    final int textureHeight = 220; // 纹理的高度
+    public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
     public @Nullable CloseCallback closeCallback;
     public @Nullable SwitchModelCallback switchModelCallback;
-    public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
 
     /**
-     * 重载构造方法，包含skipWarningOnce的布尔值
+     * 构造方法，允许设置是否单次跳过警告界面。
      *
-     * @param lastScreen      上个显示的屏幕
-     * @param skipWarningOnce {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
+     * @param lastScreen      上一个屏幕
+     * @param skipWarningOnce 是否跳过一次警告界面
      */
     public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
-        super(Component.empty());
-        this.lastScreen = lastScreen;
+        super(lastScreen);
         this.skipWarningOnce = skipWarningOnce;
         this.modelResources = ModelResourceAPI.listModels(true);
     }
 
     /**
-     * 带有回调函数的构造方法
+     * 带有回调函数的构造方法。
+     * <p>
+     * 该方法允许为屏幕关闭和模型切换设置回调函数。
      *
-     * @param lastScreen          上个显示的屏幕
-     * @param skipWarningOnce     {@code boolean}类型，传入{@code true}则跳过一次{@link StatementScreen}
-     * @param callback            关闭回调函数，在屏幕关闭时会执行<br></br>
-     *                            回调示例
-     *                            <pre>{@code
-     *                            (resources, selectedModel)->{
-     *                                // 你的代码
-     *                            }}</pre>
-     * @param switchModelCallback 切换模型回调函数，在切换模型时会执行<br></br>
-     *                            回调示例
-     *                            <pre>{@code
-     *                            (resources, selectedModel)->{
-     *                                // 你的代码
-     *                            }}
+     * @param lastScreen          上一个屏幕
+     * @param skipWarningOnce     是否跳过一次警告界面
+     * @param closeCallback       屏幕关闭时执行的回调
+     * @param switchModelCallback 模型切换时执行的回调
      */
-    public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce, @Nullable CloseCallback callback, @Nullable SwitchModelCallback switchModelCallback) {
+    public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce, @Nullable CloseCallback closeCallback, @Nullable SwitchModelCallback switchModelCallback) {
         this(lastScreen, skipWarningOnce);
-        this.closeCallback = callback;
+        this.closeCallback = closeCallback;
         this.switchModelCallback = switchModelCallback;
     }
 
     /**
-     * 重载构造方法，没有{@code skipWarningOnce}参数
+     * 默认构造方法，不跳过警告界面。
      *
-     * @param lastScreen 上个显示的屏幕
+     * @param lastScreen 上一个屏幕
      */
     public ModelSelectMenuScreen(@Nullable Screen lastScreen) {
         this(lastScreen, false);
     }
-
 
     /**
      * 打开模型选择菜单并在选择后切换模型
@@ -124,12 +111,10 @@ public class ModelSelectMenuScreen extends Screen {
         Minecraft.getInstance().setScreen(screen);
     }
 
-    private static ResourceLocation withAyameNamespace(String location) {
-        return ResourceLocation.fromNamespaceAndPath(Ayame.MOD_ID, location);
-    }
-
     /**
-     * 屏幕初始化，按钮注册和{@code builder}都在里面
+     * 屏幕初始化方法，负责初始化模型选择界面。
+     * <p>
+     * 如果未设置跳过警告，则会先显示警告屏幕。
      */
     @Override
     protected void init() {
@@ -137,72 +122,34 @@ public class ModelSelectMenuScreen extends Screen {
             this.minecraft.setScreen(new StatementScreen(this, lastScreen));
             return;
         }
-
-//        int count = 0;
-
-
-        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(), getCenterY(), textureWidth, textureHeight);
-        this.addRenderableOnly(blurredBackgroundWidget);
-
-
-//        for (IModelResource res : modelResources){
-//            int x = (this.width / 3); // 一排显示3个按钮
-//            x = x*count + ( x - buttonWidth) / 2;
-//            AyameModelType model = IModelResource.createModelFromResource(res);
-//            // TODO 完成按钮
-//            this.addRenderableWidget(Button.builder(Component.literal(model.metaData().name()), (btn) -> {
-//                if (switchModelCallback != null) {
-//                    // 执行回调
-//                    switchModelCallback.switchModel(modelResources, model);
-//                }
-//                // TODO 切换预览模型
-//            }).bounds(x, y, buttonWidth, buttonHeight).build());
-//            count++;
-//            if (count == 3) {
-//                count = 0;
-//                y += buttonHeight + buttonSpacing; // 下一个按钮的位置
-//            }
-//        }
-
-
+        super.init(); // 调用父类的初始化方法，加载通用的背景和组件
     }
 
-    /**
-     * 渲染屏幕的方法，继承自{@link Screen}
-     *
-     * @param guiGraphics the GuiGraphics object used for rendering.
-     * @param mouseX      the x-coordinate of the mouse cursor.
-     * @param mouseY      the y-coordinate of the mouse cursor.
-     * @param delta       the partial tick time.
-     */
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        super.render(guiGraphics, mouseX, mouseY, delta);
 
-        // Minecraft doesn't have a "label" widget, so we'll have to draw our own text.
-        // We'll subtract the font height from the Y position to make the text appear above the button.
-        // Subtracting an extra 10 pixels will give the text some padding.
-        // textRenderer, text, x, y, color, hasShadow
-        RenderSystem.enableBlend();
-        guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(), getCenterY(), 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-        RenderSystem.disableBlend();
-    }
 
-    /**
-     * 渲染背景，填充背景颜色
-     */
-    @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // 启用混合模式以处理透明度
-        RenderSystem.enableBlend();
-        // 居中绘制纹理贴图
-        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(), getCenterY(), 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-        // 禁用
-        RenderSystem.disableBlend();
-    }
+
+    //        int count = 0;
+    //        for (IModelResource res : modelResources){
+    //            int x = (this.width / 3); // 一排显示3个按钮
+    //            x = x*count + ( x - buttonWidth) / 2;
+    //            AyameModelType model = IModelResource.createModelFromResource(res);
+    //            // TODO 完成按钮
+    //            this.addRenderableWidget(Button.builder(Component.literal(model.metaData().name()), (btn) -> {
+    //                if (switchModelCallback != null) {
+    //                    // 执行回调
+    //                    switchModelCallback.switchModel(modelResources, model);
+    //                }
+    //                // TODO 切换预览模型
+    //            }).bounds(x, y, buttonWidth, buttonHeight).build());
+    //            count++;
+    //            if (count == 3) {
+    //                count = 0;
+    //                y += buttonHeight + buttonSpacing; // 下一个按钮的位置
+    //            }
+    //        }
 
     /**
-     * 当屏幕退出时执行的代码
+     * 当屏幕关闭时，执行回调函数并返回到上一个屏幕。
      */
     @Override
     public void onClose() {
@@ -212,23 +159,17 @@ public class ModelSelectMenuScreen extends Screen {
         }
     }
 
-    private int getCenterX() {
-        return (this.width - textureWidth) / 2;
-    }
-
-    private int getCenterY() {
-        return (this.height - textureHeight) / 2;
-    }
-
-
     /**
-     * 关闭回调函数
+     * 关闭回调函数的接口，允许在屏幕关闭时进行自定义处理。
      */
     @FunctionalInterface
     public interface CloseCallback {
         void close(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);
     }
 
+    /**
+     * 模型切换回调函数的接口，允许在模型切换时进行自定义处理。
+     */
     @FunctionalInterface
     public interface SwitchModelCallback {
         void switchModel(List<IModelResource> modelResources, @Nullable AyameModelType selectedModel);

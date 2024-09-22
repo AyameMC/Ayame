@@ -43,7 +43,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  */
 @Environment(EnvType.CLIENT)
 public class AyameKeyMappingEventHandler {
-    public static final boolean IS_TMS_INSTALLED = JavaUtil.tryClass("dev.kingtux.tms.api.TMSKeyBinding");
+    public static final boolean IS_TMS_INSTALLED = JavaUtil.isJavaClassExist("dev.kingtux.tms.api.TMSKeyBinding");
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(
             TranslatableName.SELECT_MODEL_MENU,
             InputConstants.Type.KEYSYM,

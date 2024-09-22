@@ -23,8 +23,8 @@ package org.ayamemc.ayame.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import org.ayamemc.ayame.client.resource.ModelScanner;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.resource.ModelScanner;
 import org.ayamemc.ayame.util.ConfigUtil;
 
 @Environment(EnvType.CLIENT)
