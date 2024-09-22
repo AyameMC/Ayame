@@ -28,7 +28,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
-        public class OutlineWidget extends AbstractWidget {
+@Deprecated
+public class OutlineWidget extends AbstractWidget {
     private final int outlineColor;
 
     public OutlineWidget(int x, int y, int width, int height, int outlineColor) {
