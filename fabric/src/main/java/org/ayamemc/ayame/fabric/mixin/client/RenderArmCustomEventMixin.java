@@ -29,8 +29,9 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
-import org.ayamemc.ayame.fabric.client.event.custom.RenderArmCallback;
+import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -68,9 +69,8 @@ public abstract class RenderArmCustomEventMixin {
         if (handsToRender == null) {
             return;
         }
-
         if (handsToRender.renderMainHand) {
-            RenderArmCallback.EVENT.invoker().onRenderArm(
+            InteractionResult result =   RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
                     InteractionHand.MAIN_HAND,
                     poseStack,
                     buffer,
@@ -79,12 +79,17 @@ public abstract class RenderArmCustomEventMixin {
                     pitch,
                     interactionHand == InteractionHand.MAIN_HAND ? f : 0.0F,
                     1.0F - Mth.lerp(partialTicks, this.oMainHandHeight, this.mainHandHeight),
-                    this.mainHandItem
+                    this.mainHandItem,
+                    playerEntity
             );
+            if (result != InteractionResult.PASS) {
+                ci.cancel();
+                return;
+            }
         }
 
         if (handsToRender.renderOffHand) {
-            RenderArmCallback.EVENT.invoker().onRenderArm(
+             InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
                     InteractionHand.OFF_HAND,
                     poseStack,
                     buffer,
@@ -93,13 +98,18 @@ public abstract class RenderArmCustomEventMixin {
                     pitch,
                     interactionHand == InteractionHand.OFF_HAND ? f : 0.0F,
                     1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight),
-                    this.offHandItem
+                    this.offHandItem,
+                    playerEntity
             );
+             if (result != InteractionResult.PASS) {
+                 ci.cancel();
+                 return;
+             }
         }
     }
 
-    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-    private void CancelRenderArmWithItem(AbstractClientPlayer player, float partialTicks, float pitch, InteractionHand hand, float swingProgress, ItemStack stack, float equippedProgress, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, CallbackInfo ci) {
-        ci.cancel(); // 取消渲染默认手臂，与Neo那边一个性质
-    }
+//    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
+//    private void CancelRenderArmWithItem(AbstractClientPlayer player, float partialTicks, float pitch, InteractionHand hand, float swingProgress, ItemStack stack, float equippedProgress, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, CallbackInfo ci) {
+//        ci.cancel(); // 取消渲染默认手臂，与Neo那边一个性质
+//    }
 }

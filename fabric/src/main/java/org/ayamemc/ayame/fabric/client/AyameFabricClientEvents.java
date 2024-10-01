@@ -33,7 +33,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.event.RenderCustomArmEventHandler;
 import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
-import org.ayamemc.ayame.fabric.client.event.custom.RenderArmCallback;
+import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.ayamemc.ayame.util.TaskManager;
 
 

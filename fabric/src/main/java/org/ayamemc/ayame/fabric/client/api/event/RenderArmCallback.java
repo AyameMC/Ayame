@@ -18,15 +18,18 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.event.custom;
+package org.ayamemc.ayame.fabric.client.api.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -34,11 +37,11 @@ import net.minecraft.world.item.ItemStack;
  * <p>例如在手臂上渲染盔甲或直接将手臂替换为盔甲。
  */
 @Environment(EnvType.CLIENT)
-public interface RenderArmCallback {
-    Event<RenderArmCallback> EVENT = EventFactory.createArrayBacked(RenderArmCallback.class,
+public class RenderArmCallback {
+    public static final Event<OnRenderArm> ON_RENDER_ARM = EventFactory.createArrayBacked(OnRenderArm.class,
             (listeners) -> (hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack) -> {
-                for (RenderArmCallback event : listeners) {
-                    event.onRenderArm(
+                for (OnRenderArm listener : listeners) {
+                    InteractionResult result = listener.onRenderArm(
                             hand,
                             poseStack,
                             multiBufferSource,
@@ -49,31 +52,39 @@ public interface RenderArmCallback {
                             equipProgress,
                             stack
                     );
+                    if (result != InteractionResult.PASS) return result;
                 }
+                return InteractionResult.PASS;
             });
 
-    /**
-     * 渲染玩家手之前调用
-     *
-     * @param hand              正在渲染的手
-     * @param poseStack         用于渲染的姿势堆栈
-     * @param multiBufferSource 渲染缓冲区的来源
-     * @param packedLight       用于渲染的压缩（天空和方块）光量
-     * @param partialTick       Partial Tick
-     * @param interpolatedPitch 玩家实体的插值音高
-     * @param swingProgress     正在渲染的手牌的挥动进度
-     * @param equipProgress     装备动画的进度，从 { 0.0} 到 { 1.0}
-     * @param stack             要渲染的物品组
-     */
-    void onRenderArm(
-            InteractionHand hand,
-            PoseStack poseStack,
-            MultiBufferSource multiBufferSource,
-            int packedLight,
-            float partialTick,
-            float interpolatedPitch,
-            float swingProgress,
-            float equipProgress,
-            ItemStack stack
-    );
+
+    public interface OnRenderArm {
+
+        /**
+         * 渲染玩家手之前调用
+         *
+         * @param hand              正在渲染的手
+         * @param poseStack         用于渲染的姿势堆栈
+         * @param multiBufferSource 渲染缓冲区的来源
+         * @param packedLight       用于渲染的压缩（天空和方块）光量
+         * @param partialTick       Partial Tick
+         * @param interpolatedPitch 玩家实体的插值音高
+         * @param swingProgress     正在渲染的手牌的挥动进度
+         * @param equipProgress     装备动画的进度，从 { 0.0} 到 { 1.0}
+         * @param stack             要渲染的物品组
+         * @param player             玩家实体
+         */
+        InteractionResult onRenderArm(
+                InteractionHand hand,
+                PoseStack poseStack,
+                MultiBufferSource multiBufferSource,
+                int packedLight,
+                float partialTick,
+                float interpolatedPitch,
+                float swingProgress,
+                float equipProgress,
+                ItemStack stack,
+                LocalPlayer player
+        );
+    }
 }
