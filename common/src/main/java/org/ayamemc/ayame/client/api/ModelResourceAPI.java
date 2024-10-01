@@ -32,10 +32,11 @@ import java.util.List;
 public class ModelResourceAPI {
     /**
      * 获取所有模型
+     *
      * @param sorted 是否排序
      * @return 模型列表
      */
-    public static List<IModelResource> listModels(boolean sorted){
+    public static List<IModelResource> listModels(boolean sorted) {
         // 从缓存中获取
         List<IModelResource> modelResources = ModelResourceCache.getAllModelResource(sorted);
         // 处理事件

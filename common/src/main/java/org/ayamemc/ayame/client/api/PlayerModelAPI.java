@@ -28,8 +28,9 @@ import org.ayamemc.ayame.model.AyameModelType;
 public class PlayerModelAPI {
     /**
      * 切换玩家模型的方法，同时告诉给服务端
+     *
      * @param player 玩家
-     * @param model 模型
+     * @param model  模型
      */
     public static void switchModel(Player player, AyameModelType model) {
         GeoPlayerRender.GeoPlayerModel.switchModel(player, model);
@@ -37,8 +38,9 @@ public class PlayerModelAPI {
 
     /**
      * 切换玩家模型的方法，只告诉客户端
+     *
      * @param player 玩家
-     * @param model 模型
+     * @param model  模型
      */
     public static void switchModelOnClient(Player player, AyameModelType model) {
         AyameModelCache.setPlayerModel(player, model);

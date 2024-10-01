@@ -126,8 +126,6 @@ public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
     }
 
 
-
-
     //        int count = 0;
     //        for (IModelResource res : modelResources){
     //            int x = (this.width / 3); // 一排显示3个按钮

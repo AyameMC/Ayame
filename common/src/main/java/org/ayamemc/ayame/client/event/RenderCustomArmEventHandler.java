@@ -18,29 +18,26 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.mixin.client;
+package org.ayamemc.ayame.client.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.entity.HumanoidArm;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 
-
-/**
- * 不渲染默认的手，这会导致崩溃
- */
-@Environment(EnvType.CLIENT)
-@Mixin(ItemInHandRenderer.class)
-public class ClientItemInHandRendererMixin {
-    @Inject(method = "renderPlayerArm", at = @At("HEAD"), cancellable = true)
-    private void renderPlayerArm(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, float f, float g, HumanoidArm humanoidArm, CallbackInfo ci) {
-        // TODO 重写物品在手中的逻辑
-        ci.cancel();
+public class RenderCustomArmEventHandler {
+    public static void renderCustomArmEventHandler(
+            InteractionHand hand,
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            int packedLight,
+            float partialTick,
+            float interpolatedPitch,
+            float swingProgress,
+            float equipProgress,
+            ItemStack stack
+    ) {
+        // 渲染自定义手臂逻辑在这里添加
+        //Ayame.LOGGER.warn("render arm!\n hand={} poseStack={} multiBufferSource={} packedLight={} partialTick={} interpolatedPitch={} swingProgress={} equipProgress={} stack={}", hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack);
     }
 }

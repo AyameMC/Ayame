@@ -31,35 +31,43 @@ public class ModelResourceEvents {
     /**
      * 模型资源创建时的回调<br></br>
      * 参数：<br></br>
-     *    modelResource：模型资源
+     * modelResource：模型资源
+     *
      * @see IModelResource#ModelResource(Map)
      */
-    public static class OnResourceCreate extends Event{
+    public static class OnResourceCreate extends Event {
         private final IModelResource modelResource;
+
         public OnResourceCreate(IModelResource modelResource) {
             this.modelResource = modelResource;
         }
+
         public IModelResource getModelResource() {
             return modelResource;
         }
     }
+
     /**
      * 获取模型列表时的回调<br></br>
      * 参数：<br></br>
-     *    modelResources：模型列表<br></br>
-     *    sorted：是否已排序
+     * modelResources：模型列表<br></br>
+     * sorted：是否已排序
+     *
      * @see ModelResourceAPI#listModels(boolean)
      */
-    public static class OnListResource extends Event{
+    public static class OnListResource extends Event {
         private final List<IModelResource> modelResources;
         private final boolean sorted;
+
         public OnListResource(List<IModelResource> modelResources, boolean sorted) {
             this.modelResources = modelResources;
             this.sorted = sorted;
         }
+
         public List<IModelResource> getModelResources() {
             return modelResources;
         }
+
         public boolean isSorted() {
             return sorted;
         }

@@ -27,6 +27,7 @@ import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
 
 /**
  * Fabric初始化使用的类，包括客户端与服务端
+ *
  * @see ModInitializer
  */
 public final class AyameFabric implements ModInitializer {

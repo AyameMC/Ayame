@@ -51,31 +51,30 @@ public class AyameModelResource implements IModelResource {
     }
 
 
-
     private ModelMetaData createMetaData() {
         String type = getType();
         if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)) {
-            JsonInterpreter json =this.getMetaDataJson();
+            JsonInterpreter json = this.getMetaDataJson();
             return ModelMetaData.Builder.create()
                     .parseJson(json)
                     .build();
         }
-        // TODO 完成ysm
         return ModelMetaData.Builder.create().build();
     }
+
     public ModelMetaData getMetaData() {
         return metaData;
     }
 
     public String getType() {
         if (content.containsKey("metadata.json")) return ModelMetaData.DefaultModelTypes.AYAME;
-        // TODO 完成ysm格式
+        //  完成ysm格式
         return ModelMetaData.DefaultModelTypes.AYAME;
     }
 
     public void createModel() {
         // 创建任务，在Minecraft能够启动后执行
-        Minecraft.getInstance().execute(()-> {
+        Minecraft.getInstance().execute(() -> {
             // 为ayame模型读取
             if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
                 // 创建模型
@@ -84,7 +83,6 @@ public class AyameModelResource implements IModelResource {
                 this.geoModel = locations.modelLocation();
                 this.texture = locations.textureLocation();
             }
-            // TODO 完成ysm格式
         });
     }
 
@@ -107,14 +105,17 @@ public class AyameModelResource implements IModelResource {
 
     /**
      * 获取模型资源，仅在{@link #createModel}后调用
+     *
      * @return 模型资源
      */
     @Nullable
     public ResourceLocation getGeoModelLocation() {
         return geoModel;
     }
+
     /**
      * 获取动画资源，仅在{@link #createModel}后调用
+     *
      * @return 动画资源
      */
     @Nullable
@@ -124,6 +125,7 @@ public class AyameModelResource implements IModelResource {
 
     /**
      * 获取材质资源，仅在{@link #createModel}后调用
+     *
      * @return 材质资源
      */
     public ResourceLocation getTextureLocation() {

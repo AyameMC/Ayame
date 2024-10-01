@@ -25,13 +25,19 @@ import net.minecraft.resources.ResourceLocation;
 
 /**
  * 默认模型类型，适用于Ayame模型
- * @param geoModel 模型文件
+ *
+ * @param geoModel  模型文件
  * @param animation 动画文件
- * @param texture 贴图文件
- * @param metaData 模型元数据
+ * @param texture   贴图文件
+ * @param metaData  模型元数据
  */
 
-public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ModelMetaData metaData) implements AyameModelType {
+public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,
+                                    ModelMetaData metaData) implements AyameModelType {
+
+    public static AyameModelType of(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ResourceLocation metaData) {
+        return new DefaultAyameModelType(geoModel, animation, texture, ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
+    }
 
     @Override
     public ResourceLocation getGeoModel() {
@@ -51,9 +57,5 @@ public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation 
     @Override
     public ModelMetaData metaData() {
         return metaData;
-    }
-
-    public static AyameModelType of(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ResourceLocation metaData) {
-        return new DefaultAyameModelType(geoModel, animation, texture, ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
     }
 }

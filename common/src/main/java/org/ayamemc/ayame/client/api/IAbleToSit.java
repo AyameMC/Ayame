@@ -21,10 +21,10 @@
 package org.ayamemc.ayame.client.api;
 
 public interface IAbleToSit {
-    default void ayame$setSitting(boolean sitting){
+    default void ayame$setSitting(boolean sitting) {
     }
 
-    default boolean ayame$isSitting(){
+    default boolean ayame$isSitting() {
         return false;
     }
 }

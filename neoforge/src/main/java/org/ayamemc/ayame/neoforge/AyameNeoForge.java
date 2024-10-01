@@ -20,12 +20,9 @@
 
 package org.ayamemc.ayame.neoforge;
 
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.neoforge.client.AyameNeoForgeClient;
 
 @Mod(Ayame.MOD_ID)
 public final class AyameNeoForge {

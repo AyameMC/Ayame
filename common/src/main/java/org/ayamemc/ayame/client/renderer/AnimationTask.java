@@ -28,49 +28,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnimationTask {
-    public static Map<Entity,AnimationTaskData> pendingAnimations = new HashMap<>();
+    public static Map<Entity, AnimationTaskData> pendingAnimations = new HashMap<>();
+
+    public static void addAnimation(Entity entity, AnimationTaskData animation) {
+        pendingAnimations.put(entity, animation);
+    }
+
+    public static boolean shouldAnimationProcess(Entity entity) {
+        if (!pendingAnimations.containsKey(entity))
+            return false;
+        return pendingAnimations.get(entity).processTicks() > 0;
+    }
+
+    public static void removeAnimation(Entity entity) {
+        pendingAnimations.remove(entity);
+    }
+
+    public static PlayState handle(Entity entity, AnimationController<?> controller) {
+        if (pendingAnimations.containsKey(entity)) {
+            var data = pendingAnimations.get(entity);
+            data.runATick();
+            return pendingAnimations.get(entity).handler().handle(controller);
+        } else return PlayState.STOP;
+    }
 
     @FunctionalInterface
     public interface AnimationTaskHandler {
         PlayState handle(AnimationController<?> controller);
     }
 
-    public static void addAnimation(Entity entity, AnimationTaskData animation){
-        pendingAnimations.put(entity,animation);
-    }
-
-    public static boolean shouldAnimationProcess(Entity entity){
-        if (!pendingAnimations.containsKey(entity))
-            return false;
-        return pendingAnimations.get(entity).processTicks() > 0;
-    }
-
-    public static void removeAnimation(Entity entity){
-        pendingAnimations.remove(entity);
-    }
-
-    public static PlayState handle(Entity entity,AnimationController<?> controller){
-        if (pendingAnimations.containsKey(entity)) {
-            var data = pendingAnimations.get(entity);
-            data.runATick();
-            return pendingAnimations.get(entity).handler().handle(controller);
-        }else return PlayState.STOP;
-    }
-
-    public static class AnimationTaskData{
+    public static class AnimationTaskData {
         private final AnimationTaskHandler handler;
         private int processTicks;
-        public AnimationTaskData(AnimationTaskHandler handler, int processTicks){
+
+        public AnimationTaskData(AnimationTaskHandler handler, int processTicks) {
             this.handler = handler;
             this.processTicks = processTicks;
         }
-        public int processTicks(){
+
+        public int processTicks() {
             return processTicks;
         }
-        public AnimationTaskHandler handler(){
+
+        public AnimationTaskHandler handler() {
             return handler;
         }
-        public void runATick(){
+
+        public void runATick() {
             processTicks--;
         }
     }

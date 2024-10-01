@@ -20,6 +20,8 @@
 
 package org.ayamemc.ayame.neoforge.client;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.resource.IModelResource;
@@ -28,6 +30,8 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
+
+@OnlyIn(Dist.CLIENT)
 @ApiStatus.Internal
 public class AyameClientEventsNeoForgeImpl implements IAyameClientEvents {
     @Override

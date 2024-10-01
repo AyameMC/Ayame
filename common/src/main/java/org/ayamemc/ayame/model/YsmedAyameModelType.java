@@ -54,7 +54,6 @@ public class YsmedAyameModelType implements AyameModelType {
         return this.animation;
     }
 
-    // TODO 完善YSM模型metadata创建
     @Override
     public ModelMetaData metaData() {
         return ModelMetaData.Builder.create().setType(ModelMetaData.DefaultModelTypes.YSM).build();

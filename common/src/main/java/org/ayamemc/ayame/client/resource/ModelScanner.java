@@ -29,9 +29,11 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
+
 public class ModelScanner {
     /**
      * 从指定目录扫描模型
+     *
      * @param dir 目录
      */
     public static void scanModel(Path dir) {
@@ -64,7 +66,7 @@ public class ModelScanner {
     /**
      * 从默认目录扫描模型
      */
-    public static void scanModel(){
+    public static void scanModel() {
         scanModel(Path.of(DefaultAyameModels.MODEL_PATH));
     }
 

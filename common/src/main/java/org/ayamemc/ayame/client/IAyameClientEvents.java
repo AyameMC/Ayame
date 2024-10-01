@@ -27,9 +27,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-///
 /// 内部事件，实现见 `AyameClientEventsFabricImpl` 与 `AyameClientEventsNeoForgeImpl`
-///
 @ApiStatus.Internal
 @Environment(EnvType.CLIENT)
 public interface IAyameClientEvents {

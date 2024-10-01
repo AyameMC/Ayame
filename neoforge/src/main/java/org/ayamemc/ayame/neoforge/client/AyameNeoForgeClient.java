@@ -22,12 +22,14 @@ package org.ayamemc.ayame.neoforge.client;
 
 
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.common.Mod;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 
-@Mod(value = Ayame.MOD_ID,dist = Dist.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
     public AyameNeoForgeClient() {
         AyameClient.init();

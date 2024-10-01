@@ -37,6 +37,7 @@ import static org.ayamemc.ayame.Ayame.LOGGER;
 public class FileUtil {
     /**
      * 读取文件
+     *
      * @param path {@link Path}类型，文件路径
      * @return {@link String}
      */
@@ -52,7 +53,8 @@ public class FileUtil {
 
     /**
      * 覆盖文件
-     * @param path {@link Path}类型，文件路径
+     *
+     * @param path          {@link Path}类型，文件路径
      * @param content{@link String}
      */
     public static void overwriteFile(Path path, String content) {
@@ -160,7 +162,7 @@ public class FileUtil {
             }
 
             return content.toString();
-        }catch (IOException e){
+        } catch (IOException e) {
             LOGGER.error("Cannot convert inputStream to String: ", e);
             return "";
         }

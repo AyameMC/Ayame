@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 @Environment(EnvType.CLIENT)
 public class BlurWidget extends AbstractWidget {
     Minecraft minecraft = Minecraft.getInstance();
+
     public BlurWidget(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
     }

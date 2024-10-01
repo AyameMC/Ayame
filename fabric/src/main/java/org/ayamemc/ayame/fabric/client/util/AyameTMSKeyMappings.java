@@ -28,7 +28,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.fabric.client.events.AyameKeyMappingEventHandler;
+import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,9 +42,10 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 public class AyameTMSKeyMappings {
     /**
      * 使用TMS注册按键
-     * @param name 按键绑定页面显示的键位名称
-     * @param type 输入类型，见{@link InputConstants}
-     * @param keyCode 键位，见{@link GLFW}
+     *
+     * @param name     按键绑定页面显示的键位名称
+     * @param type     输入类型，见{@link InputConstants}
+     * @param keyCode  键位，见{@link GLFW}
      * @param category 按键绑定页面的种类
      * @param modifier TMS提供的组合键位，见{@link AyameTMSKeyMappings}
      * @return AyameKeyMappings

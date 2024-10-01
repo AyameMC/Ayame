@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 
 /**
  * 存放适合共用的本地化键名
+ *
  * @see Component
  */
 public class TranslatableName {

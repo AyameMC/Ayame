@@ -23,7 +23,6 @@ package org.ayamemc.ayame.mixin.client;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,6 +35,7 @@ public class LocalPlayerMixin {
     private void onStartRiding(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
         ((Player) (Object) this).ayame$setSitting(cir.getReturnValue());
     }
+
     @Inject(method = "removeVehicle", at = @At("HEAD"))
     private void onRemoveVehicle(CallbackInfo ci) {
         ((Player) (Object) this).ayame$setSitting(false);

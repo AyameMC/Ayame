@@ -42,6 +42,30 @@ import java.util.Map;
 @Environment(EnvType.CLIENT)
 public interface IModelResource {
     /**
+     * 从文件创建模型资源
+     *
+     * @param file 文件
+     * @return 模型资源
+     * @throws IOException 读取文件时发生错误
+     */
+    static IModelResource fromFile(Path file) throws IOException {
+        return new AyameModelResource(readZip(file));
+    }
+
+    static IModelResource fromFile(File file) throws IOException {
+        return fromFile(file.toPath());
+    }
+
+    private static Map<String, InputStream> readZip(Path file) {
+        return FileUtil.readZipFile(file);
+    }
+
+    static DefaultAyameModelType createModelFromResource(IModelResource res) {
+        res.createModel();
+        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
+    }
+
+    /**
      * 获取模型元数据
      *
      * @return 模型元数据
@@ -110,28 +134,4 @@ public interface IModelResource {
      * @return 纹理资源位置
      */
     ResourceLocation getTextureLocation();
-
-    /**
-     * 从文件创建模型资源
-     * @param file 文件
-     * @return 模型资源
-     * @throws IOException 读取文件时发生错误
-     */
-    static IModelResource fromFile(Path file) throws IOException {
-        return new AyameModelResource(readZip(file));
-    }
-
-    static IModelResource fromFile(File file) throws IOException {
-        return fromFile(file.toPath());
-    }
-
-
-    private static Map<String, InputStream> readZip(Path file) {
-        return FileUtil.readZipFile(file);
-    }
-
-    static DefaultAyameModelType createModelFromResource(IModelResource res) {
-        res.createModel();
-        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
-    }
 }

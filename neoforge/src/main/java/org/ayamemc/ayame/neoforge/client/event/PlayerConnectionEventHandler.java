@@ -18,29 +18,26 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge.client.events;
+package org.ayamemc.ayame.neoforge.client.event;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.util.TaskManager;
 
-
-/**
- * 存放NeoForge按下按键后的行为的类
- */
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
-public class OpenModelSelectMenuEventHandler {
-    /**
-     * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
-     */
+public class PlayerConnectionEventHandler {
     @SubscribeEvent
-    public static void onClientClick(ClientTickEvent.Post event) {
-        while (RegisterKeyMappingEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
-            AyameClient.openSelectMenuKeyPressed();
-        }
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        // 执行所有任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
     }
 }

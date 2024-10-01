@@ -46,26 +46,26 @@ public class DefaultAyameModels {
      * 此模型写死在代码里面，作为默认模型，仅可通过资源包修改
      */
     public static final AyameModelType DEFAULT_MODEL = DefaultAyameModelType.of(
-            ResourceLocation.fromNamespaceAndPath(MOD_ID,"geo/ayame/default.json"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID,"animations/ayame/default.json"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID,"textures/ayame/default.png"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID,"metadata/ayame/default.json")
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/default.json"),
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/default.json"),
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/default.png"),
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "metadata/ayame/default.json")
     );
 
     public static IModelResource GRMMY_NEKO_MODEL_RESOURCE;
-    public static AyameModelType TEST_MODEL ;
+    public static AyameModelType TEST_MODEL;
 
-    public static void init(){
+    public static void init() {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
             GRMMY_NEKO_MODEL_RESOURCE = createModelResource("grmmy_neko");
             TEST_MODEL = createModel(GRMMY_NEKO_MODEL_RESOURCE);
         });
     }
 
-    private static IModelResource createModelResource(String name){
+    private static IModelResource createModelResource(String name) {
         Path path = Path.of(MODEL_PATH + name + ".zip");
         // 检查文件是否存在
-        if (!Files.exists(path)){
+        if (!Files.exists(path)) {
             FileUtil.copyResource("assets/ayame/models/" + name + ".zip", path);
         }
         try {
@@ -76,7 +76,7 @@ public class DefaultAyameModels {
         }
     }
 
-    private static AyameModelType createModel(IModelResource res){
+    private static AyameModelType createModel(IModelResource res) {
         return IModelResource.createModelFromResource(res);
     }
 }

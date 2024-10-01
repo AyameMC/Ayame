@@ -22,8 +22,8 @@ package org.ayamemc.ayame.fabric.client.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
+import org.ayamemc.ayame.client.resource.IModelResource;
 
 import java.util.List;
 import java.util.Map;
@@ -33,10 +33,11 @@ public class ModelResourceEvents {
     /**
      * 模型资源创建时的回调<br></br>
      * 参数：<br></br>
-     *    modelResource：模型资源
+     * modelResource：模型资源
+     *
      * @see IModelResource#ModelResource(Map)
      */
-    public static Event<OnResourceCreate> ON_RESOURCE_CREATE = EventFactory.createArrayBacked(OnResourceCreate.class, (listeners) -> (modelResource) ->{
+    public static Event<OnResourceCreate> ON_RESOURCE_CREATE = EventFactory.createArrayBacked(OnResourceCreate.class, (listeners) -> (modelResource) -> {
         for (OnResourceCreate listener : listeners) {
             listener.onResourceCreate(modelResource);
         }
@@ -45,11 +46,12 @@ public class ModelResourceEvents {
     /**
      * 获取模型列表时的回调<br></br>
      * 参数：<br></br>
-     *    modelResources：模型列表<br></br>
-     *    sorted：是否已排序
+     * modelResources：模型列表<br></br>
+     * sorted：是否已排序
+     *
      * @see ModelResourceAPI#listModels(boolean)
      */
-    public static Event<OnListResource> ON_LIST_RESOURCE = EventFactory.createArrayBacked(OnListResource.class, (listeners) -> (modelResources, sorted) ->{
+    public static Event<OnListResource> ON_LIST_RESOURCE = EventFactory.createArrayBacked(OnListResource.class, (listeners) -> (modelResources, sorted) -> {
         for (OnListResource listener : listeners) {
             listener.onListResource(modelResources, sorted);
         }
@@ -59,6 +61,7 @@ public class ModelResourceEvents {
     public interface OnResourceCreate {
         void onResourceCreate(IModelResource modelResource);
     }
+
     public interface OnListResource {
         void onListResource(List<IModelResource> modelResources, boolean sorted);
     }

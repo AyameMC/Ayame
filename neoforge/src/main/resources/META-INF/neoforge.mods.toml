@@ -51,4 +51,7 @@ side = "BOTH"
 [[mixins]]
 config = "ayame.mixins.json"
 
+[[mixins]]
+config = "ayame-neoforge.mixins.json"
+
 # 配置fabric系的AW访问加宽器，见neoforge的build.gradle

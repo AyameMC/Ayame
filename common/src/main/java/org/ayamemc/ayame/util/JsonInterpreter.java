@@ -89,6 +89,15 @@ public class JsonInterpreter {
         return new JsonInterpreter(filePath);
     }
 
+    public static JsonInterpreter fromResource(String path) {
+        InputStream content = FileUtil.getResourceAsStream(path);
+        return JsonInterpreter.of(content);
+    }
+
+    public static JsonInterpreter of(InputStream content) {
+        return new JsonInterpreter(FileUtil.inputStreamToString(content));
+    }
+
     /**
      * 读取值
      *
@@ -529,13 +538,5 @@ public class JsonInterpreter {
     @Override
     public String toString() {
         return jsonObject.toString();
-    }
-
-    public static JsonInterpreter fromResource(String path){
-        InputStream content = FileUtil.getResourceAsStream(path);
-        return JsonInterpreter.of(content);
-    }
-    public static JsonInterpreter of(InputStream content) {
-        return new JsonInterpreter(FileUtil.inputStreamToString(content));
     }
 }

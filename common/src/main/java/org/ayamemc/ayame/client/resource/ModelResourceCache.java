@@ -30,50 +30,57 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 客户端模型资源的缓存
  */
 public class ModelResourceCache {
-    /** 使用ConcurrentHashMap来保证线程安全
-        String 为模型名， ModelResource 为模型资源
+    /**
+     * 使用ConcurrentHashMap来保证线程安全
+     * String 为模型名， ModelResource 为模型资源
      */
     public static Map<String, IModelResource> cache = new ConcurrentHashMap<>();
     /**
      * 用来保证插入顺序的List
      */
     public static List<String> sortedCache = new CopyOnWriteArrayList<>();
+
     /**
      * 添加模型资源到缓存，最好使用{@link #addModelResource(IModelResource)}这个方法
-     * @param name 模型名称
+     *
+     * @param name     模型名称
      * @param modelRes 模型资源
      */
     public static void addModelResource(String name, IModelResource modelRes) {
-        cache.put(name,modelRes);
+        cache.put(name, modelRes);
         sortedCache.add(name);
     }
 
     /**
      * 添加模型资源到缓存
+     *
      * @param modelRes 模型资源
      */
     public static void addModelResource(IModelResource modelRes) {
-        addModelResource(modelRes.getMetaData().name(),modelRes);
+        addModelResource(modelRes.getMetaData().name(), modelRes);
     }
 
     /**
      * 批量添加模型资源到缓存
+     *
      * @param modelRes 模型资源
      */
-    public static void addModelResource(Collection<IModelResource> modelRes){
+    public static void addModelResource(Collection<IModelResource> modelRes) {
         modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
     /**
      * 批量添加模型资源到缓存
+     *
      * @param modelRes 模型资源
      */
-    public static void addModelResource(Map<String, IModelResource> modelRes){
+    public static void addModelResource(Map<String, IModelResource> modelRes) {
         modelRes.forEach(ModelResourceCache::addModelResource);
     }
 
     /**
      * 获取模型资源
+     *
      * @param name 模型名称
      * @return 模型资源
      */
@@ -84,10 +91,11 @@ public class ModelResourceCache {
 
     /**
      * 获取所有模型资源
+     *
      * @param sorted 是否要保证插入顺序
      * @return 所有模型资源
      */
-    public static List<IModelResource> getAllModelResource(boolean sorted){
+    public static List<IModelResource> getAllModelResource(boolean sorted) {
         return sorted ? sortedCache.stream().map(ModelResourceCache::getModelResource).toList() : cache.values().stream().toList();
     }
 
@@ -95,7 +103,7 @@ public class ModelResourceCache {
     /**
      * 清空缓存
      */
-    public static void clearCache(){
+    public static void clearCache() {
         cache.clear();
         sortedCache.clear();
     }

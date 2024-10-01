@@ -25,18 +25,12 @@ import java.util.List;
 
 /**
  * 任务管理器，用于管理任务列表和执行一次性任务
+ *
  * @param <T> 任务的类型
  */
 public class TaskManager<T extends TaskManager.Task> {
-    // 任务接口，表示可以执行的任务
-    @FunctionalInterface
-    public interface Task {
-        void execute();
-    }
-
     // 用于存储任务的列表
     private final List<T> taskList = new ArrayList<>();
-
     // 控制任务是否可以立即执行的变量
     private boolean canExecute = false;
 
@@ -63,6 +57,12 @@ public class TaskManager<T extends TaskManager.Task> {
     // 设置任务是否可以立即执行
     public void setCanExecute(boolean canExecute) {
         this.canExecute = canExecute;
+    }
+
+    // 任务接口，表示可以执行的任务
+    @FunctionalInterface
+    public interface Task {
+        void execute();
     }
 
     public static class TaskManagerImpls {

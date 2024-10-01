@@ -18,11 +18,12 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge.client.events;
+package org.ayamemc.ayame.neoforge.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -35,8 +36,10 @@ import org.lwjgl.glfw.GLFW;
 
 /**
  * 注册Ayame所使用的按键，由于NeoForge提供了组合按键绑定的支持，因此不依赖<a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>。
+ *
  * @see KeyModifier
  */
+@OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = Ayame.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RegisterKeyMappingEventHandler {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
@@ -50,6 +53,7 @@ public class RegisterKeyMappingEventHandler {
 
     /**
      * 在NeoForge中注册该按键按下的行为，按下后行为位于{@link OpenModelSelectMenuEventHandler}
+     *
      * @see RegisterKeyMappingsEvent
      */
     @SubscribeEvent

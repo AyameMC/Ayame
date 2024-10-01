@@ -124,8 +124,8 @@ public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nu
                     .setVersion(json.getString("version"));
         }
 
-        public Builder parseJsonFromResource(ResourceLocation resourceLocation){
-            return parseJson(JsonInterpreter.fromResource("assets/"+resourceLocation.getNamespace()+"/"+resourceLocation.getPath()));
+        public Builder parseJsonFromResource(ResourceLocation resourceLocation) {
+            return parseJson(JsonInterpreter.fromResource("assets/" + resourceLocation.getNamespace() + "/" + resourceLocation.getPath()));
         }
 
         public ModelMetaData build() {

@@ -18,7 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.events;
+package org.ayamemc.ayame.fabric.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.EnvType;
@@ -38,6 +38,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 /**
  * 注册Ayame所使用的按键，若安装了 <a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>组则会使用其提供的组合按键绑定。
+ *
  * @see AyameTMSKeyMappings
  * @see JavaUtil
  */
@@ -54,9 +55,10 @@ public class AyameKeyMappingEventHandler {
 
     /**
      * 注册按键
-     * @param name 按键绑定页面显示的键位名称
-     * @param type 输入类型，见{@link InputConstants}
-     * @param keyCode 键位，见{@link GLFW}
+     *
+     * @param name     按键绑定页面显示的键位名称
+     * @param type     输入类型，见{@link InputConstants}
+     * @param keyCode  键位，见{@link GLFW}
      * @param category 按键绑定页面的种类
      * @param modifier 组合键位，见{@link AyameTMSKeyMappings}
      * @return 调用 {@link AyameTMSKeyMappings}
@@ -77,6 +79,7 @@ public class AyameKeyMappingEventHandler {
 
     /**
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
+     *
      * @see KeyMapping
      */
     public static void processKeyPressed() {

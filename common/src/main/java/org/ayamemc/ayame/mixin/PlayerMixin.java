@@ -48,12 +48,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 @Environment(EnvType.CLIENT)
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
-    @Shadow public abstract boolean setEntityOnShoulder(CompoundTag entityCompound);
-
-    @Unique
-    private boolean ayame$isSitting = false;
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
+    @Unique
+    private boolean ayame$isSitting = false;
+
+    @Shadow
+    public abstract boolean setEntityOnShoulder(CompoundTag entityCompound);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -61,23 +62,23 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
         Player self = (Player) (Object) this;
         controllers.add(new AnimationController<>(self, 20, state -> {
             // 处理待处理动画
-            if (AnimationTask.shouldAnimationProcess(self)){
+            if (AnimationTask.shouldAnimationProcess(self)) {
                 return AnimationTask.handle(self, state.getController());
             }
             // 地上趴着
-            if (self.getPose() == Pose.SWIMMING && !self.isInLiquid()){
+            if (self.getPose() == Pose.SWIMMING && !self.isInLiquid()) {
                 return state.setAndContinue(DefaultAnimations.CRAWL);
             }
             // 在水里
-            if (self.isInLiquid() && self.isEyeInFluid(FluidTags.WATER)){
+            if (self.isInLiquid() && self.isEyeInFluid(FluidTags.WATER)) {
                 return state.setAndContinue(DefaultAnimations.SWIM);
             }
             // 没有移动
-            if (!state.isMoving()){
+            if (!state.isMoving()) {
                 // 是否为sit
                 if (self.ayame$isSitting()) return state.setAndContinue(RawAnimation.begin().thenLoop("misc.sit"));
                 return state.setAndContinue(DefaultAnimations.IDLE);
-            }else if (state.isMoving()){
+            } else if (state.isMoving()) {
                 return state.setAndContinue(DefaultAnimations.WALK);
             }
 
@@ -95,6 +96,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
     public void ayame$setSitting(boolean sitting) {
         ayame$isSitting = sitting;
     }
+
     @Override
     public boolean ayame$isSitting() {
         return ayame$isSitting;

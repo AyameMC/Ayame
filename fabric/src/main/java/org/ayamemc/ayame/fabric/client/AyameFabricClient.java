@@ -25,10 +25,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.fabric.client.events.AyameKeyMappingEventHandler;
+import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
 
 /**
  * Fabric客户端初始化所使用的类
+ *
  * @see ClientModInitializer
  */
 @Environment(EnvType.CLIENT)
