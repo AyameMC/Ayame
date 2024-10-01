@@ -28,8 +28,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.event.RenderCustomArmEventHandler;
 import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
@@ -51,6 +53,7 @@ public class AyameFabricClientEvents {
         ClientTickEvents.END_CLIENT_TICK.register(AyameFabricClientEvents::endClientTickEvent);
         ClientPlayConnectionEvents.JOIN.register(AyameFabricClientEvents::joinServer);
         ClientPlayConnectionEvents.DISCONNECT.register(AyameFabricClientEvents::quitServer);
+        RenderArmCallback.ON_RENDER_ARM.register(AyameFabricClientEvents::renderCustomArm);
     }
 
     private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
@@ -62,7 +65,6 @@ public class AyameFabricClientEvents {
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-        RenderArmCallback.EVENT.register(AyameFabricClientEvents::renderCustomArm);
 //        // 开新线程扫描模型
 //        new Thread(ModelScanner::scanModel).start();
     }
@@ -80,7 +82,7 @@ public class AyameFabricClientEvents {
      * @param equipProgress     装备动画的进度，从 { 0.0} 到 { 1.0}
      * @param stack             要渲染的物品组
      */
-    private static void renderCustomArm(
+    private static InteractionResult renderCustomArm(
             InteractionHand hand,
             PoseStack poseStack,
             MultiBufferSource multiBufferSource,
@@ -89,7 +91,8 @@ public class AyameFabricClientEvents {
             float interpolatedPitch,
             float swingProgress,
             float equipProgress,
-            ItemStack stack
+            ItemStack stack,
+            LocalPlayer player
     ) {
         RenderCustomArmEventHandler.renderCustomArmEventHandler(
                 hand,
@@ -102,6 +105,7 @@ public class AyameFabricClientEvents {
                 equipProgress,
                 stack
         );
+        return InteractionResult.SUCCESS;
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {

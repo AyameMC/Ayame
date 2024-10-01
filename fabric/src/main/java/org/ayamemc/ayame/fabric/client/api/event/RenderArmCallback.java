@@ -39,7 +39,7 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class RenderArmCallback {
     public static final Event<OnRenderArm> ON_RENDER_ARM = EventFactory.createArrayBacked(OnRenderArm.class,
-            (listeners) -> (hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack) -> {
+            (listeners) -> (hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack,player) -> {
                 for (OnRenderArm listener : listeners) {
                     InteractionResult result = listener.onRenderArm(
                             hand,
@@ -50,7 +50,8 @@ public class RenderArmCallback {
                             interpolatedPitch,
                             swingProgress,
                             equipProgress,
-                            stack
+                            stack,
+                            player
                     );
                     if (result != InteractionResult.PASS) return result;
                 }

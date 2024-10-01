@@ -42,5 +42,6 @@ public final class AyameFabricClient implements ClientModInitializer {
         AyameKeyMappingEventHandler.init();
         AyameFabricClientEvents.init();
         AyameClient.init();
+
     }
 }
