@@ -4,7 +4,6 @@
   "version": "${version}",
   "name": "Ayame",
   "description": "Custom player model mod. Powered by GeckoLib.",
-  "accessWidener": "ayame.accesswidener",
   "authors": [
     {
       "name": "CrystalNeko",

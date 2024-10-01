@@ -31,10 +31,7 @@ dependencies {
     // GeckoLib
     modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 }
-// 配置访问加宽器
-loom {
-    accessWidenerPath = file("src/main/resources/ayame.accesswidener")
-}
+
 repositories {
     mavenCentral()
 }

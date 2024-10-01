@@ -91,6 +91,7 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+        accessWidenerPath = file("src/main/resources/ayame.accesswidener")
     }
 
     dependencies {
