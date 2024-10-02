@@ -39,9 +39,14 @@ public abstract class AbstractModelMenuScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
     public static ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
     public static ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
+
+    private static final int BACKGROUND_TEXTURE_WIDTH = 410;
+    private static final int BACKGROUND_TEXTURE_HEIGHT = 220;
+    private static final int BUTTON_SIZE = 32;
+    private static final int LEFT_MARGIN = 10;
+    private static final int BOTTOM_MARGIN = 10;
+
     protected final Screen lastScreen;
-    private final int backgroundTextureWidth = 410;
-    private final int backgroundTextureHeight = 220;
 
     public AbstractModelMenuScreen(@Nullable Screen lastScreen) {
         super(Component.empty());
@@ -57,7 +62,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
      */
     @Override
     protected void init() {
-        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), backgroundTextureWidth, backgroundTextureHeight);
+        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         this.addRenderableOnly(blurredBackgroundWidget);
     }
 
@@ -67,7 +72,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.enableBlend();
-        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         RenderSystem.disableBlend();
     }
 
@@ -78,8 +83,8 @@ public abstract class AbstractModelMenuScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         super.render(guiGraphics, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
-        guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
-        guiGraphics.blit(MENU_TOP_LAYER_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+        guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        guiGraphics.blit(MENU_TOP_LAYER_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         RenderSystem.disableBlend();
 
         WidgetSprites settingSprites = new WidgetSprites(
@@ -88,10 +93,10 @@ public abstract class AbstractModelMenuScreen extends Screen {
                 withAyameNamespace("settings")
         );
         ImageButton imageButton = new ImageButton(
-                getLeftAlignedX(),
-                getBottomAlignedY(),
-                32,
-                32,
+                getLeftAlignedX(BACKGROUND_TEXTURE_WIDTH, LEFT_MARGIN),
+                getBottomAlignedY(BACKGROUND_TEXTURE_HEIGHT, BUTTON_SIZE, BOTTOM_MARGIN),
+                BUTTON_SIZE,
+                BUTTON_SIZE,
                 settingSprites,
                 button -> {
                     // 按钮点击后的行为
@@ -100,25 +105,33 @@ public abstract class AbstractModelMenuScreen extends Screen {
                 Component.literal("Image Button")
         );
         addRenderableWidget(imageButton);
-
     }
 
-
-    protected int getCenterX(int textureWidth) {
-        return (this.width - textureWidth) / 2;
+    /**
+     * 获取指定宽度在屏幕中心的X坐标
+     */
+    protected int getCenterX(int elementWidth) {
+        return (this.width - elementWidth) / 2;
     }
 
-    protected int getCenterY(int textureHeight) {
-        return (this.height - textureHeight) / 2;
-    }
-    protected int getLeftAlignedX() {
-        // 偏移左边的一个固定距离，使得按钮在屏幕左边对齐
-        return this.width / 2 - backgroundTextureWidth / 2 + 10; // 10 为与左边框的距离，可以调整
-    }
-
-    protected int getBottomAlignedY() {
-        // 偏移底部的一个固定距离，使得按钮在屏幕下方对齐
-        return this.height / 2 + backgroundTextureHeight / 2 - 32 - 10; // 10 为与底边框的距离，可以调整
+    /**
+     * 获取指定高度在屏幕中心的Y坐标
+     */
+    protected int getCenterY(int elementHeight) {
+        return (this.height - elementHeight) / 2;
     }
 
+    /**
+     * 获取元素在屏幕左边对齐的X坐标
+     */
+    protected int getLeftAlignedX(int containerWidth, int margin) {
+        return getCenterX(containerWidth) + margin;
+    }
+
+    /**
+     * 获取元素在屏幕底部对齐的Y坐标
+     */
+    protected int getBottomAlignedY(int containerHeight, int elementHeight, int margin) {
+        return getCenterY(containerHeight) + containerHeight - elementHeight - margin;
+    }
 }
