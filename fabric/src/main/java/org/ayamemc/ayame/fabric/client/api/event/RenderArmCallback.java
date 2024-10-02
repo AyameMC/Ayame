@@ -29,7 +29,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -39,7 +38,16 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class RenderArmCallback {
     public static final Event<OnRenderArm> ON_RENDER_ARM = EventFactory.createArrayBacked(OnRenderArm.class,
-            (listeners) -> (hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack,player) -> {
+            (listeners) -> (hand,
+                            poseStack,
+                            multiBufferSource,
+                            packedLight,
+                            partialTick,
+                            interpolatedPitch,
+                            swingProgress,
+                            equipProgress,
+                            stack,
+                            player) -> {
                 for (OnRenderArm listener : listeners) {
                     InteractionResult result = listener.onRenderArm(
                             hand,
@@ -53,7 +61,9 @@ public class RenderArmCallback {
                             stack,
                             player
                     );
-                    if (result != InteractionResult.PASS) return result;
+                    if (result != InteractionResult.PASS) {
+                        return result;
+                    }
                 }
                 return InteractionResult.PASS;
             });
@@ -73,7 +83,7 @@ public class RenderArmCallback {
          * @param swingProgress     正在渲染的手牌的挥动进度
          * @param equipProgress     装备动画的进度，从 { 0.0} 到 { 1.0}
          * @param stack             要渲染的物品组
-         * @param player             玩家实体
+         * @param player            玩家实体
          */
         InteractionResult onRenderArm(
                 InteractionHand hand,

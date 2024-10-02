@@ -23,7 +23,6 @@ package org.ayamemc.ayame.fabric.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -40,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ItemInHandRenderer.class)
-public abstract class RenderArmCustomEventMixin {
+public abstract class RenderHandCustomEventMixin {
     @Shadow
     private float oMainHandHeight;
     @Shadow
@@ -60,8 +59,8 @@ public abstract class RenderArmCustomEventMixin {
         // 这里return null实际上应该没什么问题，毕竟它只是个影子，真正被调用的不是它
     }
 
-    @Inject(method = "renderHandsWithItems", at = @At("HEAD"))
-    private void renderArmWithItem(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
+    @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
+    private void renderHandsWithItems(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
         float f = playerEntity.getAttackAnim(partialTicks);
         InteractionHand interactionHand = playerEntity.swingingArm;
         float pitch = Mth.lerp(partialTicks, playerEntity.xRotO, playerEntity.getXRot());
@@ -70,7 +69,7 @@ public abstract class RenderArmCustomEventMixin {
             return;
         }
         if (handsToRender.renderMainHand) {
-            InteractionResult result =   RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
+            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
                     InteractionHand.MAIN_HAND,
                     poseStack,
                     buffer,
@@ -89,7 +88,7 @@ public abstract class RenderArmCustomEventMixin {
         }
 
         if (handsToRender.renderOffHand) {
-             InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
+            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
                     InteractionHand.OFF_HAND,
                     poseStack,
                     buffer,
@@ -101,15 +100,9 @@ public abstract class RenderArmCustomEventMixin {
                     this.offHandItem,
                     playerEntity
             );
-             if (result != InteractionResult.PASS) {
-                 ci.cancel();
-                 return;
-             }
+            if (result != InteractionResult.PASS) {
+                ci.cancel();
+            }
         }
     }
-
-//    @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-//    private void CancelRenderArmWithItem(AbstractClientPlayer player, float partialTicks, float pitch, InteractionHand hand, float swingProgress, ItemStack stack, float equippedProgress, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, CallbackInfo ci) {
-//        ci.cancel(); // 取消渲染默认手臂，与Neo那边一个性质
-//    }
 }

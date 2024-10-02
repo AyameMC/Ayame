@@ -30,15 +30,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.event.RenderCustomArmEventHandler;
+import org.ayamemc.ayame.client.event.RenderCustomHandEventHandler;
 
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
-public class RenderCustomModelArmEventHandler {
+public class RenderCustomModelHandEventHandler {
     @SubscribeEvent
-    public static void renderCustomModelArm(RenderHandEvent event) {
-        event.setCanceled(true); // 取消渲染默认手臂
+    public static void renderCustomModelHand(RenderHandEvent event) {
         InteractionHand hand = event.getHand();
         PoseStack poseStack = event.getPoseStack();
         MultiBufferSource multiBufferSource = event.getMultiBufferSource();
@@ -48,7 +47,8 @@ public class RenderCustomModelArmEventHandler {
         float swingProgress = event.getSwingProgress();
         float equipProgress = event.getEquipProgress();
         ItemStack stack = event.getItemStack();
-        RenderCustomArmEventHandler.renderCustomArmEventHandler(
+        event.setCanceled(true); // 取消渲染默认手臂
+        RenderCustomHandEventHandler.renderCustomHandEventHandler(
                 hand,
                 poseStack,
                 multiBufferSource,

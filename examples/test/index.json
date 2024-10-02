@@ -5,7 +5,7 @@
     "animation": "animations/def_anim",
     "texture": "textures/def_tex",
     "arm": "animations/arm",
-    "controllers":[
+    "controllers": [
       "ayame:default"
     ]
   },
@@ -16,7 +16,9 @@
       "animation": "animations/preset1_anim",
       "texture": "textures/preset1_tex",
       "arm": "animations/arm",
-      "controllers": ["ayame:default"]
+      "controllers": [
+        "ayame:default"
+      ]
     },
     {
       "name": "预设2",
@@ -24,7 +26,9 @@
       "animation": "animations/preset2_anim",
       "texture": "textures/preset2_tex",
       "arm": "animations/arm",
-      "controllers": ["ayame:default"]
+      "controllers": [
+        "ayame:default"
+      ]
     }
   ]
 }

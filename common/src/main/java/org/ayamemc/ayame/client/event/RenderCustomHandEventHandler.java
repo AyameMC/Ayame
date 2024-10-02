@@ -24,9 +24,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class RenderCustomArmEventHandler {
-    public static void renderCustomArmEventHandler(
+public class RenderCustomHandEventHandler {
+    public static void renderCustomHandEventHandler(
             InteractionHand hand,
             PoseStack poseStack,
             MultiBufferSource multiBufferSource,
@@ -37,7 +38,8 @@ public class RenderCustomArmEventHandler {
             float equipProgress,
             ItemStack stack
     ) {
-        // 渲染自定义手臂逻辑在这里添加
-        //Ayame.LOGGER.warn("render arm!\n hand={} poseStack={} multiBufferSource={} packedLight={} partialTick={} interpolatedPitch={} swingProgress={} equipProgress={} stack={}", hand, poseStack, multiBufferSource, packedLight, partialTick, interpolatedPitch, swingProgress, equipProgress, stack);
+        if (stack.is(Items.APPLE)){
+            poseStack.popPose();
+        }
     }
 }
