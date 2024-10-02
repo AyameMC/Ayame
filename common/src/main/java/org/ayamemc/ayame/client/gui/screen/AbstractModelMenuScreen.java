@@ -24,6 +24,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,9 +38,10 @@ public abstract class AbstractModelMenuScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
     public static ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
+    public static ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
     protected final Screen lastScreen;
-    protected final int textureWidth = 410;
-    protected final int textureHeight = 220;
+    private final int backgroundTextureWidth = 410;
+    private final int backgroundTextureHeight = 220;
 
     public AbstractModelMenuScreen(@Nullable Screen lastScreen) {
         super(Component.empty());
@@ -54,7 +57,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
      */
     @Override
     protected void init() {
-        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(), getCenterY(), textureWidth, textureHeight);
+        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), backgroundTextureWidth, backgroundTextureHeight);
         this.addRenderableOnly(blurredBackgroundWidget);
     }
 
@@ -64,7 +67,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.enableBlend();
-        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(), getCenterY(), 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
+        guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
         RenderSystem.disableBlend();
     }
 
@@ -75,16 +78,47 @@ public abstract class AbstractModelMenuScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         super.render(guiGraphics, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
-        guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(), getCenterY(), 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
-        guiGraphics.blit(MENU_TOP_LAYER_TEXTURE, getCenterX(), getCenterY(), 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
+        guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+        guiGraphics.blit(MENU_TOP_LAYER_TEXTURE, getCenterX(backgroundTextureWidth), getCenterY(backgroundTextureHeight), 0, 0, backgroundTextureWidth, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
         RenderSystem.disableBlend();
+
+        WidgetSprites settingSprites = new WidgetSprites(
+                withAyameNamespace("settings"),
+                withAyameNamespace("settings"),
+                withAyameNamespace("settings")
+        );
+        ImageButton imageButton = new ImageButton(
+                getLeftAlignedX(),
+                getBottomAlignedY(),
+                32,
+                32,
+                settingSprites,
+                button -> {
+                    // 按钮点击后的行为
+                    System.out.println("ImageButton");
+                },
+                Component.literal("Image Button")
+        );
+        addRenderableWidget(imageButton);
+
     }
 
-    protected int getCenterX() {
+
+    protected int getCenterX(int textureWidth) {
         return (this.width - textureWidth) / 2;
     }
 
-    protected int getCenterY() {
+    protected int getCenterY(int textureHeight) {
         return (this.height - textureHeight) / 2;
     }
+    protected int getLeftAlignedX() {
+        // 偏移左边的一个固定距离，使得按钮在屏幕左边对齐
+        return this.width / 2 - backgroundTextureWidth / 2 + 10; // 10 为与左边框的距离，可以调整
+    }
+
+    protected int getBottomAlignedY() {
+        // 偏移底部的一个固定距离，使得按钮在屏幕下方对齐
+        return this.height / 2 + backgroundTextureHeight / 2 - 32 - 10; // 10 为与底边框的距离，可以调整
+    }
+
 }

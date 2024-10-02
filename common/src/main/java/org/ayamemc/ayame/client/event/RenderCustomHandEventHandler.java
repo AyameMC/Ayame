@@ -21,10 +21,15 @@
 package org.ayamemc.ayame.client.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.loading.json.raw.Model;
+import software.bernie.geckolib.model.GeoModel;
 
 public class RenderCustomHandEventHandler {
     public static void renderCustomHandEventHandler(
@@ -38,8 +43,7 @@ public class RenderCustomHandEventHandler {
             float equipProgress,
             ItemStack stack
     ) {
-        if (stack.is(Items.APPLE)){
-            poseStack.popPose();
-        }
+        //
+
     }
 }
