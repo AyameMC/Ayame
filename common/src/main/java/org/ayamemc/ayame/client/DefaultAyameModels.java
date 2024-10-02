@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.resource.AyameModelResource;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
@@ -77,6 +78,7 @@ public class DefaultAyameModels {
     }
 
     private static AyameModelType createModel(IModelResource res) {
-        return IModelResource.createModelFromResource(res);
+        AyameModelResource.ModelDataResource defaultModel = res.getDefault();
+        return defaultModel.getOrCreateResource(res.getMetaData());
     }
 }
