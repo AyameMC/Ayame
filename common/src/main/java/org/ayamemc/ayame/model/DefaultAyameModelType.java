@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.model;
 
 
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -33,11 +34,12 @@ import net.minecraft.resources.ResourceLocation;
  */
 
 public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,
-                                    ModelMetaData metaData) implements AyameModelType {
+                                    IndexData.ModelMetaData metaData) implements AyameModelType {
 
     public static AyameModelType of(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ResourceLocation metaData) {
-        return new DefaultAyameModelType(geoModel, animation, texture, ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
+        return new DefaultAyameModelType(geoModel, animation, texture, IndexData.ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
     }
+
 
     @Override
     public ResourceLocation getGeoModel() {
@@ -55,7 +57,7 @@ public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation 
     }
 
     @Override
-    public ModelMetaData metaData() {
+    public IndexData.ModelMetaData metaData() {
         return metaData;
     }
 }

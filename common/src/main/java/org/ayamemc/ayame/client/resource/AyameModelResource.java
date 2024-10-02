@@ -20,117 +20,160 @@
 
 package org.ayamemc.ayame.client.resource;
 
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.model.ModelMetaData;
+import org.ayamemc.ayame.model.IndexData;
 import org.ayamemc.ayame.util.JsonInterpreter;
-import org.jetbrains.annotations.Nullable;
+import org.ayamemc.ayame.util.ZipFileManager;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
-import static org.ayamemc.ayame.util.FileUtil.inputStreamToString;
+import static org.ayamemc.ayame.util.FormatUtil.cv;
 
 public class AyameModelResource implements IModelResource {
-    private final Map<String, InputStream> content;
-    private final ModelMetaData metaData;
-    private @Nullable ResourceLocation texture;
-    private @Nullable ResourceLocation geoModel;
-    private @Nullable ResourceLocation animation;
+    private final ZipFileManager content;
+    private final IndexData index;
 
     /**
      * @param content 模型内容
      */
-    public AyameModelResource(Map<String, InputStream> content) throws IOException {
+    public AyameModelResource(ZipFileManager content) throws IOException {
         this.content = content;
-        this.metaData = createMetaData();
+        this.index = createIndexData();
         IAyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
     }
 
-
-    private ModelMetaData createMetaData() {
-        String type = getType();
-        if (type.equalsIgnoreCase(ModelMetaData.DefaultModelTypes.AYAME)) {
-            JsonInterpreter json = this.getMetaDataJson();
-            return ModelMetaData.Builder.create()
-                    .parseJson(json)
-                    .build();
-        }
-        return ModelMetaData.Builder.create().build();
+    private IndexData createIndexData() throws IOException {
+        return IndexData.Builder.create().parseJson(JsonInterpreter.of(content.readFileContent("index.json"))).build();
     }
-
-    public ModelMetaData getMetaData() {
-        return metaData;
+    public IndexData.ModelMetaData getMetaData() {
+        return index.metaData();
     }
 
     public String getType() {
-        if (content.containsKey("metadata.json")) return ModelMetaData.DefaultModelTypes.AYAME;
-        //  完成ysm格式
-        return ModelMetaData.DefaultModelTypes.AYAME;
+        return IndexData.ModelMetaData.DefaultModelTypes.AYAME;
     }
 
-    public void createModel() {
-        // 创建任务，在Minecraft能够启动后执行
-        Minecraft.getInstance().execute(() -> {
-            // 为ayame模型读取
-            if (getType().equals(ModelMetaData.DefaultModelTypes.AYAME)) {
-                // 创建模型
-                ModelResourceWriterUtil.ModelResourceLocationRecord locations = ModelResourceWriterUtil.addModelResource(MOD_ID, this);
-                this.animation = locations.animationLocation();
-                this.geoModel = locations.modelLocation();
-                this.texture = locations.textureLocation();
+
+    public ModelDataResource getDefault() {
+        try {
+            return ModelDataResource.Builder.create().getDefaultFromZip(content).build();
+        } catch (IOException e) {
+            LOGGER.error("Error when loading default model:", e);
+            return null;
+        }
+    }
+
+    public List<ModelDataResource> getPresets() {
+        List<ModelDataResource> res = new ArrayList<>();
+        for (IndexData.ModelData data : index.presets()){
+            try {
+                res.add(ModelDataResource.Builder.create().getPresetFromZip(data.name(), content).build());
+            } catch (IOException e) {
+                LOGGER.error("Error when loading preset model:", e);
             }
-        });
+        }
+        return res;
     }
 
-
-    public JsonInterpreter getModelJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("model.json")));
-    }
-
-    public JsonInterpreter getAnimationJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("animation.json")));
-    }
-
-    public JsonInterpreter getMetaDataJson() {
-        return JsonInterpreter.of(inputStreamToString(content.get("metadata.json")));
-    }
-
-    public InputStream getTextureContent() {
-        return content.get("texture.png");
-    }
 
     /**
-     * 获取模型资源，仅在{@link #createModel}后调用
-     *
-     * @return 模型资源
+     * 模型数据资源，对应{@link IndexData.ModelData}
+     * @param mainName 主模型名称
+     * @param name 当前模型名称
+     * @param model
+     * @param texture
+     * @param animation
      */
-    @Nullable
-    public ResourceLocation getGeoModelLocation() {
-        return geoModel;
+    public record ModelDataResource(String mainName,String name,JsonInterpreter model, DynamicTexture texture, JsonInterpreter animation){
+        public ModelResourceWriterUtil.ModelResourceLocationRecord getOrCreateResource() {
+            return ModelResourceWriterUtil.addModelResource(this);
+        }
+
+        public ResourceLocation createModelResourceLocation() {
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/"+cv(mainName)+"/"+cv(name)+".json");
+        }
+        public ResourceLocation createTextureResourceLocation() {
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/"+cv(mainName)+"/"+cv(name)+".png");
+        }
+        public ResourceLocation createAnimationResourceLocation() {
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/"+cv(mainName)+"/"+cv(name)+".json");
+        }
+
+        public static class Builder {
+            private JsonInterpreter model;
+            private DynamicTexture texture;
+            private JsonInterpreter animation;
+            private String mainName;
+            private String name;
+
+            public Builder getPresetFromZip(String presetName,ZipFileManager zip) throws IOException {
+                IndexData index = IndexData.Builder.create().parseJson(JsonInterpreter.of(zip.readFileContent("index.json"))).build();
+                AtomicReference<IndexData.ModelData> data = new AtomicReference<>();
+                Arrays.asList(index.presets()).forEach(d -> {
+                    if (d.name().equals(presetName)){
+                        data.set(d);
+                    }
+                });
+                this.model = JsonInterpreter.of(zip.readFileContent(data.get().model()));
+                this.texture = new DynamicTexture(NativeImage.read(zip.readFileContent(data.get().texture())));
+                this.animation = JsonInterpreter.of(zip.readFileContent(data.get().animation()));
+                this.mainName = index.metaData().name();
+                this.name = data.get().name();
+                return this;
+            }
+
+            public Builder getDefaultFromZip(ZipFileManager zip) throws IOException {
+                IndexData index = IndexData.Builder.create().parseJson(JsonInterpreter.of(zip.readFileContent("index.json"))).build();
+                IndexData.ModelData data = index.defaultModel();
+                this.model = JsonInterpreter.of(zip.readFileContent(data.model()));
+                this.texture = new DynamicTexture(NativeImage.read(zip.readFileContent(data.texture())));
+                this.animation = JsonInterpreter.of(zip.readFileContent(data.animation()));
+                this.mainName = index.metaData().name();
+                this.name = data.name();
+                return this;
+            }
+
+            public Builder model(JsonInterpreter model) {
+                this.model = model;
+                return this;
+            }
+
+            public Builder texture(DynamicTexture texture) {
+                this.texture = texture;
+                return this;
+            }
+
+            public Builder animation(JsonInterpreter animation) {
+                this.animation = animation;
+                return this;
+            }
+
+            public Builder mainName(String mainName) {
+                this.mainName = mainName;
+                return this;
+            }
+
+            public Builder name(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public ModelDataResource build() {
+                return new ModelDataResource(mainName,name,model, texture, animation);
+            }
+
+            public static Builder create() {
+                return new Builder();
+            }
+        }
     }
-
-    /**
-     * 获取动画资源，仅在{@link #createModel}后调用
-     *
-     * @return 动画资源
-     */
-    @Nullable
-    public ResourceLocation getAnimationLocation() {
-        return animation;
-    }
-
-    /**
-     * 获取材质资源，仅在{@link #createModel}后调用
-     *
-     * @return 材质资源
-     */
-    public ResourceLocation getTextureLocation() {
-        return texture;
-    }
-
-
 }
