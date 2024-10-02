@@ -29,6 +29,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import org.ayamemc.ayame.model.AyameModelType;
+import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -53,14 +55,17 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 public class ModelResourceWriterUtil {
     /**
      * @param modelRes  模型资源
-     * @return {@link ModelResourceLocationRecord} 模型资源路径和动画路径的记录
+     * @return 未完成的模型构建器
      */
-    public static ModelResourceLocationRecord addModelResource(@NotNull AyameModelResource.ModelDataResource modelRes) {
+    public static DefaultAyameModelType.Builder addModelResource(@NotNull AyameModelResource.ModelDataResource modelRes) {
         addBakedModel(modelRes.createModelResourceLocation(), modelRes);
         addBakedAnimation(modelRes.createAnimationResourceLocation(), modelRes);
         addTexture(modelRes.createTextureResourceLocation(), modelRes);
 
-        return new ModelResourceLocationRecord(modelRes.createModelResourceLocation(),modelRes.createAnimationResourceLocation(), modelRes.createTextureResourceLocation());
+        return DefaultAyameModelType.Builder.create()
+                .setGeoModel(modelRes.createModelResourceLocation())
+                .setAnimation(modelRes.createAnimationResourceLocation())
+                .setTexture(modelRes.createTextureResourceLocation());
     }
 
     /**
@@ -102,17 +107,6 @@ public class ModelResourceWriterUtil {
      */
     public static void addTexture(ResourceLocation resourceLocation, @NotNull AyameModelResource.ModelDataResource modelRes) {
         Minecraft.getInstance().getTextureManager().register(resourceLocation, modelRes.texture());
-    }
-
-    /**
-     * 模型资源路径和动画路径的记录，只是为了方便
-     *
-     * @param modelLocation     模型资源路径
-     * @param animationLocation 模型动画路径
-     * @param textureLocation   贴图路径
-     */
-    public record ModelResourceLocationRecord(ResourceLocation modelLocation, ResourceLocation animationLocation,
-                                              ResourceLocation textureLocation) {
     }
 }
 

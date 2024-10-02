@@ -40,6 +40,35 @@ public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation 
         return new DefaultAyameModelType(geoModel, animation, texture, IndexData.ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
     }
 
+    public static class Builder {
+        private ResourceLocation geoModel;
+        private ResourceLocation animation;
+        private ResourceLocation texture;
+        private IndexData.ModelMetaData metaData;
+        public Builder setGeoModel(ResourceLocation geoModel) {
+            this.geoModel = geoModel;
+            return this;
+        }
+        public Builder setAnimation(ResourceLocation animation) {
+            this.animation = animation;
+            return this;
+        }
+        public Builder setTexture(ResourceLocation texture) {
+            this.texture = texture;
+            return this;
+        }
+        public Builder setMetaData(IndexData.ModelMetaData metaData) {
+            this.metaData = metaData;
+            return this;
+        }
+        public DefaultAyameModelType build() {
+            return new DefaultAyameModelType(geoModel, animation, texture, metaData);
+        }
+        public static Builder create() {
+            return new Builder();
+        }
+    }
+
 
     @Override
     public ResourceLocation getGeoModel() {

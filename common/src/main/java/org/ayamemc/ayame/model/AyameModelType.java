@@ -39,4 +39,5 @@ public interface AyameModelType {
     ResourceLocation getAnimation();
 
     IndexData.ModelMetaData metaData();
+
 }

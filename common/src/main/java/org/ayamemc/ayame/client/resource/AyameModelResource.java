@@ -24,6 +24,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.model.AyameModelType;
+import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.IndexData;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.ZipFileManager;
@@ -94,8 +96,13 @@ public class AyameModelResource implements IModelResource {
      * @param animation
      */
     public record ModelDataResource(String mainName,String name,JsonInterpreter model, DynamicTexture texture, JsonInterpreter animation){
-        public ModelResourceWriterUtil.ModelResourceLocationRecord getOrCreateResource() {
-            return ModelResourceWriterUtil.addModelResource(this);
+        /**
+         * 使用这个metadata 创建一个{@link DefaultAyameModelType}
+         * @param metaData
+         * @return
+         */
+        public AyameModelType getOrCreateResource(IndexData.ModelMetaData metaData) {
+            return ModelResourceWriterUtil.addModelResource(this).setMetaData(metaData).build();
         }
 
         public ResourceLocation createModelResourceLocation() {
