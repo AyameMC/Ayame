@@ -59,5 +59,10 @@
   },
   "recommends": {
     "too_many_shortcuts": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "update_checker": true
+    }
   }
 }
