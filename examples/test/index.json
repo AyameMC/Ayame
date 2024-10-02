@@ -1,4 +1,20 @@
 {
+  "format_version": "0.0.1",
+  "metadata": {
+    "name": "AQuarter_neko",
+    "version": "0.0.1",
+    "authors": [
+      "CrystalNeko"
+    ],
+    "description": "From toNeko, just for example and test",
+    "license": "CC0",
+    "links": [
+      "https://github.com/CSneko/toNeko/blob/main/models/Aquarter_neko.bbmodel"
+    ],
+    "tags": [
+      "vanilla-like"
+    ]
+  },
   "default": {
     "name": "默认",
     "model": "models/def_model",

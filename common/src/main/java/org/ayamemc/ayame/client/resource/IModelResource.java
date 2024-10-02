@@ -24,16 +24,16 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
-import org.ayamemc.ayame.model.ModelMetaData;
-import org.ayamemc.ayame.util.FileUtil;
+import org.ayamemc.ayame.model.IndexData;
 import org.ayamemc.ayame.util.JsonInterpreter;
+import org.ayamemc.ayame.util.ZipFileManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -49,20 +49,11 @@ public interface IModelResource {
      * @throws IOException 读取文件时发生错误
      */
     static IModelResource fromFile(Path file) throws IOException {
-        return new AyameModelResource(readZip(file));
+        return new AyameModelResource(new ZipFileManager(file));
     }
 
     static IModelResource fromFile(File file) throws IOException {
         return fromFile(file.toPath());
-    }
-
-    private static Map<String, InputStream> readZip(Path file) {
-        return FileUtil.readZipFile(file);
-    }
-
-    static DefaultAyameModelType createModelFromResource(IModelResource res) {
-        res.createModel();
-        return new DefaultAyameModelType(res.getGeoModelLocation(), res.getAnimationLocation(), res.getTextureLocation(), res.getMetaData());
     }
 
     /**
@@ -70,7 +61,7 @@ public interface IModelResource {
      *
      * @return 模型元数据
      */
-    ModelMetaData getMetaData();
+    IndexData.ModelMetaData getMetaData();
 
     /**
      * 获取模型类型
@@ -80,58 +71,15 @@ public interface IModelResource {
     String getType();
 
     /**
-     * 创建模型资源
+     * 获取默认模型
+     * @return 默认模型
      */
-    void createModel();
+    AyameModelResource.ModelDataResource getDefault();
 
     /**
-     * 获取模型JSON解析器
-     *
-     * @return 模型JSON解析器
+     * 获取预设模型
+     * @return 预设模型
      */
-    JsonInterpreter getModelJson();
+    List<AyameModelResource.ModelDataResource> getPresets();
 
-    /**
-     * 获取动画JSON解析器
-     *
-     * @return 动画JSON解析器
-     */
-    JsonInterpreter getAnimationJson();
-
-    /**
-     * 获取元数据JSON解析器
-     *
-     * @return 元数据JSON解析器
-     */
-    JsonInterpreter getMetaDataJson();
-
-    /**
-     * 获取纹理内容输入流
-     *
-     * @return 纹理内容输入流
-     */
-    InputStream getTextureContent();
-
-    /**
-     * 获取几何模型资源位置
-     *
-     * @return 几何模型资源位置
-     */
-    @Nullable
-    ResourceLocation getGeoModelLocation();
-
-    /**
-     * 获取动画资源位置
-     *
-     * @return 动画资源位置
-     */
-    @Nullable
-    ResourceLocation getAnimationLocation();
-
-    /**
-     * 获取纹理资源位置
-     *
-     * @return 纹理资源位置
-     */
-    ResourceLocation getTextureLocation();
 }

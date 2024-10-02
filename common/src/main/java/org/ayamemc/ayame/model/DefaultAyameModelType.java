@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.model;
 
 
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -33,11 +34,41 @@ import net.minecraft.resources.ResourceLocation;
  */
 
 public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,
-                                    ModelMetaData metaData) implements AyameModelType {
+                                    IndexData.ModelMetaData metaData) implements AyameModelType {
 
     public static AyameModelType of(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture, ResourceLocation metaData) {
-        return new DefaultAyameModelType(geoModel, animation, texture, ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
+        return new DefaultAyameModelType(geoModel, animation, texture, IndexData.ModelMetaData.Builder.create().parseJsonFromResource(metaData).build());
     }
+
+    public static class Builder {
+        private ResourceLocation geoModel;
+        private ResourceLocation animation;
+        private ResourceLocation texture;
+        private IndexData.ModelMetaData metaData;
+        public Builder setGeoModel(ResourceLocation geoModel) {
+            this.geoModel = geoModel;
+            return this;
+        }
+        public Builder setAnimation(ResourceLocation animation) {
+            this.animation = animation;
+            return this;
+        }
+        public Builder setTexture(ResourceLocation texture) {
+            this.texture = texture;
+            return this;
+        }
+        public Builder setMetaData(IndexData.ModelMetaData metaData) {
+            this.metaData = metaData;
+            return this;
+        }
+        public DefaultAyameModelType build() {
+            return new DefaultAyameModelType(geoModel, animation, texture, metaData);
+        }
+        public static Builder create() {
+            return new Builder();
+        }
+    }
+
 
     @Override
     public ResourceLocation getGeoModel() {
@@ -55,7 +86,7 @@ public record DefaultAyameModelType(ResourceLocation geoModel, ResourceLocation 
     }
 
     @Override
-    public ModelMetaData metaData() {
+    public IndexData.ModelMetaData metaData() {
         return metaData;
     }
 }
