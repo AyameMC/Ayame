@@ -43,8 +43,8 @@ public abstract class AbstractModelMenuScreen extends Screen {
     private static final int BACKGROUND_TEXTURE_WIDTH = 410;
     private static final int BACKGROUND_TEXTURE_HEIGHT = 220;
     private static final int BUTTON_SIZE = 32;
-    private static final int LEFT_MARGIN = 10;
-    private static final int BOTTOM_MARGIN = 10;
+    private static final int LEFT_MARGIN = 0;
+    private static final int BOTTOM_MARGIN = 0;
 
     protected final Screen lastScreen;
 
@@ -89,8 +89,8 @@ public abstract class AbstractModelMenuScreen extends Screen {
 
         WidgetSprites settingSprites = new WidgetSprites(
                 withAyameNamespace("settings"),
-                withAyameNamespace("settings"),
-                withAyameNamespace("settings")
+                withAyameNamespace("settings_disabled"), // 似乎不会被使用
+                withAyameNamespace("settings_enabled_focused")
         );
         ImageButton imageButton = new ImageButton(
                 getLeftAlignedX(BACKGROUND_TEXTURE_WIDTH, LEFT_MARGIN),
