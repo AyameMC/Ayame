@@ -72,7 +72,7 @@ public class StatementScreen extends WarningScreen {
      */
     @Override
     protected @NotNull Layout addFooterButtons() {
-        this.stopShowing.selected = true; // 默认勾选“不再显示此屏幕”
+        this.setSelected(true); // 默认勾选“不再显示此屏幕”
         LinearLayout linearLayout = LinearLayout.horizontal().spacing(8);
         linearLayout.addChild(Button.builder(CommonComponents.GUI_PROCEED, button -> {
             if (this.stopShowing.selected()) {
@@ -85,6 +85,10 @@ public class StatementScreen extends WarningScreen {
         }).build());
         linearLayout.addChild(Button.builder(CommonComponents.GUI_BACK, button -> this.onClose()).build());
         return linearLayout;
+    }
+
+    private void setSelected(boolean isSelected) {
+        this.stopShowing.selected = isSelected;
     }
 
 

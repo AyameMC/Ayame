@@ -177,42 +177,42 @@ public class JsonInterpreter {
                 return;
             }
             // 如果是List<JsonInterpreter>，则转换为JsonElement对象
-            if (list.get(0) instanceof JsonInterpreter) {
+            if (list.getFirst() instanceof JsonInterpreter) {
                 for (Object o : list) {
                     jsonArray.add(((JsonInterpreter) o).jsonObject);
                 }
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof JsonElement) {
+            if (list.getFirst() instanceof JsonElement) {
                 for (Object o : list) {
                     jsonArray.add((JsonElement) o);
                 }
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof String) {
+            if (list.getFirst() instanceof String) {
                 for (Object o : list) {
                     jsonArray.add((String) o);
                 }
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof Number) {
+            if (list.getFirst() instanceof Number) {
                 for (Object o : list) {
                     jsonArray.add((Number) o);
                 }
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof Boolean) {
+            if (list.getFirst() instanceof Boolean) {
                 for (Object o : list) {
                     jsonArray.add((Boolean) o);
                 }
                 jsonObject.add(path, jsonArray);
                 return;
             }
-            if (list.get(0) instanceof Character) {
+            if (list.getFirst() instanceof Character) {
                 for (Object o : list) {
                     jsonArray.add((Character) o);
                 }
@@ -463,8 +463,7 @@ public class JsonInterpreter {
      * @return 是否相等
      */
     public boolean equalsCaseIgnoreCase(Object obj) {
-        if (obj instanceof JsonInterpreter) {
-            JsonInterpreter other = (JsonInterpreter) obj;
+        if (obj instanceof JsonInterpreter other) {
             return this.jsonObject.equals(other.jsonObject);
         }
         return obj.toString().equalsIgnoreCase(this.jsonObject.toString());
@@ -477,8 +476,7 @@ public class JsonInterpreter {
      * @return 是否相等
      */
     public boolean equals(Object obj) {
-        if (obj instanceof JsonInterpreter) {
-            JsonInterpreter other = (JsonInterpreter) obj;
+        if (obj instanceof JsonInterpreter other) {
             return this.jsonObject.equals(other.jsonObject);
         }
         return obj.toString().equals(this.jsonObject.toString());
@@ -491,9 +489,8 @@ public class JsonInterpreter {
      */
     public List<JsonInterpreter> toJsonList() {
         if (jsonObject.isJsonArray()) {
-            return jsonObject.getAsJsonArray().asList().stream().map(e -> {
-                return new JsonInterpreter(e.getAsJsonObject());
-            }).collect(Collectors.toList());
+            return jsonObject.getAsJsonArray().asList().stream().map(e ->
+                    new JsonInterpreter(e.getAsJsonObject())).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }

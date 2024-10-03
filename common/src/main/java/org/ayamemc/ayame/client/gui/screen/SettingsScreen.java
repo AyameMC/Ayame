@@ -23,24 +23,23 @@ package org.ayamemc.ayame.client.gui.screen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SettingsScreen extends AbstractModelMenuScreen{
     public SettingsScreen(@Nullable Screen lastScreen) {
         super(lastScreen);
     }
+
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        super.render(guiGraphics, mouseX, mouseY, delta);
+    protected ResourceLocation renderTopLayerResourceLocation() {
+        return MENU_TOP_LAYER_TEXTURE;
+    }
 
-        // 获取要渲染的文本
-        Component text = Component.translatable("ayame.screen.warningscreen.settingsscreen.title");
-
-        // 计算居中显示的 X 坐标
-        int centerX = getCenteredStringX(text);
-
-        // 渲染文本
-        guiGraphics.drawString(this.font, text, centerX, font.lineHeight, 0xFFFFFFFF, true);
+    @Override
+    protected String setTranslatableTitle() {
+        return "ayame.screen.warningscreen.settingsscreen.title";
     }
 
     @Override

@@ -42,8 +42,8 @@ public abstract class AbstractModelMenuScreen extends Screen {
     private static final int BUTTON_SIZE = 32;
     private static final int LEFT_MARGIN = 0;
     private static final int BOTTOM_MARGIN = 0;
-    public static ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
-    public static ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
+    public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
+    public static final ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
     protected final Screen lastScreen;
 
     public AbstractModelMenuScreen(@Nullable Screen lastScreen) {
@@ -82,7 +82,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
-        guiGraphics.blit(MENU_TOP_LAYER_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        guiGraphics.blit(renderTopLayer(), getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         RenderSystem.disableBlend();
 
         WidgetSprites settingSprites = new WidgetSprites(
@@ -97,9 +97,8 @@ public abstract class AbstractModelMenuScreen extends Screen {
                 BUTTON_SIZE,
                 settingSprites,
                 button -> {
-                    if(!(this instanceof SettingsScreen)) {
+                    if (!(this instanceof SettingsScreen)) {
                         minecraft.setScreen(new SettingsScreen(this));
-
                     }
                 },
                 Component.empty()
@@ -109,8 +108,32 @@ public abstract class AbstractModelMenuScreen extends Screen {
         } else {
             addRenderableWidget(settingsButton);
         }
+
+        Component text = Component.translatable(setTranslatableTitle());
+
+        // 计算居中显示的 X 坐标
+        int centerX = getCenteredStringX(text);
+
+        // 渲染文本
+        guiGraphics.drawString(this.font, text, centerX, font.lineHeight, 0xFFFFFFFF, true);
     }
 
+    private ResourceLocation renderTopLayer() {
+        if(renderTopLayerResourceLocation() != null){
+            return renderTopLayerResourceLocation();
+        }else {
+            Ayame.LOGGER.error("renderTopLayer cannot be null and has fallback to the default topLayer");
+            return MENU_TOP_LAYER_TEXTURE;
+        }
+    }
+
+    /**
+     * 实现一个自定义的指定图层
+     * @return 你要传入的图片路径
+     */
+    protected abstract ResourceLocation renderTopLayerResourceLocation();
+
+    protected abstract String setTranslatableTitle();
     /**
      * 获取指定宽度在屏幕中心的X坐标
      */
