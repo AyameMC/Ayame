@@ -20,10 +20,13 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
@@ -125,6 +128,22 @@ public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
         super.init(); // 调用父类的初始化方法，加载通用的背景和组件
     }
 
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.render(guiGraphics, mouseX, mouseY, delta);
+
+        // 获取要渲染的文本
+        Component text = Component.translatable("ayame.screen.warningscreen.modelselectscreen.title");
+
+        // 计算居中显示的 X 坐标
+        int centerX = getCenteredStringX(text);
+
+        // 渲染文本
+        guiGraphics.drawString(this.font, text, centerX, font.lineHeight, 0xFFFFFFFF, true);
+    }
+
+
+
 
     //        int count = 0;
     //        for (IModelResource res : modelResources){
@@ -151,7 +170,7 @@ public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
      */
     @Override
     public void onClose() {
-        minecraft.setScreen(lastScreen);
+        super.onClose();
         if (closeCallback != null) {
             closeCallback.close(modelResources, selectedModel);
         }
