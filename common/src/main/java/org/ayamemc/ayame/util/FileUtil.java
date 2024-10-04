@@ -25,12 +25,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
@@ -75,8 +72,6 @@ public class FileUtil {
             LOGGER.error(e.getMessage());
         }
     }
-
-
 
 
     /**

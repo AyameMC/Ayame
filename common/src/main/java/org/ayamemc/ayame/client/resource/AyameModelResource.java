@@ -56,6 +56,7 @@ public class AyameModelResource implements IModelResource {
     private IndexData createIndexData() throws IOException {
         return IndexData.Builder.create().parseJson(JsonInterpreter.of(content.readFileContent("index.json"))).build();
     }
+
     public IndexData.ModelMetaData getMetaData() {
         return index.metaData();
     }
@@ -76,7 +77,7 @@ public class AyameModelResource implements IModelResource {
 
     public List<ModelDataResource> getPresets() {
         List<ModelDataResource> res = new ArrayList<>();
-        for (IndexData.ModelData data : index.presets()){
+        for (IndexData.ModelData data : index.presets()) {
             try {
                 res.add(ModelDataResource.Builder.create().getPresetFromZip(data.name(), content).build());
             } catch (IOException e) {
@@ -89,15 +90,18 @@ public class AyameModelResource implements IModelResource {
 
     /**
      * 模型数据资源，对应{@link IndexData.ModelData}
-     * @param mainName 主模型名称
-     * @param name 当前模型名称
+     *
+     * @param mainName  主模型名称
+     * @param name      当前模型名称
      * @param model
      * @param texture
      * @param animation
      */
-    public record ModelDataResource(String mainName,String name,JsonInterpreter model, DynamicTexture texture, JsonInterpreter animation){
+    public record ModelDataResource(String mainName, String name, JsonInterpreter model, DynamicTexture texture,
+                                    JsonInterpreter animation) {
         /**
          * 使用这个metadata 创建一个{@link DefaultAyameModelType}
+         *
          * @param metaData
          * @return
          */
@@ -106,13 +110,15 @@ public class AyameModelResource implements IModelResource {
         }
 
         public ResourceLocation createModelResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/"+cv(mainName)+"/"+cv(name)+".json");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
         }
+
         public ResourceLocation createTextureResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/"+cv(mainName)+"/"+cv(name)+".png");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/" + cv(mainName) + "/" + cv(name) + ".png");
         }
+
         public ResourceLocation createAnimationResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/"+cv(mainName)+"/"+cv(name)+".json");
+            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
         }
 
         public static class Builder {
@@ -122,11 +128,15 @@ public class AyameModelResource implements IModelResource {
             private String mainName;
             private String name;
 
-            public Builder getPresetFromZip(String presetName,ZipFileManager zip) throws IOException {
+            public static Builder create() {
+                return new Builder();
+            }
+
+            public Builder getPresetFromZip(String presetName, ZipFileManager zip) throws IOException {
                 IndexData index = IndexData.Builder.create().parseJson(JsonInterpreter.of(zip.readFileContent("index.json"))).build();
                 AtomicReference<IndexData.ModelData> data = new AtomicReference<>();
                 Arrays.asList(index.presets()).forEach(d -> {
-                    if (d.name().equals(presetName)){
+                    if (d.name().equals(presetName)) {
                         data.set(d);
                     }
                 });
@@ -175,11 +185,7 @@ public class AyameModelResource implements IModelResource {
             }
 
             public ModelDataResource build() {
-                return new ModelDataResource(mainName,name,model, texture, animation);
-            }
-
-            public static Builder create() {
-                return new Builder();
+                return new ModelDataResource(mainName, name, model, texture, animation);
             }
         }
     }

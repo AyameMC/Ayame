@@ -20,14 +20,11 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SettingsScreen extends AbstractModelMenuScreen{
+public class SettingsScreen extends AbstractModelMenuScreen {
     public SettingsScreen(@Nullable Screen lastScreen) {
         super(lastScreen);
     }

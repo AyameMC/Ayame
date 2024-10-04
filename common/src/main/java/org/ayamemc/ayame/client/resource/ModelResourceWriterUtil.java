@@ -22,14 +22,11 @@
 package org.ayamemc.ayame.client.resource;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.platform.NativeImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
@@ -40,10 +37,8 @@ import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
-import java.io.IOException;
 import java.util.Map;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 /**
@@ -54,7 +49,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class ModelResourceWriterUtil {
     /**
-     * @param modelRes  模型资源
+     * @param modelRes 模型资源
      * @return 未完成的模型构建器
      */
     public static DefaultAyameModelType.Builder addModelResource(@NotNull AyameModelResource.ModelDataResource modelRes) {

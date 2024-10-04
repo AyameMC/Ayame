@@ -37,13 +37,13 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractModelMenuScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
+    public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
+    public static final ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
     private static final int BACKGROUND_TEXTURE_WIDTH = 410;
     private static final int BACKGROUND_TEXTURE_HEIGHT = 220;
     private static final int BUTTON_SIZE = 32;
     private static final int LEFT_MARGIN = 0;
     private static final int BOTTOM_MARGIN = 0;
-    public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
-    public static final ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
     protected final Screen lastScreen;
 
     public AbstractModelMenuScreen(@Nullable Screen lastScreen) {
@@ -119,9 +119,9 @@ public abstract class AbstractModelMenuScreen extends Screen {
     }
 
     private ResourceLocation renderTopLayer() {
-        if(renderTopLayerResourceLocation() != null){
+        if (renderTopLayerResourceLocation() != null) {
             return renderTopLayerResourceLocation();
-        }else {
+        } else {
             Ayame.LOGGER.error("renderTopLayer cannot be null and has fallback to the default topLayer");
             return MENU_TOP_LAYER_TEXTURE;
         }
@@ -129,11 +129,13 @@ public abstract class AbstractModelMenuScreen extends Screen {
 
     /**
      * 实现一个自定义的指定图层
+     *
      * @return 你要传入的图片路径
      */
     protected abstract ResourceLocation renderTopLayerResourceLocation();
 
     protected abstract String setTranslatableTitle();
+
     /**
      * 获取指定宽度在屏幕中心的X坐标
      */

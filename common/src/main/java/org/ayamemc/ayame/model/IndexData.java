@@ -32,14 +32,20 @@ import java.util.List;
 
 /**
  * 模型index.json的处理
+ *
  * @param defaultModel 默认模型
- * @param presets 预设
+ * @param presets      预设
  */
-public record IndexData(ModelMetaData metaData,ModelData defaultModel, ModelData[] presets) {
+public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelData[] presets) {
     public static class Builder {
         private ModelMetaData metadata = null;
         private ModelData defaultModel = null;
         private ModelData[] presets = new ModelData[0];
+
+        public static Builder create() {
+            return new Builder();
+        }
+
         public Builder parseJson(JsonInterpreter json) {
             this.metaData(ModelMetaData.Builder.create().parseJson(json.getJsonInterpreter("metadata")).build());
             this.defaultModel(ModelData.Builder.create().parseJson(json.getJsonInterpreter("default")).build());
@@ -48,36 +54,43 @@ public record IndexData(ModelMetaData metaData,ModelData defaultModel, ModelData
             this.presets(ps.toArray(new ModelData[0]));
             return this;
         }
+
         public Builder metaData(ModelMetaData metaData) {
             this.metadata = metaData;
             return this;
         }
+
         public Builder defaultModel(ModelData defaultModel) {
             this.defaultModel = defaultModel;
             return this;
         }
+
         public Builder presets(ModelData... presets) {
             this.presets = Arrays.copyOf(presets, presets.length);
             return this;
         }
+
         public IndexData build() {
-            return new IndexData(metadata,defaultModel, presets);
-        }
-        public static Builder create() {
-            return new Builder();
+            return new IndexData(metadata, defaultModel, presets);
         }
     }
 
     /**
      * 单个模型数据
-     * @param name 模型名称
-     * @param model 模型的json路径
-     * @param animation 动画
-     * @param texture 材质
-     * @param arm 手臂文件
+     *
+     * @param name        模型名称
+     * @param model       模型的json路径
+     * @param animation   动画
+     * @param texture     材质
+     * @param arm         手臂文件
      * @param controllers 控制器
      */
-    public record ModelData(String name, String model, String animation, String texture, String arm, String[] controllers) {
+    public record ModelData(String name, String model, String animation, String texture, String arm,
+                            String[] controllers) {
+
+        public ModelData build() {
+            return new ModelData(name, model, animation, texture, arm, controllers);
+        }
 
         public static class Builder {
             private String name = "Unknown";
@@ -86,6 +99,10 @@ public record IndexData(ModelMetaData metaData,ModelData defaultModel, ModelData
             private String texture = "Unknown";
             private String arm = "Unknown";
             private String[] controllers = new String[0];
+
+            public static Builder create() {
+                return new Builder();
+            }
 
             public Builder parseJson(JsonInterpreter json) {
                 this.name(json.getString("name"));
@@ -130,14 +147,6 @@ public record IndexData(ModelMetaData metaData,ModelData defaultModel, ModelData
             public ModelData build() {
                 return new ModelData(name, model, animation, texture, arm, controllers);
             }
-
-            public static Builder create() {
-                return new Builder();
-            }
-        }
-
-        public ModelData build() {
-            return new ModelData(name, model, animation, texture, arm, controllers);
         }
     }
 
@@ -151,8 +160,8 @@ public record IndexData(ModelMetaData metaData,ModelData defaultModel, ModelData
      * @param links       链接
      */
     public record ModelMetaData(@NotNull String[] authors, @NotNull String name, @Nullable String description,
-                                       @Nullable String license, @Nullable String[] links, @Nullable String[] tags,
-                                       @NotNull String type, @NotNull String version, @Nullable String[] animations) {
+                                @Nullable String license, @Nullable String[] links, @Nullable String[] tags,
+                                @NotNull String type, @NotNull String version, @Nullable String[] animations) {
 
 
         public JsonInterpreter conversion() {

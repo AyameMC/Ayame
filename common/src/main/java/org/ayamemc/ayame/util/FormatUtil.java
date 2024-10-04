@@ -43,10 +43,11 @@ public class FormatUtil {
 
     /**
      * 封装了{@link #convertToValidFormat(String)}方法。
+     *
      * @param input
      * @return
      */
-    public static String cv(String input){
+    public static String cv(String input) {
         return convertToValidFormat(input);
     }
 }

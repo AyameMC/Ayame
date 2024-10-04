@@ -22,16 +22,11 @@ package org.ayamemc.ayame.client.resource;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.IndexData;
-import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.ZipFileManager;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -72,12 +67,14 @@ public interface IModelResource {
 
     /**
      * 获取默认模型
+     *
      * @return 默认模型
      */
     AyameModelResource.ModelDataResource getDefault();
 
     /**
      * 获取预设模型
+     *
      * @return 预设模型
      */
     List<AyameModelResource.ModelDataResource> getPresets();

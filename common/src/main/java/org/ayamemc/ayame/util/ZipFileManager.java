@@ -21,13 +21,14 @@
 package org.ayamemc.ayame.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipEntry;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.zip.ZipFile;
+
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class ZipFileManager {
