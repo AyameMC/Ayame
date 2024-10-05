@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
-import static org.ayamemc.ayame.Ayame.MOD_ID;
 import static org.ayamemc.ayame.util.FormatUtil.cv;
+import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 public class AyameModelResource implements IModelResource {
     private final ZipFileManager content;
@@ -110,15 +110,15 @@ public class AyameModelResource implements IModelResource {
         }
 
         public ResourceLocation createModelResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
+            return withAyameNamespace("geo/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
         }
 
         public ResourceLocation createTextureResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/" + cv(mainName) + "/" + cv(name) + ".png");
+            return withAyameNamespace("textures/ayame/" + cv(mainName) + "/" + cv(name) + ".png");
         }
 
         public ResourceLocation createAnimationResourceLocation() {
-            return ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
+            return withAyameNamespace("animations/ayame/" + cv(mainName) + "/" + cv(name) + ".json");
         }
 
         public static class Builder {

@@ -39,7 +39,8 @@ public class AyameNeoForgeClient {
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
         ModLoadingContext.get().registerExtensionPoint(
                 IConfigScreenFactory.class,
-                () -> (modContainer, parentScreen) -> new SettingsScreen(parentScreen));
+                () -> (modContainer, lastScreen) -> new SettingsScreen(lastScreen)
+        );
     }
 
 

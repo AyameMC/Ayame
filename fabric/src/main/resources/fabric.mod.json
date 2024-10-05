@@ -41,7 +41,9 @@
     "client": [
       "org.ayamemc.ayame.fabric.client.AyameFabricClient"
     ],
-    "modmenu": [ "org.ayamemc.ayame.fabric.AyameFabric" ]
+    "modmenu": [
+      "org.ayamemc.ayame.fabric.client.AyameModMenuApiImpl"
+    ]
   },
   "mixins": [
     "ayame.mixins.json",

@@ -18,22 +18,15 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric;
+package org.ayamemc.ayame.fabric.client;
 
-import net.fabricmc.api.ModInitializer;
-import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
 
-/**
- * Fabric初始化使用的类，包括客户端与服务端
- *
- * @see ModInitializer
- */
-public final class AyameFabric implements ModInitializer {
+public class AyameModMenuApiImpl implements ModMenuApi {
     @Override
-    public void onInitialize() {
-        Ayame.init();
-        IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return SettingsScreen::new;
     }
 }

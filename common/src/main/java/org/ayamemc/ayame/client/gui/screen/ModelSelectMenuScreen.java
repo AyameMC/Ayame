@@ -30,6 +30,7 @@ import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * {@code ModelSelectMenuScreen} 负责处理 Ayame 模型的选择界面。
  * <p>
- * 该类继承自 {@link AbstractModelMenuScreen}，主要功能是：
+ * 该类继承自 {@link AyameMainScreen}，主要功能是：
  * <ul>
  *     <li>显示可供选择的模型列表</li>
  *     <li>处理模型选择的逻辑</li>
@@ -49,10 +50,10 @@ import java.util.List;
  * 在模型切换时，可通过 {@link SwitchModelCallback} 进行切换时的自定义处理。
  * </p>
  *
- * @see AbstractModelMenuScreen
+ * @see AyameMainScreen
  */
 @Environment(EnvType.CLIENT)
-public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
+public class ModelSelectMenuScreen extends AyameMainScreen {
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
     public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
@@ -128,12 +129,12 @@ public class ModelSelectMenuScreen extends AbstractModelMenuScreen {
 
 
     @Override
-    protected ResourceLocation renderTopLayerResourceLocation() {
+    protected @NotNull ResourceLocation renderTopLayerResourceLocation() {
         return MENU_TOP_LAYER_TEXTURE;
     }
 
     @Override
-    protected String setTranslatableTitle() {
+    protected @NotNull String setTranslatableTitle() {
         return "ayame.screen.warningscreen.modelselectscreen.title";
     }
 

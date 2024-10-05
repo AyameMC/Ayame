@@ -27,12 +27,11 @@ import dev.kingtux.tms.api.modifiers.KeyModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-import static org.ayamemc.ayame.Ayame.MOD_ID;
+import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 
 /**
@@ -63,7 +62,7 @@ public class AyameTMSKeyMappings {
             bindingModifiers.set(KeyModifier.CONTROL, true);
         }
         if (bindingModifiers != null) {
-            return new TMSKeyBinding(ResourceLocation.fromNamespaceAndPath(MOD_ID, name), type, keyCode, category, bindingModifiers);
+            return new TMSKeyBinding(withAyameNamespace(name), type, keyCode, category, bindingModifiers);
         } else {
             throw new RuntimeException("Modifier only can be alt, shift or ctrl");
         }

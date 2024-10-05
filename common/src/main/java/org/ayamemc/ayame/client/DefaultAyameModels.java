@@ -22,7 +22,6 @@ package org.ayamemc.ayame.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.resource.AyameModelResource;
 import org.ayamemc.ayame.client.resource.IModelResource;
 import org.ayamemc.ayame.model.AyameModelType;
@@ -34,7 +33,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.ayamemc.ayame.Ayame.MOD_ID;
+import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
+
 
 /**
  * Ayame的默认演示模型
@@ -47,10 +47,10 @@ public class DefaultAyameModels {
      * 此模型写死在代码里面，作为默认模型，仅可通过资源包修改
      */
     public static final AyameModelType DEFAULT_MODEL = DefaultAyameModelType.of(
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "geo/ayame/default.json"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "animations/ayame/default.json"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/ayame/default.png"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "metadata/ayame/default.json")
+            withAyameNamespace("geo/ayame/default.json"),
+            withAyameNamespace("animations/ayame/default.json"),
+            withAyameNamespace("textures/ayame/default.png"),
+            withAyameNamespace("metadata/ayame/default.json")
     );
 
     public static IModelResource GRMMY_NEKO_MODEL_RESOURCE;

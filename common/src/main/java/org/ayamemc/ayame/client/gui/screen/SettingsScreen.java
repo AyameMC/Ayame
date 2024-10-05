@@ -22,25 +22,31 @@ package org.ayamemc.ayame.client.gui.screen;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SettingsScreen extends AbstractModelMenuScreen {
+public class SettingsScreen extends AyameMainScreen {
     public SettingsScreen(@Nullable Screen lastScreen) {
         super(lastScreen);
     }
 
+
     @Override
-    protected ResourceLocation renderTopLayerResourceLocation() {
+    protected @NotNull ResourceLocation renderTopLayerResourceLocation() {
         return MENU_TOP_LAYER_TEXTURE;
     }
 
     @Override
-    protected String setTranslatableTitle() {
+    protected @NotNull String setTranslatableTitle() {
         return "ayame.screen.warningscreen.settingsscreen.title";
     }
 
     @Override
     public void onClose() {
-        minecraft.setScreen(null);
+        if (minecraft.level == null) { // 玩家不是在世界内打开的话那肯定就是通过模组菜单打开的
+            minecraft.setScreen(lastScreen);
+        } else {
+            minecraft.setScreen(null);
+        }
     }
 }

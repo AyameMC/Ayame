@@ -18,22 +18,14 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric;
+package org.ayamemc.ayame.util;
 
-import net.fabricmc.api.ModInitializer;
-import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
+import net.minecraft.resources.ResourceLocation;
 
-/**
- * Fabric初始化使用的类，包括客户端与服务端
- *
- * @see ModInitializer
- */
-public final class AyameFabric implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        Ayame.init();
-        IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+import static org.ayamemc.ayame.Ayame.MOD_ID;
+
+public class ResourceLocationHelper {
+    public static ResourceLocation withAyameNamespace(String location) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
     }
 }

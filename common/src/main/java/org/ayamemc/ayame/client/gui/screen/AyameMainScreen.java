@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -34,12 +35,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.gui.widget.BlurWidget;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
+import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
+
 @Environment(EnvType.CLIENT)
-public abstract class AbstractModelMenuScreen extends Screen {
+public abstract class AyameMainScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
     public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
@@ -51,13 +55,9 @@ public abstract class AbstractModelMenuScreen extends Screen {
 
     protected final Screen lastScreen;
 
-    public AbstractModelMenuScreen(@Nullable Screen lastScreen) {
+    public AyameMainScreen(@Nullable Screen lastScreen) {
         super(Component.empty());
         this.lastScreen = lastScreen;
-    }
-
-    private static ResourceLocation withAyameNamespace(String location) {
-        return ResourceLocation.fromNamespaceAndPath(Ayame.MOD_ID, location);
     }
 
     /**
@@ -67,14 +67,18 @@ public abstract class AbstractModelMenuScreen extends Screen {
     protected void init() {
         BlurWidget blurredBackgroundWidget = new BlurWidget(getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         this.addRenderableOnly(blurredBackgroundWidget);
+        final int searchBarWidth = 208;
+        final int searchBarHeight = 20;
         EditBox searchBarEditBox = new EditBox(
                 this.font,
-                getComponentCenterX(208),
-                getComponentCenterY(20) - 90,
-                208,
-                20,
+                getComponentCenterX(searchBarWidth),
+                getComponentTopY(searchBarHeight),
+                searchBarWidth,
+                searchBarHeight,
                 Component.translatable("ayame.widget.searchBarEditBox")
         );
+        searchBarEditBox.setHint(Component.translatable("ayame.widget.searchBarEditBox").withStyle(ChatFormatting.DARK_GRAY));
+        searchBarEditBox.setBordered(true);
         addRenderableWidget(searchBarEditBox);
 
     }
@@ -85,11 +89,21 @@ public abstract class AbstractModelMenuScreen extends Screen {
      */
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        if (minecraft.level == null) {
+            //this.renderPanorama(guiGraphics, partialTick);
+            super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
+        } else {
+            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
+        }
+    }
+
+    protected void renderBackgroundTexture(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.enableBlend();
         guiGraphics.blit(MENU_BACKGROUND_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         RenderSystem.disableBlend();
-
     }
+
 
     /**
      * 渲染屏幕内容，包括背景边框
@@ -99,7 +113,7 @@ public abstract class AbstractModelMenuScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         guiGraphics.blit(MENU_BACKGROUND_OUTLINE_TEXTURE, getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
-        guiGraphics.blit(renderTopLayer(), getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        guiGraphics.blit(renderTopLayerResourceLocation(), getCenterX(BACKGROUND_TEXTURE_WIDTH), getCenterY(BACKGROUND_TEXTURE_HEIGHT), 0, 0, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT, BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         RenderSystem.disableBlend();
 
         WidgetSprites settingSprites = new WidgetSprites(
@@ -146,32 +160,24 @@ public abstract class AbstractModelMenuScreen extends Screen {
 //            addRenderableWidget(settingsButton);
 //        }
 
-        Component text = Component.translatable(setTranslatableTitle());
+        Component titleText = Component.translatable(setTranslatableTitle());
 
         // 计算居中显示的 X 坐标
-        int centerX = getCenteredStringX(text);
+        int centerX = getCenteredStringX(titleText);
 
         // 渲染文本
-        guiGraphics.drawString(this.font, text, centerX, font.lineHeight, 0xFFFFFFFF, true);
+        guiGraphics.drawString(this.font, titleText, centerX, font.lineHeight, 0xFFFFFFFF, true);
     }
 
-    private ResourceLocation renderTopLayer() {
-        if (renderTopLayerResourceLocation() != null) {
-            return renderTopLayerResourceLocation();
-        } else {
-            Ayame.LOGGER.error("renderTopLayer cannot be null and has fallback to the default topLayer");
-            return MENU_TOP_LAYER_TEXTURE;
-        }
-    }
 
     /**
      * 实现一个自定义的指定图层
      *
      * @return 你要传入的图片路径
      */
-    protected abstract ResourceLocation renderTopLayerResourceLocation();
+    protected abstract @NotNull ResourceLocation renderTopLayerResourceLocation();
 
-    protected abstract String setTranslatableTitle();
+    protected abstract @NotNull String setTranslatableTitle();
 
     /**
      * 获取指定宽度在屏幕中心的X坐标
@@ -219,6 +225,34 @@ public abstract class AbstractModelMenuScreen extends Screen {
     protected int getComponentCenterY(int componentHeight) {
         return (this.height - componentHeight) / 2;
     }
+    /**
+     * 获取组件在屏幕顶部对齐的 Y 坐标
+     */
+    protected int getComponentTopY(int margin) {
+        return margin;
+    }
+
+    /**
+     * 获取组件在屏幕底部对齐的 Y 坐标
+     */
+    protected int getComponentBottomY(int componentHeight, int margin) {
+        return this.height - componentHeight - margin;
+    }
+
+    /**
+     * 获取组件在屏幕左边对齐的 X 坐标
+     */
+    protected int getComponentLeftX(int margin) {
+        return margin;
+    }
+
+    /**
+     * 获取组件在屏幕右边对齐的 X 坐标
+     */
+    protected int getComponentRightX(int componentWidth, int margin) {
+        return this.width - componentWidth - margin;
+    }
+
 
     @Override
     public void onClose() {
