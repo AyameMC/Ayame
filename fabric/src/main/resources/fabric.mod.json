@@ -40,7 +40,8 @@
     ],
     "client": [
       "org.ayamemc.ayame.fabric.client.AyameFabricClient"
-    ]
+    ],
+    "modmenu": [ "org.ayamemc.ayame.fabric.AyameFabric" ]
   },
   "mixins": [
     "ayame.mixins.json",

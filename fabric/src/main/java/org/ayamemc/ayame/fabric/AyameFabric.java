@@ -20,9 +20,13 @@
 
 package org.ayamemc.ayame.fabric;
 
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
 import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
 
 /**
@@ -30,10 +34,15 @@ import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
  *
  * @see ModInitializer
  */
-public final class AyameFabric implements ModInitializer {
+public final class AyameFabric implements ModInitializer, ModMenuApi {
     @Override
     public void onInitialize() {
         Ayame.init();
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
+    }
+
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return SettingsScreen::new;
     }
 }
