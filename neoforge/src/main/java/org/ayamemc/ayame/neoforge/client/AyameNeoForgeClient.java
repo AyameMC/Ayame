@@ -23,10 +23,13 @@ package org.ayamemc.ayame.neoforge.client;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
 
 @OnlyIn(Dist.CLIENT)
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
@@ -34,5 +37,10 @@ public class AyameNeoForgeClient {
     public AyameNeoForgeClient() {
         AyameClient.init();
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
+        ModLoadingContext.get().registerExtensionPoint(
+                IConfigScreenFactory.class,
+                () -> (modContainer, parentScreen) -> new SettingsScreen(parentScreen));
     }
+
+
 }
