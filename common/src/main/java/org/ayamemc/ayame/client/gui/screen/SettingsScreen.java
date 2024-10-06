@@ -40,13 +40,4 @@ public class SettingsScreen extends AyameMainScreen {
     protected @NotNull String setTranslatableTitle() {
         return "ayame.screen.warningscreen.settingsscreen.title";
     }
-
-    @Override
-    public void onClose() {
-        if (minecraft.level == null) { // 玩家不是在世界内打开的话那肯定就是通过模组菜单打开的
-            minecraft.setScreen(lastScreen);
-        } else {
-            minecraft.setScreen(null);
-        }
-    }
 }

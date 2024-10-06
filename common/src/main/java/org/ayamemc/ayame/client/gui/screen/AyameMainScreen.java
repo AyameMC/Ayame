@@ -14,7 +14,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.gui.Alignment;
 import org.ayamemc.ayame.client.gui.widget.BlurWidget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,13 +27,12 @@ public abstract class AyameMainScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
     public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
-    public static final ResourceLocation SETTINGS_TEXTURE = withAyameNamespace("textures/gui/settings.png");
-    private static final Path MODEL_DIR = Path.of("config/ayame/models/");
-    private static final int BACKGROUND_TEXTURE_WIDTH = 410;
-    private static final int BACKGROUND_TEXTURE_HEIGHT = 220;
+    protected static final int BACKGROUND_TEXTURE_WIDTH = 410;
+    protected static final int BACKGROUND_TEXTURE_HEIGHT = 220;
     private static final int BUTTON_SIZE = 32;
+    protected static final int MINI_BUTTON_SIZE = 16;
 
-    protected final Screen lastScreen;
+    protected Screen lastScreen;
 
     public AyameMainScreen(@Nullable Screen lastScreen) {
         super(Component.empty());
@@ -45,20 +43,6 @@ public abstract class AyameMainScreen extends Screen {
     protected void init() {
         BlurWidget blurredBackgroundWidget = new BlurWidget(getCenteredX(BACKGROUND_TEXTURE_WIDTH), getCenteredY(BACKGROUND_TEXTURE_HEIGHT), BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
         this.addRenderableOnly(blurredBackgroundWidget);
-
-        final int searchBarWidth = 112;
-        final int searchBarHeight = 23;
-        EditBox searchBarEditBox = new EditBox(
-                this.font,
-                getAlignedX(BACKGROUND_TEXTURE_WIDTH, searchBarWidth, 0, Alignment.CENTER) + 27,
-                getAlignedY(BACKGROUND_TEXTURE_HEIGHT, searchBarHeight, 0, Alignment.TOP) + 1,
-                searchBarWidth,
-                searchBarHeight,
-                Component.translatable("ayame.widget.searchBarEditBox")
-        );
-        searchBarEditBox.setHint(Component.translatable("ayame.widget.searchBarEditBox").withStyle(ChatFormatting.DARK_GRAY));
-        searchBarEditBox.setBordered(true);
-        addRenderableWidget(searchBarEditBox);
     }
 
     @Override
@@ -90,11 +74,7 @@ public abstract class AyameMainScreen extends Screen {
                 withAyameNamespace("settings_disabled"),
                 withAyameNamespace("settings_enabled_focused")
         );
-        WidgetSprites opendirSprites = new WidgetSprites(
-                withAyameNamespace("opendir"),
-                withAyameNamespace("opendir"),
-                withAyameNamespace("opendir_enabled_focused")
-        );
+
         ImageButton settingsButton = new ImageButton(
                 getAlignedX(BACKGROUND_TEXTURE_WIDTH, BUTTON_SIZE, 0, Alignment.LEFT),
                 getAlignedY(BACKGROUND_TEXTURE_HEIGHT, BUTTON_SIZE, 0, Alignment.BOTTOM),
@@ -102,27 +82,13 @@ public abstract class AyameMainScreen extends Screen {
                 BUTTON_SIZE,
                 settingSprites,
                 button -> {
-                    Ayame.LOGGER.info("Setting button clicked.");
                     minecraft.setScreen(new SettingsScreen(this));
                 },
-                Component.empty()
+                Component.translatable("ayame.screen.warningscreen.settingsscreen.title")
         );
-        ImageButton opendirButton = new ImageButton(
-                getAlignedX(BACKGROUND_TEXTURE_WIDTH, BUTTON_SIZE, 0, Alignment.LEFT),
-                getAlignedY(BACKGROUND_TEXTURE_HEIGHT, BUTTON_SIZE, 90, Alignment.BOTTOM),
-                BUTTON_SIZE,
-                BUTTON_SIZE,
-                opendirSprites,
-                button -> {
-                    Ayame.LOGGER.info("Opendir button clicked.");
-                    Util.getPlatform().openPath(MODEL_DIR);
-                },
-                Component.empty()
-        );
-        opendirButton.setTooltip(Tooltip.create(Component.translatable("ayame.button.opendir.tooltip")));
+
 
         addRenderableWidget(settingsButton);
-        addRenderableWidget(opendirButton);
 
         Component titleText = Component.translatable(setTranslatableTitle());
         int centerX = getCenteredStringX(titleText);
@@ -143,15 +109,11 @@ public abstract class AyameMainScreen extends Screen {
 
     protected int getAlignedX(int containerWidth, int elementWidth, int margin, Alignment alignment) {
         int baseX = getCenteredX(containerWidth);
-        switch (alignment) {
-            case LEFT:
-                return baseX + margin;
-            case RIGHT:
-                return baseX + containerWidth - elementWidth - margin;
-            case CENTER:
-            default:
-                return baseX + (containerWidth - elementWidth) / 2;
-        }
+        return switch (alignment) {
+            case LEFT -> baseX + margin;
+            case RIGHT -> baseX + containerWidth - elementWidth - margin;
+            default -> baseX + (containerWidth - elementWidth) / 2;
+        };
     }
 
     protected int getCenteredStringX(Component text) {
@@ -162,19 +124,23 @@ public abstract class AyameMainScreen extends Screen {
 
     protected int getAlignedY(int containerHeight, int elementHeight, int margin, Alignment alignment) {
         int baseY = getCenteredY(containerHeight);
-        switch (alignment) {
-            case TOP:
-                return baseY + margin;
-            case BOTTOM:
-                return baseY + containerHeight - elementHeight - margin;
-            case CENTER:
-            default:
-                return baseY + (containerHeight - elementHeight) / 2;
-        }
+        return switch (alignment) {
+            case TOP -> baseY + margin;
+            case BOTTOM -> baseY + containerHeight - elementHeight - margin;
+            default -> baseY + (containerHeight - elementHeight) / 2;
+        };
     }
 
     @Override
     public void onClose() {
         minecraft.setScreen(lastScreen);
+    }
+
+    protected enum Alignment {
+        CENTER,
+        LEFT,
+        RIGHT,
+        TOP,
+        BOTTOM,
     }
 }

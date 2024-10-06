@@ -20,10 +20,19 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.resource.IModelResource;
@@ -33,7 +42,10 @@ import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
+
+import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 /**
  * {@code ModelSelectMenuScreen} 负责处理 Ayame 模型的选择界面。
@@ -54,6 +66,11 @@ import java.util.List;
  */
 @Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends AyameMainScreen {
+    protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
+
+    public final static int searchBarWidth = 112;
+    public final static int searchBarHeight = 23;
+
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
     public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
@@ -125,6 +142,41 @@ public class ModelSelectMenuScreen extends AyameMainScreen {
             return;
         }
         super.init(); // 调用父类的初始化方法，加载通用的背景和组件
+        EditBox searchBox = new EditBox(
+                this.font,
+                getAlignedX(BACKGROUND_TEXTURE_WIDTH, searchBarWidth, 0, Alignment.CENTER) + 27,
+                getAlignedY(BACKGROUND_TEXTURE_HEIGHT, searchBarHeight, 0, Alignment.TOP) + 1,
+                searchBarWidth,
+                searchBarHeight,
+                Component.translatable("ayame.widget.searchBox")
+        );
+        searchBox.setHint(Component.translatable("ayame.widget.searchBox").withStyle(ChatFormatting.DARK_GRAY));
+        searchBox.setBordered(true);
+        addRenderableWidget(searchBox);
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.render(guiGraphics, mouseX, mouseY, delta);
+
+        WidgetSprites opendirSprites = new WidgetSprites(
+                withAyameNamespace("opendir"),
+                withAyameNamespace("opendir"),
+                withAyameNamespace("opendir_enabled_focused")
+        );
+        ImageButton opendirButton = new ImageButton(
+                getAlignedX(BACKGROUND_TEXTURE_WIDTH, MINI_BUTTON_SIZE, 0, Alignment.RIGHT) - 125,
+                getAlignedY(BACKGROUND_TEXTURE_HEIGHT, MINI_BUTTON_SIZE, 0, Alignment.BOTTOM) - 3,
+                MINI_BUTTON_SIZE,
+                MINI_BUTTON_SIZE,
+                opendirSprites,
+                button -> {
+                    Util.getPlatform().openPath(MODEL_DIR);
+                },
+                Component.translatable("ayame.button.opendir.tooltip")
+        );
+        opendirButton.setTooltip(Tooltip.create(Component.translatable("ayame.button.opendir.tooltip")));
+        addRenderableWidget(opendirButton);
     }
 
 
