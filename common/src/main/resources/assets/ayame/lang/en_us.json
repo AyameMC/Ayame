@@ -8,5 +8,6 @@
   "ayame.screen.warningscreen.modelselectscreen.title": "Select Model",
   "ayame.screen.warningscreen.settingsscreen.title": "Ayame Settings",
   "ayame.button.opendir.tooltip": "Open Model Folder\n(Place model files here)",
+  "ayame.button.listmode.tooltip": "List Mode",
   "ayame.widget.searchBox": "Search..."
 }

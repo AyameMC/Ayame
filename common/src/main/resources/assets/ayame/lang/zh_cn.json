@@ -8,5 +8,6 @@
   "ayame.screen.warningscreen.modelselectscreen.title": "选择模型",
   "ayame.screen.warningscreen.settingsscreen.title": "Ayame 设置",
   "ayame.button.opendir.tooltip": "打开模型文件夹\n（请将模型文件放在这里）",
+  "ayame.button.listmode.tooltip": "列表模式",
   "ayame.widget.searchBox": "搜索..."
 }

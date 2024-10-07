@@ -26,10 +26,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -161,6 +158,11 @@ public class ModelSelectMenuScreen extends AyameMainScreen {
                 withAyameNamespace("opendir"),
                 withAyameNamespace("opendir_enabled_focused")
         );
+        WidgetSprites listmodeSprites = new WidgetSprites(
+                withAyameNamespace("listmode"),
+                withAyameNamespace("listmode"),
+                withAyameNamespace("listmode_enabled_focused")
+        );
         ImageButton opendirButton = new ImageButton(
                 getAlignedX(BACKGROUND_TEXTURE_WIDTH, MINI_BUTTON_SIZE, 0, Alignment.RIGHT) - 125,
                 getAlignedY(BACKGROUND_TEXTURE_HEIGHT, MINI_BUTTON_SIZE, 0, Alignment.BOTTOM) - 3,
@@ -172,8 +174,21 @@ public class ModelSelectMenuScreen extends AyameMainScreen {
                 },
                 Component.translatable("ayame.button.opendir.tooltip")
         );
+        ImageButton listmodeButton = new ImageButton(
+                getAlignedX(BACKGROUND_TEXTURE_WIDTH, MINI_BUTTON_SIZE, 0, Alignment.LEFT) + 35,
+                getAlignedY(BACKGROUND_TEXTURE_HEIGHT, MINI_BUTTON_SIZE, 0, Alignment.BOTTOM) - 3,
+                MINI_BUTTON_SIZE,
+                MINI_BUTTON_SIZE,
+                listmodeSprites,
+                button -> {
+                    //Util.getPlatform().openPath(MODEL_DIR);
+                },
+                Component.translatable("ayame.button.listmode.tooltip")
+        );
         opendirButton.setTooltip(Tooltip.create(Component.translatable("ayame.button.opendir.tooltip")));
+        listmodeButton.setTooltip(Tooltip.create(Component.translatable("ayame.button.listmode.tooltip")));
         addRenderableWidget(opendirButton);
+        addRenderableWidget(listmodeButton);
     }
 
 
