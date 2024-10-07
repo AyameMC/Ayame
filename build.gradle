@@ -74,6 +74,13 @@ subprojects {
             name = "Terraformers"
             url = "https://maven.terraformersmc.com/"
         }
+        maven {
+            name = 'Ayame Maven Repo'
+            url = 'https://maven.ayamemc.org/'
+            content {
+                includeGroup("org.ayamemc")
+            }
+        }
 
         // Modrinth Maven
         exclusiveContent {

@@ -3,22 +3,15 @@ package org.ayamemc.ayame.client.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.gui.widget.BlurWidget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Path;
 
 import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
@@ -29,9 +22,8 @@ public abstract class AyameMainScreen extends Screen {
     public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
     protected static final int BACKGROUND_TEXTURE_WIDTH = 410;
     protected static final int BACKGROUND_TEXTURE_HEIGHT = 220;
-    private static final int BUTTON_SIZE = 32;
     protected static final int MINI_BUTTON_SIZE = 16;
-
+    private static final int BUTTON_SIZE = 32;
     protected Screen lastScreen;
 
     public AyameMainScreen(@Nullable Screen lastScreen) {

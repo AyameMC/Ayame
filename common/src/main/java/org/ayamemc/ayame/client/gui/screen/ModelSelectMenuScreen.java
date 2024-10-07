@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -66,11 +65,9 @@ import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
  */
 @Environment(EnvType.CLIENT)
 public class ModelSelectMenuScreen extends AyameMainScreen {
-    protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
-
     public final static int searchBarWidth = 112;
     public final static int searchBarHeight = 23;
-
+    protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
     public final boolean skipWarningOnce;
     public final List<IModelResource> modelResources;
     public @Nullable AyameModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
