@@ -20,11 +20,14 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Environment(EnvType.CLIENT)
 public class SettingsScreen extends AyameMainScreen {
     public SettingsScreen(@Nullable Screen lastScreen) {
         super(lastScreen);

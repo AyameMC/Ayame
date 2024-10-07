@@ -101,6 +101,16 @@ subprojects {
         accessWidenerPath = file("src/main/resources/ayame.accesswidener")
     }
 
+    jar {
+        from(rootProject.file('COPYING'))
+        from(rootProject.file('COPYING.LESSER'))
+        from(rootProject.file('licenses')) {
+            into('licenses')  // 将 licenses/ 文件夹完整放入 jar 中
+        }
+    }
+
+
+
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         // mappings loom.officialMojangMappings()
@@ -143,4 +153,3 @@ subprojects {
 repositories {
     mavenCentral()
 }
-
