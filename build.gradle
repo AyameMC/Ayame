@@ -104,6 +104,7 @@ subprojects {
     jar {
         from(rootProject.file('COPYING'))
         from(rootProject.file('COPYING.LESSER'))
+        from(rootProject.file('COPYING.AYAME_LOGO'))
         from(rootProject.file('licenses')) {
             into('licenses')  // 将 licenses/ 文件夹完整放入 jar 中
         }
