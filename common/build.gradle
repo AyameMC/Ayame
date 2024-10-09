@@ -37,3 +37,6 @@ dependencies {
 repositories {
     mavenCentral()
 }
+loom {
+    accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+}
