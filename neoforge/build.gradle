@@ -61,7 +61,7 @@ dependencies {
     // GeckoLib
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     // PaperDoll Render
-    implementation "org.ayamemc:paper-doll-render:neoforge-4.0.0"
+    implementation "org.ayamemc:paperdollrender:neoforge-4.0.0"
 }
 
 processResources {

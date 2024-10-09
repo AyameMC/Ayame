@@ -59,7 +59,7 @@ dependencies {
     // Fabric Language Kotlin 它是too-many-shortcuts的前置，不是我们模组的前置，在这里只是为了让too-many-shortcuts正常加载
     modImplementation("net.fabricmc:fabric-language-kotlin:1.12.1+kotlin.2.0.20")
     // PaperDoll Render
-    modImplementation("org.ayamemc:paper-doll-render:fabric-4.0.0")
+    modImplementation("org.ayamemc:paperdollrender:fabric-4.0.0")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
