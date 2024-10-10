@@ -18,7 +18,7 @@ pertaz(Icon Desiger)
 description = '''
 Custom player model mod. Powered by GeckoLib.
 '''
-logoFile = "ayame_logo.png"
+logoFile = "../icon.png"
 updateJSONURL = "https://updatechecker.ayamemc.org/neoforge/ayame/update.json"
 [[dependencies.ayame]]
 modId = "neoforge"

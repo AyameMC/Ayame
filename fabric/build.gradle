@@ -27,6 +27,10 @@ architectury {
     fabric()
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
 configurations {
     common {
         canBeResolved = true
@@ -45,21 +49,21 @@ configurations {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation("net.fabricmc:fabric-loader:$rootProject.fabric_loader_version")
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version")
 
     // Fabric Mod Menu
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
     // GeckoLib
-    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
     // too-many-shortcuts
-    modImplementation "maven.modrinth:too-many-shortcuts:0.0.5+mc.1.21.1"
+    modImplementation("maven.modrinth:too-many-shortcuts:0.0.5+mc.1.21.1")
     // Fabric Language Kotlin 它是too-many-shortcuts的前置，不是我们模组的前置，在这里只是为了让too-many-shortcuts正常加载
     modImplementation("net.fabricmc:fabric-language-kotlin:1.12.1+kotlin.2.0.20")
     // PaperDoll Render
-    modImplementation("org.ayamemc:paperdollrender:fabric-4.0.0")
+    modImplementation("org.ayamemc:paperdoll-render:fabric-${paperdollrender_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
@@ -74,9 +78,7 @@ processResources {
     }
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/ayame-fabric.accesswidener")
-}
+
 
 sourcesJar {
     def commonSources = project(":common").sourcesJar

@@ -1,5 +1,0 @@
-accessWidener v2 named
-accessible field net/minecraft/client/gui/components/Checkbox selected Z
-accessible field net/minecraft/client/renderer/GameRenderer blurEffect Lnet/minecraft/client/renderer/PostChain;
-accessible method net/minecraft/client/renderer/GameRenderer loadBlurEffect (Lnet/minecraft/server/packs/resources/ResourceProvider;)V
-accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
