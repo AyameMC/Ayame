@@ -16,5 +16,5 @@ build/*
 /fabric/src/main/generated/
 /remappedSrc/
 /.idea/
-!/.idea/copyright/z
+!/.idea/copyright/
 /*/.architectury-transformer/
