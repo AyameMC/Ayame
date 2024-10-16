@@ -31,7 +31,7 @@ dependencies {
     // GeckoLib
     modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
     // PaperDoll Render
-    modImplementation("org.ayamemc:paperdoll-render:common-${paperdollrender_version}")
+   // modImplementation("org.ayamemc:paperdoll-render:common-${paperdollrender_version}")
 }
 
 repositories {

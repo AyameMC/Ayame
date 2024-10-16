@@ -27,6 +27,7 @@ import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.model.IndexData;
+import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.ZipFileManager;
 

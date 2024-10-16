@@ -25,6 +25,18 @@
       "ayame:default"
     ]
   },
+  "presets": [
+    {
+      "name": "预设1",
+      "model": "models/def_model.json",
+      "animation": "animations/def_anim.json",
+      "texture": "textures/def_tex.json",
+      "arm": "animations/arm.json",
+      "controllers": [
+        "ayame:default"
+      ]
+    }
+  ],
   "注释（别管这么多啦，这是咱开发时用的）": {
     "presets": [
       {

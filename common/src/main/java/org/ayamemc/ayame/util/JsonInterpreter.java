@@ -77,6 +77,14 @@ public class JsonInterpreter {
         this.filePath = filePath;
     }
 
+    public boolean isEmpty() {
+        return jsonObject.entrySet().isEmpty();
+    }
+
+    public boolean isNullOrEmpty() {
+        return this.jsonObject == null || this.isEmpty();
+    }
+
     public static JsonInterpreter of(String jsonString) {
         return new JsonInterpreter(jsonString);
     }

@@ -63,6 +63,7 @@ public class DefaultAyameModels {
         });
     }
 
+    // TODO: JSON爆null问题在于此处，res.getDefault传入的content内的index.json为null
     private static IModelResource createModelResource(String name) {
         Path path = Path.of(MODEL_PATH + name + ".zip");
         // 检查文件是否存在

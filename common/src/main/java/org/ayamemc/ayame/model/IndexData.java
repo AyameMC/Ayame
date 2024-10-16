@@ -46,11 +46,15 @@ public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelDat
             return new Builder();
         }
 
-        public Builder parseJson(JsonInterpreter json) {
+        public Builder parseJson(@NotNull JsonInterpreter json) {
             this.metaData(ModelMetaData.Builder.create().parseJson(json.getJsonInterpreter("metadata")).build());
             this.defaultModel(ModelData.Builder.create().parseJson(json.getJsonInterpreter("default")).build());
             List<ModelData> ps = new ArrayList<>();
-            json.getJsonList("presets").forEach(preset -> ps.add(ModelData.Builder.create().parseJson(preset).build()));
+            json.getJsonList("presets").forEach(preset ->{
+                if (!preset.isNullOrEmpty()) {
+                    ps.add(ModelData.Builder.create().parseJson(preset).build());
+                }
+            });
             this.presets(ps.toArray(new ModelData[0]));
             return this;
         }

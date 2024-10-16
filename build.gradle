@@ -75,7 +75,7 @@ subprojects {
             url = "https://maven.terraformersmc.com/"
         }
         maven {
-            name = 'Ayame Maven Repo'
+            name = 'AyameMC'
             url = 'https://maven.ayamemc.org/'
             content {
                 includeGroup("org.ayamemc")
