@@ -28,6 +28,7 @@ import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.TaskManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,7 +65,7 @@ public class DefaultAyameModels {
     }
 
     // TODO: JSON爆null问题在于此处，res.getDefault传入的content内的index.json为null
-    private static IModelResource createModelResource(String name) {
+    private static @NotNull IModelResource createModelResource(String name) {
         Path path = Path.of(MODEL_PATH + name + ".zip");
         // 检查文件是否存在
         if (!Files.exists(path)) {

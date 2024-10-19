@@ -65,8 +65,8 @@ dependencies {
     // 不要使用modImplementation，否则IO会爆炸
     // GeckoLib
     implementation("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}")
-    // PaperDoll Render
-    //implementation("org.ayamemc:paperdoll-render:neoforge-${paperdollrender_version}")
+    // Ayame PaperDoll
+    //implementation("org.ayamemc:ayame-paperdoll:neoforge-${ayame_paperdoll_version}")
 }
 
 processResources {
