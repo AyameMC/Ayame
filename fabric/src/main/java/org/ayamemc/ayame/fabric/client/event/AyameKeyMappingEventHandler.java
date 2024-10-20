@@ -44,7 +44,6 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  */
 @Environment(EnvType.CLIENT)
 public class AyameKeyMappingEventHandler {
-    public static final boolean IS_TMS_INSTALLED = JavaUtil.isJavaClassExist("dev.kingtux.tms.api.TMSKeyBinding");
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(
             TranslatableName.SELECT_MODEL_MENU,
             InputConstants.Type.KEYSYM,
@@ -64,15 +63,23 @@ public class AyameKeyMappingEventHandler {
      * @return 调用 {@link AyameTMSKeyMappings}
      * @see KeyMapping
      */
-    public static KeyMapping registerKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
+    public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
         KeyMapping keyMapping;
-        if (IS_TMS_INSTALLED && modifier != null) {
-            keyMapping = AyameTMSKeyMappings.registerTMSKeyMapping(name, type, keyCode, category, modifier);
-        } else {
+        try {
+            // 直接检查 TMSKeyBinding 是否存在
+            Class.forName("dev.kingtux.tms.api.TMSKeyBinding");
+            if (modifier != null) {
+                keyMapping = AyameTMSKeyMappings.registerTMSKeyMapping(name, type, keyCode, category, modifier);
+            } else {
+                keyMapping = new KeyMapping("key." + MOD_ID + "." + name, type, keyCode, category);
+            }
+        } catch (ClassNotFoundException e) {
+            // 若 TMSKeyBinding 不存在，则使用默认 KeyMapping
             keyMapping = new KeyMapping("key." + MOD_ID + "." + name, type, keyCode, category);
         }
         return KeyBindingHelper.registerKeyBinding(keyMapping);
     }
+
 
     public static void init() {
     }

@@ -66,7 +66,7 @@ dependencies {
     // GeckoLib
     implementation("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}")
     // Ayame PaperDoll
-    //implementation("org.ayamemc:ayame-paperdoll:neoforge-${ayame_paperdoll_version}")
+    implementation("org.ayamemc:ayame-paperdoll:neoforge-mc${minecraft_version}-${ayame_paperdoll_version}")
 }
 
 processResources {

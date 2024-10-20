@@ -31,7 +31,7 @@ dependencies {
     // GeckoLib
     modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
     // Ayame PaperDoll
-    //modImplementation("org.ayamemc:ayame-paperdoll:common-${ayame_paperdoll_version}")
+    modImplementation("org.ayamemc:ayame-paperdoll:common-mc${minecraft_version}-${ayame_paperdoll_version}")
 }
 
 repositories {
