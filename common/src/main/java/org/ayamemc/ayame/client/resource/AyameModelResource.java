@@ -49,6 +49,9 @@ public class AyameModelResource implements IModelResource {
      * @param content 模型内容
      */
     public AyameModelResource(ZipFileManager content) throws IOException {
+        if (content == null){
+            throw new RuntimeException("Model File Content is null");
+        }
         this.content = content;
         this.index = createIndexData();
         IAyameClientEvents.Instance.INSTANCE.ModelResource_onResourceCreate(this);
@@ -69,6 +72,9 @@ public class AyameModelResource implements IModelResource {
 
     public ModelDataResource getDefault() {
         try {
+            if (FileUtil.inputStreamToString(content.readFileContent("index.json")).equalsIgnoreCase("")){
+                throw new RuntimeException("Model File index is null");
+            }
             return ModelDataResource.Builder.create().getDefaultFromZip(content).build();
         } catch (IOException e) {
             LOGGER.error("Error when loading default model:", e);

@@ -28,6 +28,7 @@ import org.ayamemc.ayame.model.AyameModelType;
 import org.ayamemc.ayame.model.DefaultAyameModelType;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.TaskManager;
+import org.ayamemc.ayame.util.ZipFileManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -55,13 +56,13 @@ public class DefaultAyameModels {
     );
 
     public static IModelResource GRMMY_NEKO_MODEL_RESOURCE;
-    public static AyameModelType TEST_MODEL;
+    public static AyameModelType GRMMY_NEKO_MODEL;
 
     public static void init() {
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
+        //TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
             GRMMY_NEKO_MODEL_RESOURCE = createModelResource("grmmy_neko");
-            TEST_MODEL = createModel(GRMMY_NEKO_MODEL_RESOURCE);
-        });
+            GRMMY_NEKO_MODEL = createModel(GRMMY_NEKO_MODEL_RESOURCE);
+        //});
     }
 
     // TODO: JSON爆null问题在于此处，res.getDefault传入的content内的index.json为null

@@ -45,6 +45,9 @@ public class JsonInterpreter {
         Gson gson = new Gson();
         // 将 JSON 字符串转换为 JsonObject
         this.jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        if (jsonObject == null){
+            throw new RuntimeException("JsonObject is null,the content of it:"+original);
+        }
     }
 
     /**

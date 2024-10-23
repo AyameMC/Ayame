@@ -34,7 +34,6 @@ import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
  */
 @Environment(EnvType.CLIENT)
 public final class AyameFabricClient implements ClientModInitializer {
-    private static KeyMapping keyMapping;
 
     @Override
     public void onInitializeClient() {

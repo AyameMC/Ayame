@@ -52,19 +52,18 @@ public class ZipFileManager {
                 ZipEntry entry = entries.nextElement();
 
                 if (!entry.isDirectory()) { // 忽略目录
-                    try (InputStream is = zipFile.getInputStream(entry)) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        byte[] buffer = new byte[1024];
-                        int len;
+                    InputStream is = zipFile.getInputStream(entry);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int len;
 
-                        while ((len = is.read(buffer)) != -1) {
-                            baos.write(buffer, 0, len);
-                        }
-
-                        // 将内容转换为字节数组输入流并存储在 Map 中
-                        InputStream contentStream = new ByteArrayInputStream(baos.toByteArray());
-                        fileContents.put(entry.getName(), contentStream);
+                    while ((len = is.read(buffer)) != -1) {
+                        baos.write(buffer, 0, len);
                     }
+
+                    // 将内容转换为字节数组输入流并存储在 Map 中
+                    InputStream contentStream = new ByteArrayInputStream(baos.toByteArray());
+                    fileContents.put(entry.getName(), contentStream);
                 }
             }
         } catch (IOException e) {
