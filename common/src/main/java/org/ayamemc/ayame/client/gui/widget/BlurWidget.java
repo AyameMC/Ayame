@@ -9,6 +9,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
+@Deprecated
 public class BlurWidget extends AbstractWidget {
     final Minecraft minecraft = Minecraft.getInstance();
 

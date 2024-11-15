@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,8 +37,9 @@ import org.jetbrains.annotations.Nullable;
 
 import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
+
 @Environment(EnvType.CLIENT)
-public abstract class AyameScreen extends Screen {
+public abstract class AyameScreen extends Screen{
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
     public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
@@ -56,14 +58,14 @@ public abstract class AyameScreen extends Screen {
      * @param lastScreen      上一个屏幕
      * @param skipWarningOnce 是否跳过一次警告界面
      */
-    public AyameScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
-        super(Component.empty());
+    public AyameScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
+        super(title);
         this.lastScreen = lastScreen;
         this.skipWarningOnce = skipWarningOnce;
     }
 
-    public AyameScreen(@Nullable Screen lastScreen) {
-        super(Component.empty());
+    public AyameScreen(Component title, @Nullable Screen lastScreen) {
+        super(title);
         this.lastScreen = lastScreen;
         this.skipWarningOnce = false;
     }
@@ -80,19 +82,27 @@ public abstract class AyameScreen extends Screen {
         }
 
         // 显示模糊背景
-        BlurWidget blurredBackgroundWidget = new BlurWidget(getCenteredX(BACKGROUND_TEXTURE_WIDTH), getCenteredY(BACKGROUND_TEXTURE_HEIGHT), BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
-        this.addRenderableOnly(blurredBackgroundWidget);
+        //BlurWidget blurredBackgroundWidget = new BlurWidget(getCenteredX(BACKGROUND_TEXTURE_WIDTH), getCenteredY(BACKGROUND_TEXTURE_HEIGHT), BACKGROUND_TEXTURE_WIDTH, BACKGROUND_TEXTURE_HEIGHT);
+        //this.addRenderableOnly(blurredBackgroundWidget);
     }
 
+//    @Override
+//    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+//        this.renderBlurredBackground(partialTick);
+//        if (minecraft.level == null) {
+//            super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+//            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
+//        } else {
+//            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
+//        }
+//    }
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (minecraft.level == null) {
-            super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
-        } else {
-            renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
-        }
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick ) {
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
     }
+
+
 
     protected void renderBackgroundTexture(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.enableBlend();
@@ -129,14 +139,12 @@ public abstract class AyameScreen extends Screen {
 
         addRenderableWidget(settingsButton);
 
-        Component titleText = Component.translatable(setTranslatableTitle());
+        Component titleText = this.title;
         int centerX = getCenteredStringX(titleText);
         guiGraphics.drawString(this.font, titleText, centerX, font.lineHeight, 0xFFFFFFFF, true);
     }
 
     protected abstract @NotNull ResourceLocation renderTopLayerResourceLocation();
-
-    protected abstract @NotNull String setTranslatableTitle();
 
     protected int getCenteredX(int elementWidth) {
         return (this.width - elementWidth) / 2;

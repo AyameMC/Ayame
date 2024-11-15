@@ -45,15 +45,15 @@ import org.ayamemc.ayame.util.TaskManager;
  * @see AyameFabricClient
  */
 @Environment(EnvType.CLIENT)
-public class AyameFabricClientEvents {
+public class FabricClientEventHandler {
     /**
      * 注册Fabric事件
      */
     public static void init() {
-        ClientTickEvents.END_CLIENT_TICK.register(AyameFabricClientEvents::endClientTickEvent);
-        ClientPlayConnectionEvents.JOIN.register(AyameFabricClientEvents::joinServer);
-        ClientPlayConnectionEvents.DISCONNECT.register(AyameFabricClientEvents::quitServer);
-        RenderArmCallback.ON_RENDER_ARM.register(AyameFabricClientEvents::renderCustomHand);
+        ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
+        ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
+        ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
+        RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
     }
 
     private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {

@@ -78,11 +78,11 @@ public class ModelSelectMenuScreen extends AyameScreen {
      * @param skipWarningOnce 是否跳过一次警告界面
      */
     public ModelSelectMenuScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
-        super(lastScreen, skipWarningOnce);
+        super(Component.translatable("ayame.screen.warningscreen.modelselectscreen.title"), lastScreen, skipWarningOnce);
         this.modelResources = ModelResourceAPI.listModels(true);
     }
     public ModelSelectMenuScreen(@Nullable Screen lastScreen) {
-        super(lastScreen, false);
+        super(Component.translatable("ayame.screen.warningscreen.modelselectscreen.title"), lastScreen, false);
         this.modelResources = ModelResourceAPI.listModels(true);
     }
 
@@ -137,7 +137,7 @@ public class ModelSelectMenuScreen extends AyameScreen {
                 MINI_BUTTON_SIZE,
                 listmodeSprites,
                 button -> {
-                    //Util.getPlatform().openPath(MODEL_DIR);
+                    Util.getPlatform().openPath(MODEL_DIR);
                 },
                 Component.translatable("ayame.button.listmode.tooltip")
         );
@@ -155,10 +155,6 @@ public class ModelSelectMenuScreen extends AyameScreen {
         return MENU_TOP_LAYER_TEXTURE;
     }
 
-    @Override
-    protected @NotNull String setTranslatableTitle() {
-        return "ayame.screen.warningscreen.modelselectscreen.title";
-    }
 
 
     //        int count = 0;

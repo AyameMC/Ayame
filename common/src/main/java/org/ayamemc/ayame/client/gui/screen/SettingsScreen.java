@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client.gui.screen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,10 +37,10 @@ public class SettingsScreen extends AyameScreen {
      * @param skipWarningOnce 是否跳过一次警告界面
      */
     public SettingsScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
-        super(lastScreen, skipWarningOnce);
+        super(Component.translatable("ayame.screen.warningscreen.settingsscreen.title"), lastScreen, skipWarningOnce);
     }
     public SettingsScreen(@Nullable Screen lastScreen) {
-        super(lastScreen, false);
+        super(Component.translatable("ayame.screen.warningscreen.settingsscreen.title"), lastScreen, false);
     }
 
 
@@ -47,10 +48,5 @@ public class SettingsScreen extends AyameScreen {
     @Override
     protected @NotNull ResourceLocation renderTopLayerResourceLocation() {
         return MENU_TOP_LAYER_TEXTURE;
-    }
-
-    @Override
-    protected @NotNull String setTranslatableTitle() {
-        return "ayame.screen.warningscreen.settingsscreen.title";
     }
 }
