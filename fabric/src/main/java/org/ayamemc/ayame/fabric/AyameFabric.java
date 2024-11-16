@@ -25,8 +25,8 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.fabric.client.event.ModelReloadEventHandler;
 import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
+import org.ayamemc.ayame.fabric.client.event.ModelReloadEventHandler;
 
 /**
  * Fabric初始化使用的类，包括客户端与服务端

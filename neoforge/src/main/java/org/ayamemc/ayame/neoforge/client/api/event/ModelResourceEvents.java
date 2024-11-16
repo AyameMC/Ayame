@@ -25,7 +25,6 @@ import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.model.resource.IModelResource;
 
 import java.util.List;
-import java.util.Map;
 
 public class ModelResourceEvents {
     /**

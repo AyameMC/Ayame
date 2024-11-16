@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import javax.swing.text.html.parser.Entity;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class ModelSelectMenuScreen extends AyameScreen {
     public static final int searchBarHeight = 23;
     protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
     public final List<IModelResource> modelResources;
+    private Entity entity;
     public @Nullable ModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
 
 
@@ -90,7 +92,6 @@ public class ModelSelectMenuScreen extends AyameScreen {
     @Override
     protected void init() {
         super.init();  // 继承父类的初始化方法，包括警告检查逻辑
-
         // 搜索框组件初始化
         EditBox searchBox = new EditBox(
                 this.font,

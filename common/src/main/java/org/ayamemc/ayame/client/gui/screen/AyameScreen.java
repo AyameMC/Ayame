@@ -58,7 +58,7 @@ public abstract class AyameScreen extends Screen{
      * @param lastScreen      上一个屏幕
      * @param skipWarningOnce 是否跳过一次警告界面
      */
-    public AyameScreen(Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
+    public AyameScreen(@NotNull Component title, @Nullable Screen lastScreen, boolean skipWarningOnce) {
         super(title);
         this.lastScreen = lastScreen;
         this.skipWarningOnce = skipWarningOnce;

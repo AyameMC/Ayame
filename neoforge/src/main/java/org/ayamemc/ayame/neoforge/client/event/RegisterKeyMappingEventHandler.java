@@ -54,8 +54,8 @@ public class RegisterKeyMappingEventHandler {
 
     /**
      * 在NeoForge中注册该按键按下的行为
-     * @see NeoForgeClientEventHandler#onClientClick(ClientTickEvent.Post)
      *
+     * @see NeoForgeClientEventHandler#onClientClick(ClientTickEvent.Post)
      * @see RegisterKeyMappingsEvent
      */
     @SubscribeEvent
