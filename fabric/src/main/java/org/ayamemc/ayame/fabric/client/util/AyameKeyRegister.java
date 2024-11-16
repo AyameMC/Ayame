@@ -18,7 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.event;
+package org.ayamemc.ayame.fabric.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.EnvType;
@@ -27,7 +27,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.EventHandler;
-import org.ayamemc.ayame.fabric.client.util.AyameTMSKeyMappings;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +37,11 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
 /**
  * 注册Ayame所使用的按键，若安装了 <a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>组则会使用其提供的组合按键绑定。
  *
- * @see AyameTMSKeyMappings
+ * @see AyameTmsKey
  * @see JavaUtil
  */
 @Environment(EnvType.CLIENT)
-public class AyameKeyMappingEventHandler {
+public class AyameKeyRegister {
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(
             TranslatableName.SELECT_MODEL_MENU,
             InputConstants.Type.KEYSYM,
@@ -58,8 +57,8 @@ public class AyameKeyMappingEventHandler {
      * @param type     输入类型，见{@link InputConstants}
      * @param keyCode  键位，见{@link GLFW}
      * @param category 按键绑定页面的种类
-     * @param modifier 组合键位，见{@link AyameTMSKeyMappings}
-     * @return 调用 {@link AyameTMSKeyMappings}
+     * @param modifier 组合键位，见{@link AyameTmsKey}
+     * @return 调用 {@link AyameTmsKey}
      * @see KeyMapping
      */
     public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
@@ -68,7 +67,7 @@ public class AyameKeyMappingEventHandler {
             // 直接检查 TMSKeyBinding 是否存在
             Class.forName("dev.kingtux.tms.api.TMSKeyBinding");
             if (modifier != null) {
-                keyMapping = AyameTMSKeyMappings.registerTMSKeyMapping(name, type, keyCode, category, modifier);
+                keyMapping = AyameTmsKey.registerTMSKeyMapping(name, type, keyCode, category, modifier);
             } else {
                 keyMapping = new KeyMapping("key." + MOD_ID + "." + name, type, keyCode, category);
             }
@@ -89,7 +88,7 @@ public class AyameKeyMappingEventHandler {
      * @see KeyMapping
      */
     public static void processKeyPressed() {
-        while (AyameKeyMappingEventHandler.MODEL_SELECT_MENU.consumeClick()) {
+        while (AyameKeyRegister.MODEL_SELECT_MENU.consumeClick()) {
             EventHandler.openSelectMenuKeyPressed();
         }
     }

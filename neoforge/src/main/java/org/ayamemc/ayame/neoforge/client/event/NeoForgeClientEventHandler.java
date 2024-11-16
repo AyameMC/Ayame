@@ -20,26 +20,22 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.EventHandler;
 import org.ayamemc.ayame.util.TaskManager;
 
 
-@EventBusSubscriber(modid = Ayame.MOD_ID, value = Dist.CLIENT)
 public class NeoForgeClientEventHandler {
     /**
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
      */
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
-        while (RegisterKeyMappingEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
+        while (RegisterKeyEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
             EventHandler.openSelectMenuKeyPressed();
         }
     }
@@ -59,7 +55,8 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void renderCustomModelHand(RenderHandEvent event) {
         event.setCanceled(true); // 取消渲染默认手臂
-        EventHandler.renderCustomHandEventHandler(event.getHand(),
+        EventHandler.renderCustomHandEventHandler(
+                event.getHand(),
                 event.getPoseStack(),
                 event.getMultiBufferSource(),
                 event.getPackedLight(),
@@ -67,7 +64,8 @@ public class NeoForgeClientEventHandler {
                 event.getInterpolatedPitch(),
                 event.getSwingProgress(),
                 event.getEquipProgress(),
-                event.getItemStack());
+                event.getItemStack()
+        );
     }
 
 

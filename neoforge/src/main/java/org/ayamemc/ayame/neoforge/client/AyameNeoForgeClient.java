@@ -23,20 +23,32 @@ package org.ayamemc.ayame.neoforge.client;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
+import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
+import org.ayamemc.ayame.neoforge.client.event.RegisterKeyEventHandler;
 
 @OnlyIn(Dist.CLIENT)
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
-    public AyameNeoForgeClient() {
+    public AyameNeoForgeClient(IEventBus modBus) {
         AyameClient.init();
+
+        NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
+
+        modBus.register(RegisterKeyEventHandler.class);
+
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
+
         ModLoadingContext.get().registerExtensionPoint(
                 IConfigScreenFactory.class,
                 () -> (modContainer, lastScreen) -> new SettingsScreen(lastScreen)

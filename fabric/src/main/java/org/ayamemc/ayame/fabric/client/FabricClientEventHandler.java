@@ -35,7 +35,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.handler.EventHandler;
 import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
-import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
+import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 import org.ayamemc.ayame.util.TaskManager;
 
 
@@ -109,7 +109,7 @@ public class FabricClientEventHandler {
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {
-        AyameKeyMappingEventHandler.processKeyPressed();
+        AyameKeyRegister.processKeyPressed();
     }
 
 }

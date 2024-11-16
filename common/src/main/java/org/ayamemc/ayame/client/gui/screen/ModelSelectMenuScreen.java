@@ -69,7 +69,6 @@ public class ModelSelectMenuScreen extends AyameScreen {
     public static final int searchBarHeight = 23;
     protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
     public final List<IModelResource> modelResources;
-    private Entity entity;
     public @Nullable ModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
 
 

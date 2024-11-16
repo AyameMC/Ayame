@@ -41,8 +41,7 @@ import org.lwjgl.glfw.GLFW;
  * @see KeyModifier
  */
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = Ayame.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class RegisterKeyMappingEventHandler {
+public class RegisterKeyEventHandler {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
             "key." + Ayame.MOD_ID + "." + TranslatableName.SELECT_MODEL_MENU,
             KeyConflictContext.IN_GAME,

@@ -22,12 +22,11 @@ package org.ayamemc.ayame.fabric.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.kingtux.tms.api.TMSKeyBinding;
-import dev.kingtux.tms.api.modifiers.BindingModifiers;
+import dev.kingtux.tms.api.modifiers.BindingModifier;
 import dev.kingtux.tms.api.modifiers.KeyModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
-import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -35,10 +34,10 @@ import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 
 /**
- * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyMappingEventHandler}。
+ * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyRegister}。
  */
 @Environment(EnvType.CLIENT)
-public class AyameTMSKeyMappings {
+public class AyameTmsKey {
     /**
      * 使用TMS注册按键
      *
@@ -46,7 +45,7 @@ public class AyameTMSKeyMappings {
      * @param type     输入类型，见{@link InputConstants}
      * @param keyCode  键位，见{@link GLFW}
      * @param category 按键绑定页面的种类
-     * @param modifier TMS提供的组合键位，见{@link AyameTMSKeyMappings}
+     * @param modifier TMS提供的组合键位，见{@link AyameTmsKey}
      * @return AyameKeyMappings
      */
     public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull String modifier) {

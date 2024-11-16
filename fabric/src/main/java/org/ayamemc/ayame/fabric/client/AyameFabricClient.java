@@ -24,7 +24,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.fabric.client.event.AyameKeyMappingEventHandler;
+import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -37,7 +37,7 @@ public final class AyameFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // 不要动AyameKeyMappingEventHandler的init方法
-        AyameKeyMappingEventHandler.init();
+        AyameKeyRegister.init();
         FabricClientEventHandler.init();
         AyameClient.init();
 
