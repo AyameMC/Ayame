@@ -26,6 +26,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
@@ -52,7 +53,8 @@ public class RegisterKeyMappingEventHandler {
     ));
 
     /**
-     * 在NeoForge中注册该按键按下的行为，按下后行为位于{@link OpenModelSelectMenuEventHandler}
+     * 在NeoForge中注册该按键按下的行为
+     * @see NeoForgeClientEventHandler#onClientClick(ClientTickEvent.Post)
      *
      * @see RegisterKeyMappingsEvent
      */
