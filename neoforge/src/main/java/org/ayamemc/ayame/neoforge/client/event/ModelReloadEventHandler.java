@@ -25,13 +25,14 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class ModelReloadEventHandler extends ContextAwareReloadListener {
     @Override
-    public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller preparationsProfiler, @NotNull ProfilerFiller reloadProfiler, @NotNull Executor backgroundExecutor, @NotNull Executor gameExecutor) {
         CompletableFuture<Void> modelReloadTask = CompletableFuture.runAsync(() -> {
             PlayerModelAPI.getCache().forEach((player, cacheEntry) -> {
                 ModelResourceWriterUtil.addModelResource(cacheEntry);
