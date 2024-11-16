@@ -20,14 +20,16 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
+import net.minecraft.client.gui.components.Tooltip;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.EventHandler;
 import org.ayamemc.ayame.util.TaskManager;
-
 
 public class NeoForgeClientEventHandler {
     /**
@@ -66,6 +68,11 @@ public class NeoForgeClientEventHandler {
                 event.getEquipProgress(),
                 event.getItemStack()
         );
+    }
+    @SubscribeEvent
+    public static void onRenderHand(RenderTooltipEvent.Color event) {
+        event.setBorderStart(0xFFfdc7f5);
+        event.setBorderEnd(0xFFfdc7f5);
     }
 
 
