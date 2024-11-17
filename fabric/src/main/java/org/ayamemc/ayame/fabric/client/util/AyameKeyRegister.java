@@ -66,7 +66,7 @@ public class AyameKeyRegister {
         try {
             // 直接检查 TMSKeyBinding 是否存在
             Class.forName("dev.kingtux.tms.api.TMSKeyBinding");
-            if (modifier != null) {
+            if (modifier != null && false) {
                 keyMapping = AyameTmsKey.registerTMSKeyMapping(name, type, keyCode, category, modifier);
             } else {
                 keyMapping = new KeyMapping("key." + MOD_ID + "." + name, type, keyCode, category);

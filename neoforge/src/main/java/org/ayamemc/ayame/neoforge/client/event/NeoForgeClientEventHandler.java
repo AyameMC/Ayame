@@ -20,9 +20,7 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
-import net.minecraft.client.gui.components.Tooltip;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
@@ -70,9 +68,10 @@ public class NeoForgeClientEventHandler {
         );
     }
     @SubscribeEvent
-    public static void onRenderHand(RenderTooltipEvent.Color event) {
-        event.setBorderStart(0xFFfdc7f5);
-        event.setBorderEnd(0xFFfdc7f5);
+    public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
+        event.setBorderStart(0xCC_fdc7f5);
+        event.setBorderEnd(0xCC_fde8f5);
+        event.setBackground(0xCC_5f5f5f);
     }
 
 

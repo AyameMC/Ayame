@@ -25,18 +25,23 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.handler.EventHandler;
 import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 import org.ayamemc.ayame.util.TaskManager;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -55,6 +60,8 @@ public class FabricClientEventHandler {
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
     }
+
+
 
     private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
         // 停止执行玩家进入世界的任务
