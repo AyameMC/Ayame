@@ -20,19 +20,11 @@
 
 package org.ayamemc.ayame.fabric.mixin.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
-import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-
-
 
 @Mixin(TooltipRenderUtil.class)
 public abstract class TooltipRenderUtilMixin {
@@ -42,24 +34,24 @@ public abstract class TooltipRenderUtilMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderHorizontalLine(Lnet/minecraft/client/gui/GuiGraphics;IIIII)V"),
             index = 5
     )
-    private static int renderHorizontalLineBackgroundColor(int backgroundColor) {
-        return Minecraft.getInstance().screen instanceof AyameScreen ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
+    private static int renderHorizontalLineAyameBackgroundColor(int backgroundColor) {
+        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
     }
     @ModifyArg(
             method = "renderTooltipBackground",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderRectangle(Lnet/minecraft/client/gui/GuiGraphics;IIIIII)V"),
             index = 6
     )
-    private static int renderRectangleBackgroundColor(int backgroundColor) {
-        return ClientEventHandler.TOOLTIP_BACKGROUND_COLOR;
+    private static int renderRectangleAyameBackgroundColor(int backgroundColor) {
+        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
     }
     @ModifyArg(
             method = "renderTooltipBackground",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderVerticalLine(Lnet/minecraft/client/gui/GuiGraphics;IIIII)V"),
             index = 5
     )
-    private static int renderVerticalLineBackgroundColor(int backgroundColor) {
-        return ClientEventHandler.TOOLTIP_BACKGROUND_COLOR;
+    private static int renderVerticalLineAyameBackgroundColor(int backgroundColor) {
+        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
     }
 
     @ModifyArg(
@@ -67,16 +59,16 @@ public abstract class TooltipRenderUtilMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderFrameGradient(Lnet/minecraft/client/gui/GuiGraphics;IIIIIII)V"),
             index = 6
     )
-    private static int renderFrameGradientTopColor(int topColor) {
-        return ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR;
+    private static int renderFrameGradientAyameTopColor(int topColor) {
+        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR : topColor;
     }
     @ModifyArg(
             method = "renderTooltipBackground",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/TooltipRenderUtil;renderFrameGradient(Lnet/minecraft/client/gui/GuiGraphics;IIIIIII)V"),
             index = 7
     )
-    private static int renderFrameGradientBottomColor(int bottomColor) {
-        return ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR;
+    private static int renderFrameGradientAyameBottomColor(int bottomColor) {
+        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR : bottomColor;
     }
 
 

@@ -28,6 +28,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
+import software.bernie.geckolib.util.JsonUtil;
 
 public class NeoForgeClientEventHandler {
     /**
@@ -69,9 +70,11 @@ public class NeoForgeClientEventHandler {
     }
     @SubscribeEvent
     public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
-        event.setBorderStart(0xCC_fdc7f5);
-        event.setBorderEnd(0xCC_fde8f5);
-        event.setBackground(0xCC_5f5f5f);
+        if (ClientEventHandler.useAyameTooltipColor) {
+            event.setBorderStart(ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR);
+            event.setBorderEnd(ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR);
+            event.setBackground(ClientEventHandler.TOOLTIP_BACKGROUND_COLOR);
+        }
     }
 
 

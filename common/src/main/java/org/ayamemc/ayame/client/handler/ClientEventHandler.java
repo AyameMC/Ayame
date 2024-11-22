@@ -25,8 +25,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.spongepowered.asm.mixin.Unique;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
@@ -34,6 +34,7 @@ public class ClientEventHandler {
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
 
     private final static Minecraft minecraft = Minecraft.getInstance();
+    public static boolean useAyameTooltipColor = minecraft.screen instanceof ModelSelectMenuScreen;
 
     public static void renderCustomHandEventHandler(
             InteractionHand hand,
