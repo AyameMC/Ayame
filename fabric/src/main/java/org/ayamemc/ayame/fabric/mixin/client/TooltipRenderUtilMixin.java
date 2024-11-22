@@ -43,7 +43,7 @@ public abstract class TooltipRenderUtilMixin {
             index = 6
     )
     private static int renderRectangleAyameBackgroundColor(int backgroundColor) {
-        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
+        return ClientEventHandler.shouldUseAyameTooltipColor() ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
     }
     @ModifyArg(
             method = "renderTooltipBackground",
@@ -51,7 +51,7 @@ public abstract class TooltipRenderUtilMixin {
             index = 5
     )
     private static int renderVerticalLineAyameBackgroundColor(int backgroundColor) {
-        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
+        return ClientEventHandler.shouldUseAyameTooltipColor() ? ClientEventHandler.TOOLTIP_BACKGROUND_COLOR : backgroundColor;
     }
 
     @ModifyArg(
@@ -60,7 +60,7 @@ public abstract class TooltipRenderUtilMixin {
             index = 6
     )
     private static int renderFrameGradientAyameTopColor(int topColor) {
-        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR : topColor;
+        return ClientEventHandler.shouldUseAyameTooltipColor() ? ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR : topColor;
     }
     @ModifyArg(
             method = "renderTooltipBackground",
@@ -68,7 +68,7 @@ public abstract class TooltipRenderUtilMixin {
             index = 7
     )
     private static int renderFrameGradientAyameBottomColor(int bottomColor) {
-        return ClientEventHandler.useAyameTooltipColor ? ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR : bottomColor;
+        return ClientEventHandler.shouldUseAyameTooltipColor() ? ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR : bottomColor;
     }
 
 

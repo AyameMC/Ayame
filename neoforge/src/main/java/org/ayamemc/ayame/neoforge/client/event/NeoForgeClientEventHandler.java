@@ -70,7 +70,7 @@ public class NeoForgeClientEventHandler {
     }
     @SubscribeEvent
     public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
-        if (ClientEventHandler.useAyameTooltipColor) {
+        if (ClientEventHandler.shouldUseAyameTooltipColor()) {
             event.setBorderStart(ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR);
             event.setBorderEnd(ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR);
             event.setBackground(ClientEventHandler.TOOLTIP_BACKGROUND_COLOR);
