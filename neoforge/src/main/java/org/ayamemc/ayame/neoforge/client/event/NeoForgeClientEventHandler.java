@@ -26,7 +26,7 @@ import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.handler.EventHandler;
+import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
 
 public class NeoForgeClientEventHandler {
@@ -36,7 +36,7 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
         while (RegisterKeyEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
-            EventHandler.openSelectMenuKeyPressed();
+            ClientEventHandler.openSelectMenuKeyPressed();
         }
     }
 
@@ -55,7 +55,7 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void renderCustomModelHand(RenderHandEvent event) {
         event.setCanceled(true); // 取消渲染默认手臂
-        EventHandler.renderCustomHandEventHandler(
+        ClientEventHandler.renderCustomHandEventHandler(
                 event.getHand(),
                 event.getPoseStack(),
                 event.getMultiBufferSource(),

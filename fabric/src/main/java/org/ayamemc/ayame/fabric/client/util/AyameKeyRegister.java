@@ -26,7 +26,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.handler.EventHandler;
+import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.jetbrains.annotations.Nullable;
@@ -89,7 +89,7 @@ public class AyameKeyRegister {
      */
     public static void processKeyPressed() {
         while (AyameKeyRegister.MODEL_SELECT_MENU.consumeClick()) {
-            EventHandler.openSelectMenuKeyPressed();
+            ClientEventHandler.openSelectMenuKeyPressed();
         }
     }
 }
