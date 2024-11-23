@@ -24,18 +24,23 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import org.ayamemc.ayame.client.renderer.AyameGeoAnimatable;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
 
 @Mixin(ItemInHandLayer.class)
 public class ItemInHandLayerMixin implements AyameGeoAnimatable {
-    /**
-     * Each instance of a {@code GeoAnimatable} must return an instance of an {@link AnimatableInstanceCache}, which handles instance-specific animation info
-     * <p>
-     * Generally speaking, you should create your cache using {@code GeckoLibUtil#createCache} and store it in your animatable instance, returning that cached instance when called
-     *
-     * @return A cached instance of an {@code AnimatableInstanceCache}
-     */
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+
+        AyameGeoAnimatable.super.registerControllers(controllers);
+    }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return null;
+        return AyameGeoAnimatable.super.getAnimatableInstanceCache();
+    }
+
+    @Override
+    public double getTick(Object object) {
+        return AyameGeoAnimatable.super.getTick(object);
     }
 }

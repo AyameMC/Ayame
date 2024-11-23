@@ -21,15 +21,22 @@
 package org.ayamemc.ayame.client.renderer;
 
 import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 
 public interface AyameGeoAnimatable extends GeoAnimatable {
+    @Override
     default void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 
     }
 
+    @Override
+    default AnimatableInstanceCache getAnimatableInstanceCache() {
+        return null;
+    }
+
+    @Override
     default double getTick(Object object) {
         return 0;
     }
-
 }
