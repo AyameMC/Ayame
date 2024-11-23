@@ -6,7 +6,7 @@
       "org/ayamemc/ayame/client/api/IAbleToSit"
     ],
     "net/minecraft/class_918": [
-      "software/bernie/geckolib/animatable/GeoAnimatable"
+      "org/ayamemc/ayame/client/renderer/AyameGeoAnimatable"
     ]
   }
 }

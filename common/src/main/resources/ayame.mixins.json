@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "client": [
     "client.ClientEntityRenderersMixin",
+    "client.ItemInHandLayerMixin",
     "client.LocalPlayerMixin"
   ],
   "mixins": [
