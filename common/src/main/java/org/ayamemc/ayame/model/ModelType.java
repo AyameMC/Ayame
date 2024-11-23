@@ -38,6 +38,8 @@ public interface ModelType {
 
     ResourceLocation getAnimation();
 
+    ResourceLocation getArm();
+
     IndexData.ModelMetaData metaData();
 
 }

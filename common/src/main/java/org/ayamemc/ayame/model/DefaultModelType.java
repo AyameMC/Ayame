@@ -32,7 +32,7 @@ import net.minecraft.resources.ResourceLocation;
  * @param metaData  模型元数据
  */
 
-public record DefaultModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,
+public record DefaultModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,ResourceLocation arm,
                                IndexData.ModelMetaData metaData) implements ModelType {
 
 
@@ -52,6 +52,11 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
     }
 
     @Override
+    public ResourceLocation getArm() {
+        return arm;
+    }
+
+    @Override
     public IndexData.ModelMetaData metaData() {
         return metaData;
     }
@@ -60,6 +65,7 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
         private ResourceLocation geoModel;
         private ResourceLocation animation;
         private ResourceLocation texture;
+        private ResourceLocation arm;
         private IndexData.ModelMetaData metaData;
 
         public static Builder create() {
@@ -86,8 +92,13 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
             return this;
         }
 
+        public Builder setArm(ResourceLocation arm) {
+            this.arm = arm;
+            return this;
+        }
+
         public DefaultModelType build() {
-            return new DefaultModelType(geoModel, animation, texture, metaData);
+            return new DefaultModelType(geoModel, animation, texture, arm,metaData);
         }
     }
 }

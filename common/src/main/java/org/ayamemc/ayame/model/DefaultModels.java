@@ -35,6 +35,7 @@ public class DefaultModels {
             .setGeoModel(Ayame.withAyamePath("geo/ayame/default.json"))
             .setAnimation(Ayame.withAyamePath("animations/ayame/default.json"))
             .setTexture(Ayame.withAyamePath("textures/ayame/default.png"))
+            .setArm(Ayame.withAyamePath("arm/ayame/default.json"))
             .setMetaData(IndexData.ModelMetaData.Builder.create()
                     .setName("default")
                     .setAuthors(new String[]{"CrystalNeko"})

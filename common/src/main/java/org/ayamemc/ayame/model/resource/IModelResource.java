@@ -50,6 +50,8 @@ public interface IModelResource {
 
     InputStream getTexture(IndexData.ModelData model);
 
+    JsonInterpreter getArmJson(IndexData.ModelData model);
+
     default IndexData.ModelData getDefault() {
         return getModels().getFirst();
     }
@@ -64,5 +66,9 @@ public interface IModelResource {
 
     default ResourceLocation createTextureResourceLocation() {
         return Ayame.withAyamePath("textures/" + getName() + ".png");
+    }
+
+    default ResourceLocation createArmResourceLocation() {
+        return Ayame.withAyamePath("arms/" + getName() + ".json");
     }
 }

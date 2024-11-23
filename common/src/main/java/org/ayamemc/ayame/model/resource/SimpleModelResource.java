@@ -69,4 +69,9 @@ public class SimpleModelResource implements IModelResource {
     public InputStream getTexture(IndexData.ModelData model) {
         return modelFile.getContent(model.texture());
     }
+
+    @Override
+    public JsonInterpreter getArmJson(IndexData.ModelData model) {
+        return JsonInterpreter.of(modelFile.getContent(model.arm()));
+    }
 }

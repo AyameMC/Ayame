@@ -60,6 +60,7 @@ public class ModelResourceWriterUtil {
      */
     public static DefaultModelType.Builder addModelResource(@NotNull IModelResource modelRes) {
         addBakedModel(modelRes.createModelResourceLocation(), modelRes);
+        addBakedModel(modelRes.createArmResourceLocation(), modelRes);
         addBakedAnimation(modelRes.createAnimationResourceLocation(), modelRes);
         addTexture(modelRes.createTextureResourceLocation(), modelRes);
         return DefaultModelType.Builder.create()
@@ -136,6 +137,7 @@ public class ModelResourceWriterUtil {
 
     public static DefaultModelType.Builder addModelResource(PlayerModelAPI.CacheEntry entry) {
         addBakedModel(entry.model().getGeoModel(), entry.modelJson());
+        addBakedModel(entry.model().getArm(), entry.armJson());
         addBakedAnimation(entry.model().getAnimation(), entry.animJson());
         addTexture(entry.model().getTexture(), entry.texture());
         return DefaultModelType.Builder.create()

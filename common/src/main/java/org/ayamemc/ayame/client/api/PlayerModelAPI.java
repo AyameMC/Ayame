@@ -61,6 +61,7 @@ public class PlayerModelAPI {
                 model,
                 JsonInterpreter.of(FileUtil.getResourceAsStream("assets/ayame/" + model.getGeoModel().getPath())),
                 JsonInterpreter.of(FileUtil.getResourceAsStream("assets/ayame/" + model.getAnimation().getPath())),
+                JsonInterpreter.of(FileUtil.getResourceAsStream("assets/ayame/" + model.getArm().getPath())),
                 FileUtil.getResourceAsStream("assets/ayame/" + model.getTexture().getPath())
         );
         cache.put(player, entry);
@@ -70,7 +71,7 @@ public class PlayerModelAPI {
         return cache;
     }
 
-    public record CacheEntry(ModelType model, JsonInterpreter modelJson, JsonInterpreter animJson,
+    public record CacheEntry(ModelType model, JsonInterpreter modelJson, JsonInterpreter animJson,JsonInterpreter armJson,
                              InputStream texture) {
     }
 }
