@@ -27,11 +27,9 @@ import dev.kingtux.tms.api.modifiers.KeyModifier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.Ayame;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
-
-import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
-
 
 /**
  * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyRegister}。
@@ -61,7 +59,7 @@ public class AyameTmsKey {
             bindingModifiers.set(KeyModifier.CONTROL, true);
         }
         if (bindingModifiers != null) {
-            return new TMSKeyBinding(withAyameNamespace(name), type, keyCode, category, bindingModifiers);
+            return new TMSKeyBinding(Ayame.withAyamePath(name), type, keyCode, category, bindingModifiers);
         } else {
             throw new RuntimeException("Modifier only can be alt, shift or ctrl");
         }

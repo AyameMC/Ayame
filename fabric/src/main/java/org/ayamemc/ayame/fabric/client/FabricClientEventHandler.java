@@ -57,7 +57,6 @@ public class FabricClientEventHandler {
     }
 
 
-
     private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
         // 停止执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);

@@ -20,8 +20,8 @@
 
 package org.ayamemc.ayame.util;
 
-public class TODO extends RuntimeException{
-    public TODO(String content){
-        super("Not implemented yet: "+content);
+public class TODO extends RuntimeException {
+    public TODO(String content) {
+        super("Not implemented yet: " + content);
     }
 }

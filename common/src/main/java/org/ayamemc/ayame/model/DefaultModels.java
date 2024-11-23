@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.model;
 
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
@@ -27,14 +28,13 @@ import org.ayamemc.ayame.util.FileUtil;
 
 import java.nio.file.Path;
 
-import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
     public static final ModelType DEFAULT_MODEL = DefaultModelType.Builder.create()
-            .setGeoModel(withAyameNamespace("geo/ayame/default.json"))
-            .setAnimation(withAyameNamespace("animations/ayame/default.json"))
-            .setTexture(withAyameNamespace("textures/ayame/default.png"))
+            .setGeoModel(Ayame.withAyamePath("geo/ayame/default.json"))
+            .setAnimation(Ayame.withAyamePath("animations/ayame/default.json"))
+            .setTexture(Ayame.withAyamePath("textures/ayame/default.png"))
             .setMetaData(IndexData.ModelMetaData.Builder.create()
                     .setName("default")
                     .setAuthors(new String[]{"CrystalNeko"})
@@ -47,11 +47,12 @@ public class DefaultModels {
     public static final IModelResource AQUARTER_NEKO_RESOURCE = create("AQuarter_neko");
 
     // 静态初始化
-    public static void init(){}
+    public static void init() {
+    }
 
     private static IModelResource create(String name) {
         Path targetPath = Path.of(MODEL_PATH + name + ".zip");
-        FileUtil.copyResource("assets/ayame/models/"+name+".zip", targetPath);
+        FileUtil.copyResource("assets/ayame/models/" + name + ".zip", targetPath);
         return ModelResourceRegistry.create(ModelContent.create().createZipPack(targetPath));
     }
 }

@@ -174,7 +174,7 @@ public class FileUtil {
     /**
      * 从 ZipFile 中获取指定文件的 InputStream。
      *
-     * @param zipFile  ZipFile 对象
+     * @param zipFile   ZipFile 对象
      * @param entryName 要读取的文件名
      * @return 指定文件的 InputStream，如果文件不存在则返回 null
      */

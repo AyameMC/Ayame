@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,26 +29,23 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.gui.widget.BlurWidget;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
-
-
 @Environment(EnvType.CLIENT)
-public abstract class AyameScreen extends Screen{
-    public static final ResourceLocation MENU_BACKGROUND_TEXTURE = withAyameNamespace("textures/gui/background.png");
-    public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = withAyameNamespace("textures/gui/background_outline.png");
-    public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = withAyameNamespace("textures/gui/top_layer.png");
+public abstract class AyameScreen extends Screen {
+    public static final ResourceLocation MENU_BACKGROUND_TEXTURE = Ayame.withAyamePath("textures/gui/background.png");
+    public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = Ayame.withAyamePath("textures/gui/background_outline.png");
+    public static final ResourceLocation MENU_TOP_LAYER_TEXTURE = Ayame.withAyamePath("textures/gui/top_layer.png");
     protected static final int BACKGROUND_TEXTURE_WIDTH = 410;
     protected static final int BACKGROUND_TEXTURE_HEIGHT = 220;
-    protected int leftPos;
-    protected int topPos;
     protected static final int MINI_BUTTON_SIZE = 16;
     private static final int BUTTON_SIZE = 32;
     protected final boolean skipWarningOnce;
+    protected int leftPos;
+    protected int topPos;
     protected Screen lastScreen;
 
     /**
@@ -86,7 +82,7 @@ public abstract class AyameScreen extends Screen{
         //this.addRenderableOnly(blurredBackgroundWidget);
     }
 
-//    @Override
+    //    @Override
 //    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 //        this.renderBlurredBackground(partialTick);
 //        if (minecraft.level == null) {
@@ -97,11 +93,10 @@ public abstract class AyameScreen extends Screen{
 //        }
 //    }
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick ) {
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         renderBackgroundTexture(guiGraphics, mouseX, mouseY, partialTick);
     }
-
 
 
     protected void renderBackgroundTexture(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -119,9 +114,9 @@ public abstract class AyameScreen extends Screen{
         RenderSystem.disableBlend();
 
         WidgetSprites settingSprites = new WidgetSprites(
-                withAyameNamespace("settings"),
-                withAyameNamespace("settings_disabled"),
-                withAyameNamespace("settings_enabled_focused")
+                Ayame.withAyamePath("settings"),
+                Ayame.withAyamePath("settings_disabled"),
+                Ayame.withAyamePath("settings_enabled_focused")
         );
 
         ImageButton settingsButton = new ImageButton(
@@ -131,7 +126,7 @@ public abstract class AyameScreen extends Screen{
                 BUTTON_SIZE,
                 settingSprites,
                 button -> {
-                    minecraft.setScreen(new SettingsScreen(this,true));
+                    minecraft.setScreen(new SettingsScreen(this, true));
                 },
                 Component.translatable("ayame.screen.warningscreen.settingsscreen.title")
         );

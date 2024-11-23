@@ -22,20 +22,22 @@ package org.ayamemc.ayame.model.resource;
 
 import net.minecraft.server.packs.repository.PackDetector;
 import net.minecraft.world.level.validation.DirectoryValidator;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.TODO;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
-import java.nio.file.Files;
 import java.io.IOException;
-import java.util.zip.ZipFile;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> {
 
     public ModelContent(DirectoryValidator validator) {
         super(validator);
+    }
+
+    public static ModelContent create() {
+        return new ModelContent(new DirectoryValidator(path1 -> true));
     }
 
     @Nullable
@@ -62,9 +64,5 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
 //            return new ModelResourceRegistry.ModelFile(null);
 //        }
 //        return null;
-    }
-
-    public static ModelContent create() {
-        return new ModelContent(new DirectoryValidator(path1 -> true));
     }
 }

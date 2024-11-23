@@ -34,21 +34,16 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.ModelType;
 import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-import javax.swing.text.html.parser.Entity;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
 
 /**
  * {@code ModelSelectMenuScreen} 负责处理 Ayame 模型的选择界面。
@@ -59,7 +54,6 @@ import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
  *     <li>处理模型选择的逻辑</li>
  *     <li>提供回调接口用于处理屏幕关闭或模型切换时的操作</li>
  * </ul>
- *
  *
  * @see AyameScreen
  */
@@ -82,6 +76,7 @@ public class ModelSelectMenuScreen extends AyameScreen {
         super(Component.translatable("ayame.screen.warningscreen.modelselectscreen.title"), lastScreen, skipWarningOnce);
         this.modelResources = ModelResourceAPI.listModels(true);
     }
+
     public ModelSelectMenuScreen(@Nullable Screen lastScreen) {
         super(Component.translatable("ayame.screen.warningscreen.modelselectscreen.title"), lastScreen, false);
         this.modelResources = ModelResourceAPI.listModels(true);
@@ -110,14 +105,14 @@ public class ModelSelectMenuScreen extends AyameScreen {
         super.render(guiGraphics, mouseX, mouseY, delta);
 
         WidgetSprites opendirSprites = new WidgetSprites(
-                withAyameNamespace("opendir"),
-                withAyameNamespace("opendir"),
-                withAyameNamespace("opendir_enabled_focused")
+                Ayame.withAyamePath("opendir"),
+                Ayame.withAyamePath("opendir"),
+                Ayame.withAyamePath("opendir_enabled_focused")
         );
         WidgetSprites listmodeSprites = new WidgetSprites(
-                withAyameNamespace("listmode"),
-                withAyameNamespace("listmode"),
-                withAyameNamespace("listmode_enabled_focused")
+                Ayame.withAyamePath("listmode"),
+                Ayame.withAyamePath("listmode"),
+                Ayame.withAyamePath("listmode_enabled_focused")
         );
         ImageButton opendirButton = new ImageButton(
                 getAlignedX(BACKGROUND_TEXTURE_WIDTH, MINI_BUTTON_SIZE, 0, Alignment.RIGHT) - 125,
@@ -154,7 +149,6 @@ public class ModelSelectMenuScreen extends AyameScreen {
     protected @NotNull ResourceLocation renderTopLayerResourceLocation() {
         return MENU_TOP_LAYER_TEXTURE;
     }
-
 
 
     //        int count = 0;

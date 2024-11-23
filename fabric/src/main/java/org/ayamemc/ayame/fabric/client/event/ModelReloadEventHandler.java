@@ -24,6 +24,7 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.jetbrains.annotations.NotNull;
@@ -31,14 +32,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-import static org.ayamemc.ayame.util.ResourceLocationHelper.withAyameNamespace;
-
 public class ModelReloadEventHandler implements IdentifiableResourceReloadListener {
 
 
     @Override
     public ResourceLocation getFabricId() {
-        return withAyameNamespace("model_reload");
+        return Ayame.withAyamePath("model_reload");
     }
 
     @Override

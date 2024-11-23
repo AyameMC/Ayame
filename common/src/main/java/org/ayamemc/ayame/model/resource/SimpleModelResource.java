@@ -26,14 +26,16 @@ import org.ayamemc.ayame.util.JsonInterpreter;
 import java.io.InputStream;
 import java.util.List;
 
-public class SimpleModelResource implements IModelResource{
+public class SimpleModelResource implements IModelResource {
     private final ModelResourceRegistry.ModelFile modelFile;
     private final IndexData.ModelMetaData metaData;
-    public SimpleModelResource(ModelResourceRegistry.ModelFile modelFile){
+
+    public SimpleModelResource(ModelResourceRegistry.ModelFile modelFile) {
         this.modelFile = modelFile;
         this.metaData = createMetaData();
     }
-    private IndexData.ModelMetaData createMetaData(){
+
+    private IndexData.ModelMetaData createMetaData() {
         return IndexData.ModelMetaData.Builder.create().parseJson(modelFile.getIndexJson()).build();
     }
 

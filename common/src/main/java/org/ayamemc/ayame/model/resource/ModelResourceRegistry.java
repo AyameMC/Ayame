@@ -22,7 +22,6 @@ package org.ayamemc.ayame.model.resource;
 
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
-import org.ayamemc.ayame.util.TODO;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.InputStream;
@@ -33,12 +32,13 @@ import java.util.zip.ZipFile;
 /**
  * 模型格式的注册表
  */
-public class ModelResourceRegistry{
+public class ModelResourceRegistry {
     private static final Map<String, ResourceFactory> registry = new HashMap<>();
 
     /**
      * 注册一个模型格式
-     * @param name 模型格式的名称
+     *
+     * @param name    模型格式的名称
      * @param factory 模型格式的工厂
      */
     public static void register(String name, ResourceFactory factory) {
@@ -47,7 +47,8 @@ public class ModelResourceRegistry{
 
     /**
      * 以模型格式的名称获取一个模型格式的实例
-     * @param format 模型格式的名称
+     *
+     * @param format    模型格式的名称
      * @param modelFile 模型文件
      * @return 模型实例
      */
@@ -58,28 +59,31 @@ public class ModelResourceRegistry{
 
     /**
      * 获取一个模型格式的实例，根据模型文件的元数据获取模型格式的名称
+     *
      * @param modelFile 模型文件
      * @return 模型实例
      */
-    public static IModelResource create(ModelFile modelFile){
+    public static IModelResource create(ModelFile modelFile) {
         return create(modelFile.getFormat(), modelFile);
     }
 
     /**
      * 判断一个模型格式是否被注册
+     *
      * @param name 模型格式的名称
      * @return 是否被注册
      */
-    public static boolean contains(String name){
+    public static boolean contains(String name) {
         return registry.containsKey(name);
     }
 
     /**
      * 检查一个模型是否支持被读取
+     *
      * @param modelFile 模型文件
      * @return 是否支持被读取
      */
-    public static boolean contains(ModelFile modelFile){
+    public static boolean contains(ModelFile modelFile) {
         return contains(modelFile.getFormat());
     }
 
@@ -94,20 +98,22 @@ public class ModelResourceRegistry{
         IModelResource create(ModelFile modelFile);
     }
 
-    public static class ModelFile{
+    public static class ModelFile {
         private final ZipFile zipFile;
-        public ModelFile(ZipFile zipFile){
+
+        public ModelFile(ZipFile zipFile) {
             this.zipFile = zipFile;
         }
-        public JsonInterpreter getIndexJson(){
+
+        public JsonInterpreter getIndexJson() {
             return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "index.json"));
         }
 
-        public String getFormat(){
+        public String getFormat() {
             return getIndexJson().getString("format");
         }
 
-        public InputStream getContent(String path){
+        public InputStream getContent(String path) {
             return FileUtil.getInputStreamFromZip(zipFile, path);
         }
     }

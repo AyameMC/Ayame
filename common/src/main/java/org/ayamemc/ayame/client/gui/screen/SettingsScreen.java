@@ -39,10 +39,10 @@ public class SettingsScreen extends AyameScreen {
     public SettingsScreen(@Nullable Screen lastScreen, boolean skipWarningOnce) {
         super(Component.translatable("ayame.screen.warningscreen.settingsscreen.title"), lastScreen, skipWarningOnce);
     }
+
     public SettingsScreen(@Nullable Screen lastScreen) {
         super(Component.translatable("ayame.screen.warningscreen.settingsscreen.title"), lastScreen, false);
     }
-
 
 
     @Override

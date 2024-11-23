@@ -86,7 +86,6 @@ public class StatementScreen extends WarningScreen {
         linearLayout.addChild(Button.builder(CommonComponents.GUI_BACK, button -> this.onClose()).build());
         return linearLayout;
     }
-    
 
 
     /**

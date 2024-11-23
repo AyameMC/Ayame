@@ -163,9 +163,10 @@ public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelDat
      * @param license     许可证
      * @param links       链接
      */
-    public record ModelMetaData(@NotNull String format,@NotNull String[] authors, @NotNull String name, @Nullable String description,
+    public record ModelMetaData(@NotNull String format, @NotNull String[] authors, @NotNull String name,
+                                @Nullable String description,
                                 @Nullable String license, @Nullable String[] links, @Nullable String[] tags,
-                               @NotNull String version, @Nullable String[] animations) {
+                                @NotNull String version, @Nullable String[] animations) {
 
 
         public JsonInterpreter conversion() {
@@ -196,6 +197,7 @@ public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelDat
             public static Builder create() {
                 return new Builder();
             }
+
             public Builder setFormat(String format) {
                 this.format = format;
                 return this;
@@ -258,7 +260,7 @@ public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelDat
             }
 
             public ModelMetaData build() {
-                return new ModelMetaData(format,authors, name, description, license, links, tags, version, animations);
+                return new ModelMetaData(format, authors, name, description, license, links, tags, version, animations);
             }
         }
 

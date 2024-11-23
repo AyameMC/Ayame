@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame;
 
+import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.model.DefaultModels;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.ConfigUtil;
@@ -34,5 +35,9 @@ public final class Ayame {
         ConfigUtil.init();
         ModelResourceRegistry.init();
         DefaultModels.init();
+    }
+
+    public static ResourceLocation withAyamePath(String location) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
     }
 }

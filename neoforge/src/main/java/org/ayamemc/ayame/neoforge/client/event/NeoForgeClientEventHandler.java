@@ -28,7 +28,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
-import software.bernie.geckolib.util.JsonUtil;
 
 public class NeoForgeClientEventHandler {
     /**
@@ -68,6 +67,7 @@ public class NeoForgeClientEventHandler {
                 event.getItemStack()
         );
     }
+
     @SubscribeEvent
     public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
         if (ClientEventHandler.shouldUseAyameTooltipColor()) {

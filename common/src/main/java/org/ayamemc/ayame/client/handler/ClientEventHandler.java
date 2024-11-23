@@ -29,16 +29,15 @@ import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 
 public class ClientEventHandler {
-    private final static Minecraft minecraft = Minecraft.getInstance();
-
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
     public static final int TOOLTIP_BORDER_TOP_COLOR = 0xCC_fdc7f5;
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
-
+    private final static Minecraft minecraft = Minecraft.getInstance();
 
     public static boolean shouldUseAyameTooltipColor() {
         return minecraft.screen instanceof AyameScreen;
     }
+
     public static void renderCustomHandEventHandler(
             InteractionHand hand,
             PoseStack poseStack,
