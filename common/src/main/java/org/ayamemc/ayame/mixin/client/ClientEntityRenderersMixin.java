@@ -46,7 +46,9 @@ import java.util.Map;
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)
     private static void createPlayerRenderers(EntityRendererProvider.Context context, CallbackInfoReturnable<Map<PlayerSkin.Model, EntityRenderer<? extends Player>>> cir) {
-        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m = new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new AyamePlayerRender(context)));
+        Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m =
+                new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new AyamePlayerRender(context)));
+
         m.put(PlayerSkin.Model.SLIM, new AyamePlayerRender(context));
         cir.setReturnValue(ImmutableMap.copyOf(m));
     }

@@ -26,18 +26,18 @@ import org.ayamemc.ayame.client.renderer.AyameGeoAnimatable;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererMixin implements AyameGeoAnimatable {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-
-        AyameGeoAnimatable.super.registerControllers(controllers);
+        controllers.add();
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return AyameGeoAnimatable.super.getAnimatableInstanceCache();
+        return  GeckoLibUtil.createInstanceCache(this);
     }
 
     @Override
