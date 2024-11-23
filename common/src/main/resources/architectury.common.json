@@ -5,7 +5,7 @@
       "software/bernie/geckolib/animatable/GeoEntity",
       "org/ayamemc/ayame/client/api/IAbleToSit"
     ],
-    "net/minecraft/class_918": [
+    "net/minecraft/class_759": [
       "org/ayamemc/ayame/client/renderer/AyameGeoAnimatable"
     ]
   }

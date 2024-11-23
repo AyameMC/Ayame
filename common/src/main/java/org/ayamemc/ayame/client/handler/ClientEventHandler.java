@@ -21,12 +21,17 @@
 package org.ayamemc.ayame.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.renderer.AyamePlayerHandRenderer;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 public class ClientEventHandler {
@@ -50,7 +55,8 @@ public class ClientEventHandler {
             float equipProgress,
             ItemStack stack
     ) {
-
+        AyamePlayerHandRenderer renderer = new AyamePlayerHandRenderer(null);
+        renderer.render(poseStack, null, multiBufferSource, null, (VertexConsumer) multiBufferSource, packedLight, partialTick);
     }
 
     public static void openSelectMenuKeyPressed() {

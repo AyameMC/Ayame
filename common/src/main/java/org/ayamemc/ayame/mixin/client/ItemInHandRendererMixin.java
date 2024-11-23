@@ -20,14 +20,15 @@
 
 package org.ayamemc.ayame.mixin.client;
 
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import org.ayamemc.ayame.client.renderer.AyameGeoAnimatable;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 
-@Mixin(ItemInHandLayer.class)
-public class ItemInHandLayerMixin implements AyameGeoAnimatable {
+@Mixin(ItemInHandRenderer.class)
+public class ItemInHandRendererMixin implements AyameGeoAnimatable {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 

@@ -20,14 +20,14 @@
 
 package org.ayamemc.ayame.client.renderer;
 
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import software.bernie.geckolib.animatable.GeoAnimatable;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.*;
+import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
-public class AyamePlayerHandRenderer extends GeoObjectRenderer<ItemInHandLayer> {
-    public AyamePlayerHandRenderer(GeoModel<ItemInHandLayer> model) {
+public class AyamePlayerHandRenderer extends GeoObjectRenderer<ItemInHandRenderer> {
+    public AyamePlayerHandRenderer(GeoModel<ItemInHandRenderer> model) {
         super(model);
     }
+
+
 }
