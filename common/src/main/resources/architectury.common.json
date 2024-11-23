@@ -4,6 +4,9 @@
     "net/minecraft/class_1657": [
       "software/bernie/geckolib/animatable/GeoEntity",
       "org/ayamemc/ayame/client/api/IAbleToSit"
+    ],
+    "net/minecraft/class_918": [
+      "software/bernie/geckolib/animatable/GeoAnimatable"
     ]
   }
 }

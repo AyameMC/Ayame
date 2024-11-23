@@ -37,10 +37,10 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 @Environment(EnvType.CLIENT)
-public class GeoPlayerRender extends GeoEntityRenderer<Player> {
+public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     // TODO : 完善代码 & 添加API
-    public GeoPlayerRender(EntityRendererProvider.Context context) {
+    public AyamePlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
     }
 
