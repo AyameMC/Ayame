@@ -25,8 +25,10 @@ import com.mojang.math.Axis;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,7 +45,7 @@ public class ClientEventHandler {
     public static final int TOOLTIP_BORDER_TOP_COLOR = 0xCC_fdc7f5;
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
     private final static Minecraft minecraft = Minecraft.getInstance();
-    private final static Player player = minecraft.player;
+    private final static LocalPlayer player = minecraft.player;
 
     public static boolean shouldUseAyameTooltipColor() {
         return minecraft.screen instanceof AyameScreen;
@@ -71,8 +73,6 @@ public class ClientEventHandler {
     public static void renderCustomHandInHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
 
         if (minecraft.level == null || player == null) return;
-
-        ModelType model = AyameModelCache.getPlayerModel(player)
 
         LivingEntity entity = new Pig(EntityType.PIG, minecraft.level);
 
