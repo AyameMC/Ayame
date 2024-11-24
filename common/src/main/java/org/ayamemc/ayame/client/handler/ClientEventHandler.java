@@ -83,7 +83,7 @@ public class ClientEventHandler {
         EntityRenderDispatcher dispatcher = minecraft.getEntityRenderDispatcher();
 
 
-        com.mojang.blaze3d.vertex.PoseStack poseStack = new com.mojang.blaze3d.vertex.PoseStack();
+        PoseStack poseStack = new PoseStack();
         poseStack.pushPose();
         poseStack.translate(x, y, 1050.0);
         poseStack.scale(size, size, size);
