@@ -21,14 +21,11 @@
 package org.ayamemc.ayame.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -37,9 +34,6 @@ import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.renderer.AyamePlayerHandRenderer;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
@@ -86,8 +80,7 @@ public class ClientEventHandler {
     }
 
     private static void renderEntityInGui(LivingEntity entity, int x, int y, int size) {
-        Minecraft client = Minecraft.getInstance();
-        EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
+        EntityRenderDispatcher dispatcher = minecraft.getEntityRenderDispatcher();
 
 
         com.mojang.blaze3d.vertex.PoseStack poseStack = new com.mojang.blaze3d.vertex.PoseStack();
@@ -96,7 +89,7 @@ public class ClientEventHandler {
         poseStack.scale(size, size, size);
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
 
-        dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, client.renderBuffers().bufferSource(), 15728880);
+        dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, minecraft.renderBuffers().bufferSource(), 15728880);
         poseStack.popPose();
     }
 }
