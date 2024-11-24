@@ -21,16 +21,29 @@
 package org.ayamemc.ayame.fabric.mixin.client.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
+import org.ayamemc.ayame.model.AyameModelCache;
+import org.ayamemc.ayame.model.ModelType;
+import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -61,6 +74,7 @@ public abstract class RenderHandCustomEventMixin {
 
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void renderHandsWithItems(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
+        /*
         float f = playerEntity.getAttackAnim(partialTicks);
         InteractionHand interactionHand = playerEntity.swingingArm;
         float pitch = Mth.lerp(partialTicks, playerEntity.xRotO, playerEntity.getXRot());
@@ -103,6 +117,17 @@ public abstract class RenderHandCustomEventMixin {
             if (result != InteractionResult.PASS) {
                 ci.cancel();
             }
-        }
+            */
+        ci.cancel();
     }
+
+    @Inject(method = "renderHandsWithItems", at = @At("HEAD"),cancellable = true)
+    private void renderPlayerArm(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
+        ci.cancel();
+//        ModelType model = AyameModelCache.getPlayerModel(playerEntity);
+//        ResourceLocation arm = model.getArm();
+
+    }
+
+
 }
