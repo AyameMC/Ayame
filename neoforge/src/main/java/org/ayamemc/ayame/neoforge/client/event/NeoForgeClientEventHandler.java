@@ -22,6 +22,7 @@ package org.ayamemc.ayame.neoforge.client.event;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -75,6 +76,13 @@ public class NeoForgeClientEventHandler {
             event.setBorderEnd(ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR);
             event.setBackground(ClientEventHandler.TOOLTIP_BACKGROUND_COLOR);
         }
+    }
+
+    @SubscribeEvent
+    public static void renderCustomHandInHUd(RenderGuiEvent.Post event) {
+        ClientEventHandler.renderCustomHandInHud(
+                event.getGuiGraphics(), event.getPartialTick()
+        );
     }
 
 

@@ -25,8 +25,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -53,7 +56,9 @@ public class FabricClientEventHandler {
         ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
         ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
+
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
+        HudRenderCallback.EVENT.register(FabricClientEventHandler::renderEntityOnHud);
     }
 
 
@@ -113,4 +118,8 @@ public class FabricClientEventHandler {
         AyameKeyRegister.processKeyPressed();
     }
 
+
+    private static void renderEntityOnHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
+        ClientEventHandler.renderCustomHandInHud(guiGraphics, tickDelta);
+    }
 }
