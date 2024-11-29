@@ -71,20 +71,20 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
             }
             // 地上趴着（比如活版门）
             if (pose == Pose.SWIMMING && !player.isInLiquid()) {
-                return state.setAndContinue(DefaultAnimations.CRAWL);
+                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_CLIMBING);
             }
             // 在水里（游泳）
             if (player.isInLiquid() && player.isEyeInFluid(FluidTags.WATER)) {
-                return state.setAndContinue(DefaultAnimations.SWIM);
+                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_SWIM);
             }
-            if(pose == Pose.CROUCHING ) {
-                return state.setAndContinue(DefaultAnimations.SNEAK);
-            }
+//            if(pose == Pose.CROUCHING ) {
+//                return state.setAndContinue(DefaultAnimations.SNEAK);
+//            }
             if(pose == Pose.DYING){
-                return state.setAndContinue(DefaultAnimations.DIE);
+                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.SPECIAL_DEATH);
             }
             if(player.isCrouching()) {
-
+                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_SNEAKING);
             }
 
 
