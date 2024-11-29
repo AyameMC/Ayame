@@ -62,19 +62,19 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
-        final Player self = (Player) (Object) this;
-        final Pose pose = self.getPose();
-        controllers.add(new AnimationController<>(self, 20, state -> {
+        final Player player = (Player) (Object) this;
+        final Pose pose = player.getPose();
+        controllers.add(new AnimationController<>(player, 20, state -> {
             // 处理待处理动画
-            if (AnimationTask.shouldAnimationProcess(self)) {
-                return AnimationTask.handle(self, state.getController());
+            if (AnimationTask.shouldAnimationProcess(player)) {
+                return AnimationTask.handle(player, state.getController());
             }
             // 地上趴着（比如活版门）
-            if (pose == Pose.SWIMMING && !self.isInLiquid()) {
+            if (pose == Pose.SWIMMING && !player.isInLiquid()) {
                 return state.setAndContinue(DefaultAnimations.CRAWL);
             }
             // 在水里（游泳）
-            if (self.isInLiquid() && self.isEyeInFluid(FluidTags.WATER)) {
+            if (player.isInLiquid() && player.isEyeInFluid(FluidTags.WATER)) {
                 return state.setAndContinue(DefaultAnimations.SWIM);
             }
             if(pose == Pose.CROUCHING ) {
@@ -83,6 +83,9 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
             if(pose == Pose.DYING){
                 return state.setAndContinue(DefaultAnimations.DIE);
             }
+            if(player.isCrouching()) {
+
+            }
 
 
 
@@ -90,7 +93,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
             // 没有移动
             if (!state.isMoving()) {
                 // 是否为sit
-                if (self.ayame$isSitting()) return state.setAndContinue(RawAnimation.begin().thenLoop("misc.sit"));
+                if (player.ayame$isSitting()) return state.setAndContinue(RawAnimation.begin().thenLoop("misc.sit"));
                 return state.setAndContinue(DefaultAnimations.IDLE);
             } else if (state.isMoving()) {
                 return state.setAndContinue(DefaultAnimations.WALK);
