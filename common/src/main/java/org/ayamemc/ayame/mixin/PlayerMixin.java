@@ -25,6 +25,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.api.IAbleToSit;
@@ -56,23 +57,36 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
     @Shadow
     public abstract boolean setEntityOnShoulder(CompoundTag entityCompound);
 
+    @Shadow public abstract void remove(Entity.RemovalReason reason);
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
-        Player self = (Player) (Object) this;
+        final Player self = (Player) (Object) this;
+        final Pose pose = self.getPose();
         controllers.add(new AnimationController<>(self, 20, state -> {
             // 处理待处理动画
             if (AnimationTask.shouldAnimationProcess(self)) {
                 return AnimationTask.handle(self, state.getController());
             }
-            // 地上趴着
-            if (self.getPose() == Pose.SWIMMING && !self.isInLiquid()) {
+            // 地上趴着（比如活版门）
+            if (pose == Pose.SWIMMING && !self.isInLiquid()) {
                 return state.setAndContinue(DefaultAnimations.CRAWL);
             }
-            // 在水里
+            // 在水里（游泳）
             if (self.isInLiquid() && self.isEyeInFluid(FluidTags.WATER)) {
                 return state.setAndContinue(DefaultAnimations.SWIM);
             }
+            if(pose == Pose.CROUCHING ) {
+                return state.setAndContinue(DefaultAnimations.SNEAK);
+            }
+            if(pose == Pose.DYING){
+                return state.setAndContinue(DefaultAnimations.DIE);
+            }
+
+
+
+
             // 没有移动
             if (!state.isMoving()) {
                 // 是否为sit
