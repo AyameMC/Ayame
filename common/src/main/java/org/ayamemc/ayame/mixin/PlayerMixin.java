@@ -30,6 +30,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
+import org.ayamemc.ayame.model.DefaultAnimations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -38,9 +39,10 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 
 /**
@@ -57,50 +59,53 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
     @Shadow
     public abstract boolean setEntityOnShoulder(CompoundTag entityCompound);
 
-    @Shadow public abstract void remove(Entity.RemovalReason reason);
+    @Shadow
+    public abstract void remove(Entity.RemovalReason reason);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
+        final boolean isInLiquid = player.isInLiquid();
+        final boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
+        final boolean isSitting = player.ayame$isSitting();
+
         controllers.add(new AnimationController<>(player, 20, state -> {
-            // 处理待处理动画
+            // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
             }
-            // 地上趴着（比如活版门）
-            if (pose == Pose.SWIMMING && !player.isInLiquid()) {
-                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_CLIMBING);
-            }
-            // 在水里（游泳）
-            if (player.isInLiquid() && player.isEyeInFluid(FluidTags.WATER)) {
-                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_SWIM);
-            }
-//            if(pose == Pose.CROUCHING ) {
-//                return state.setAndContinue(DefaultAnimations.SNEAK);
-//            }
-            if(pose == Pose.DYING){
-                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.SPECIAL_DEATH);
-            }
-            if(player.isCrouching()) {
-                return state.setAndContinue(org.ayamemc.ayame.model.DefaultAnimations.MOVE_SNEAKING);
-            }
 
+            // 动画判断列表
+            List<Supplier<PlayState>> animationChecks = List.of(
+                    // 地上趴着（比如活版门）
+                    () -> pose == Pose.SWIMMING && !isInLiquid ? state.setAndContinue(DefaultAnimations.MOVE_CLIMBING) : null,
+                    // 在水里（游泳）
+                    () -> isInLiquid && isInWater ? state.setAndContinue(DefaultAnimations.MOVE_SWIM) : null,
+                    // 死亡动画
+                    () -> player.isDeadOrDying() ? state.setAndContinue(DefaultAnimations.SPECIAL_DEATH) : null,
+                    // 潜行
+                    () -> player.isCrouching() ? state.setAndContinue(DefaultAnimations.MOVE_SNEAKING) : null,
+                    // 未移动时的逻辑
+                    () -> !state.isMoving() && isSitting ? state.setAndContinue(DefaultAnimations.STATE_SIT) : null,
+                    () -> !state.isMoving() ? state.setAndContinue(DefaultAnimations.STATE_IDLE) : null,
+                    // 移动时的逻辑
+                    () -> state.isMoving() ? state.setAndContinue(DefaultAnimations.MOVE_WALK) : null
+            );
 
-
-
-            // 没有移动
-            if (!state.isMoving()) {
-                // 是否为sit
-                if (player.ayame$isSitting()) return state.setAndContinue(RawAnimation.begin().thenLoop("misc.sit"));
-                return state.setAndContinue(DefaultAnimations.IDLE);
-            } else if (state.isMoving()) {
-                return state.setAndContinue(DefaultAnimations.WALK);
+            // 按顺序执行判断逻辑，返回首个非 null 的状态
+            for (Supplier<PlayState> check : animationChecks) {
+                PlayState result = check.get();
+                if (result != null) {
+                    return result;
+                }
             }
 
             return PlayState.CONTINUE;
         }));
+
+
         // TODO 添加events
     }
 
