@@ -8,4 +8,3 @@ accessible field net/minecraft/client/renderer/ItemInHandRenderer$HandRenderSele
 accessible field net/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection renderOffHand Z
 # LivingEntity 有没有跳的字段
 accessible field net/minecraft/world/entity/LivingEntity jumping Z
-accessible field net/minecraft/world/entity/player/Player abilities Lnet/minecraft/world/entity/player/Abilities;

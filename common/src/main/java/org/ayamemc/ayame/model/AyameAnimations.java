@@ -22,7 +22,7 @@ package org.ayamemc.ayame.model;
 
 import software.bernie.geckolib.animation.RawAnimation;
 
-public class DefaultAnimations {
+public class AyameAnimations {
     // 调试动画
     /** 调试用空动画，通常用于测试或无动画状态。 */
     public static final RawAnimation DEBUG_EMPTY = create("debug.empty", true);
