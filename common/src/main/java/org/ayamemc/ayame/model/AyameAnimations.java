@@ -82,7 +82,7 @@ public class AyameAnimations {
     /** 玩家使用副手（左手）时的单次播放动画。 */
     public static final RawAnimation ACTION_USE_OFFHAND = create("action.use_offhand", false);
     /** 玩家挥动主手（右手）时的单次播放动画。 */
-    public static final RawAnimation ACTION_SWING_HAND = create("action.swing_hand", false);
+    public static final RawAnimation ACTION_SWING_MAINHAND = create("action.swing_mainhand", false);
     /** 玩家挥动副手（左手）时的单次播放动画。 */
     public static final RawAnimation ACTION_SWING_OFFHAND = create("action.swing_offhand", false);
 

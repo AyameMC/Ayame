@@ -86,67 +86,74 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
             // 动画判断列表
             List<Supplier<PlayState>> animationChecks = List.of(
                     // ---- 非循环
-
-                    // 玩家右键右手
-                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.MAIN_HAND) ?
-                            state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND) : null,
-                    // 玩家右键左手
-                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.OFF_HAND) ?
-                            state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND) : null,
-                    // 玩家被攻击
-                    () -> (player.isHurt()) ?
-                            state.setAndContinue(AyameAnimations.ACTION_ATTACKED) : null,
+                    // 玩家死亡，todo 修复无效问题
                     () -> (player.isDeadOrDying()) ?
                             state.setAndContinue(AyameAnimations.SPECIAL_DEATH) : null,
+                    // 玩家右键右手，todo 修复只对物品生效的问题
+                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.MAIN_HAND) ?
+                            state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND) : null,
+                    // 玩家右键左手，todo 修复只对物品生效的问题
+                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.OFF_HAND) ?
+                            state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND) : null,
+                    // 玩家被攻击，todo 修复时有时无问题
+                    () -> (player.isHurt()) ?
+                            state.setAndContinue(AyameAnimations.ACTION_ATTACKED) : null,
+
 
                     // ----循环
                     //  玩家移动动画
-                    // 在活版门状态，不动
-                    () -> (player.isSwimming() && !player.isInLiquid() && !state.isMoving()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_CLIMB_STILL) : null,
-                    // 在活版门状态，移动
-                    () -> (player.isSwimming() && !player.isInLiquid() && state.isMoving()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_CLIMBING) : null,
-                    // 朴实无华地走
-                    () -> (state.isMoving() && !player.isSprinting()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_WALK) : null,
-                    // 疾跑
-                    () -> (state.isMoving() && player.isSprinting()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
-                    // 潜行，不动
-                    () -> (!state.isMoving() && player.isCrouching()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SNEAK_STILL) : null,
-                    // 潜行，移动
-                    () -> (!state.isMoving() && player.isCrouching()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
-                    // 游泳，移动
-                    () -> (state.isMoving() && player.isSwimming()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SWIM) : null,
-                    // 游泳，不动（直立），可靠性存疑
-                    () -> (!state.isMoving() && player.isSwimming()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SWIM_STAND) : null,
-                    // 跳跃，可靠性存疑
-                    () -> (player.jumping) ?
-                            state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
-                    // 普通开创飞，可靠性存疑
+                    // 普通开创飞，有效
                     () -> (player.getAbilities().flying) ?
                             state.setAndContinue(AyameAnimations.MOVE_FLY) : null,
-                    // 鞘翅飞，可靠性存疑
+                    // 潜行，不动，有效
+                    () -> (!state.isMoving() && player.isCrouching()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_SNEAK_STILL) : null,
+                    // 潜行，移动，有效
+                    () -> (player.isCrouching()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
+                    // 游泳，不动（直立），有效
+                    () -> (!state.isMoving() && player.isSwimming()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_SWIM_STAND) : null,
+                    // 游泳，移动，有效
+                    () -> (player.isSwimming()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_SWIM) : null,
+
+
+                    // 在活版门状态，todo 修复无效问题
+                    () -> (player.isSwimming() && !state.isMoving() && !player.isInLiquid()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_CLIMB_STILL) : null,
+                    // 在活版门状态，todo 修复无效问题
+                    () -> (player.isSwimming() && !player.isInLiquid()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_CLIMBING) : null,
+                    // 朴实无华地走，有效
+                    () -> (state.isMoving() && !player.isSprinting()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_WALK) : null,
+                    // 疾跑，有效
+                    () -> (state.isMoving() && player.isSprinting()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
+
+
+
+                    // 跳跃，todo 修复奇怪问题
+                    () -> (player.jumping) ?
+                            state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
+
+                    // 鞘翅飞，todo 修复无效问题
                     () -> (player.isFallFlying()) ?
                             state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
                     // TODO: 制作下梯子和上梯子动画
-                    // 悬挂在梯子上不动
+                    // 悬挂在梯子上不动，todo 修复无效问题
                     () -> (player.onClimbable() && player.isSuppressingSlidingDownLadder()) ?
                             state.setAndContinue(AyameAnimations.MOVE_LADDER_STILL) : null,
-                    // 睡觉
+                    // 睡觉，有效
                     () -> (player.isSleeping()) ?
                             state.setAndContinue(AyameAnimations.STATE_SLEEP) : null,
 
                     //  玩家的一些移动状态
-                    // 坐着
+                    // 坐着，有效，todo 修复无效问题 比如船，马不行
                     () -> (!state.isMoving() && player.ayame$isSitting()) ?
                     state.setAndContinue(AyameAnimations.STATE_SIT) : null,
-                    // 禁止不动
+                    // 禁止不动，有效
                     () -> (!state.isMoving()) ?
                             state.setAndContinue(AyameAnimations.STATE_IDLE) : null
 
