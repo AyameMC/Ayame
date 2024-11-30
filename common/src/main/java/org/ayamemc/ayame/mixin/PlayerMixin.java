@@ -21,10 +21,13 @@
 package org.ayamemc.ayame.mixin;
 
 
+import com.mojang.datafixers.util.Either;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -62,14 +65,16 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
     @Shadow
     public abstract void remove(Entity.RemovalReason reason);
 
+    @Shadow public abstract Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos bedPos);
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-        final boolean isInLiquid = player.isInLiquid();
-        final boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
-        final boolean isSitting = player.ayame$isSitting();
+//        final boolean isInLiquid = player.isInLiquid();
+//        final boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
+//        final boolean isSitting = player.ayame$isSitting();
 
         controllers.add(new AnimationController<>(player, 20, state -> {
             // 动画任务处理
@@ -79,19 +84,76 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
 
             // 动画判断列表
             List<Supplier<PlayState>> animationChecks = List.of(
-                    // 地上趴着（比如活版门）
-                    () -> pose == Pose.SWIMMING && !isInLiquid ? state.setAndContinue(DefaultAnimations.MOVE_CLIMBING) : null,
-                    // 在水里（游泳）
-                    () -> isInLiquid && isInWater ? state.setAndContinue(DefaultAnimations.MOVE_SWIM) : null,
-                    // 死亡动画
-                    () -> player.isDeadOrDying() ? state.setAndContinue(DefaultAnimations.SPECIAL_DEATH) : null,
-                    // 潜行
-                    () -> player.isCrouching() ? state.setAndContinue(DefaultAnimations.MOVE_SNEAKING) : null,
-                    // 未移动时的逻辑
-                    () -> !state.isMoving() && isSitting ? state.setAndContinue(DefaultAnimations.STATE_SIT) : null,
-                    () -> !state.isMoving() ? state.setAndContinue(DefaultAnimations.STATE_IDLE) : null,
-                    // 移动时的逻辑
-                    () -> state.isMoving() ? state.setAndContinue(DefaultAnimations.MOVE_WALK) : null
+//                    // 地上趴着（比如活版门）
+//                    () -> pose == Pose.SWIMMING && !isInLiquid ? state.setAndContinue(DefaultAnimations.MOVE_CLIMBING) : null,
+//                    // 在水里（游泳）
+//                    () -> isInLiquid && isInWater ? state.setAndContinue(DefaultAnimations.MOVE_SWIM) : null,
+//                    // 死亡动画
+//                    () -> player.isDeadOrDying() ? state.setAndContinue(DefaultAnimations.SPECIAL_DEATH) : null,
+//                    // 潜行
+//                    () -> player.isCrouching() ? state.setAndContinue(DefaultAnimations.MOVE_SNEAKING) : null,
+//                    // 未移动时的逻辑
+//                    () -> !state.isMoving() && isSitting ? state.setAndContinue(DefaultAnimations.STATE_SIT) : null,
+//                    () -> !state.isMoving() ? state.setAndContinue(DefaultAnimations.STATE_IDLE) : null,
+//                    // 移动时的逻辑
+//                    () -> state.isMoving() ? state.setAndContinue(DefaultAnimations.MOVE_WALK) : null
+
+                    //  玩家移动动画
+                    // 在活版门状态，不动
+                    () -> (player.isSwimming() && !player.isInLiquid() && !state.isMoving()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_CLIMBING) : null,
+                    // 在活版门状态，移动
+                    () -> (player.isSwimming() && !player.isInLiquid() && state.isMoving()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_CLIMB) : null,
+                    // 朴实无华地走
+                    () -> (state.isMoving() && !player.isSprinting()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_WALK) : null,
+                    // 疾跑
+                    () -> (state.isMoving() && player.isSprinting()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_RUN) : null,
+                    // 潜行，不动
+                    () -> (!state.isMoving() && player.isCrouching()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_SNEAKING) : null,
+                    // 潜行，移动
+                    () -> (!state.isMoving() && player.isCrouching()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_SNEAK) : null,
+                    // 游泳，移动
+                    () -> (state.isMoving() && player.isSwimming()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_SWIM) : null,
+                    // 游泳，不动（致力），可靠性存疑
+                    () -> (!state.isMoving() && player.isSwimming()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_SWIM_STAND) : null,
+                    // 跳跃，可靠性存疑
+                    () -> (player.jumping) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_JUMP) : null,
+                    // 普通开创飞，可靠性存疑
+                    () -> (player.abilities.flying) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_FLY) : null,
+                    // 鞘翅飞，可靠性存疑
+                    () -> (player.isFallFlying()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_ELYTRA_FLY) : null,
+                    // TODO: 制作下梯子和上梯子动画
+                    // 悬挂在梯子上不动
+                    () -> (player.onClimbable() && player.isSuppressingSlidingDownLadder()) ?
+                            state.setAndContinue(DefaultAnimations.MOVE_LADDER_STILLNESS) : null,
+                    // 睡觉
+                    () -> (player.isSleeping()) ?
+                            state.setAndContinue(DefaultAnimations.STATE_SLEEP) : null,
+
+
+
+                    //  玩家的一些移动状态
+                    // 坐着
+                    () -> (!state.isMoving() && player.ayame$isSitting()) ?
+                            state.setAndContinue(DefaultAnimations.STATE_SIT) : null,
+                    // 禁止不动
+                    () -> (!state.isMoving()) ?
+                            state.setAndContinue(DefaultAnimations.STATE_IDLE) : null,
+
+
+
+
+
             );
 
             // 按顺序执行判断逻辑，返回首个非 null 的状态

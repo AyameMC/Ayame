@@ -25,68 +25,72 @@ import software.bernie.geckolib.animation.RawAnimation;
 public class DefaultAnimations {
     // 调试动画
     /** 调试用空动画，通常用于测试或无动画状态。 */
-    public static final RawAnimation DEBUG_EMPTY = RawAnimation.begin().thenLoop("debug.empty");
+    public static final RawAnimation DEBUG_EMPTY = create("debug.empty", true);
 
     // 移动动画
     /** 玩家行走时的循环动画。 */
-    public static final RawAnimation MOVE_WALK = RawAnimation.begin().thenLoop("move.walk");
+    public static final RawAnimation MOVE_WALK = create("move.walk", true);
     /** 玩家疾跑时的循环动画。 */
-    public static final RawAnimation MOVE_RUN = RawAnimation.begin().thenLoop("move.run");
-    /** 玩家在活板门下方移动时的循环动画。 */
-    public static final RawAnimation MOVE_CLIMBING = RawAnimation.begin().thenLoop("move.climbing");
+    public static final RawAnimation MOVE_RUN = create("move.run", true);
+    /** 玩家在活板门下方但不移动时的循环动画。 */
+    public static final RawAnimation MOVE_CLIMBING = create("move.climbing", true);
     /** 玩家在活板门下方爬行时的循环动画。 */
-    public static final RawAnimation MOVE_CLIMB = RawAnimation.begin().thenLoop("move.climb");
+    public static final RawAnimation MOVE_CLIMB = create("move.climb", true);
     /** 玩家潜行但不移动时的循环动画。 */
-    public static final RawAnimation MOVE_SNEAKING = RawAnimation.begin().thenLoop("move.sneaking");
+    public static final RawAnimation MOVE_SNEAKING = create("move.sneaking", true);
     /** 玩家潜行并移动时的循环动画。 */
-    public static final RawAnimation MOVE_SNEAK = RawAnimation.begin().thenLoop("move.sneak");
+    public static final RawAnimation MOVE_SNEAK = create("move.sneak", true);
     /** 玩家游泳时的循环动画。 */
-    public static final RawAnimation MOVE_SWIM = RawAnimation.begin().thenLoop("move.swim");
+    public static final RawAnimation MOVE_SWIM = create("move.swim", true);
     /** 玩家在水中站立式游泳时的循环动画。 */
-    public static final RawAnimation MOVE_SWIM_STAND = RawAnimation.begin().thenLoop("move.swim_stand");
+    public static final RawAnimation MOVE_SWIM_STAND = create("move.swim_stand", true);
     /** 玩家跳跃时的单次播放动画。 */
-    public static final RawAnimation MOVE_JUMP = RawAnimation.begin().thenPlay("move.jump");
+    public static final RawAnimation MOVE_JUMP = create("move.jump", false);
     /** 玩家在创造模式飞行时的循环动画。 */
-    public static final RawAnimation MOVE_FLY = RawAnimation.begin().thenLoop("move.fly");
+    public static final RawAnimation MOVE_FLY = create("move.fly", true);
     /** 玩家鞘翅飞行时的循环动画。 */
-    public static final RawAnimation MOVE_ELYTRA_FLY = RawAnimation.begin().thenLoop("move.elytra_fly");
+    public static final RawAnimation MOVE_ELYTRA_FLY = create("move.elytra_fly", true);
     /** 玩家爬梯子向上移动时的循环动画。 */
-    public static final RawAnimation MOVE_LADDER_UP = RawAnimation.begin().thenLoop("move.ladder_up");
+    public static final RawAnimation MOVE_LADDER_UP = create("move.ladder_up", true);
     /** 玩家静止在梯子上时的循环动画。 */
-    public static final RawAnimation MOVE_LADDER_STILLNESS = RawAnimation.begin().thenLoop("move.ladder_stillness");
+    public static final RawAnimation MOVE_LADDER_STILLNESS = create("move.ladder_stillness", true);
     /** 玩家爬梯子向下移动时的循环动画。 */
-    public static final RawAnimation MOVE_LADDER_DOWN = RawAnimation.begin().thenLoop("move.ladder_down");
+    public static final RawAnimation MOVE_LADDER_DOWN = create("move.ladder_down", true);
 
     // 状态动画
     /** 玩家坐在船上时的循环动画。 */
-    public static final RawAnimation STATE_BOAT = RawAnimation.begin().thenLoop("state.boat");
+    public static final RawAnimation STATE_BOAT = create("state.boat", true);
     /** 玩家睡觉时的循环动画。 */
-    public static final RawAnimation STATE_SLEEP = RawAnimation.begin().thenLoop("state.sleep");
+    public static final RawAnimation STATE_SLEEP = create("state.sleep", true);
     /** 玩家骑马（或驴）时的循环动画。 */
-    public static final RawAnimation STATE_RIDE = RawAnimation.begin().thenLoop("state.ride");
+    public static final RawAnimation STATE_RIDE = create("state.ride", true);
     /** 玩家骑猪时的循环动画。 */
-    public static final RawAnimation STATE_RIDE_PIG = RawAnimation.begin().thenLoop("state.ride_pig");
+    public static final RawAnimation STATE_RIDE_PIG = create("state.ride_pig", true);
     /** 玩家坐下时的循环动画。 */
-    public static final RawAnimation STATE_SIT = RawAnimation.begin().thenLoop("state.sit");
+    public static final RawAnimation STATE_SIT = create("state.sit", true);
     /** 玩家无操作时的循环动画。 */
-    public static final RawAnimation STATE_IDLE = RawAnimation.begin().thenLoop("state.idle");
+    public static final RawAnimation STATE_IDLE = create("state.idle", true);
 
     // 动作动画
     /** 玩家被攻击时的单次播放动画。 */
-    public static final RawAnimation ACTION_ATTACKED = RawAnimation.begin().thenPlay("action.attacked");
+    public static final RawAnimation ACTION_ATTACKED = create("action.attacked", false);
     /** 玩家使用主手（右手）时的单次播放动画。 */
-    public static final RawAnimation ACTION_USE_MAINHAND = RawAnimation.begin().thenPlay("action.use_mainhand");
+    public static final RawAnimation ACTION_USE_MAINHAND = create("action.use_mainhand", false);
     /** 玩家使用副手（左手）时的单次播放动画。 */
-    public static final RawAnimation ACTION_USE_OFFHAND = RawAnimation.begin().thenPlay("action.use_offhand");
+    public static final RawAnimation ACTION_USE_OFFHAND = create("action.use_offhand", false);
     /** 玩家挥动主手（右手）时的单次播放动画。 */
-    public static final RawAnimation ACTION_SWING_HAND = RawAnimation.begin().thenPlay("action.swing_hand");
+    public static final RawAnimation ACTION_SWING_HAND = create("action.swing_hand", false);
     /** 玩家挥动副手（左手）时的单次播放动画。 */
-    public static final RawAnimation ACTION_SWING_OFFHAND = RawAnimation.begin().thenPlay("action.swing_offhand");
+    public static final RawAnimation ACTION_SWING_OFFHAND = create("action.swing_offhand", false);
 
     // 特殊动画
     /** 玩家使用“激流”附魔三叉戟时的循环动画。 */
-    public static final RawAnimation SPECIAL_RIPTIDE = RawAnimation.begin().thenLoop("special.riptide");
+    public static final RawAnimation SPECIAL_RIPTIDE = create("special.riptide", true);
     /** 玩家死亡时的单次播放动画。 */
-    public static final RawAnimation SPECIAL_DEATH = RawAnimation.begin().thenPlay("special.death");
+    public static final RawAnimation SPECIAL_DEATH = create("special.death", false);
 
+    private static RawAnimation create(String animationName, boolean loop) {
+        return loop ? RawAnimation.begin().thenLoop(animationName) : RawAnimation.begin().thenPlay(animationName);
+    }
 }
+
