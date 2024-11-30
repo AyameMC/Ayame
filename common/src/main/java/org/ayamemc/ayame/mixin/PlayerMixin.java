@@ -115,7 +115,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                             state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
                     // 潜行，不动
                     () -> (!state.isMoving() && player.isCrouching()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
+                            state.setAndContinue(AyameAnimations.MOVE_SNEAK_STILL) : null,
                     // 潜行，移动
                     () -> (!state.isMoving() && player.isCrouching()) ?
                             state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
