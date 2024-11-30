@@ -103,10 +103,10 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                     //  玩家移动动画
                     // 在活版门状态，不动
                     () -> (player.isSwimming() && !player.isInLiquid() && !state.isMoving()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_CLIMBING) : null,
+                            state.setAndContinue(AyameAnimations.MOVE_CLIMB_STILL) : null,
                     // 在活版门状态，移动
                     () -> (player.isSwimming() && !player.isInLiquid() && state.isMoving()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_CLIMB) : null,
+                            state.setAndContinue(AyameAnimations.MOVE_CLIMBING) : null,
                     // 朴实无华地走
                     () -> (state.isMoving() && !player.isSprinting()) ?
                             state.setAndContinue(AyameAnimations.MOVE_WALK) : null,
@@ -118,11 +118,11 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                             state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
                     // 潜行，移动
                     () -> (!state.isMoving() && player.isCrouching()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_SNEAK) : null,
+                            state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
                     // 游泳，移动
                     () -> (state.isMoving() && player.isSwimming()) ?
                             state.setAndContinue(AyameAnimations.MOVE_SWIM) : null,
-                    // 游泳，不动（致力），可靠性存疑
+                    // 游泳，不动（直立），可靠性存疑
                     () -> (!state.isMoving() && player.isSwimming()) ?
                             state.setAndContinue(AyameAnimations.MOVE_SWIM_STAND) : null,
                     // 跳跃，可靠性存疑
@@ -137,7 +137,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                     // TODO: 制作下梯子和上梯子动画
                     // 悬挂在梯子上不动
                     () -> (player.onClimbable() && player.isSuppressingSlidingDownLadder()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_LADDER_STILLNESS) : null,
+                            state.setAndContinue(AyameAnimations.MOVE_LADDER_STILL) : null,
                     // 睡觉
                     () -> (player.isSleeping()) ?
                             state.setAndContinue(AyameAnimations.STATE_SLEEP) : null,

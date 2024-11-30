@@ -22,6 +22,9 @@ package org.ayamemc.ayame.model;
 
 import software.bernie.geckolib.animation.RawAnimation;
 
+/**
+ * Ayame 动画定义类，用于管理玩家不同状态的动画。
+ */
 public class AyameAnimations {
     // 调试动画
     /** 调试用空动画，通常用于测试或无动画状态。 */
@@ -32,14 +35,14 @@ public class AyameAnimations {
     public static final RawAnimation MOVE_WALK = create("move.walk", true);
     /** 玩家疾跑时的循环动画。 */
     public static final RawAnimation MOVE_RUN = create("move.run", true);
-    /** 玩家在活板门下方但不移动时的循环动画。 */
-    public static final RawAnimation MOVE_CLIMBING = create("move.climbing", true);
+    /** 玩家在活板门下方静止时的循环动画。 */
+    public static final RawAnimation MOVE_CLIMB_STILL = create("move.climb_still", true);
     /** 玩家在活板门下方爬行时的循环动画。 */
-    public static final RawAnimation MOVE_CLIMB = create("move.climb", true);
-    /** 玩家潜行但不移动时的循环动画。 */
-    public static final RawAnimation MOVE_SNEAKING = create("move.sneaking", true);
+    public static final RawAnimation MOVE_CLIMBING = create("move.climbing", true);
+    /** 玩家潜行但静止时的循环动画。 */
+    public static final RawAnimation MOVE_SNEAK_STILL = create("move.sneak_still", true);
     /** 玩家潜行并移动时的循环动画。 */
-    public static final RawAnimation MOVE_SNEAK = create("move.sneak", true);
+    public static final RawAnimation MOVE_SNEAKING = create("move.sneaking", true);
     /** 玩家游泳时的循环动画。 */
     public static final RawAnimation MOVE_SWIM = create("move.swim", true);
     /** 玩家在水中站立式游泳时的循环动画。 */
@@ -53,7 +56,7 @@ public class AyameAnimations {
     /** 玩家爬梯子向上移动时的循环动画。 */
     public static final RawAnimation MOVE_LADDER_UP = create("move.ladder_up", true);
     /** 玩家静止在梯子上时的循环动画。 */
-    public static final RawAnimation MOVE_LADDER_STILLNESS = create("move.ladder_stillness", true);
+    public static final RawAnimation MOVE_LADDER_STILL = create("move.ladder_still", true);
     /** 玩家爬梯子向下移动时的循环动画。 */
     public static final RawAnimation MOVE_LADDER_DOWN = create("move.ladder_down", true);
 
@@ -68,7 +71,7 @@ public class AyameAnimations {
     public static final RawAnimation STATE_RIDE_PIG = create("state.ride_pig", true);
     /** 玩家坐下时的循环动画。 */
     public static final RawAnimation STATE_SIT = create("state.sit", true);
-    /** 玩家无操作时的循环动画。 */
+    /** 玩家静止（无操作）时的循环动画。 */
     public static final RawAnimation STATE_IDLE = create("state.idle", true);
 
     // 动作动画
@@ -89,8 +92,14 @@ public class AyameAnimations {
     /** 玩家死亡时的单次播放动画。 */
     public static final RawAnimation SPECIAL_DEATH = create("special.death", false);
 
+    /**
+     * 创建动画的辅助方法。
+     *
+     * @param animationName 动画名称。
+     * @param loop 动画是否为循环播放。
+     * @return 创建的动画对象。
+     */
     private static RawAnimation create(String animationName, boolean loop) {
         return loop ? RawAnimation.begin().thenLoop(animationName) : RawAnimation.begin().thenPlay(animationName);
     }
 }
-
