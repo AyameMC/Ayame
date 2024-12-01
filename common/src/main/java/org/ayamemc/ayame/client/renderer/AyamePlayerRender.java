@@ -42,6 +42,9 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 @Environment(EnvType.CLIENT)
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int BOOT_SLOT = 0;
+    private static final int LEGGINGS_SLOT = 1;
+    private static final int CHEST_PLATE_SLOT = 2;
+    private static final int HELMET_SLOT = 3;
 
 
     // TODO : 完善代码 & 添加API
@@ -73,10 +76,26 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         }
 
         @Override
-        public void applyMolangQueries(AnimationState<Player> playerAnimationState, double animTime) {
+        public void applyMolangQueries(AnimationState<Player> animationState, double animTime) {
+            final Player player = animationState.getAnimatable();
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
-                    playerAnimationState.getAnimatable().getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
+                    player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
+            );
+
+            MathParser.setVariable(AyameMolangVars.HAS_LEGGINGS, () ->
+                    // 玩家是否穿裤子
+                    player.getInventory().getArmor(LEGGINGS_SLOT).isEmpty() ? 0 : 1
+            );
+
+            MathParser.setVariable(AyameMolangVars.HAS_CHEST_PLATE, () ->
+                    // 玩家是否穿胸甲
+                    player.getInventory().getArmor(CHEST_PLATE_SLOT).isEmpty() ? 0 : 1
+            );
+
+            MathParser.setVariable(AyameMolangVars.HAS_HELMET, () ->
+                    // 玩家是否穿头盔
+                    player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );
         }
 
