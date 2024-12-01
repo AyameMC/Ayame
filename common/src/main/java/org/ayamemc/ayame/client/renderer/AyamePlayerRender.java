@@ -30,9 +30,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.model.AyameModelCache;
+import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -67,6 +70,20 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         public GeoPlayerModel() {
         }
 
+        @Override
+        public void applyMolangQueries(AnimationState<Player> playerAnimationState, double animTime) {
+            MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () -> {
+                // 玩家是不是穿鞋了
+                if (playerAnimationState.getAnimatable().getInventory().getArmor(4).isEmpty()) {
+                    // 没穿
+                    return 0;
+                } else {
+                    // 穿了
+                    return 1;
+                }
+            });
+        }
+
 
         /**
          * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
@@ -92,5 +109,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             return AyameModelCache.getPlayerModel(animatable).getAnimation();
         }
 
+
     }
+
 }

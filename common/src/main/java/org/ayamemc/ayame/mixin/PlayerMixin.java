@@ -73,11 +73,8 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-//        final boolean isInLiquid = player.isInLiquid();
-//        final boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
-//        final boolean isSitting = player.ayame$isSitting();
 
-        controllers.add(new AnimationController<>(player, 20, state -> {
+        controllers.add(new AnimationController<>(player, 5, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
@@ -101,6 +98,16 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
 
 
                     // ----循环
+                    // TODO: 制作悬挂动画
+                    // 上梯子，有效
+                    // 悬挂梯子，有效
+                    () -> (player.onClimbable() && player.isSuppressingSlidingDownLadder()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_LADDER_STILL) : null,
+                    // 下梯子，有效
+                    () -> (player.onClimbable()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_LADDER_DOWN) : null,
+
+
                     //  玩家移动动画
                     // 普通开创飞，有效
                     () -> (player.getAbilities().flying) ?
@@ -141,16 +148,15 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                     // 鞘翅飞，todo 修复无效问题
                     () -> (player.isFallFlying()) ?
                             state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
-                    // TODO: 制作下梯子和上梯子动画
-                    // 悬挂在梯子上不动，todo 修复无效问题
-                    () -> (player.onClimbable() && player.isSuppressingSlidingDownLadder()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_LADDER_STILL) : null,
+
+
+
                     // 睡觉，有效
                     () -> (player.isSleeping()) ?
                             state.setAndContinue(AyameAnimations.STATE_SLEEP) : null,
 
                     //  玩家的一些移动状态
-                    // 坐着，有效，todo 修复无效问题 比如船，马不行
+                    // 坐着，船有效，todo 修复无效问题 比如，马不行
                     () -> (!state.isMoving() && player.ayame$isSitting()) ?
                     state.setAndContinue(AyameAnimations.STATE_SIT) : null,
                     // 禁止不动，有效
