@@ -57,6 +57,15 @@ public class AyameMolangVars {
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)
         );
+        MathParser.registerVariable(
+                new Variable(AyameMolangVars.HAS_LEGGINGS, 0)
+        );
+        MathParser.registerVariable(
+                new Variable(AyameMolangVars.HAS_CHEST_PLATE, 0)
+        );
+        MathParser.registerVariable(
+                new Variable(AyameMolangVars.HAS_HELMET, 0)
+        );
 
     }
 }
