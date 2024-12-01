@@ -42,9 +42,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 @Environment(EnvType.CLIENT)
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int BOOT_SLOT = 0;
-    private static final int BOOT_SLOT = 0;
-    private static final int BOOT_SLOT = 0;
-    private static final int BOOT_SLOT = 0;
+
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
