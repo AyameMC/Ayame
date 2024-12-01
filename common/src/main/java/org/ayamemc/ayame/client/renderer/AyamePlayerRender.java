@@ -41,6 +41,10 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 @Environment(EnvType.CLIENT)
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
+    private static final int BOOT_SLOT = 0;
+    private static final int BOOT_SLOT = 0;
+    private static final int BOOT_SLOT = 0;
+    private static final int BOOT_SLOT = 0;
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
@@ -72,16 +76,10 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
         @Override
         public void applyMolangQueries(AnimationState<Player> playerAnimationState, double animTime) {
-            MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () -> {
-                // 玩家是不是穿鞋了
-                if (playerAnimationState.getAnimatable().getInventory().getArmor(3).isEmpty()) {
-                    // 没穿
-                    return 0;
-                } else {
-                    // 穿了
-                    return 1;
-                }
-            });
+            MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
+                    // 玩家是否穿鞋
+                    playerAnimationState.getAnimatable().getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
+            );
         }
 
 
