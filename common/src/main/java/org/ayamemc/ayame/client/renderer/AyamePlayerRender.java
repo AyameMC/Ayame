@@ -74,7 +74,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         public void applyMolangQueries(AnimationState<Player> playerAnimationState, double animTime) {
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () -> {
                 // 玩家是不是穿鞋了
-                if (playerAnimationState.getAnimatable().getInventory().getArmor(4).isEmpty()) {
+                if (playerAnimationState.getAnimatable().getInventory().getArmor(3).isEmpty()) {
                     // 没穿
                     return 0;
                 } else {
