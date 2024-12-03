@@ -51,10 +51,10 @@
   ],
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=1.21 <=1.21.1",
+    "minecraft": ">=1.21.1",
     "java": ">=21",
     "fabric-api": "*",
-    "geckolib": ">=4.5.8"
+    "geckolib": ">=4.7"
   },
   "breaks": {
     "optifabric": "*",

@@ -23,28 +23,27 @@ updateJSONURL = "https://updatechecker.ayamemc.org/neoforge/ayame/update.json"
 [[dependencies.ayame]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.0,)"
+versionRange = "[21.1.83,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.ayame]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21,)"
+versionRange = "[1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.ayame]]
 modId = "geckolib"
 type = "required"
-versionRange = "[4.5.8,)"
+versionRange = "[4.7,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.ayame]]
 modId = "optifine"
 type = "incompatible"
-versionRange = "[0,)"
 ordering = "NONE"
 side = "BOTH"
 
