@@ -19,6 +19,7 @@ description = '''
 Custom player model mod. Powered by GeckoLib.
 '''
 logoFile = "icon.png"
+logoBlur = false
 updateJSONURL = "https://updatechecker.ayamemc.org/neoforge/ayame/update.json"
 [[dependencies.ayame]]
 modId = "neoforge"
