@@ -23,6 +23,8 @@ package org.ayamemc.ayame.model;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.value.Variable;
 
+import java.util.function.DoubleSupplier;
+
 public class AyameMolangVars {
     /** 护甲值（0-20）。 */
     public static final String ARMOR_VALUE = "aym.armor_value";
@@ -66,6 +68,6 @@ public class AyameMolangVars {
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_HELMET, 0)
         );
-
+        MathParser.registerVariable(new Variable(AyameMolangVars.HAS_MAINHAND, 0));
     }
 }

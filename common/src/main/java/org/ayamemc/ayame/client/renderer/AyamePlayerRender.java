@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
@@ -78,6 +79,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         @Override
         public void applyMolangQueries(AnimationState<Player> animationState, double animTime) {
             final Player player = animationState.getAnimatable();
+            MathParser.setVariable(
+                    AyameMolangVars.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
+            );
+            MathParser.setVariable(
+                    AyameMolangVars.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
+            );
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
                     player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
