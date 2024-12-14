@@ -56,6 +56,7 @@ public class AyameMolangVars {
     public static final String FOOD_LEVEL = "aym.food_level";
 
 
+
     public static void registerMolangVars() {
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)
