@@ -57,6 +57,7 @@ public class AyameMolangVars {
 
 
 
+
     public static void registerMolangVars() {
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)
