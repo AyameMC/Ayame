@@ -85,6 +85,9 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             MathParser.setVariable(
                     AyameMolangVars.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
+            MathParser.setVariable(
+                    AyameMolangVars.IS_RIPTIDE, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
+            );
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
                     player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
