@@ -25,6 +25,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
@@ -53,6 +54,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         super(context, new GeoPlayerModel());
     }
 
+
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
@@ -67,6 +69,15 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         if (animatable.getPose() == Pose.SWIMMING) {
             poseStack.translate(0, -0.5, 0);
         }
+    }
+
+    @Override
+    public void actuallyRender(PoseStack poseStack, Player player, BakedGeoModel model, @Nullable RenderType renderType,
+                               MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
+                               int packedLight, int packedOverlay, int colour) {
+        RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
+        VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
+        super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, colour);
     }
 
 
