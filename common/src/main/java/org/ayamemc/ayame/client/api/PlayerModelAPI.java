@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -71,7 +71,8 @@ public class PlayerModelAPI {
         return cache;
     }
 
-    public record CacheEntry(ModelType model, JsonInterpreter modelJson, JsonInterpreter animJson,JsonInterpreter armJson,
+    public record CacheEntry(ModelType model, JsonInterpreter modelJson, JsonInterpreter animJson,
+                             JsonInterpreter armJson,
                              InputStream texture) {
     }
 }

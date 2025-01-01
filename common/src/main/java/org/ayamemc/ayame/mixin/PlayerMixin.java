@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -141,7 +141,6 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                             state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
 
 
-
                     // 跳跃，todo 修复奇怪问题
                     () -> (player.jumping) ?
                             state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
@@ -151,7 +150,6 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                             state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
 
 
-
                     // 睡觉，有效
                     () -> (player.isSleeping()) ?
                             state.setAndContinue(AyameAnimations.STATE_SLEEP) : null,
@@ -159,7 +157,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit {
                     //  玩家的一些移动状态
                     // 坐着，船有效，todo 修复无效问题 比如，马不行
                     () -> (!state.isMoving() && player.ayame$isSitting()) ?
-                    state.setAndContinue(AyameAnimations.STATE_SIT) : null,
+                            state.setAndContinue(AyameAnimations.STATE_SIT) : null,
                     // 禁止不动，有效
                     () -> (!state.isMoving()) ?
                             state.setAndContinue(AyameAnimations.STATE_IDLE) : null

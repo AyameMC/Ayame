@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #     Custom player model mod. Powered by GeckoLib.
-#     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+#     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
 #
 #     This file is part of Ayame.
 #

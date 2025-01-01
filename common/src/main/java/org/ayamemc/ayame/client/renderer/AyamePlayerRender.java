@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -87,6 +87,15 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         public GeoPlayerModel() {
         }
 
+        /**
+         * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
+         *
+         * @param model 传入{@link ModelType}类型的模型资源
+         */
+        public static void switchModel(Player player, ModelType model) {
+            AyameModelCache.setPlayerModel(player, model);
+        }
+
         @Override
         public void applyMolangQueries(AnimationState<Player> animationState, double animTime) {
             final Player player = animationState.getAnimatable();
@@ -118,16 +127,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
                     // 玩家是否穿头盔
                     player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );
-        }
-
-
-        /**
-         * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
-         *
-         * @param model 传入{@link ModelType}类型的模型资源
-         */
-        public static void switchModel(Player player, ModelType model) {
-            AyameModelCache.setPlayerModel(player, model);
         }
 
         @Override

@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.model;
 
-import net.minecraft.world.entity.Entity;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;

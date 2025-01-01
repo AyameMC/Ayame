@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -28,17 +28,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.model.AyameModelCache;
-import org.ayamemc.ayame.model.ModelType;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;

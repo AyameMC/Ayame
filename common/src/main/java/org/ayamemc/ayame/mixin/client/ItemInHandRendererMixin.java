@@ -1,6 +1,6 @@
 /*
  *     Custom player model mod. Powered by GeckoLib.
- *     Copyright (C) 2024  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
+ *     Copyright (C) 2024-2025  CrystalNeko, HappyRespawnanchor, pertaz(Icon Designer)
  *
  *     This file is part of Ayame.
  *
@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.mixin.client;
 
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import org.ayamemc.ayame.client.renderer.AyameGeoAnimatable;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -37,7 +36,7 @@ public class ItemInHandRendererMixin implements AyameGeoAnimatable {
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return  GeckoLibUtil.createInstanceCache(this);
+        return GeckoLibUtil.createInstanceCache(this);
     }
 
     @Override
