@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -128,12 +129,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
                     player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );
         }
-
+        @Deprecated(forRemoval = true)
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getGeoModel();
         }
 
+        @Deprecated(forRemoval = true)
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getTexture();

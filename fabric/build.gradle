@@ -61,7 +61,7 @@ dependencies {
     // too-many-shortcuts
     modImplementation("maven.modrinth:too-many-shortcuts:${tms_version}")
     // Fabric Language Kotlin 它是too-many-shortcuts的前置，不是我们模组的前置，在这里只是为了让too-many-shortcuts正常加载
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.12.1+kotlin.2.0.20")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${fabric_language_kotlin_version}")
     // Ayame PaperDoll
     modImplementation "maven.modrinth:ayame-paperdoll:${ayame_paperdoll_version}-fabric"
 

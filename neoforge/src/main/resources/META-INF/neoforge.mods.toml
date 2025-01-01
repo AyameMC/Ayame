@@ -24,7 +24,7 @@ updateJSONURL = "https://updatechecker.ayamemc.org/neoforge/ayame/update.json"
 [[dependencies.ayame]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1.83,)"
+versionRange = "[21.1.92,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -38,7 +38,7 @@ side = "BOTH"
 [[dependencies.ayame]]
 modId = "geckolib"
 type = "required"
-versionRange = "[4.7,)"
+versionRange = "[4.7.3,)"
 ordering = "NONE"
 side = "BOTH"
 
