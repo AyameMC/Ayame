@@ -20,8 +20,6 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.Layout;
@@ -43,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
  * @see ModelSelectMenuScreen
  * @see WarningScreen
  */
-@Environment(EnvType.CLIENT)
+
 public class StatementScreen extends WarningScreen {
     private static final Component TITLE = Component.translatable("ayame.screen.warningscreen.statementscreen.title").withStyle(ChatFormatting.BOLD);
     private static final Component CONTENT = Component.translatable("ayame.screen.warningscreen.statementscreen.content").withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.gnu.org/licenses/")));

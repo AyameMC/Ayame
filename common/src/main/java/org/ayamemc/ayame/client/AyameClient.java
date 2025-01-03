@@ -20,12 +20,10 @@
 
 package org.ayamemc.ayame.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.ayamemc.ayame.util.ConfigUtil;
 
-@Environment(EnvType.CLIENT)
+
 public class AyameClient {
     public static void init() {
         ConfigUtil.init();

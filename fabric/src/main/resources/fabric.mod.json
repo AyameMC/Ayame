@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "ayame",
-  "version": "${version}",
-  "name": "Ayame",
-  "description": "Custom player model mod. Powered by GeckoLib.",
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
   "authors": [
     {
       "name": "CrystalNeko",
@@ -27,11 +27,11 @@
     }
   ],
   "contact": {
-    "homepage": "https://github.com/AyameMC/Ayame",
-    "sources": "https://github.com/AyameMC/Ayame",
-    "issues": "https://github.com/AyameMC/Ayame/issues"
+    "homepage": "${mod_homepage_url}",
+    "sources": "${mod_fabric_sources_url}",
+    "issues": "${mod_issues_url}"
   },
-  "license": "LGPL-3.0-or-later",
+  "license": "${mod_license}",
   "icon": "assets/ayame/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -50,22 +50,17 @@
     "ayame-fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": "*",
-    "minecraft": ">=1.21.1",
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "${fabric_minecraft_version_range}",
     "java": ">=21",
     "fabric-api": "*",
-    "geckolib": ">=4.7"
+    "geckolib": ">=${geckolib_version}"
   },
   "breaks": {
     "optifabric": "*",
     "optifine": "*"
   },
   "recommends": {
-    "too_many_shortcuts": "*"
-  },
-  "custom": {
-    "modmenu": {
-      "update_checker": true
-    }
+    "too_many_shortcuts": ">=${too_many_shortcuts_version}"
   }
 }

@@ -147,6 +147,7 @@ public class AyameAnimations {
      * 玩家死亡时的单次播放动画。
      */
     public static final RawAnimation SPECIAL_DEATH = create("special.death", false);
+    public static final RawAnimation TEST = create("aym.test", true);
 
     /**
      * 创建动画的辅助方法。

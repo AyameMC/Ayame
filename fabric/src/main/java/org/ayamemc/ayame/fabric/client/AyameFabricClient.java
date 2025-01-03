@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
@@ -31,7 +29,7 @@ import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
  *
  * @see ClientModInitializer
  */
-@Environment(EnvType.CLIENT)
+
 public final class AyameFabricClient implements ClientModInitializer {
 
     @Override

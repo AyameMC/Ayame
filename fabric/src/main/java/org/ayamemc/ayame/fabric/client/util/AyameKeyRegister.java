@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.fabric.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
@@ -40,7 +38,7 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  * @see AyameTmsKey
  * @see JavaUtil
  */
-@Environment(EnvType.CLIENT)
+
 public class AyameKeyRegister {
     public static final KeyMapping MODEL_SELECT_MENU = registerKeyMapping(
             TranslatableName.SELECT_MODEL_MENU,

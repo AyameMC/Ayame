@@ -20,8 +20,6 @@
 
 package org.ayamemc.ayame.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -32,7 +30,6 @@ import java.util.List;
  * 内部事件，实现见 {@code AyameClientEventsFabricImpl} 与 {@code AyameClientEventsNeoForgeImpl}
  */
 @ApiStatus.Internal
-@Environment(EnvType.CLIENT)
 public interface IAyameClientEvents {
     void ModelResource_onResourceCreate(IModelResource modelResource);
 

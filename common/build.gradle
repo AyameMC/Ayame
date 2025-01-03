@@ -38,5 +38,5 @@ repositories {
     mavenCentral()
 }
 loom {
-    accessWidenerPath = file("src/main/resources/ayame.accesswidener")
+    accessWidenerPath = file("${mod_access_widener_path}")
 }

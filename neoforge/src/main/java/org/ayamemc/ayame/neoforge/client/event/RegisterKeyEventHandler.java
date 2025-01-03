@@ -22,8 +22,6 @@ package org.ayamemc.ayame.neoforge.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -39,7 +37,6 @@ import org.lwjgl.glfw.GLFW;
  *
  * @see KeyModifier
  */
-@OnlyIn(Dist.CLIENT)
 public class RegisterKeyEventHandler {
     public static final Lazy<KeyMapping> MODEL_SELECT_MENU = Lazy.of(() -> new KeyMapping(
             "key." + Ayame.MOD_ID + "." + TranslatableName.SELECT_MODEL_MENU,

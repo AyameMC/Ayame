@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.fabric.client.api.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.player.LocalPlayer;
@@ -35,7 +33,7 @@ import net.minecraft.world.item.ItemStack;
  * 在以第一人称渲染玩家手臂之前触发。为代替NeoForge提供的 {@code RenderArmEvent} 而生（因为Fabric Api没给对应的事件），可用于替换玩家手臂的渲染
  * <p>例如在手臂上渲染盔甲或直接将手臂替换为盔甲。
  */
-@Environment(EnvType.CLIENT)
+
 public class RenderArmCallback {
     public static final Event<OnRenderArm> ON_RENDER_ARM = EventFactory.createArrayBacked(OnRenderArm.class,
             (listeners) -> (hand,

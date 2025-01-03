@@ -20,8 +20,6 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -57,7 +55,7 @@ import java.util.List;
  *
  * @see AyameScreen
  */
-@Environment(EnvType.CLIENT)
+
 public class ModelSelectMenuScreen extends AyameScreen {
     public static final int searchBarWidth = 112;
     public static final int searchBarHeight = 23;

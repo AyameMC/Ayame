@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.fabric.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -47,7 +45,7 @@ import org.ayamemc.ayame.util.TaskManager;
  *
  * @see AyameFabricClient
  */
-@Environment(EnvType.CLIENT)
+
 public class FabricClientEventHandler {
     /**
      * 注册Fabric事件

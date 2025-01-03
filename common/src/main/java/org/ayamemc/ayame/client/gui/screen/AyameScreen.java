@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -34,7 +32,7 @@ import org.ayamemc.ayame.util.ConfigUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
+
 public abstract class AyameScreen extends Screen {
     public static final ResourceLocation MENU_BACKGROUND_TEXTURE = Ayame.withAyamePath("textures/gui/background.png");
     public static final ResourceLocation MENU_BACKGROUND_OUTLINE_TEXTURE = Ayame.withAyamePath("textures/gui/background_outline.png");

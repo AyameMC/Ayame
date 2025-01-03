@@ -24,8 +24,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import dev.kingtux.tms.api.TMSKeyBinding;
 import dev.kingtux.tms.api.modifiers.BindingModifiers;
 import dev.kingtux.tms.api.modifiers.KeyModifier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.Ayame;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +32,7 @@ import org.lwjgl.glfw.GLFW;
 /**
  * 注册{@code too-many-shortcuts}的组合按键，检测是否安装其的逻辑位于{@link AyameKeyRegister}。
  */
-@Environment(EnvType.CLIENT)
+
 public class AyameTmsKey {
     /**
      * 使用TMS注册按键

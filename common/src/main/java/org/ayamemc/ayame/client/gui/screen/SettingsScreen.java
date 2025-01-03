@@ -20,15 +20,13 @@
 
 package org.ayamemc.ayame.client.gui.screen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
+
 public class SettingsScreen extends AyameScreen {
     /**
      * 构造方法，允许设置是否单次跳过警告界面。

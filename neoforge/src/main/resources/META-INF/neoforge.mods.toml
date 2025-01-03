@@ -1,13 +1,13 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-license = "LGPL-3.0-or-later"
-issueTrackerURL = "https://github.com/AyameMC/Ayame/issues"
+license = "${mod_license}"
+issueTrackerURL = "${mod_issues_url}"
 
 [[mods]]
-modId = "ayame"
+modId = "${mod_id}"
 version = "${version}"
-displayName = "Ayame"
-displayURL = "https://github.com/AyameMC/Ayame"
+displayName = "${mod_name}"
+displayURL = "${mod_homepage_url}"
 authors = '''
 CSneko, HappyRespawnanchor, pertaz(Icon Designer)
 '''
@@ -15,43 +15,39 @@ credits = '''
 pertaz(Icon Desiger)
 '''
 
-description = '''
-Custom player model mod. Powered by GeckoLib.
-'''
+description = "${mod_description}"
 logoFile = "icon.png"
 logoBlur = false
 updateJSONURL = "https://updatechecker.ayamemc.org/neoforge/ayame/update.json"
-[[dependencies.ayame]]
+[[dependencies.${ mod_id }]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1.92,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.ayame]]
+[[dependencies.${ mod_id }]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,)"
+versionRange = "${neoforge_minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.ayame]]
+[[dependencies.${ mod_id }]]
 modId = "geckolib"
 type = "required"
-versionRange = "[4.7.3,)"
+versionRange = "[${geckolib_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.ayame]]
+[[dependencies.${ mod_id }]]
 modId = "optifine"
 type = "incompatible"
 ordering = "NONE"
 side = "BOTH"
 
 [[mixins]]
-config = "ayame.mixins.json"
+config = "${mod_mixin_config}"
 
 [[mixins]]
 config = "ayame-neoforge.mixins.json"
-
-# 配置fabric系的AW访问加宽器，见neoforge的build.gradle

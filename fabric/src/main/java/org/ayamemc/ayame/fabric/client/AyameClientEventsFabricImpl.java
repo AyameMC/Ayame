@@ -20,8 +20,6 @@
 
 package org.ayamemc.ayame.fabric.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.fabric.client.api.event.ModelResourceEvents;
 import org.ayamemc.ayame.model.resource.IModelResource;
@@ -30,7 +28,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.List;
 
 @ApiStatus.Internal
-@Environment(EnvType.CLIENT)
+
 public class AyameClientEventsFabricImpl implements IAyameClientEvents {
     @Override
     public void ModelResource_onResourceCreate(IModelResource modelResource) {

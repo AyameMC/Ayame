@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.mixin.client;
 
 import com.google.common.collect.ImmutableMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -41,7 +39,7 @@ import java.util.Map;
 /**
  * 使用自定义模组取代默认的史蒂夫
  */
-@Environment(EnvType.CLIENT)
+
 @Mixin(EntityRenderers.class)
 public class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)

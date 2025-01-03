@@ -22,8 +22,6 @@ package org.ayamemc.ayame.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -34,15 +32,16 @@ import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-@Environment(EnvType.CLIENT)
+
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int BOOT_SLOT = 0;
     private static final int LEGGINGS_SLOT = 1;
@@ -54,7 +53,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     public AyamePlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
     }
-
 
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
@@ -129,13 +127,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
                     player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );
         }
-        @Deprecated(forRemoval = true)
+
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getGeoModel();
         }
 
-        @Deprecated(forRemoval = true)
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getTexture();

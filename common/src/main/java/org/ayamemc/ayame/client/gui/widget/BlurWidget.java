@@ -20,15 +20,13 @@
 
 package org.ayamemc.ayame.client.gui.widget;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
-@Environment(EnvType.CLIENT)
+
 @Deprecated
 public class BlurWidget extends AbstractWidget {
     final Minecraft minecraft = Minecraft.getInstance();
