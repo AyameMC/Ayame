@@ -29,6 +29,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.yttribume.Yttribume;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
@@ -57,9 +59,10 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
-        if (animatable.isBaby()) {
-            poseStack.scale(0.5F, 0.5F, 0.5F); // 将幼年实体的尺寸缩小为原来的一半
-        }
+        // 实体缩放
+        float scale = animatable.ayame$getYttribume(Yttribumes.RENDER_SCALE);
+        poseStack.scale(scale, scale, scale);
+
         // 坐下时向下移动
         if (animatable.ayame$isSitting()) {
             poseStack.translate(0, -0.7, 0);

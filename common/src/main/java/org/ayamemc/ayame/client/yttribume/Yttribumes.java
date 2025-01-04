@@ -18,31 +18,31 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame;
+package org.ayamemc.ayame.client.yttribume;
 
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameMolangVars;
-import org.ayamemc.ayame.model.DefaultModels;
-import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
-import org.ayamemc.ayame.util.ConfigUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public final class Ayame {
-    public static final String MOD_ID = "ayame";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-    public static void init() {
-        ConfigUtil.init();
-        ModelResourceRegistry.init();
-        DefaultModels.init();
-        Yttribumes.init();
+import static org.ayamemc.ayame.Ayame.withAyamePath;
+public class Yttribumes {
+    private static final Map<ResourceLocation, Yttribume> YTTRIBUMES = new HashMap<>();
 
-        AyameMolangVars.registerMolangVars();
+    public static final Yttribume EMPTY = new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL); // 空
+    public static final Yttribume RENDER_SCALE = new Yttribume(1.0F, 0.001F, 16.0F, Yttribume.AttributeType.MODEL); // 控制渲染缩放
+
+    public static Yttribume register(ResourceLocation id, Yttribume yttribume){
+        YTTRIBUMES.put(id, yttribume);
+        return yttribume;
     }
-
-    public static ResourceLocation withAyamePath(String location) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
+    public static Yttribume get(ResourceLocation id){
+        return YTTRIBUMES.getOrDefault(id, EMPTY);
+    }
+    public static Collection<ResourceLocation> getIds(){
+        return YTTRIBUMES.keySet();
+    }
+    public static void init(){
     }
 }

@@ -18,31 +18,23 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame;
+package org.ayamemc.ayame.client.yttribume;
 
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameMolangVars;
-import org.ayamemc.ayame.model.DefaultModels;
-import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
-import org.ayamemc.ayame.util.ConfigUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public final class Ayame {
-    public static final String MOD_ID = "ayame";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    public static void init() {
-        ConfigUtil.init();
-        ModelResourceRegistry.init();
-        DefaultModels.init();
-        Yttribumes.init();
-
-        AyameMolangVars.registerMolangVars();
+public class Yttribume {
+    public final float defaultValue;
+    public final float min;
+    public final float max;
+    public final AttributeType type;
+    public Yttribume(float defaultValue, float min, float max, AttributeType type){
+        this.defaultValue = defaultValue;
+        this.min = min;
+        this.max = max;
+        this.type = type;
     }
 
-    public static ResourceLocation withAyamePath(String location) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
+
+    public enum AttributeType{
+        MODEL, // 只对自己的模型生效
+        GLOBAL, // 全局生效
     }
 }

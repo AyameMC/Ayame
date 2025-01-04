@@ -21,19 +21,62 @@
 package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.yttribume.Yttribume;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
+
+import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
+
 
 public class AyameCommand {
     public static <T extends SharedSuggestionProvider> void init(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
+        // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
-                .then(LiteralArgumentBuilder.literal("attribute")
+                // ---------------------------------------------------------- yttribume -------------------------------------------------------------------------
+                .then(LiteralArgumentBuilder.<T>literal("yttribume")
+                        .then(RequiredArgumentBuilder.<T,String>argument("yttribume", StringArgumentType.string())
+                                .suggests((c, b)->{
+                                    Yttribumes.getIds().forEach((y)-> b.add(new SuggestionsBuilder(y.toString(), 0)));
+                                    return b.buildFuture();
+                                })
+                                // ------------------------------------- yttribume set -------------------------------------------------------------------------
+                                .then(LiteralArgumentBuilder.<T>literal("set")
+                                        .then(RequiredArgumentBuilder.argument("value", FloatArgumentType.floatArg())) // TODO 最大值&最小值处理
+                                        .executes(AyameCommand::setYttribume)
+                                )
+
+                        )
                 )
+                // -----------------------------------------------------------------------------------------------
         );
 
         // aym重定向到ayame
         dispatcher.register(LiteralArgumentBuilder.<T>literal("aym").redirect(dispatcher.getRoot().getChild("ayame")));
+    }
+
+    private static <T extends SharedSuggestionProvider> int setYttribume(CommandContext<T> context) {
+        assert Minecraft.getInstance().player != null;
+        Minecraft.getInstance().player.ayame$setYttribume(getByString(StringArgumentType.getString(context, "yttribume")), FloatArgumentType.getFloat(context, "value"));
+        return 0;
+    }
+
+
+    private static Yttribume getByString(String yttribume){
+        String[] yttribumeSplit = yttribume.split(":");
+        String namespace = yttribumeSplit[0];
+        String path = yttribumeSplit[1];
+        return Yttribumes.get(ResourceLocation.fromNamespaceAndPath(namespace,path));
     }
 
 }
