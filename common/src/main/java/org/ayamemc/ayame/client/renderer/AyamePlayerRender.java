@@ -29,14 +29,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.ModelType;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.math.MathParser;
@@ -60,7 +57,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         // 实体缩放
-        float scale = animatable.ayame$getYttribume(Yttribumes.RENDER_SCALE);
+        float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_RENDER_SCALE);
         poseStack.scale(scale, scale, scale);
 
         // 坐下时向下移动

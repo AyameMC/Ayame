@@ -41,6 +41,5 @@ public final class AyameFabric implements ModInitializer {
         Ayame.init();
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new ModelReloadEventHandler());
-        ClientCommandRegistrationCallback.EVENT.register(AyameCommand::init);
     }
 }

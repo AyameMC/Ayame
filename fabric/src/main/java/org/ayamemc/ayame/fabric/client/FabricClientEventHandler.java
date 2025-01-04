@@ -56,7 +56,12 @@ public class FabricClientEventHandler {
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
 
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
-        HudRenderCallback.EVENT.register(FabricClientEventHandler::renderEntityOnHud);
+        HudRenderCallback.EVENT.register(FabricClientEventHandler::renderHud);
+    }
+
+    private static void renderHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+        ClientEventHandler.renderCustomHandInHud(guiGraphics, deltaTracker);
+        ClientEventHandler.renderHud(guiGraphics, deltaTracker);
     }
 
 
@@ -116,8 +121,4 @@ public class FabricClientEventHandler {
         AyameKeyRegister.processKeyPressed();
     }
 
-
-    private static void renderEntityOnHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
-        ClientEventHandler.renderCustomHandInHud(guiGraphics, tickDelta);
-    }
 }

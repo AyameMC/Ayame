@@ -35,13 +35,18 @@ import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
     public static final int TOOLTIP_BORDER_TOP_COLOR = 0xCC_fdc7f5;
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
     private final static Minecraft minecraft = Minecraft.getInstance();
-    private final static LocalPlayer player = minecraft.player;
+    private final static @NotNull LocalPlayer player = minecraft.player;
 
     public static boolean shouldUseAyameTooltipColor() {
         return minecraft.screen instanceof AyameScreen;
@@ -94,4 +99,22 @@ public class ClientEventHandler {
         dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, minecraft.renderBuffers().bufferSource(), 15728880);
         poseStack.popPose();
     }
+
+    public static void renderHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
+        float shake = player.ayame$getYttribume(Yttribumes.GLOBAL_SCREEN_SHAKE);
+        if (shake != 0F){
+            // 抖起来
+            applyScreenShake(guiGraphics,shake);
+        }
+    }
+
+    private static void applyScreenShake(GuiGraphics guiGraphics,float intensity) {
+        var random = new Random();
+        var shakeX = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移X，范围 [-intensity, intensity]
+        var shakeY = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移Y，范围 [-intensity, intensity]
+
+        // 在当前渲染矩阵中应用偏移
+        guiGraphics.pose().translate(shakeX, shakeY, 0.0);
+    }
+
 }
