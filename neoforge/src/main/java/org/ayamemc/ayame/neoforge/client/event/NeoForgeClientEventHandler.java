@@ -21,11 +21,9 @@
 package org.ayamemc.ayame.neoforge.client.event;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
-import net.neoforged.neoforge.client.event.RenderHandEvent;
-import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import org.ayamemc.ayame.client.command.AyameCommand;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
@@ -51,6 +49,11 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+    }
+
+    @SubscribeEvent
+    public static void registerCommand(RegisterClientCommandsEvent event){
+        AyameCommand.init(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent
