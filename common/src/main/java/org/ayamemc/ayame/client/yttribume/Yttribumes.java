@@ -30,8 +30,8 @@ import static org.ayamemc.ayame.Ayame.withAyamePath;
 public class Yttribumes {
     private static final Map<ResourceLocation, Yttribume> YTTRIBUMES = new HashMap<>();
 
-    public static final Yttribume EMPTY = new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL); // 空
-    public static final Yttribume RENDER_SCALE = new Yttribume(1.0F, 0.001F, 16.0F, Yttribume.AttributeType.MODEL); // 控制渲染缩放
+    public static final Yttribume EMPTY = register(withAyamePath("model.empty"),new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL)); // 空
+    public static final Yttribume RENDER_SCALE = register(withAyamePath("model.render.scale"), new Yttribume(1.0F, 0.001F, 16.0F, Yttribume.AttributeType.MODEL)); // 控制渲染缩放
 
     public static Yttribume register(ResourceLocation id, Yttribume yttribume){
         YTTRIBUMES.put(id, yttribume);
