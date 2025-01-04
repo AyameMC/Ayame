@@ -34,7 +34,7 @@ public class Yttribumes {
     public static final Yttribume EMPTY = register(withAyamePath("empty"), new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL,true)); // 空
     public static final Yttribume MODEL_SCALE = register(withAyamePath("model.scale"), new Yttribume(1.0F, 0.001F, 1000F, Yttribume.AttributeType.MODEL,false)); // 控制渲染缩放
     public static final Yttribume GLOBAL_SCREEN_SHAKE = register(withAyamePath("global.screen.shake"), new Yttribume(0.0F, 0.0F, 10.0F, Yttribume.AttributeType.GLOBAL,false)); // 抖起来！
-
+    public static final Yttribume GLOBAL_CAMERA_Y_OFFSET = register(withAyamePath("global.camera.y.offset"), new Yttribume(0.0F, -10.0F, 10.0F, Yttribume.AttributeType.GLOBAL,false));
     public static Yttribume register(ResourceLocation id, Yttribume yttribume) {
         YTTRIBUMES.put(id, yttribume);
         return yttribume;

@@ -25,6 +25,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -57,6 +58,7 @@ public class FabricClientEventHandler {
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
         ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
         HudRenderCallback.EVENT.register(ClientEventHandler::renderHud);
+        WorldRenderEvents.START.register((context)-> ClientEventHandler.renderCamera());
 
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
     }

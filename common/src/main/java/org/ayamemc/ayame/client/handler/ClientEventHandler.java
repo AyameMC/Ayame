@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client.handler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.math.Axis;
+import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -33,6 +34,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
@@ -100,6 +102,7 @@ public class ClientEventHandler {
             // 抖起来
             applyScreenShake(guiGraphics,shake);
         }
+
     }
     private static void applyScreenShake(GuiGraphics guiGraphics,float intensity) {
         var random = new Random();
@@ -110,4 +113,9 @@ public class ClientEventHandler {
     }
 
 
+    public static void renderCamera() {
+        Camera camera = minecraft.gameRenderer.getMainCamera();
+        Vec3 currentPosition = camera.getPosition();
+        camera.setPosition(currentPosition.x, currentPosition.y + player.ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET), currentPosition.z);
+    }
 }

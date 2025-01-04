@@ -15,5 +15,6 @@
   "message.ayame.command.yttribume.reset_success": "Resetting yttribume value successful",
   "yttribume.ayame.empty": "Empty",
   "yttribume.ayame.model.scale": "Model Rendering Scale",
-  "yttribume.ayame.global.screen.shake": "GUI Shaking"
+  "yttribume.ayame.global.screen.shake": "GUI Shaking",
+  "yttribume.ayame.global.camera.y.offset": "Camera Y-axis offset"
 }

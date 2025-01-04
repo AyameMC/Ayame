@@ -6,5 +6,6 @@ accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraf
 accessible class net/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection
 accessible field net/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection renderMainHand Z
 accessible field net/minecraft/client/renderer/ItemInHandRenderer$HandRenderSelection renderOffHand Z
+accessible method net/minecraft/client/Camera setPosition (DDD)V
 # LivingEntity 有没有跳的字段
 accessible field net/minecraft/world/entity/LivingEntity jumping Z
