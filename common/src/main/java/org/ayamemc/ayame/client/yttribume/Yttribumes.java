@@ -21,12 +21,15 @@
 package org.ayamemc.ayame.client.yttribume;
 
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.withAyamePath;
+import static org.ayamemc.ayame.Ayame.minecraft;
 
 public class Yttribumes {
     private static final Map<ResourceLocation, Yttribume> YTTRIBUMES = new HashMap<>();
@@ -37,6 +40,8 @@ public class Yttribumes {
     public static final Yttribume GLOBAL_CAMERA_Y_OFFSET = register(withAyamePath("global.camera.y.offset"), new Yttribume(0.0F, -10.0F, 10.0F, Yttribume.AttributeType.GLOBAL,false));
     public static Yttribume register(ResourceLocation id, Yttribume yttribume) {
         YTTRIBUMES.put(id, yttribume);
+        // 注册到Molang
+        MathParser.registerVariable(new Variable(id.getNamespace()+".yttribume."+id.getPath(),0));
         return yttribume;
     }
 
