@@ -22,7 +22,10 @@ package org.ayamemc.ayame.neoforge;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
+import org.ayamemc.ayame.neoforge.event.NeoForgeEventHandler;
 
 @Mod(Ayame.MOD_ID)
 public final class AyameNeoForge {

@@ -20,11 +20,16 @@
 
 package org.ayamemc.ayame.fabric.mixin.client.event;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +60,6 @@ public abstract class RenderHandCustomEventMixin {
 
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void renderHandsWithItems(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
-        /*
         float f = playerEntity.getAttackAnim(partialTicks);
         InteractionHand interactionHand = playerEntity.swingingArm;
         float pitch = Mth.lerp(partialTicks, playerEntity.xRotO, playerEntity.getXRot());
@@ -64,18 +68,7 @@ public abstract class RenderHandCustomEventMixin {
             return;
         }
         if (handsToRender.renderMainHand) {
-            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
-                    InteractionHand.MAIN_HAND,
-                    poseStack,
-                    buffer,
-                    combinedLight,
-                    partialTicks,
-                    pitch,
-                    interactionHand == InteractionHand.MAIN_HAND ? f : 0.0F,
-                    1.0F - Mth.lerp(partialTicks, this.oMainHandHeight, this.mainHandHeight),
-                    this.mainHandItem,
-                    playerEntity
-            );
+            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.MAIN_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.MAIN_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oMainHandHeight, this.mainHandHeight), this.mainHandItem, playerEntity);
             if (result != InteractionResult.PASS) {
                 ci.cancel();
                 return;
@@ -83,32 +76,11 @@ public abstract class RenderHandCustomEventMixin {
         }
 
         if (handsToRender.renderOffHand) {
-            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(
-                    InteractionHand.OFF_HAND,
-                    poseStack,
-                    buffer,
-                    combinedLight,
-                    partialTicks,
-                    pitch,
-                    interactionHand == InteractionHand.OFF_HAND ? f : 0.0F,
-                    1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight),
-                    this.offHandItem,
-                    playerEntity
-            );
+            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.OFF_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.OFF_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight), this.offHandItem, playerEntity);
             if (result != InteractionResult.PASS) {
                 ci.cancel();
             }
-            */
-        ci.cancel();
+            ci.cancel();
+        }
     }
-
-    @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
-    private void renderPlayerArm(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
-        ci.cancel();
-//        ModelType model = AyameModelCache.getPlayerModel(playerEntity);
-//        ResourceLocation arm = model.getArm();
-
-    }
-
-
 }

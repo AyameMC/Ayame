@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.fabric.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -54,14 +55,9 @@ public class FabricClientEventHandler {
         ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
         ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
+        ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
 
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
-        HudRenderCallback.EVENT.register(FabricClientEventHandler::renderHud);
-    }
-
-    private static void renderHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        ClientEventHandler.renderCustomHandInHud(guiGraphics, deltaTracker);
-        ClientEventHandler.renderHud(guiGraphics, deltaTracker);
     }
 
 
@@ -114,7 +110,7 @@ public class FabricClientEventHandler {
                 equipProgress,
                 stack
         );
-        return InteractionResult.SUCCESS;
+        return InteractionResult.FAIL;
     }
 
     private static void endClientTickEvent(Minecraft minecraft) {

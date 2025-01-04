@@ -23,7 +23,7 @@ package org.ayamemc.ayame.neoforge.client.event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.ayamemc.ayame.client.command.AyameCommand;
+import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.TaskManager;
@@ -47,13 +47,13 @@ public class NeoForgeClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+    public static void registerCommand(RegisterClientCommandsEvent event) {
+        AyameCommandManager.createCommands(event.getDispatcher(), event.getBuildContext());
     }
 
     @SubscribeEvent
-    public static void registerCommand(RegisterClientCommandsEvent event){
-        AyameCommand.init(event.getDispatcher(), event.getBuildContext());
+    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
     }
 
     @SubscribeEvent
@@ -79,13 +79,6 @@ public class NeoForgeClientEventHandler {
             event.setBorderEnd(ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR);
             event.setBackground(ClientEventHandler.TOOLTIP_BACKGROUND_COLOR);
         }
-    }
-
-    @SubscribeEvent
-    public static void renderCustomHandInHUd(RenderGuiEvent.Post event) {
-        ClientEventHandler.renderCustomHandInHud(
-                event.getGuiGraphics(), event.getPartialTick()
-        );
     }
 
 

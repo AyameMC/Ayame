@@ -21,6 +21,10 @@
 package org.ayamemc.ayame.client.yttribume;
 
 public interface IYttribumable {
-    default void ayame$setYttribume(Yttribume yttribume, float value){}
-    default float ayame$getYttribume(Yttribume yttribume){return yttribume.defaultValue;}
+    default void ayame$setYttribume(Yttribume yttribume, float value) {
+    }
+
+    default float ayame$getYttribume(Yttribume yttribume) {
+        return yttribume.defaultValue;
+    }
 }

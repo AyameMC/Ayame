@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 public final class Ayame {
     public static final String MOD_ID = "ayame";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Minecraft minecraft = Minecraft.getInstance();
 
     public static void init() {
         ConfigUtil.init();

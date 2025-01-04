@@ -21,9 +21,7 @@
 package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.client.command.AyameCommand;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
 /**
@@ -40,6 +38,5 @@ public final class AyameFabricClient implements ClientModInitializer {
         AyameKeyRegister.init();
         FabricClientEventHandler.init();
         AyameClient.init();
-        ClientCommandRegistrationCallback.EVENT.register(AyameCommand::init);
     }
 }

@@ -10,5 +10,5 @@
   "ayame.button.opendir.tooltip": "Open Model Folder\n(Place model files here)",
   "ayame.button.listmode.tooltip": "List Mode",
   "ayame.widget.searchBox": "Search...",
-  "message.ayame.command.yttribume.set.success": "§aSet up for success!"
+  "ayame.command.message.yttribume.set_success": "Setting successful"
 }

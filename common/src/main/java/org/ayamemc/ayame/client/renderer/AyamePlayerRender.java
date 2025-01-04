@@ -59,15 +59,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         // 实体缩放
         float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_RENDER_SCALE);
         poseStack.scale(scale, scale, scale);
-
-        // 坐下时向下移动
-        if (animatable.ayame$isSitting()) {
-            poseStack.translate(0, -0.7, 0);
-        }
-        // 游泳/爬行时向下移动
-        if (animatable.getPose() == Pose.SWIMMING) {
-            poseStack.translate(0, -0.5, 0);
-        }
     }
 
     @Override
@@ -128,11 +119,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             );
         }
 
+        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getGeoModel();
         }
 
+        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
             return AyameModelCache.getPlayerModel(animatable).getTexture();

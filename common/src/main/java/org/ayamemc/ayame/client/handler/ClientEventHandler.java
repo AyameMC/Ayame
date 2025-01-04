@@ -21,70 +21,58 @@
 package org.ayamemc.ayame.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.math.Axis;
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
+import static org.ayamemc.ayame.Ayame.minecraft;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
     public static final int TOOLTIP_BORDER_TOP_COLOR = 0xCC_fdc7f5;
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
-    private final static Minecraft minecraft = Minecraft.getInstance();
-    private final static @NotNull LocalPlayer player = minecraft.player;
+    private final static LocalPlayer player = minecraft.player;
 
     public static boolean shouldUseAyameTooltipColor() {
         return minecraft.screen instanceof AyameScreen;
     }
 
-    public static void renderCustomHandEventHandler(
-            InteractionHand hand,
-            PoseStack poseStack,
-            MultiBufferSource multiBufferSource,
-            int packedLight,
-            float partialTick,
-            float interpolatedPitch,
-            float swingProgress,
-            float equipProgress,
-            ItemStack stack
-    ) {
-        //AyamePlayerHandRenderer renderer = new AyamePlayerHandRenderer(null);
-        //renderer.render(poseStack, null, multiBufferSource, null, (VertexConsumer) multiBufferSource, packedLight, partialTick);
+    public static void renderCustomHandEventHandler(InteractionHand hand, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, float partialTick, float interpolatedPitch, float swingProgress, float equipProgress, ItemStack stack) {
+
+    }
+
+    public static <T extends SharedSuggestionProvider> void registerClientCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
+        AyameCommandManager.createCommands(dispatcher, context);
     }
 
     public static void openSelectMenuKeyPressed() {
         minecraft.setScreen(new ModelSelectMenuScreen(null));
     }
 
-    public static void renderCustomHandInHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
-
-        if (minecraft.level == null || player == null) return;
-
-        LivingEntity entity = new Pig(EntityType.PIG, minecraft.level);
-
-        // 设置实体的起始位置
-        entity.setPos(player.getX(), player.getY(), player.getZ());
-
-        // 渲染逻辑
-        int x = minecraft.getWindow().getGuiScaledWidth() - 50; // 右下角的X坐标
-        int y = minecraft.getWindow().getGuiScaledHeight() - 50; // 右下角的Y坐标
-        renderEntityInGui(entity, x, y, 30); // 实体大小为30
-    }
+//    public static void renderCustomHandInHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
+//
+//        if (minecraft.level == null) return;
+//
+//        LivingEntity entity = new Pig(EntityType.PIG, minecraft.level);
+//
+//        // 设置实体的起始位置
+//        entity.setPos(player.getX(), player.getY(), player.getZ());
+//
+//        // 渲染逻辑
+//        int x = minecraft.getWindow().getGuiScaledWidth() - 50; // 右下角的X坐标
+//        int y = minecraft.getWindow().getGuiScaledHeight() - 50; // 右下角的Y坐标
+//        renderEntityInGui(entity, x, y, 30); // 实体大小为30
+//    }
 
     private static void renderEntityInGui(LivingEntity entity, int x, int y, int size) {
         EntityRenderDispatcher dispatcher = minecraft.getEntityRenderDispatcher();
@@ -100,21 +88,5 @@ public class ClientEventHandler {
         poseStack.popPose();
     }
 
-    public static void renderHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
-        float shake = player.ayame$getYttribume(Yttribumes.GLOBAL_SCREEN_SHAKE);
-        if (shake != 0F){
-            // 抖起来
-            applyScreenShake(guiGraphics,shake);
-        }
-    }
-
-    private static void applyScreenShake(GuiGraphics guiGraphics,float intensity) {
-        var random = new Random();
-        var shakeX = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移X，范围 [-intensity, intensity]
-        var shakeY = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移Y，范围 [-intensity, intensity]
-
-        // 在当前渲染矩阵中应用偏移
-        guiGraphics.pose().translate(shakeX, shakeY, 0.0);
-    }
 
 }

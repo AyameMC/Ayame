@@ -22,7 +22,6 @@ package org.ayamemc.ayame.client.gui.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
@@ -61,7 +60,7 @@ public class ModelSelectMenuScreen extends AyameScreen {
     public static final int searchBarHeight = 23;
     protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
     public final List<IModelResource> modelResources;
-    public @Nullable ModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
+    public @Nullable ModelType selectedModel = AyameModelCache.getPlayerModel(minecraft.player);
 
 
     /**

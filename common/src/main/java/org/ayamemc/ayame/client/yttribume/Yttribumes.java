@@ -27,23 +27,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.withAyamePath;
+
 public class Yttribumes {
     private static final Map<ResourceLocation, Yttribume> YTTRIBUMES = new HashMap<>();
 
-    public static final Yttribume EMPTY = register(withAyamePath("model.empty"),new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL)); // 空
-    public static final Yttribume MODEL_RENDER_SCALE = register(withAyamePath("model.render.scale"), new Yttribume(1.0F, 0.001F, 10000F, Yttribume.AttributeType.MODEL)); // 控制渲染缩放
-    public static final Yttribume GLOBAL_SCREEN_SHAKE = register(withAyamePath("global.screen.shake"), new Yttribume(0.0F, 0.0F, 100.0F, Yttribume.AttributeType.GLOBAL)); // 抖起来！
+    public static final Yttribume EMPTY = register(withAyamePath("empty"), new Yttribume(0.0F, 0.0F, 0.0F, Yttribume.AttributeType.MODEL)); // 空
+    public static final Yttribume MODEL_RENDER_SCALE = register(withAyamePath("scale"), new Yttribume(1.0F, 0.001F, 10000F, Yttribume.AttributeType.MODEL)); // 控制渲染缩放
 
-    public static Yttribume register(ResourceLocation id, Yttribume yttribume){
+    public static Yttribume register(ResourceLocation id, Yttribume yttribume) {
         YTTRIBUMES.put(id, yttribume);
         return yttribume;
     }
-    public static Yttribume get(ResourceLocation id){
+
+    public static Yttribume get(ResourceLocation id) {
         return YTTRIBUMES.getOrDefault(id, EMPTY);
     }
-    public static Collection<ResourceLocation> getIds(){
+
+    public static Collection<ResourceLocation> getIds() {
         return YTTRIBUMES.keySet();
     }
-    public static void init(){
+
+    public static void init() {
     }
 }

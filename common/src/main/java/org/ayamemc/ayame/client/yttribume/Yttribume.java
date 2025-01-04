@@ -25,7 +25,8 @@ public class Yttribume {
     public final float min;
     public final float max;
     public final AttributeType type;
-    public Yttribume(float defaultValue, float min, float max, AttributeType type){
+
+    public Yttribume(float defaultValue, float min, float max, AttributeType type) {
         this.defaultValue = defaultValue;
         this.min = min;
         this.max = max;
@@ -33,7 +34,7 @@ public class Yttribume {
     }
 
 
-    public enum AttributeType{
+    public enum AttributeType {
         MODEL, // 只对自己的模型生效
         GLOBAL, // 全局生效
     }

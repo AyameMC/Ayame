@@ -22,7 +22,6 @@ package org.ayamemc.ayame.client.util;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -44,6 +43,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
+import static org.ayamemc.ayame.Ayame.minecraft;
 
 /**
  * 用于向GeckoLib缓存和贴图写入新模型的工具类
@@ -104,7 +104,7 @@ public class ModelResourceWriterUtil {
      */
     public static void addTexture(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
         try {
-            Minecraft.getInstance().getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
+            minecraft.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +127,7 @@ public class ModelResourceWriterUtil {
 
     public static void addTexture(ResourceLocation resourceLocation, InputStream inputStream) {
         try {
-            Minecraft.getInstance().getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(inputStream)));
+            minecraft.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(inputStream)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
