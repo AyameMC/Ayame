@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
@@ -57,7 +56,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         // 实体缩放
-        float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_RENDER_SCALE);
+        float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
         poseStack.scale(scale, scale, scale);
     }
 

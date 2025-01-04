@@ -37,29 +37,14 @@ import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import static org.ayamemc.ayame.Ayame.minecraft;
 
 
-@SuppressWarnings("unchecked")
 public class AyameCommandManager {
     public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
         // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
-                        // ---------------------------------------------------------- yttribume -------------------------------------------------------------------------
 
                         .then(LiteralArgumentBuilder.<T>literal("model")
-                                .then(LiteralArgumentBuilder.<T>literal("set-attribute")
-                                        .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("attribute", ResourceLocationArgument.id())
-                                                .suggests((c, b) -> {
-                                                    Yttribumes.getIds().forEach((y) -> b.suggest(y.toString()));
-                                                    return b.buildFuture();
-                                                })
-                                                .then(RequiredArgumentBuilder.<T, Float>argument("value", FloatArgumentType.floatArg())
-                                                        .executes(AyameCommandManager::setYttribume)) // TODO 最大值&最小值处理
-                                        )
-                                )
 
                         )
-
-
-                // ------------------------------------- yttribume set -------------------------------------------------------------------------
 
 
         );
@@ -68,13 +53,9 @@ public class AyameCommandManager {
 
         // aym重定向到ayame
         dispatcher.register(LiteralArgumentBuilder.<T>literal("aym").redirect(dispatcher.getRoot().getChild("ayame")));
-    }
 
-    @SuppressWarnings("DataFlowIssue")
-    private static <T extends SharedSuggestionProvider> int setYttribume(CommandContext<T> context) {
-        minecraft.player.ayame$setYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "attribute")), FloatArgumentType.getFloat(context, "value"));
-        minecraft.player.sendSystemMessage(Component.translatable("ayame.command.message.yttribume.set_success"));
-        return 0;
+        // 注册yttribume命令
+        YttribumeCommand.init(dispatcher,context);
     }
 
 

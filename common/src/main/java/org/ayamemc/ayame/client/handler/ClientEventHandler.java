@@ -23,6 +23,8 @@ package org.ayamemc.ayame.client.handler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.math.Axis;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -34,6 +36,9 @@ import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
+
+import java.util.Random;
 
 import static org.ayamemc.ayame.Ayame.minecraft;
 
@@ -86,6 +91,22 @@ public class ClientEventHandler {
 
         dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, minecraft.renderBuffers().bufferSource(), 15728880);
         poseStack.popPose();
+    }
+
+
+    public static void renderHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
+        float shake = player.ayame$getYttribume(Yttribumes.GLOBAL_SCREEN_SHAKE);
+        if (shake != 0F){
+            // 抖起来
+            applyScreenShake(guiGraphics,shake);
+        }
+    }
+    private static void applyScreenShake(GuiGraphics guiGraphics,float intensity) {
+        var random = new Random();
+        var shakeX = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移X，范围 [-intensity, intensity]
+        var shakeY = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移Y，范围 [-intensity, intensity]
+        // 在当前渲染矩阵中应用偏移
+        guiGraphics.pose().translate(shakeX, shakeY, 0.0);
     }
 
 

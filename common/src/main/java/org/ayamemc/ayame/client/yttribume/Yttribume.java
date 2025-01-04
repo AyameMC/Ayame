@@ -25,12 +25,14 @@ public class Yttribume {
     public final float min;
     public final float max;
     public final AttributeType type;
+    public final boolean hideInGui;
 
-    public Yttribume(float defaultValue, float min, float max, AttributeType type) {
+    public Yttribume(float defaultValue, float min, float max, AttributeType type, boolean hideInGui) {
         this.defaultValue = defaultValue;
         this.min = min;
         this.max = max;
         this.type = type;
+        this.hideInGui = hideInGui;
     }
 
 

@@ -56,6 +56,7 @@ public class FabricClientEventHandler {
         ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
         ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
+        HudRenderCallback.EVENT.register(ClientEventHandler::renderHud);
 
         RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
     }

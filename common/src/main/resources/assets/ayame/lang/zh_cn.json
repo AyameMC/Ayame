@@ -10,5 +10,10 @@
   "ayame.button.opendir.tooltip": "打开模型文件夹\n（请将模型文件放在这里）",
   "ayame.button.listmode.tooltip": "列表模式",
   "ayame.widget.searchBox": "搜索...",
-  "ayame.command.message.yttribume.set_success": "设置成功"
+  "message.ayame.command.yttribume.set_success": "设置成功",
+  "message.ayame.command.yttribume.get_success": "当前属性值为：%f",
+  "message.ayame.command.yttribume.reset_success": "成功重设属性值",
+  "yttribume.ayame.empty": "空",
+  "yttribume.ayame.model.scale": "模型渲染缩放",
+  "yttribume.ayame.global.screen.shake": "界面抖动"
 }

@@ -10,5 +10,10 @@
   "ayame.button.opendir.tooltip": "Open Model Folder\n(Place model files here)",
   "ayame.button.listmode.tooltip": "List Mode",
   "ayame.widget.searchBox": "Search...",
-  "ayame.command.message.yttribume.set_success": "Setting successful"
+  "ayame.command.message.yttribume.set_success": "Setting successful",
+  "message.ayame.command.yttribume.get_success": "The current yttribume value is: %f",
+  "message.ayame.command.yttribume.reset_success": "Resetting yttribume value successful",
+  "yttribume.ayame.empty": "Empty",
+  "yttribume.ayame.model.scale": "Model Rendering Scale",
+  "yttribume.ayame.global.screen.shake": "GUI Shaking"
 }
