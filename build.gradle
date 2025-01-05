@@ -110,6 +110,8 @@ subprojects {
             officialMojangMappings()
             parchment("org.parchmentmc.data:parchment-${parchment_minecraft_version}:${parchment_version}@zip")
         }
+        implementation "org.graalvm.polyglot:polyglot:${graaljs_version}"
+        implementation "org.graalvm.polyglot:js-community:${graaljs_version}"
     }
 
     java {
