@@ -51,6 +51,7 @@ public class SimpleModelResource implements IModelResource {
                 .name(getMetaData().name())
                 .animation("animation.json")
                 .texture("texture.png")
+                .arm("arm.json")
                 .build()
         );
     }

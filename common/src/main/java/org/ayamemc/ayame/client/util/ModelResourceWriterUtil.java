@@ -29,6 +29,7 @@ import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.model.DefaultModelType;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.util.JsonInterpreter;
+import org.ayamemc.ayame.util.TaskManager;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -57,10 +58,12 @@ public class ModelResourceWriterUtil {
      * @return 未完成的模型构建器
      */
     public static DefaultModelType.Builder addModelResource(@NotNull IModelResource modelRes) {
-        addBakedModel(modelRes.createModelResourceLocation(), modelRes);
-        addBakedModel(modelRes.createArmResourceLocation(), modelRes);
-        addBakedAnimation(modelRes.createAnimationResourceLocation(), modelRes);
-        addTexture(modelRes.createTextureResourceLocation(), modelRes);
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
+            addBakedModel(modelRes.createModelResourceLocation(), modelRes);
+            addBakedModel(modelRes.createArmResourceLocation(), modelRes);
+            addBakedAnimation(modelRes.createAnimationResourceLocation(), modelRes);
+            addTexture(modelRes.createTextureResourceLocation(), modelRes);
+        });
         return DefaultModelType.Builder.create()
                 .setGeoModel(modelRes.createModelResourceLocation())
                 .setAnimation(modelRes.createAnimationResourceLocation())

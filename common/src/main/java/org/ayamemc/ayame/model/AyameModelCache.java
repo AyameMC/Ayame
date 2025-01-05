@@ -49,7 +49,7 @@ public class AyameModelCache {
      */
     @NotNull
     public static ModelType getPlayerModel(Player player) {
-        return playerModelCache.getOrDefault(player, DefaultModels.DEFAULT_MODEL);
+        return playerModelCache.getOrDefault(player, DefaultModels.AYAME_CHAN_TYPE);
     }
 
     public static boolean hasPlayerModel(Player player) {

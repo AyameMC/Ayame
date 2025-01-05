@@ -20,7 +20,7 @@
 
 package org.ayamemc.ayame.model;
 
-import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
@@ -31,21 +31,8 @@ import java.nio.file.Path;
 
 public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
-    public static final ModelType DEFAULT_MODEL = DefaultModelType.Builder.create()
-            .setGeoModel(Ayame.withAyamePath("geo/ayame/default.json"))
-            .setAnimation(Ayame.withAyamePath("animations/ayame/default.json"))
-            .setTexture(Ayame.withAyamePath("textures/ayame/default.png"))
-            .setArm(Ayame.withAyamePath("arm/ayame/default.json"))
-            .setMetaData(IndexData.ModelMetaData.Builder.create()
-                    .setName("default")
-                    .setAuthors(new String[]{"CrystalNeko"})
-                    .setDescription("Default model for Ayame")
-                    .setVersion("0.0.1")
-                    .build()
-            )
-            .build();
-
-    public static final IModelResource AQUARTER_NEKO_RESOURCE = create("AQuarter_neko");
+    public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
+    public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
 
     // 静态初始化
     public static void init() {
