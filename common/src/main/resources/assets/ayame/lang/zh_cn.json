@@ -21,6 +21,7 @@
   "message.ayame.command.yttribume.help": "§b/yttribume 帮助\n§a/yttribume help §b我相信你一定知道这个命令的作用\n§a/yttribume set <属性> <值> §b设置属性的值\n§a/yttribume get <属性> §b获取属性的值\n§a/yttribume reset <属性> §b重设属性的值",
   "yttribume.ayame.empty": "空",
   "yttribume.ayame.model.scale": "模型渲染缩放",
+  "yttribume.ayame.model.alpha": "模型透明度",
   "yttribume.ayame.global.screen.shake": "界面抖动",
   "yttribume.ayame.global.camera.y.offset": "摄像机Y轴偏移"
 }

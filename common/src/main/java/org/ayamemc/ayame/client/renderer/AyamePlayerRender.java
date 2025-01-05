@@ -70,7 +70,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
                                int packedLight, int packedOverlay, int colour) {
         RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
         VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
-        super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+
+        // 透明渲染
+        int a = (int) (player.ayame$getYttribume(Yttribumes.MODEL_ALPHA) * 255);
+        int modifiedColour = (a << 24) | (colour & 0x00FFFFFF);
+
+        super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, modifiedColour);
     }
 
 
