@@ -47,6 +47,10 @@ public class TaskManager<T extends TaskManager.Task> {
 
     // 执行所有保存的任务并清空任务列表
     public void executeAll() {
+        if (!canExecute) {
+            // 如果不能立即执行，则不执行任务
+            return;
+        }
         for (T task : taskList) {
             task.execute();
         }

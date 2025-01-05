@@ -25,6 +25,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -33,12 +34,14 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.ayamemc.ayame.util.TaskManager;
 
 import java.util.Random;
 
@@ -48,7 +51,9 @@ public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
     public static final int TOOLTIP_BORDER_TOP_COLOR = 0xCC_fdc7f5;
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
-    private final static LocalPlayer player = minecraft.player;
+    private static Player getPlayer(){
+        return minecraft.player;
+    }
 
     public static boolean shouldUseAyameTooltipColor() {
         return minecraft.screen instanceof AyameScreen;
@@ -97,13 +102,14 @@ public class ClientEventHandler {
 
 
     public static void renderHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
-        float shake = player.ayame$getYttribume(Yttribumes.GLOBAL_SCREEN_SHAKE);
+        float shake = getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_SCREEN_SHAKE);
         if (shake != 0F){
             // 抖起来
             applyScreenShake(guiGraphics,shake);
         }
 
     }
+
     private static void applyScreenShake(GuiGraphics guiGraphics,float intensity) {
         var random = new Random();
         var shakeX = (random.nextFloat() - 0.5f) * 2 * intensity; // 随机偏移X，范围 [-intensity, intensity]
@@ -116,10 +122,14 @@ public class ClientEventHandler {
     public static void renderCamera() {
         Camera camera = minecraft.gameRenderer.getMainCamera();
         Vec3 currentPosition = camera.getPosition();
-        camera.setPosition(currentPosition.x, currentPosition.y + player.ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET), currentPosition.z);
+        camera.setPosition(currentPosition.x, currentPosition.y + getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET), currentPosition.z);
     }
     public static void plusCameraYOffset(float offset,boolean reset) {
-        if (reset) player.ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,Yttribumes.GLOBAL_CAMERA_Y_OFFSET.defaultValue);
-        player.ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,player.ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET)+offset);
+        if (reset) getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,Yttribumes.GLOBAL_CAMERA_Y_OFFSET.defaultValue);
+        getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET)+offset);
+    }
+
+    public static void tick(Minecraft minecraft) {
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
     }
 }

@@ -53,6 +53,7 @@ public class FabricClientEventHandler {
      * 注册Fabric事件
      */
     public static void init() {
+        ClientTickEvents.START_CLIENT_TICK.register(ClientEventHandler::tick);
         ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
         ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
