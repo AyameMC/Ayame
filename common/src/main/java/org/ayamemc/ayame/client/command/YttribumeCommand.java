@@ -65,7 +65,16 @@ public class YttribumeCommand {
                                 .executes(YttribumeCommand::resetYttribume)
                         )
                 )
+                .then(LiteralArgumentBuilder.<T>literal("help")
+                        .executes(YttribumeCommand::help)
+                )
+                .executes(YttribumeCommand::help)
         );
+    }
+
+    private static <T extends SharedSuggestionProvider> int help(CommandContext<T> context) {
+        minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.help"));
+        return 0;
     }
 
     private static <T extends SharedSuggestionProvider> int resetYttribume(CommandContext<T> context) {
