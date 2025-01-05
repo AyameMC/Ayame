@@ -48,7 +48,7 @@ public final class AyameFabric implements ModInitializer {
             Scriptable scope = context.initStandardObjects();
 
             // JavaScript 代码
-            String jsCode = "console.log(11114514)";
+            String jsCode = "1 + 333";
 
             // 执行 JavaScript 代码
             context.evaluateString(scope, jsCode, "HelloWorldScript", 1, null);
