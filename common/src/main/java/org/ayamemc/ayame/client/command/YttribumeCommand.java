@@ -96,11 +96,8 @@ public class YttribumeCommand {
         float value = FloatArgumentType.getFloat(context, "value");
         ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
         Yttribume yttribume = Yttribumes.get(resource);
-        if (value > yttribume.max) {
-            minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_fail_big", yttribume.max));
-            return 0;
-        }else if (value < yttribume.min) {
-            minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_fail_small", yttribume.min));
+        if (value > yttribume.max || value < yttribume.min) {
+            minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_fail", yttribume.min, yttribume.max));
             return 0;
         }
         minecraft.player.ayame$setYttribume(yttribume, value);
