@@ -45,7 +45,28 @@ public class AyameKeyRegister {
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_Y,
             TranslatableName.MOD_KEY_MENU_NAME,
-            "alt"
+            Modifier.ALT
+    );
+    public static final KeyMapping CAMERA_Y_OFFSET_UP = registerKeyMapping(
+            TranslatableName.CAMERA_Y_OFFSET_UP,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UP,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.CTRL
+    );
+    public static final KeyMapping CAMERA_Y_OFFSET_DOWN = registerKeyMapping(
+            TranslatableName.CAMERA_Y_OFFSET_DOWN,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_DOWN,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.CTRL
+    );
+    public static final KeyMapping CAMERA_Y_OFFSET_RESET = registerKeyMapping(
+            TranslatableName.CAMERA_Y_OFFSET_RESET,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.CTRL
     );
 
     /**
@@ -59,12 +80,12 @@ public class AyameKeyRegister {
      * @return 调用 {@link AyameTmsKey}
      * @see KeyMapping
      */
-    public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category, @Nullable String modifier) {
+    public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category,Modifier modifier) {
         KeyMapping keyMapping;
         try {
             // 直接检查 TMSKeyBinding 是否存在
             Class.forName("dev.kingtux.tms.api.TMSKeyBinding");
-            if (modifier != null && false) {
+            if (modifier != Modifier.EMPTY) {
                 keyMapping = AyameTmsKey.registerTMSKeyMapping(name, type, keyCode, category, modifier);
             } else {
                 keyMapping = new KeyMapping("key." + MOD_ID + "." + name, type, keyCode, category);
@@ -89,5 +110,22 @@ public class AyameKeyRegister {
         while (AyameKeyRegister.MODEL_SELECT_MENU.consumeClick()) {
             ClientEventHandler.openSelectMenuKeyPressed();
         }
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_UP.consumeClick()){
+            ClientEventHandler.plusCameraYOffset(0.01f,false);
+        }
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_DOWN.consumeClick()){
+            ClientEventHandler.plusCameraYOffset(-0.01f,false);
+        }
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_RESET.consumeClick()){
+            ClientEventHandler.plusCameraYOffset(0.0f,true);
+        }
+
+    }
+
+    public enum Modifier {
+        SHIFT,
+        CTRL,
+        ALT,
+        EMPTY
     }
 }

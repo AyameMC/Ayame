@@ -118,4 +118,8 @@ public class ClientEventHandler {
         Vec3 currentPosition = camera.getPosition();
         camera.setPosition(currentPosition.x, currentPosition.y + player.ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET), currentPosition.z);
     }
+    public static void plusCameraYOffset(float offset,boolean reset) {
+        if (reset) player.ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,Yttribumes.GLOBAL_CAMERA_Y_OFFSET.defaultValue);
+        player.ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET,player.ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET)+offset);
+    }
 }

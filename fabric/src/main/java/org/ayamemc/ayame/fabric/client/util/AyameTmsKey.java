@@ -44,15 +44,15 @@ public class AyameTmsKey {
      * @param modifier TMS提供的组合键位，见{@link AyameTmsKey}
      * @return AyameKeyMappings
      */
-    public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull String modifier) {
+    public static KeyMapping registerTMSKeyMapping(String name, @NotNull InputConstants.Type type, int keyCode, String category, @NotNull AyameKeyRegister.Modifier modifier) {
         BindingModifiers bindingModifiers = null;
-        if (modifier.equalsIgnoreCase("alt")) {
+        if (modifier == AyameKeyRegister.Modifier.ALT) {
             bindingModifiers = new BindingModifiers();
             bindingModifiers.set(KeyModifier.ALT, true);
-        } else if (modifier.equalsIgnoreCase("shift")) {
+        } else if (modifier == AyameKeyRegister.Modifier.SHIFT) {
             bindingModifiers = new BindingModifiers();
             bindingModifiers.set(KeyModifier.SHIFT, true);
-        } else if (modifier.equalsIgnoreCase("ctrl")) {
+        } else if (modifier == AyameKeyRegister.Modifier.CTRL) {
             bindingModifiers = new BindingModifiers();
             bindingModifiers.set(KeyModifier.CONTROL, true);
         }

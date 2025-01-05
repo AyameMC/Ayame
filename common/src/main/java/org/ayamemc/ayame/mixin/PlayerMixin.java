@@ -70,9 +70,16 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     @Shadow
     public abstract Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos bedPos);
 
+
     @Override
-    public void ayame$setYttribume(Yttribume yttribume, float value) {
-        this.ayame$yttribumeMap.put(yttribume, value);
+    public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
+        if (ignoredLimit || yttribume.min <= value && value <= yttribume.max){
+            this.ayame$yttribumeMap.put(yttribume, value);
+        }else if (value > yttribume.max){
+            this.ayame$yttribumeMap.put(yttribume, yttribume.max);
+        }else if (value < yttribume.min){
+            this.ayame$yttribumeMap.put(yttribume, yttribume.min);
+        }
     }
 
     @Override

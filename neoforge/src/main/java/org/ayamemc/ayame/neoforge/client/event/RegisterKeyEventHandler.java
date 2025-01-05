@@ -46,6 +46,30 @@ public class RegisterKeyEventHandler {
             GLFW.GLFW_KEY_Y,
             TranslatableName.MOD_KEY_MENU_NAME
     ));
+    public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_UP = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_UP,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.CONTROL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UP,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
+    public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_DOWN = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_DOWN,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.CONTROL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_DOWN,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
+    public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_RESET = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_RESET,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.CONTROL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
 
     /**
      * 在NeoForge中注册该按键按下的行为
@@ -56,5 +80,8 @@ public class RegisterKeyEventHandler {
     @SubscribeEvent
     public static void onKeyPressed(RegisterKeyMappingsEvent event) {
         event.register(MODEL_SELECT_MENU.get());
+        event.register(CAMERA_Y_OFFSET_UP.get());
+        event.register(CAMERA_Y_OFFSET_DOWN.get());
+        event.register(CAMERA_Y_OFFSET_RESET.get());
     }
 }

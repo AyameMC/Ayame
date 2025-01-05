@@ -93,7 +93,17 @@ public class YttribumeCommand {
 
 
     private static <T extends SharedSuggestionProvider> int setYttribume(CommandContext<T> context) {
-        minecraft.player.ayame$setYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume")), FloatArgumentType.getFloat(context, "value"));
+        float value = FloatArgumentType.getFloat(context, "value");
+        ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
+        Yttribume yttribume = Yttribumes.get(resource);
+        if (value > yttribume.max) {
+            minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_fail_big", yttribume.max));
+            return 0;
+        }else if (value < yttribume.min) {
+            minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_fail_small", yttribume.min));
+            return 0;
+        }
+        minecraft.player.ayame$setYttribume(yttribume, value);
         minecraft.player.sendSystemMessage(Component.translatable("message.ayame.command.yttribume.set_success"));
         return 0;
     }

@@ -37,6 +37,15 @@ public class NeoForgeClientEventHandler {
         while (RegisterKeyEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
             ClientEventHandler.openSelectMenuKeyPressed();
         }
+        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_UP.get().consumeClick()){
+            ClientEventHandler.plusCameraYOffset(0.01f,false);
+        }
+        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_DOWN.get().consumeClick()){
+            ClientEventHandler.plusCameraYOffset(-0.01f,false);
+        }
+        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_RESET.get().consumeClick()){
+            ClientEventHandler.plusCameraYOffset(0.0f,true);
+        }
     }
 
     @SubscribeEvent
