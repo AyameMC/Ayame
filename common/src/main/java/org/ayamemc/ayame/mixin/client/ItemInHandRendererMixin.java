@@ -28,7 +28,7 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 @Mixin(ItemInHandRenderer.class)
-public class ItemInHandRendererMixin implements AyameGeoAnimatable {
+public abstract class ItemInHandRendererMixin implements AyameGeoAnimatable {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add();

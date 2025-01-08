@@ -50,11 +50,12 @@ public class FileUtil {
         }
     }
 
+
     /**
      * 覆盖文件
      *
-     * @param path          {@link Path}类型，文件路径
-     * @param content{@link String}
+     * @param path    {@link Path}类型，文件路径
+     * @param content 覆盖的内容
      */
     public static void overwriteFile(Path path, String content) {
         try {
@@ -87,14 +88,13 @@ public class FileUtil {
         Map<String, InputStream> fileMap = new HashMap<>();
 
         Stream<Path> files = Files.list(folderPath);
-        files.filter(Files::isRegularFile)
-                .forEach(file -> {
-                    try {
-                        fileMap.put(file.getFileName().toString(), Files.newInputStream(file));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        files.filter(Files::isRegularFile).forEach(file -> {
+            try {
+                fileMap.put(file.getFileName().toString(), Files.newInputStream(file));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 
         return fileMap;
@@ -128,8 +128,21 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 返回 Ayame 资源路径下的 InputStream
+     * @param resourcePath 路径
+     * @return 字节流
+     */
+    public static InputStream getAyameResourceAsStream(String resourcePath) {
+        return getResourceAsStream("assets/ayame/" + resourcePath);
+    }
 
-    // 返回资源的 InputStream
+    /**
+     * 返回资源的 InputStream
+     *
+     * @param resourcePath 路径
+     * @return 字节流
+     */
     public static InputStream getResourceAsStream(String resourcePath) {
         try {
             // 使用ClassLoader读取资源文件
@@ -147,7 +160,12 @@ public class FileUtil {
         }
     }
 
-    // 将资源复制到指定路径
+    /**
+     * 将资源复制到指定路径
+     *
+     * @param resourcePath 起始路径
+     * @param targetPath   目标路径
+     */
     public static void copyResource(String resourcePath, Path targetPath) {
         try (InputStream inputStream = getResourceAsStream(resourcePath)) {
             if (inputStream == null) {

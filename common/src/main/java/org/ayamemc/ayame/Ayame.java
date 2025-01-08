@@ -32,7 +32,8 @@ import org.slf4j.LoggerFactory;
 
 public final class Ayame {
     public static final String MOD_ID = "ayame";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final String MOD_NAME = "Ayame";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft minecraft = Minecraft.getInstance();
 
     public static void init() {

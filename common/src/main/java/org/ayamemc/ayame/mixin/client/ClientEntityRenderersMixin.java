@@ -41,7 +41,7 @@ import java.util.Map;
  */
 
 @Mixin(EntityRenderers.class)
-public class ClientEntityRenderersMixin {
+public abstract class ClientEntityRenderersMixin {
     @Inject(method = "createPlayerRenderers", at = @At("RETURN"), cancellable = true)
     private static void createPlayerRenderers(EntityRendererProvider.Context context, CallbackInfoReturnable<Map<PlayerSkin.Model, EntityRenderer<? extends Player>>> cir) {
         Map<PlayerSkin.Model, EntityRenderer<? extends Player>> m =

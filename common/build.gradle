@@ -34,7 +34,7 @@ dependencies {
     modImplementation("maven.modrinth:ayame-paperdoll:${ayame_paperdoll_version}-fabric")
     // Rhino库
     implementation("org.mozilla:rhino:${rhino_version}")
-    include("org.mozilla:rhino:${rhino_version}")
+    // include("org.mozilla:rhino:${rhino_version}")
 }
 
 repositories {
