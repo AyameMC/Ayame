@@ -34,9 +34,9 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        AyameClient.init();
         // 不要动AyameKeyMappingEventHandler的init方法
         AyameKeyRegister.init();
         FabricClientEventHandler.init();
-        AyameClient.init();
     }
 }

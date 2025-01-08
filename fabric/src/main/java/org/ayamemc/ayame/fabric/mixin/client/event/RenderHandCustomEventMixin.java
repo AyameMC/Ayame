@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.fabric.mixin.client.event;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;

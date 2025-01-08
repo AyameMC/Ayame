@@ -21,20 +21,9 @@
 package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.yttribume.Yttribume;
-import org.ayamemc.ayame.client.yttribume.Yttribumes;
-
-import static org.ayamemc.ayame.Ayame.minecraft;
 
 
 public class AyameCommandManager {

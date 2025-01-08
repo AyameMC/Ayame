@@ -105,12 +105,10 @@ subprojects {
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        // mappings loom.officialMojangMappings()
         mappings loom.layered() {
             officialMojangMappings()
             parchment("org.parchmentmc.data:parchment-${parchment_minecraft_version}:${parchment_version}@zip")
         }
-        implementation "org.mozilla:rhino:${rhino_version}"
     }
 
     java {

@@ -21,7 +21,10 @@
 package org.ayamemc.ayame.neoforge.client.event;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;

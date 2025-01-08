@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.withAyamePath;
-import static org.ayamemc.ayame.Ayame.minecraft;
 
 public class Yttribumes {
     private static final Map<ResourceLocation, Yttribume> YTTRIBUMES = new HashMap<>();

@@ -27,8 +27,6 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
 import org.ayamemc.ayame.fabric.client.event.ModelReloadEventHandler;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 /**
  * Fabric初始化使用的类，包括客户端与服务端
@@ -41,20 +39,5 @@ public final class AyameFabric implements ModInitializer {
         Ayame.init();
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new ModelReloadEventHandler());
-        // 创建并进入一个 JavaScript 上下文
-        Context context = Context.enter();
-        try {
-            // 初始化标准对象（例如全局对象）
-            Scriptable scope = context.initStandardObjects();
-
-            // JavaScript 代码
-            String jsCode = "1 + 333";
-
-            // 执行 JavaScript 代码
-            context.evaluateString(scope, jsCode, "HelloWorldScript", 1, null);
-        } finally {
-            // 退出 JavaScript 上下文
-            Context.exit();
-        }
     }
 }

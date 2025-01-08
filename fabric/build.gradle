@@ -65,6 +65,9 @@ dependencies {
     // Ayame PaperDoll
     modImplementation "maven.modrinth:ayame-paperdoll:${ayame_paperdoll_version}-fabric"
 
+    // Rhino库
+    implementation("org.mozilla:rhino:${rhino_version}")
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 

@@ -67,6 +67,12 @@ dependencies {
     implementation("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}")
     // Ayame PaperDoll
     implementation "maven.modrinth:ayame-paperdoll:${ayame_paperdoll_version}-neoforge"
+
+    // Rhino库
+    implementation("org.mozilla:rhino:${rhino_version}")
+    forgeRuntimeLibrary("org.mozilla:rhino:${rhino_version}")
+    include("org.mozilla:rhino:${rhino_version}")
+
 }
 
 processResources {

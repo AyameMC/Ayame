@@ -27,7 +27,6 @@ import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;

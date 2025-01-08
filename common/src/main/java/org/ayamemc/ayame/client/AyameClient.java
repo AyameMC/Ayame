@@ -30,6 +30,4 @@ public class AyameClient {
         // 扫描模型
         ModelScanner.scanModel();
     }
-
-
 }

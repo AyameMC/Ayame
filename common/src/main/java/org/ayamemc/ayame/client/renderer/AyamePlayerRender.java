@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
@@ -37,11 +36,8 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.math.MathParser;
-import software.bernie.geckolib.loading.math.value.Variable;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-
-import static org.ayamemc.ayame.Ayame.minecraft;
 
 
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
