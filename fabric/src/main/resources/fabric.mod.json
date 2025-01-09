@@ -46,7 +46,7 @@
     ]
   },
   "mixins": [
-    "ayame.mixins.json",
+    "${mod_mixin_config}",
     "ayame-fabric.mixins.json"
   ],
   "depends": {

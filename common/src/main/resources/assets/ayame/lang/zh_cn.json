@@ -1,6 +1,6 @@
 {
-  "modmenu.descriptionTranslation.ayame": "GeckoLib 驱动的自定义玩家模型模组",
-  "fml.menu.mods.info.description.ayame": "GeckoLib 驱动的自定义玩家模型模组",
+  "modmenu.descriptionTranslation.ayame": "GeckoLib 驱动的自定义玩家模型模组。",
+  "fml.menu.mods.info.description.ayame": "GeckoLib 驱动的自定义玩家模型模组。",
   "key.categories.ayame": "Ayame",
   "key.ayame.model_select_menu": "打开玩家模型界面",
   "key.ayame.camera_y_offset_up": "摄像机Y轴向上偏移",
