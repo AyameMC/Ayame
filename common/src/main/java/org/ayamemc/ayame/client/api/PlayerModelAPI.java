@@ -62,7 +62,7 @@ public class PlayerModelAPI {
                 JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getGeoModel().getPath())),
                 JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getAnimation().getPath())),
                 JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getArm().getPath())),
-                FileUtil.getResourceAsStream("assets/ayame/" + model.getTexture().getPath())
+                FileUtil.getResourceAsStream(model.getTexture().getPath())
         );
         cache.put(player, entry);
     }

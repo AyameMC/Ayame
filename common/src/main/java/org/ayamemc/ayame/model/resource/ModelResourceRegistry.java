@@ -24,7 +24,10 @@ import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipFile;
@@ -100,13 +103,38 @@ public class ModelResourceRegistry {
 
     public static class ModelFile {
         private final ZipFile zipFile;
+        private final Path directory;
 
         public ModelFile(ZipFile zipFile) {
             this.zipFile = zipFile;
+            this.directory = null;
+        }
+
+        public ModelFile(Path directory) {
+            this.directory = directory;
+            this.zipFile = null;
         }
 
         public JsonInterpreter getIndexJson() {
-            return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "index.json"));
+            if (zipFile != null) {
+                return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "index.json"));
+            } else if (directory != null) {
+                Path indexPath = directory.resolve("index.json");
+                if (Files.exists(indexPath)) {
+                    try {
+                        return JsonInterpreter.of(Files.newInputStream(indexPath));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        throw new IOException("index.json not found in directory: " + directory);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            throw new IllegalStateException("ModelFile must be either a directory or a zip file");
         }
 
         public String getFormat() {
@@ -114,7 +142,20 @@ public class ModelResourceRegistry {
         }
 
         public InputStream getContent(String path) {
-            return FileUtil.getInputStreamFromZip(zipFile, path);
+            if (zipFile != null) {
+                return FileUtil.getInputStreamFromZip(zipFile, path);
+            } else if (directory != null) {
+                Path filePath = directory.resolve(path);
+                if (Files.exists(filePath)) {
+                    try {
+                        return Files.newInputStream(filePath);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            return null;
         }
     }
+
 }

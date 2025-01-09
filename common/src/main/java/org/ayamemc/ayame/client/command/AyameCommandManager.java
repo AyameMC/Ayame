@@ -21,42 +21,179 @@
 package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.client.yttribume.Yttribume;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+
+import java.util.concurrent.CompletableFuture;
+
+import static org.ayamemc.ayame.Ayame.minecraft;
 
 
+@SuppressWarnings("unchecked")
 public class AyameCommandManager {
     public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
         // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
 
-                        .then(LiteralArgumentBuilder.<T>literal("model")
-
+                .then(LiteralArgumentBuilder.literal("model")
+                )
+                .then(LiteralArgumentBuilder.<T>literal("benchmark-compiled")
+                        .executes(AyameCommandManager::benchmarkCompiled)
+                )
+                .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
+                        .executes(AyameCommandManager::benchmarkInterpreted)
+                )
+                .then(LiteralArgumentBuilder.<T>literal("yttribume")
+                        .then(LiteralArgumentBuilder.<T>literal("set")
+                                .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("yttribume", ResourceLocationArgument.id())
+                                        .suggests((SuggestionProvider<T>) YTTRIBUME_SUGGESTION_PROVIDER)
+                                        .then(RequiredArgumentBuilder.<T, Float>argument("value", FloatArgumentType.floatArg())
+                                                .executes(AyameCommandManager::setYttribume) // TODO 最大值&最小值处理
+                                        )
+                                )
                         )
+                        .then(LiteralArgumentBuilder.<T>literal("get")
+                                .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("yttribume", ResourceLocationArgument.id())
+                                        .suggests((SuggestionProvider<T>) YTTRIBUME_SUGGESTION_PROVIDER)
+                                        .executes(AyameCommandManager::getYttribume)
+                                )
+                        )
+                        .then(LiteralArgumentBuilder.<T>literal("reset")
+                                .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("yttribume", ResourceLocationArgument.id())
+                                        .suggests((SuggestionProvider<T>) YTTRIBUME_SUGGESTION_PROVIDER)
+                                        .executes(AyameCommandManager::resetYttribume)
+                                )
+                        )
+                        .then(LiteralArgumentBuilder.<T>literal("help")
+                                .executes(AyameCommandManager::help)
+                        )
+                        .executes(AyameCommandManager::help)
+                ));
 
 
-        );
         // -----------------------------------------------------------------------------------------------
 
 
         // aym重定向到ayame
         dispatcher.register(LiteralArgumentBuilder.<T>literal("aym").redirect(dispatcher.getRoot().getChild("ayame")));
 
-        // 注册yttribume命令
-        YttribumeCommand.init(dispatcher,context);
+    }
+
+    private static <T extends SharedSuggestionProvider> int benchmarkTest(CommandContext<T> tCommandContext, boolean useInterpretedMode) {
+        final var minecraft = Minecraft.getInstance();
+        int numRuns = 10;
+        final double[] totalTime = {0};
+        String mode = useInterpretedMode ? "解释模式" : "编译模式";
+
+        // 异步执行基准测试
+        CompletableFuture.runAsync(() -> {
+            sendMessageToClient(Component.literal("Rhino" + mode + "测试开始！"));
+
+            for (int i = 0; i < numRuns; i++) {
+                double elapsedTime = rhinoBenchmark(useInterpretedMode);
+                totalTime[0] += elapsedTime;
+                int runIndex = i + 1;
+
+                minecraft.execute(() -> {
+                    sendMessageToClient(Component.literal("（Rhino" + mode + "）第" + runIndex + "次 - 耗时: " + elapsedTime + " ms"));
+                });
+            }
+
+            double averageTime = totalTime[0] / numRuns;
+
+            minecraft.execute(() -> {
+                sendMessageToClient(Component.literal("（Rhino" + mode + "）平均时间: " + averageTime + " ms"));
+                sendMessageToClient(Component.literal("Rhino" + mode + "基准测试完成！"));
+            });
+        });
+
+        return 0;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static void sendMessageToClient(Component message) {
+        minecraft.player.displayClientMessage(message, false);
+    }
+
+    public static double rhinoBenchmark(boolean useInterpretedMode) {
+        Context context = Context.enter();
+        context.setInterpretedMode(useInterpretedMode);
+        Scriptable scope = context.initStandardObjects();
+
+        String script = "function fibonacci(n) { " +
+                "if (n <= 1) return n; " +
+                "return fibonacci(n - 1) + fibonacci(n - 2); } " +
+                "fibonacci(35);";
+
+        long startTime = System.nanoTime();
+        context.evaluateString(scope, script, "<cmd>", 1, null);
+        long endTime = System.nanoTime();
+
+        return (endTime - startTime) / 1e6; // 转换为毫秒
+    }
+
+    private static <T extends SharedSuggestionProvider> int benchmarkInterpreted(CommandContext<T> tCommandContext) {
+        return benchmarkTest(tCommandContext, true);
+    }
+
+    private static <T extends SharedSuggestionProvider> int benchmarkCompiled(CommandContext<T> tCommandContext) {
+        return benchmarkTest(tCommandContext, false);
     }
 
 
-//    private static Yttribume getByString(String yttribume) {
-//        String[] yttribumeSplit = yttribume.split(":");
-//        String namespace = yttribumeSplit[0];
-//
-//        String path = yttribumeSplit[1];
-//        if (namespace.isEmpty()){
-//            return Yttribumes.get(ResourceLocation.fromNamespaceAndPath("ayame", path));
-//        }
-//        return Yttribumes.get(ResourceLocation.fromNamespaceAndPath(namespace, path));
-//    }
+    private static final SuggestionProvider<?> YTTRIBUME_SUGGESTION_PROVIDER = (c, b) -> {
+        Yttribumes.getIds().forEach((y) -> b.suggest(y.toString()));
+        return b.buildFuture();
+    };
+
+
+    @SuppressWarnings("DataFlowIssue")
+    private static <T extends SharedSuggestionProvider> int help(CommandContext<T> context) {
+        minecraft.player.displayClientMessage(Component.translatable("message.ayame.command.yttribume.help"), false);
+        return 0;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static <T extends SharedSuggestionProvider> int resetYttribume(CommandContext<T> context) {
+        Yttribume yttribume = Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"));
+        minecraft.player.ayame$setYttribume(yttribume, yttribume.defaultValue);
+        sendMessageToClient(Component.translatable("message.ayame.command.yttribume.reset_success"));
+        return 0;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static <T extends SharedSuggestionProvider> int getYttribume(CommandContext<T> context) {
+        sendMessageToClient(Component.translatable("message.ayame.command.yttribume.get_success",
+                minecraft.player.ayame$getYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"))))
+        );
+        return 0;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static <T extends SharedSuggestionProvider> int setYttribume(CommandContext<T> context) {
+        float value = FloatArgumentType.getFloat(context, "value");
+        ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
+        Yttribume yttribume = Yttribumes.get(resource);
+        if (value > yttribume.max || value < yttribume.min) {
+            sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_fail", yttribume.min, yttribume.max));
+        }
+        minecraft.player.ayame$setYttribume(yttribume, value);
+        sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_success"));
+        return 0;
+    }
 
 }

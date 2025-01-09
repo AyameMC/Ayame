@@ -22,10 +22,10 @@ package org.ayamemc.ayame.model.resource;
 
 import net.minecraft.server.packs.repository.PackDetector;
 import net.minecraft.world.level.validation.DirectoryValidator;
-import org.ayamemc.ayame.util.TODO;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -43,7 +43,7 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
     @Nullable
     @Override
     public ModelResourceRegistry.ModelFile createZipPack(Path path) {
-        ZipFile zipFile = null;
+        ZipFile zipFile;
         try {
             zipFile = new ZipFile(path.toFile());
         } catch (IOException e) {
@@ -57,12 +57,16 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
     }
 
     @Override
-    protected ModelResourceRegistry.ModelFile createDirectoryPack(Path path) {
-        throw new TODO("createDirectoryPack");
-//        Path indexFilePath = path.resolve("index.json");
-//        if (Files.exists(indexFilePath)) {
-//            return new ModelResourceRegistry.ModelFile(null);
-//        }
-//        return null;
+    public ModelResourceRegistry.ModelFile createDirectoryPack(Path path) {
+        Path indexFilePath = path.resolve("index.json");
+
+        if (Files.exists(indexFilePath)) {
+            System.out.println("Found index.json at: " + indexFilePath);
+            return new ModelResourceRegistry.ModelFile(path); // 传递目录路径
+        } else {
+            System.out.println("index.json not found at: " + indexFilePath);
+        }
+
+        return null;
     }
 }

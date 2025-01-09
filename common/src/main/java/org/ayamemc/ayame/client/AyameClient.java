@@ -20,18 +20,12 @@
 
 package org.ayamemc.ayame.client;
 
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.ayamemc.ayame.util.ConfigUtil;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 
 public class AyameClient {
     public static void init() {
-//        Context context = Context.enter();
-//        context.setInterpretedMode(false);
-
         ConfigUtil.init();
         // 扫描模型
         ModelScanner.scanModel();

@@ -20,11 +20,13 @@
 
 package org.ayamemc.ayame.util;
 
+import org.ayamemc.ayame.Ayame;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -130,6 +132,7 @@ public class FileUtil {
 
     /**
      * 返回 Ayame 资源路径下的 InputStream
+     *
      * @param resourcePath 路径
      * @return 字节流
      */
@@ -161,16 +164,34 @@ public class FileUtil {
     }
 
     /**
-     * 将资源复制到指定路径
+     * 将资源复制到指定路径（支持文件和目录）
      *
      * @param resourcePath 起始路径
      * @param targetPath   目标路径
      */
     public static void copyResource(String resourcePath, Path targetPath) {
-        try (InputStream inputStream = getResourceAsStream(resourcePath)) {
-            if (inputStream == null) {
-                return; // 资源未找到，直接返回
-            }
+        Path resource = Paths.get(resourcePath).toAbsolutePath();  // 转换为绝对路径
+
+        if (Files.isDirectory(resource)) {
+            // 如果是目录，则调用复制目录的方法
+            copyDirectory(resource, targetPath);
+        } else if (Files.isRegularFile(resource)) {
+            // 如果是文件，则调用复制文件的方法
+            copyFile(resource, targetPath);
+        } else {
+            System.err.println("Resource is neither a file nor a directory: " + resource);
+        }
+    }
+
+
+    /**
+     * 复制文件
+     *
+     * @param sourcePath 源文件路径
+     * @param targetPath 目标文件路径
+     */
+    private static void copyFile(Path sourcePath, Path targetPath) {
+        try (InputStream inputStream = Files.newInputStream(sourcePath)) {
 
             // 创建目标路径的父目录
             Files.createDirectories(targetPath.getParent());
@@ -185,7 +206,44 @@ public class FileUtil {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("Cannot copy resource: ", e);
+            Ayame.LOGGER.error("Cannot copy resource: ", e);
+        }
+    }
+
+    /**
+     * 复制目录及其内容
+     *
+     * @param sourceDir 源目录路径
+     * @param targetDir 目标目录路径
+     */
+    private static void copyDirectory(Path sourceDir, Path targetDir) {
+        try {
+            // 创建目标目录
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+
+            // 遍历源目录中的文件和子目录
+            Files.walkFileTree(sourceDir, new SimpleFileVisitor<>() {
+                @Override
+                public @NotNull FileVisitResult visitFile(Path file, @NotNull BasicFileAttributes attrs) {
+                    Path targetFile = targetDir.resolve(sourceDir.relativize(file));
+                    copyFile(file, targetFile); // 复制文件
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public @NotNull FileVisitResult preVisitDirectory(Path dir, @NotNull BasicFileAttributes attrs) throws IOException {
+                    // 创建子目录
+                    Path targetDirPath = targetDir.resolve(sourceDir.relativize(dir));
+                    if (!Files.exists(targetDirPath)) {
+                        Files.createDirectories(targetDirPath);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            LOGGER.error("Cannot copy directory: ", e);
         }
     }
 

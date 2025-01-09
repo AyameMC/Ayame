@@ -26,6 +26,7 @@ import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.FileUtil;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 
@@ -39,8 +40,8 @@ public class DefaultModels {
     }
 
     private static IModelResource create(String name) {
-        Path targetPath = Path.of(MODEL_PATH + name + ".zip");
-        FileUtil.copyResource("assets/ayame/models/" + name + ".zip", targetPath);
-        return ModelResourceRegistry.create(ModelContent.create().createZipPack(targetPath));
+        Path targetPath = Path.of(MODEL_PATH + name);
+        FileUtil.copyResource("assets/ayame/models/" + name, targetPath);
+        return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(targetPath));
     }
 }
