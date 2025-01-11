@@ -61,6 +61,7 @@
     "optifine": "*"
   },
   "recommends": {
-    "too_many_shortcuts": ">=${too_many_shortcuts_version}"
+    "too_many_shortcuts": ">=${too_many_shortcuts_version}",
+    "ayame_paperdoll": ">=${ayame_paperdoll_version}"
   }
 }

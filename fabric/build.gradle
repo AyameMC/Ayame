@@ -68,7 +68,7 @@ dependencies {
     // Rhino库
     implementation("org.mozilla:rhino:${rhino_version}")
     include("org.mozilla:rhino:${rhino_version}")
-    
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
@@ -89,7 +89,8 @@ processResources {
             mod_fabric_sources_url        : project.findProperty('mod_fabric_sources_url'),
             fabric_loader_version         : project.findProperty('fabric_loader_version'),
             fabric_minecraft_version_range: project.findProperty('fabric_minecraft_version_range'),
-            too_many_shortcuts_version    : project.findProperty('too_many_shortcuts_version')
+            too_many_shortcuts_version    : project.findProperty('too_many_shortcuts_version'),
+            ayame_paperdoll_version       : project.findProperty('ayame_paperdoll_version')
     ]
 
     // 注册所有占位符为输入属性
