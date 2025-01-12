@@ -94,33 +94,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-        controllers.add(new AnimationController<>(this, 5, state -> {
-            // 动画任务处理
-            if (AnimationTask.shouldAnimationProcess(player)) {
-                return AnimationTask.handle(player, state.getController());
-            }
 
-            // 动画判断列表
-            List<Supplier<PlayState>> animationChecks = List.of(
-                    // ---- 非循环
-                    // 玩家死亡，todo 修复无效问题
-                    //() -> state.setAnimation(RawAnimation.begin().thenLoop(""))
-
-            );
-
-            // 按顺序执行判断逻辑，返回首个非 null 的状态
-            for (Supplier<PlayState> check : animationChecks) {
-                PlayState result = check.get();
-                if (result != null) {
-                    return result;
-                }
-            }
-
-            return PlayState.CONTINUE;
-        }
-
-
-        ));
         controllers.add(new AnimationController<>(this, 5, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
