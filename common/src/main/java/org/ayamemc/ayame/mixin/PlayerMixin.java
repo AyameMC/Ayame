@@ -61,7 +61,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     @Unique
     private final Map<Yttribume, Float> ayame$yttribumeMap = new HashMap<>();
     @Unique
-    private boolean ayame$isYttribumeRestricted = false;
+    private boolean ayame$isYttribumeRestricted = true;
     @Unique
     private boolean ayame$isSitting = false;
 

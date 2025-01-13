@@ -115,11 +115,12 @@ public class YttribumeCommand {
         float value = FloatArgumentType.getFloat(context, "value");
         ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
         Yttribume yttribume = Yttribumes.get(resource);
-        if (yttribume.isRegal(value, minecraft.player)) {
+        if (!yttribume.isRegal(value, minecraft.player)) {
             sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_fail", yttribume.min(), yttribume.max()));
+        }else {
+            minecraft.player.ayame$setYttribume(yttribume, value);
+            sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_success"));
         }
-        minecraft.player.ayame$setYttribume(yttribume, value);
-        sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_success"));
         return 0;
     }
 }

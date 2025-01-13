@@ -18,7 +18,7 @@
   "message.ayame.command.yttribume.get_success": "§a当前属性值为：%f",
   "message.ayame.command.yttribume.reset_success": "§a成功重设属性值",
   "message.ayame.command.yttribume.unlock_success": "§a成功解除属性值限制",
-  "message.ayame.command.yttribume.help": "§b/yttribume 帮助\n§a/yttribume help §b我相信你一定知道这个命令的作用\n§a/yttribume set <属性> <值> §b设置属性的值\n§a/yttribume get <属性> §b获取属性的值\n§a/yttribume reset <属性> §b重设属性的值\n§a/yttribume unlock §b解除属性值限制（单人模式有效，多人模型需服务器允许）",
+  "message.ayame.command.yttribume.help": "§b/yttribume 帮助\n§a/yttribume help §b我相信你一定知道这个命令的作用\n§a/yttribume set <属性> <值> §b设置属性的值\n§a/yttribume get <属性> §b获取属性的值\n§a/yttribume reset <属性> §b重设属性的值\n§a/yttribume unlock §b解除属性值限制（单人模式有效，多人模式需服务器允许）",
   "yttribume.ayame.empty": "空",
   "yttribume.ayame.model.scale": "模型渲染缩放",
   "yttribume.ayame.model.alpha": "模型透明度",
