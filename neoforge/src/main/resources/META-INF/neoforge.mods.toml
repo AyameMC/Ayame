@@ -41,6 +41,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${ mod_id }]]
+modId = "ayame_paperdoll"
+type = "optional"
+versionRange = "[${ayame_paperdoll_version},)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.${ mod_id }]]
 modId = "optifine"
 type = "incompatible"
 ordering = "NONE"
