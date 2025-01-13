@@ -21,11 +21,11 @@
 package org.ayamemc.ayame.client.yttribume;
 
 public class Yttribume {
-    public final float defaultValue;
-    public final float min;
-    public final float max;
-    public final AttributeType type;
-    public final boolean hideInGui;
+    private final float defaultValue;
+    private final float min;
+    private final float max;
+    private final AttributeType type;
+    private final boolean hideInGui;
 
     public Yttribume(float defaultValue, float min, float max, AttributeType type, boolean hideInGui) {
         this.defaultValue = defaultValue;
@@ -33,6 +33,29 @@ public class Yttribume {
         this.max = max;
         this.type = type;
         this.hideInGui = hideInGui;
+    }
+
+    public float defaultValue() {
+        return defaultValue;
+    }
+    public float min() {
+        return min;
+    }
+    public float max() {
+        return max;
+    }
+    public AttributeType type() {
+        return type;
+    }
+    public boolean hideInGui() {
+        return hideInGui;
+    }
+    //判断是否在范围内
+    public boolean isRegal(float value,IYttribumable yttribumable){
+        if (yttribumable.isRestricted()){
+            return value >= min() && value <= max();
+        }
+        return true;
     }
 
 

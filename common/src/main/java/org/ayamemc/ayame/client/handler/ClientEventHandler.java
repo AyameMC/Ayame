@@ -127,7 +127,7 @@ public class ClientEventHandler {
 
     public static void plusCameraYOffset(float offset, boolean reset) {
         if (reset)
-            getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET, Yttribumes.GLOBAL_CAMERA_Y_OFFSET.defaultValue);
+            getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET, Yttribumes.GLOBAL_CAMERA_Y_OFFSET.defaultValue());
         getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET, getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET) + offset);
     }
 

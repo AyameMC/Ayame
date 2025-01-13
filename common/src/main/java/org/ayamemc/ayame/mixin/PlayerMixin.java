@@ -61,6 +61,8 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     @Unique
     private final Map<Yttribume, Float> ayame$yttribumeMap = new HashMap<>();
     @Unique
+    private boolean ayame$isYttribumeRestricted = false;
+    @Unique
     private boolean ayame$isSitting = false;
 
     @Shadow
@@ -75,18 +77,28 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
 
     @Override
     public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
-        if (ignoredLimit || yttribume.min <= value && value <= yttribume.max){
+        if (ignoredLimit || yttribume.isRegal(value, this)){
             this.ayame$yttribumeMap.put(yttribume, value);
-        }else if (value > yttribume.max){
-            this.ayame$yttribumeMap.put(yttribume, yttribume.max);
-        }else if (value < yttribume.min){
-            this.ayame$yttribumeMap.put(yttribume, yttribume.min);
+        }else if (value > yttribume.max()){
+            this.ayame$yttribumeMap.put(yttribume, yttribume.max());
+        }else if (value < yttribume.min()){
+            this.ayame$yttribumeMap.put(yttribume, yttribume.min());
         }
     }
 
     @Override
     public float ayame$getYttribume(Yttribume yttribume) {
-        return this.ayame$yttribumeMap.getOrDefault(yttribume, yttribume.defaultValue);
+        return this.ayame$yttribumeMap.getOrDefault(yttribume, yttribume.defaultValue());
+    }
+
+    @Override
+    public boolean ayame$isRestricted() {
+        return ayame$isYttribumeRestricted;
+    }
+
+    @Override
+    public void ayame$liftRestriction() {
+        this.ayame$isYttribumeRestricted = false;
     }
 
     @Override

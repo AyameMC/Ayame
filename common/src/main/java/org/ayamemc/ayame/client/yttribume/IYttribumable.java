@@ -28,6 +28,11 @@ public interface IYttribumable {
     }
 
     default float ayame$getYttribume(Yttribume yttribume) {
-        return yttribume.defaultValue;
+        return yttribume.defaultValue();
+    }
+    default boolean ayame$isRestricted(){
+        return true;
+    }
+    default void ayame$liftRestriction(){
     }
 }
