@@ -190,7 +190,7 @@ public class FileUtil {
      * @param sourcePath 源文件路径
      * @param targetPath 目标文件路径
      */
-    private static void copyFile(Path sourcePath, Path targetPath) {
+    public static void copyFile(Path sourcePath, Path targetPath) {
         try (InputStream inputStream = Files.newInputStream(sourcePath)) {
 
             // 创建目标路径的父目录

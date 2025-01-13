@@ -29,19 +29,35 @@ import org.ayamemc.ayame.util.FileUtil;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static org.ayamemc.ayame.Ayame.withAyamePath;
 
 public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
     public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
+    public static final ModelType BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
+            .setGeoModel(withAyamePath("geo/ayame/default.json"))
+            .setAnimation(withAyamePath("animations/ayame/default.json"))
+            .setTexture(withAyamePath("textures/ayame/default.png"))
+            .setArm(withAyamePath("textures/ayame/default_arm.png"))
+            .setMetaData(IndexData.ModelMetaData.Builder.create()
+                    .setVersion("v1.0.0")
+                    .setDescription("为了防止意外崩溃而添加的builtin模型")
+                    .setAuthors(new String[]{"hoomwool"})
+                    .setLicense("cc0")
+                    .setLinks(new String[]{""})
+                    .setTags(new String[]{"default"})
+                    .build()
+            )
+            .build();
 
     // 静态初始化
     public static void init() {
     }
 
     private static IModelResource create(String name) {
-        Path targetPath = Path.of(MODEL_PATH + name);
-        FileUtil.copyResource("assets/ayame/models/" + name, targetPath);
-        return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(targetPath));
+        Path targetPath = Path.of(MODEL_PATH + name + ".zip");
+        FileUtil.copyFile(Path.of("assets/ayame/models/" + name+".zip"), targetPath);
+        return ModelResourceRegistry.create(ModelContent.create().createZipPack(targetPath));
     }
 }
