@@ -82,6 +82,8 @@ public class YttribumeCommand {
     }
 
     public static <T extends SharedSuggestionProvider> int unlock(CommandContext<T> context) {
+        minecraft.player.ayame$setRestriction(false);
+        sendMessageToClient(Component.translatable("message.ayame.command.yttribume.unlock_success"));
         return 1;
     }
 

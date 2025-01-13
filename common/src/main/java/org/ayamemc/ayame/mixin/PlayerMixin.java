@@ -97,8 +97,8 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     }
 
     @Override
-    public void ayame$liftRestriction() {
-        this.ayame$isYttribumeRestricted = false;
+    public void ayame$setRestriction(boolean restricted) {
+        this.ayame$isYttribumeRestricted = restricted;
     }
 
     @Override

@@ -33,6 +33,6 @@ public interface IYttribumable {
     default boolean ayame$isRestricted(){
         return true;
     }
-    default void ayame$liftRestriction(){
+    default void ayame$setRestriction(boolean restricted){
     }
 }
