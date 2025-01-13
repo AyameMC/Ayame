@@ -52,7 +52,7 @@ public class Yttribume {
     }
     //判断是否在范围内
     public boolean isRegal(float value,IYttribumable yttribumable){
-        if (yttribumable.isRestricted()){
+        if (yttribumable.ayame$isRestricted()){
             return value >= min() && value <= max();
         }
         return true;
