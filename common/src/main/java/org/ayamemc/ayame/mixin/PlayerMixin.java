@@ -30,7 +30,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
@@ -79,17 +78,19 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     public abstract Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos bedPos);
 
 
-    @Shadow public abstract int resetRecipes(Collection<RecipeHolder<?>> recipes);
+    @Shadow
+    public abstract int resetRecipes(Collection<RecipeHolder<?>> recipes);
 
-    @Shadow private boolean reducedDebugInfo;
+    @Shadow
+    private boolean reducedDebugInfo;
 
     @Override
     public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
-        if (ignoredLimit || yttribume.isRegal(value, this)){
+        if (ignoredLimit || yttribume.isRegal(value, this)) {
             this.ayame$yttribumeMap.put(yttribume, value);
-        }else if (value > yttribume.max()){
+        } else if (value > yttribume.max()) {
             this.ayame$yttribumeMap.put(yttribume, yttribume.max());
-        }else if (value < yttribume.min()){
+        } else if (value < yttribume.min()) {
             this.ayame$yttribumeMap.put(yttribume, yttribume.min());
         }
     }
@@ -114,16 +115,21 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-        controllers.add(new AnimationController<>(this,"testaym",2,state ->{
-            return state.setAndContinue(AyameAnimations.AYAME_TEST);
-        }));
+        for (byte i = 0; i < 127; i++) {
+            byte finalI = i;
+            controllers.add(new AnimationController<>(this, "mix_controller" + i, 2,
+                    state ->
+                            state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI + 1, true))));
+        }
+
+
         controllers.add(new AnimationController<>(this, 2, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
             }
             // TODO: 不要一直设置
-            if (player.isSpectator()){
+            if (player.isSpectator()) {
                 ayame$setYttribume(Yttribumes.MODEL_ALPHA, 0.6F);
             } else {
                 ayame$setYttribume(Yttribumes.MODEL_ALPHA, 1.0F);
@@ -193,7 +199,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                             state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
 
 
-                    // 跳跃，todo 修复奇怪问题
+                    // 跳跃，有效
                     () -> (player.jumping) ?
                             state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
 
@@ -230,7 +236,6 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
 
 
         ));
-
 
 
         // TODO 添加events
