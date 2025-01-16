@@ -29,10 +29,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameAnimations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,6 +47,7 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +78,10 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     @Shadow
     public abstract Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos bedPos);
 
+
+    @Shadow public abstract int resetRecipes(Collection<RecipeHolder<?>> recipes);
+
+    @Shadow private boolean reducedDebugInfo;
 
     @Override
     public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
@@ -106,13 +114,20 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-
-        controllers.add(new AnimationController<>(this, 5, state -> {
+        controllers.add(new AnimationController<>(this,"testaym",2,state ->{
+            return state.setAndContinue(AyameAnimations.AYAME_TEST);
+        }));
+        controllers.add(new AnimationController<>(this, 2, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
             }
-
+            // TODO: 不要一直设置
+            if (player.isSpectator()){
+                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 0.6F);
+            } else {
+                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 1.0F);
+            }
             // 动画判断列表
             List<Supplier<PlayState>> animationChecks = List.of(
                     // ---- 非循环
@@ -167,6 +182,9 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                     // 在活版门状态，todo 修复无效问题
                     () -> (player.isSwimming() && !player.isInLiquid()) ?
                             state.setAndContinue(AyameAnimations.MOVE_CLIMBING) : null,
+                    // 鞘翅飞，有效
+                    () -> (player.isFallFlying()) ?
+                            state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
                     // 朴实无华地走，有效
                     () -> (state.isMoving() && !player.isSprinting()) ?
                             state.setAndContinue(AyameAnimations.MOVE_WALK) : null,
@@ -178,11 +196,6 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                     // 跳跃，todo 修复奇怪问题
                     () -> (player.jumping) ?
                             state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
-
-                    // 鞘翅飞，todo 修复无效问题
-                    () -> (player.isFallFlying()) ?
-                            state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
-
 
                     // 睡觉，有效
                     () -> (player.isSleeping()) ?
@@ -201,6 +214,12 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
             // 按顺序执行判断逻辑，返回首个非 null 的状态
             for (Supplier<PlayState> check : animationChecks) {
                 PlayState result = check.get();
+                var ani = state.getController().getCurrentAnimation();
+
+                if (ani != null) {
+                    // Ayame.LOGGER.info("playing {}", ani.animation().name());
+                }
+
                 if (result != null) {
                     return result;
                 }

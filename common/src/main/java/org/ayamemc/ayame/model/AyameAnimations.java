@@ -32,6 +32,8 @@ public class AyameAnimations {
      */
     public static final RawAnimation DEBUG_EMPTY = create("debug.empty", true);
 
+    public static final RawAnimation AYAME_TEST = create("aym.test", true);
+
     // 移动动画
     /**
      * 玩家行走时的循环动画。
@@ -147,7 +149,6 @@ public class AyameAnimations {
      * 玩家死亡时的单次播放动画。
      */
     public static final RawAnimation SPECIAL_DEATH = create("special.death", false);
-    public static final RawAnimation TEST = create("aym.test", true);
 
     /**
      * 创建动画的辅助方法。
