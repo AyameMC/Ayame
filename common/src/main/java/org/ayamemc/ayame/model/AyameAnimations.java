@@ -32,7 +32,7 @@ public class AyameAnimations {
      */
     public static final RawAnimation DEBUG_EMPTY = create("debug.empty", true);
 
-    public static final RawAnimation AYAME_TEST = create("aym.test", true);
+    public static final String MIX_PARALLEL = "mix.parallel";
 
     // 移动动画
     /**
@@ -157,7 +157,7 @@ public class AyameAnimations {
      * @param loop          动画是否为循环播放。
      * @return 创建的动画对象。
      */
-    private static RawAnimation create(String animationName, boolean loop) {
+    public static RawAnimation create(String animationName, boolean loop) {
         return loop ? RawAnimation.begin().thenLoop(animationName) : RawAnimation.begin().thenPlay(animationName);
     }
 }

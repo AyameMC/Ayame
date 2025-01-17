@@ -576,6 +576,40 @@
 					]
 				},
 				{
+					"name": "Halo",
+					"parent": "Head",
+					"pivot": [0.03333, 41.58793, 8.22015],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{
+							"origin": [-5, 39.98234, 3.19691],
+							"size": [10, 4, 10],
+							"inflate": -2,
+							"uv": {
+								"north": {"uv": [33, 106], "uv_size": [10, 0]},
+								"east": {"uv": [23, 106], "uv_size": [10, 0]},
+								"south": {"uv": [53, 106], "uv_size": [10, 0]},
+								"west": {"uv": [43, 106], "uv_size": [10, 0]},
+								"up": {"uv": [33, 96], "uv_size": [10, 10]},
+								"down": {"uv": [43, 106], "uv_size": [10, -10]}
+							}
+						},
+						{
+							"origin": [-7.9, 44.39913, 0.26661],
+							"size": [16, 4, 16],
+							"inflate": -2,
+							"uv": {
+								"north": {"uv": [0, 106], "uv_size": [16, 0]},
+								"east": {"uv": [-16, 106], "uv_size": [16, 0]},
+								"south": {"uv": [32, 106], "uv_size": [16, 0]},
+								"west": {"uv": [16, 106], "uv_size": [16, 0]},
+								"up": {"uv": [0, 90], "uv_size": [16, 16]},
+								"down": {"uv": [16, 106], "uv_size": [16, -16]}
+							}
+						}
+					]
+				},
+				{
 					"name": "Arm",
 					"parent": "UpperBody",
 					"pivot": [-0.2, 27.225, 0]
@@ -622,7 +656,7 @@
 				{
 					"name": "LeftHandLocator",
 					"parent": "LeftHand",
-					"pivot": [3.625, 15.525, 0.025]
+					"pivot": [3.625, 17.525, 0.025]
 				},
 				{
 					"name": "RightArm",
@@ -653,7 +687,7 @@
 				{
 					"name": "RightHandLocator",
 					"parent": "RightHand",
-					"pivot": [-4.125, 15.525, 0.025]
+					"pivot": [-4.125, 17.525, 0.025]
 				},
 				{
 					"name": "Ribbon3",
