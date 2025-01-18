@@ -20,7 +20,11 @@
 
 package org.ayamemc.ayame.model;
 
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 public class AyameMolangVars {
@@ -81,8 +85,21 @@ public class AyameMolangVars {
      */
     public static final String FOOD_LEVEL = "aym.food_level";
 
+    /**
+     * 玩家客户端相机的人称，第一人称为0，第三人称背面为1，正面为2
+     */
+    public static final String WHICH_PERSON = "aym.which_person";
 
     public static void registerMolangVars() {
+        MolangQueries.<Player>setActorVariable(WHICH_PERSON, actor -> {
+            final Minecraft minecraft = actor.mc();
+            final CameraType person = minecraft.options.getCameraType();
+            return switch (person) {
+                case FIRST_PERSON -> 0;
+                case THIRD_PERSON_BACK -> 1;
+                case THIRD_PERSON_FRONT -> 2;
+            };
+        });
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)
         );
@@ -97,4 +114,5 @@ public class AyameMolangVars {
         );
         MathParser.registerVariable(new Variable(AyameMolangVars.HAS_MAINHAND, 0));
     }
+
 }

@@ -123,9 +123,12 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         final Pose pose = player.getPose();
         for (byte i = 0; i < (Byte.MAX_VALUE - 1); i++) {
             byte finalI = (byte) (i + 1);
-            controllers.add(new AnimationController<>(this, "mix_controller" + finalI, 2, state ->
-                    state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI, true))));
+            controllers.add(new AnimationController<>(this, "mix_controller" + finalI, 2, state -> {
+                controllers.remove("base_controller");
+                return state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI, true));
+            }));
         }
+
 
         controllers.add(new AnimationController<>(this, 2, state -> {
             // 动画任务处理
