@@ -12856,28 +12856,13 @@
 					"scale": "aym.has_helmet"
 				},
 				"MHead": {
-					"rotation": [0, 0, 0]
-				},
-				"Head": {
-					"rotation": [
-						"aym.which_person == 2 ? -query.head_y_rotation : query.head_y_rotation",
-						"aym.which_person == 2 ? -query.head_x_rotation : query.head_x_rotation",
-						0
-					]
+					"rotation": ["(query.head_x_rotation - query.body_x_rotation)", "(query.head_y_rotation - query.body_y_rotation)", 0]
 				},
 				"RightEyesBase": {
-					"position": [
-						"aym.which_person == 2 ? -query.head_x_rotation/180 : query.head_x_rotation/180",
-						"aym.which_person == 2 ? -query.head_y_rotation/360 : query.head_y_rotation/360",
-						0
-					]
+					"position": ["-(query.head_y_rotation - query.body_y_rotation)/240", "-(query.head_x_rotation - query.body_x_rotation)/420", 0]
 				},
 				"LeftEyesBase": {
-					"position": [
-						"aym.which_person == 2 ? -query.head_x_rotation/180 : query.head_x_rotation/180",
-						"aym.which_person == 2 ? -query.head_y_rotation/360 : query.head_y_rotation/360",
-						0
-					]
+					"position": ["-(query.head_y_rotation - query.body_y_rotation)/240", "-(query.head_x_rotation - query.body_x_rotation)/420", 0]
 				}
 			}
 		}

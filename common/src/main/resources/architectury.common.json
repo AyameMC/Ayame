@@ -4,6 +4,7 @@
     "net/minecraft/class_1657": [
       "software/bernie/geckolib/animatable/GeoEntity",
       "org/ayamemc/ayame/client/api/IAbleToSit",
+      "org/ayamemc/ayame/client/api/IAbleHurting",
       "org/ayamemc/ayame/client/yttribume/IYttribumable"
     ],
     "net/minecraft/class_759": [

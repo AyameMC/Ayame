@@ -21,26 +21,23 @@
 package org.ayamemc.ayame.mixin;
 
 
-import com.mojang.datafixers.util.Either;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import org.ayamemc.ayame.client.api.IAbleHurting;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
-import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameAnimations;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -48,7 +45,6 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +56,7 @@ import java.util.function.Supplier;
  */
 
 @Mixin(Player.class)
-public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumable {
+public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumable, IAbleHurting {
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
     @Unique
@@ -69,62 +65,24 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     private boolean ayame$isYttribumeRestricted = true;
     @Unique
     private boolean ayame$isSitting = false;
-
-    @Shadow
-    public abstract boolean setEntityOnShoulder(CompoundTag entityCompound);
-
-    @Shadow
-    public abstract void remove(Entity.RemovalReason reason);
-
-    @Shadow
-    public abstract Either<Player.BedSleepingProblem, Unit> startSleepInBed(BlockPos bedPos);
-
-
-    @Shadow
-    public abstract int resetRecipes(Collection<RecipeHolder<?>> recipes);
-
-    @Shadow
-    private boolean reducedDebugInfo;
-
-    @Shadow
-    @Final
-    private static Logger LOGGER;
-
-    @Override
-    public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
-        if (ignoredLimit || yttribume.isRegal(value, this)) {
-            this.ayame$yttribumeMap.put(yttribume, value);
-        } else if (value > yttribume.max()) {
-            this.ayame$yttribumeMap.put(yttribume, yttribume.max());
-        } else if (value < yttribume.min()) {
-            this.ayame$yttribumeMap.put(yttribume, yttribume.min());
-        }
-    }
-
-    @Override
-    public float ayame$getYttribume(Yttribume yttribume) {
-        return this.ayame$yttribumeMap.getOrDefault(yttribume, yttribume.defaultValue());
-    }
-
-    @Override
-    public boolean ayame$isRestricted() {
-        return ayame$isYttribumeRestricted;
-    }
-
-    @Override
-    public void ayame$setRestriction(boolean restricted) {
-        this.ayame$isYttribumeRestricted = restricted;
-    }
+    @Unique
+    private boolean ayame$isHurting = false;
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
+
+
         for (byte i = 0; i < (Byte.MAX_VALUE - 1); i++) {
             byte finalI = (byte) (i + 1);
             controllers.add(new AnimationController<>(this, "mix_controller" + finalI, 2, state -> {
-                controllers.remove("base_controller");
+                //  controllers.controllers().clear();
+                // controllers.controllers().getFirst().forceAnimationReset();
+                // controllers.remove("base_controller");
+                // state.getController().forceAnimationReset();
                 return state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI, true));
             }));
         }
@@ -135,12 +93,12 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
             }
-            // TODO: 不要一直设置
-            if (player.isSpectator()) {
-                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 0.6F);
-            } else {
-                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 1.0F);
-            }
+//            // TODO: 不要一直设置
+//            if (player.isSpectator()) {
+//                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 0.6F);
+//            } else {
+//                ayame$setYttribume(Yttribumes.MODEL_ALPHA, 1.0F);
+//            }
             // 动画判断列表
             List<Supplier<PlayState>> animationChecks = List.of(
                     // ---- 非循环
@@ -148,14 +106,14 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                     () -> (player.isDeadOrDying()) ?
                             state.setAndContinue(AyameAnimations.SPECIAL_DEATH) : null,
 
-                    // 玩家右键右手，todo 修复只对物品生效的问题
-                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.MAIN_HAND) ?
-                            state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND) : null,
-                    // 玩家右键左手，todo 修复只对物品生效的问题
-                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.OFF_HAND) ?
-                            state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND) : null,
+//                    // 玩家右键右手，todo 修复只对物品生效的问题
+//                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.MAIN_HAND) ?
+//                            state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND) : null,
+//                    // 玩家右键左手，todo 修复只对物品生效的问题
+//                    () -> (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.OFF_HAND) ?
+//                            state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND) : null,
                     // 玩家被攻击，todo 修复时有时无问题
-                    () -> (player.isHurt()) ?
+                    () -> (player.ayame$isHurting()) ?
                             state.setAndContinue(AyameAnimations.ACTION_ATTACKED) : null,
 
 
@@ -237,17 +195,46 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                     return result;
                 }
             }
-
             return PlayState.CONTINUE;
         }
 
 
         ));
 
+        controllers.add(new AnimationController<>(this, "swing", 2, state -> {
+            final ItemStack itemStack = player.getUseItem();
+            final UseAnim handAnimation = itemStack.getUseAnimation();
+
+            // 玩家使用右手
+            if (player.isUsingItem() && (player.getUsedItemHand() == InteractionHand.MAIN_HAND))
+                return state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND);
+            // 玩家使用左手
+            if (player.isUsingItem() && (player.getUsedItemHand() == InteractionHand.OFF_HAND))
+                return state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND);
+            // 玩家挥动右手
+            if (player.swinging && (player.swingingArm == InteractionHand.MAIN_HAND))
+                return state.setAndContinue(AyameAnimations.ACTION_SWING_MAINHAND);
+            // 玩家挥动左手
+            if (player.swinging && (player.swingingArm == InteractionHand.OFF_HAND))
+                state.setAndContinue(AyameAnimations.ACTION_SWING_OFFHAND);
+
+            state.getController().forceAnimationReset();
+
+            return PlayState.STOP;
+        }));
 
         // TODO 添加events
     }
 
+    @Inject(method = "hurt", at = @At("HEAD"))
+    private void startHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.ayame$isHurting = true;
+    }
+
+    @Inject(method = "hurt", at = @At("RETURN"))
+    private void endHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        this.ayame$isHurting = false;
+    }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return ayame$geoCache;
@@ -263,5 +250,40 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         return ayame$isSitting;
     }
 
+    @Override
+    public void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
+        if (ignoredLimit || yttribume.isRegal(value, this)) {
+            this.ayame$yttribumeMap.put(yttribume, value);
+        } else if (value > yttribume.max()) {
+            this.ayame$yttribumeMap.put(yttribume, yttribume.max());
+        } else if (value < yttribume.min()) {
+            this.ayame$yttribumeMap.put(yttribume, yttribume.min());
+        }
+    }
+
+    @Override
+    public void ayame$setHurting(boolean hurting) {
+        ayame$isHurting = hurting;
+    }
+
+    @Override
+    public boolean ayame$isHurting() {
+        return ayame$isHurting;
+    }
+
+    @Override
+    public float ayame$getYttribume(Yttribume yttribume) {
+        return this.ayame$yttribumeMap.getOrDefault(yttribume, yttribume.defaultValue());
+    }
+
+    @Override
+    public boolean ayame$isRestricted() {
+        return ayame$isYttribumeRestricted;
+    }
+
+    @Override
+    public void ayame$setRestriction(boolean restricted) {
+        this.ayame$isYttribumeRestricted = restricted;
+    }
 
 }
