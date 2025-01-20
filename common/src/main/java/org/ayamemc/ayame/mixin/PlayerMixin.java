@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.IAbleHurting;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
@@ -74,18 +75,6 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         // TODO 完善默认动画，支持自定义动画
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
-
-
-        for (byte i = 0; i < (Byte.MAX_VALUE - 1); i++) {
-            byte finalI = (byte) (i + 1);
-            controllers.add(new AnimationController<>(this, "mix_controller" + finalI, 2, state -> {
-                //  controllers.controllers().clear();
-                // controllers.controllers().getFirst().forceAnimationReset();
-                // controllers.remove("base_controller");
-                // state.getController().forceAnimationReset();
-                return state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI, true));
-            }));
-        }
 
 
         controllers.add(new AnimationController<>(this, 2, state -> {
@@ -196,21 +185,27 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                 }
             }
             return PlayState.CONTINUE;
+        }));
+
+        for (byte i = 0; i < (Byte.MAX_VALUE - 1); i++) {
+            byte finalI = (byte) (i + 1);
+            controllers.add(new AnimationController<>(this, "mix_controller" + finalI, 2,
+                    state ->
+                            state.setAndContinue(AyameAnimations.create(AyameAnimations.MIX_PARALLEL + finalI, true))));
         }
-
-
-        ));
 
         controllers.add(new AnimationController<>(this, "swing", 2, state -> {
             final ItemStack itemStack = player.getUseItem();
             final UseAnim handAnimation = itemStack.getUseAnimation();
-
+//            if (player.swingingArm != null)
+//                Ayame.LOGGER.info("hand {}", player.swingingArm);
             // 玩家使用右手
             if (player.isUsingItem() && (player.getUsedItemHand() == InteractionHand.MAIN_HAND))
                 return state.setAndContinue(AyameAnimations.ACTION_USE_MAINHAND);
             // 玩家使用左手
             if (player.isUsingItem() && (player.getUsedItemHand() == InteractionHand.OFF_HAND))
                 return state.setAndContinue(AyameAnimations.ACTION_USE_OFFHAND);
+            // TODO: 弃用swingingArm
             // 玩家挥动右手
             if (player.swinging && (player.swingingArm == InteractionHand.MAIN_HAND))
                 return state.setAndContinue(AyameAnimations.ACTION_SWING_MAINHAND);
@@ -232,9 +227,10 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     }
 
     @Inject(method = "hurt", at = @At("RETURN"))
-    private void endHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    private void endHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.ayame$isHurting = false;
     }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return ayame$geoCache;
