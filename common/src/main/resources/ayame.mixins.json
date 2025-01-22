@@ -9,6 +9,7 @@
     "client.LocalPlayerMixin"
   ],
   "mixins": [
+    "AnimationControllerMixin",
     "PlayerMixin"
   ],
   "injectors": {
