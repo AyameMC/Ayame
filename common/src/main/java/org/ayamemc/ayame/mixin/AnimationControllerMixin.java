@@ -24,6 +24,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.ai.goal.InteractGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,7 +41,7 @@ import java.util.List;
 public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
     @Shadow
     protected abstract AnimationPoint getAnimationPointAtTick(List<Keyframe<MathValue>> frames, double tick, boolean isRotation, Direction.Axis axis);
-    
+
     @WrapOperation(
             method = "process",
             at = @At(value = "INVOKE", target = "Lsoftware/bernie/geckolib/animation/keyframe/BoneAnimationQueue;addNextRotation(Lsoftware/bernie/geckolib/animation/keyframe/Keyframe;DDLsoftware/bernie/geckolib/animation/state/BoneSnapshot;Lsoftware/bernie/geckolib/animation/state/BoneSnapshot;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;)V"),
@@ -58,21 +59,24 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
             final Keyframe<MathValue> zKeyframe = zKeyframes.get(i);
             final Keyframe<MathValue> xKeyframeCopy = new Keyframe<>(
                     xKeyframe.length(),
-                    boxingToMathValue(xKeyframe.startValue().get() + 1),
+                    ayame$boxingToMathValue(ayame$unboxToDouble(xKeyframe.startValue())),
+//                    xKeyframe.startValue(),
                     xKeyframe.endValue(),
                     xKeyframe.easingType(),
                     xKeyframe.easingArgs()
             );
             final Keyframe<MathValue> yKeyframeCopy = new Keyframe<>(
                     yKeyframe.length(),
-                    boxingToMathValue(yKeyframe.startValue().get() + 1),
+                    ayame$boxingToMathValue(ayame$unboxToDouble(yKeyframe.startValue())),
+//                    yKeyframe.startValue(),
                     yKeyframe.endValue(),
                     yKeyframe.easingType(),
                     yKeyframe.easingArgs()
             );
             final Keyframe<MathValue> zKeyframeCopy = new Keyframe<>(
                     zKeyframe.length(),
-                    boxingToMathValue(zKeyframe.startValue().get() + 1),
+                    ayame$boxingToMathValue(ayame$unboxToDouble(zKeyframe.startValue())),
+//                    zKeyframe.startValue(),
                     zKeyframe.endValue(),
                     zKeyframe.easingType(),
                     zKeyframe.easingArgs()
@@ -90,12 +94,12 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
     }
 
     @Unique
-    private static double unboxToDouble(MathValue value) {
+    private static double ayame$unboxToDouble(MathValue value) {
         return value.get();
     }
 
     @Unique
-    private static MathValue boxingToMathValue(double value) {
+    private static MathValue ayame$boxingToMathValue(double value) {
         return () -> value;
     }
 }
