@@ -20,3 +20,4 @@ build/*
 !/.idea/copyright/
 /*/.architectury-transformer/
 /common/run/
+#/common/src/main/resources/assets/ayame/models/ayame_chan/script/.vscode/

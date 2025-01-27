@@ -1,0 +1,53 @@
+{
+  // TypeScript 编译器选项
+  "compilerOptions": {
+    // 目标语言为 ECMAScript 5，确保与 Rhino 兼容
+    "target": "ES5",
+    // 使用 ES5 标准库，确保与 Rhino 支持的功能一致
+    "lib": ["ES5"],
+    // 允许编译 JavaScript 文件，支持混合项目
+    "allowJs": true,
+    // 启用对 JavaScript 的类型检查
+    "checkJs": true,
+    // 启用严格类型检查
+    "strict": true,
+    // 禁止隐式的 any 类型
+    "noImplicitAny": true,
+    // 禁止对 null 或 undefined 的调用
+    "strictNullChecks": true,
+    // 禁止从索引签名中访问不存在的属性
+    "noPropertyAccessFromIndexSignature": true,
+    // 防止访问对象不存在的字段或函数
+    "noImplicitThis": true,
+    // 保留 JSX 语法，仅当需要时启用，避免报错
+    "jsx": "preserve",
+    // 允许从没有默认导出的模块导入默认内容
+    "allowSyntheticDefaultImports": true,
+    // 使用 Node 风格的模块解析方式
+    "moduleResolution": "node10",
+    // 指定类型声明文件的根目录
+    "typeRoots": ["./lib"],
+    // 基础路径，解析非相对模块的基准目录
+    "baseUrl": "."
+  },
+  // 包含在编译中的文件或模式
+  "include": ["./**/*.d.ts", "./**/*.js"],
+  // 排除在编译之外的文件或模式
+  "exclude": [],
+  // Deno Lint 配置
+  "lint": {
+    "rules": {
+      // 使用推荐的规则集
+      "tags": ["recommended"],
+      // 排除特定的规则
+      "exclude": []
+    },
+    // 格式化配置
+    "fmt": {
+      "options": {
+        // 使用 4 个空格进行缩进
+        "indentWidth": 4
+      }
+    }
+  }
+}
