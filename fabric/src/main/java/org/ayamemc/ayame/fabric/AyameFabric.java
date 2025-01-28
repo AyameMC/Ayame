@@ -36,7 +36,7 @@ import org.ayamemc.ayame.fabric.client.event.ModelReloadEventHandler;
 public final class AyameFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        Ayame.init();
+        Ayame.init("fabric");
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new ModelReloadEventHandler());
     }

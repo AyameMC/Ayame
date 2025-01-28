@@ -4,7 +4,9 @@
     // 目标语言为 ECMAScript 5，确保与 Rhino 兼容
     "target": "ES5",
     // 使用 ES5 标准库，确保与 Rhino 支持的功能一致
-    "lib": ["ES5"],
+    "lib": [
+      "ES5"
+    ],
     // 允许编译 JavaScript 文件，支持混合项目
     "allowJs": true,
     // 启用对 JavaScript 的类型检查
@@ -26,19 +28,26 @@
     // 使用 Node 风格的模块解析方式
     "moduleResolution": "node10",
     // 指定类型声明文件的根目录
-    "typeRoots": ["./lib"],
+    "typeRoots": [
+      "./types/@types"
+    ],
     // 基础路径，解析非相对模块的基准目录
     "baseUrl": "."
   },
   // 包含在编译中的文件或模式
-  "include": ["./**/*.d.ts", "./**/*.js"],
+  "include": [
+    "./types/**/*.d.ts",
+    "./**/*.js"
+  ],
   // 排除在编译之外的文件或模式
   "exclude": [],
   // Deno Lint 配置
   "lint": {
     "rules": {
       // 使用推荐的规则集
-      "tags": ["recommended"],
+      "tags": [
+        "recommended"
+      ],
       // 排除特定的规则
       "exclude": []
     },

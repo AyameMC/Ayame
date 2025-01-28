@@ -1,7 +1,7 @@
 /**
  * 表示玩家对象。
  */
-declare class Player {
+declare interface Player {
   /** 玩家 ID */
   get name(): string;
 

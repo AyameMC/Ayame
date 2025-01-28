@@ -18,16 +18,19 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge;
+package org.ayamemc.ayame.client.script;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import org.ayamemc.ayame.Ayame;
+import org.mozilla.javascript.annotations.JSFunction;
 
-@Mod(Ayame.MOD_ID)
-public final class AyameNeoForge {
-    public AyameNeoForge(IEventBus modBus) {
-        // Run our common setup.
-        Ayame.init("neoforge");
+public class JsPlayer {
+    public String name;
+
+    public JsPlayer(String name) {
+        this.name = name;
+    }
+
+    @JSFunction
+    public void sendChat(String message) {
+        System.out.println(this.name + " sent chat: " + message);
     }
 }

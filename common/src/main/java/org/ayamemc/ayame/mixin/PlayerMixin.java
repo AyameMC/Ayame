@@ -43,6 +43,7 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationProcessor;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -174,10 +175,10 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
             // 按顺序执行判断逻辑，返回首个非 null 的状态
             for (Supplier<PlayState> check : animationChecks) {
                 PlayState result = check.get();
-                var ani = state.getController().getCurrentAnimation();
+                AnimationProcessor.QueuedAnimation queuedAnimation = state.getController().getCurrentAnimation();
 
-                if (ani != null) {
-                    // Ayame.LOGGER.info("playing {}", ani.animation().name());
+                if (queuedAnimation != null) {
+                     Ayame.LOGGER.info("playing {}", queuedAnimation.animation().name());
                 }
 
                 if (result != null) {

@@ -27,12 +27,12 @@
     // 使用 Node 风格的模块解析方式
     "moduleResolution": "node10",
     "typeRoots": [
-      "./lib"
+      "types/@types"
     ],
     "baseUrl": "."
   },
   "include": [
-    "./**/*.d.ts",
+    "./types/**/*.d.ts",
     "./**/*.js"
   ],
   "exclude": []

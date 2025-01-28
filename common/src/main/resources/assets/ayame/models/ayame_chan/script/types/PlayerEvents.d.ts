@@ -1,6 +1,6 @@
+import EventHandler from "./EventHandler.d.ts";
 import { Level } from "./Level.d.ts";
 import { Player } from "./Player.d.ts";
-import EventHandler from "./EventHandler.d.ts";
 
 /**
  * 与玩家相关的事件。

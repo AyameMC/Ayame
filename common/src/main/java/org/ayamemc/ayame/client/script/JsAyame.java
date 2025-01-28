@@ -18,16 +18,11 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge;
+package org.ayamemc.ayame.client.script;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
 import org.ayamemc.ayame.Ayame;
 
-@Mod(Ayame.MOD_ID)
-public final class AyameNeoForge {
-    public AyameNeoForge(IEventBus modBus) {
-        // Run our common setup.
-        Ayame.init("neoforge");
-    }
+public class JsAyame {
+    public static final String VERSION = org.ayamemc.ayame.Ayame.VERSION;
+    public static final String modLoader = Ayame.modLoader;
 }
