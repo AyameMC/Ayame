@@ -22,6 +22,11 @@ function _main() {
     }
 
 }
+// function test(){
+//     Logger.info("loop...");
+//     test();
+// }
+// test();
 _main()
 
 PlayerEvents.tick((event) => {
