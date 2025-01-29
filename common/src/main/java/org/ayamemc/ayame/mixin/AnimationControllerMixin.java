@@ -20,35 +20,47 @@
 
 package org.ayamemc.ayame.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.ai.goal.InteractGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.keyframe.*;
-import software.bernie.geckolib.animation.state.BoneSnapshot;
+import software.bernie.geckolib.animation.keyframe.AnimationPoint;
+import software.bernie.geckolib.animation.keyframe.BoneAnimation;
+import software.bernie.geckolib.animation.keyframe.Keyframe;
+import software.bernie.geckolib.animation.keyframe.KeyframeStack;
 import software.bernie.geckolib.loading.math.MathValue;
 
 import java.util.List;
 
 @Mixin(AnimationController.class)
 public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
+    @Unique
+    private static double ayame$unboxToDouble(MathValue value) {
+        return value.get();
+    }
+
+    @Unique
+    private static MathValue ayame$boxingToMathValue(double value) {
+        return () -> value;
+    }
+
     @Shadow
     protected abstract AnimationPoint getAnimationPointAtTick(List<Keyframe<MathValue>> frames, double tick, boolean isRotation, Direction.Axis axis);
 
-    @WrapOperation(
-            method = "process",
-            at = @At(value = "INVOKE", target = "Lsoftware/bernie/geckolib/animation/keyframe/BoneAnimationQueue;addNextRotation(Lsoftware/bernie/geckolib/animation/keyframe/Keyframe;DDLsoftware/bernie/geckolib/animation/state/BoneSnapshot;Lsoftware/bernie/geckolib/animation/state/BoneSnapshot;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;)V"),
+    @Inject(
+            method = "processCurrentAnimation",
+            at = @At(value = "INVOKE", target = "Lsoftware/bernie/geckolib/animation/keyframe/BoneAnimationQueue;addRotations(Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;)V"),
             remap = false
     )
-    private void process(BoneAnimationQueue instance, Keyframe<?> keyFrame, double lerpedTick, double transitionLength, BoneSnapshot startSnapshot, BoneSnapshot initialSnapshot, AnimationPoint nextXPoint, AnimationPoint nextYPoint, AnimationPoint nextZPoint, Operation<Void> original,
-                         @Local(name = "rotationKeyFrames") KeyframeStack<Keyframe<MathValue>> rotationKeyFrames, @Local BoneAnimation boneAnimation) {
+    private void processCurrentAnimation(double adjustedTick, double seekTime, boolean crashWhenCantFindBone, CallbackInfo ci,
+                                         @Local(name = "rotationKeyFrames") KeyframeStack<Keyframe<MathValue>> rotationKeyFrames,
+                                         @Local BoneAnimation boneAnimation) {
         final List<Keyframe<MathValue>> xKeyframes = rotationKeyFrames.xKeyframes();
         final List<Keyframe<MathValue>> yKeyframes = rotationKeyFrames.yKeyframes();
         final List<Keyframe<MathValue>> zKeyframes = rotationKeyFrames.zKeyframes();
@@ -86,20 +98,5 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
             yKeyframes.set(i, yKeyframeCopy);
             zKeyframes.set(i, zKeyframeCopy);
         }
-
-        original.call(instance, keyFrame, lerpedTick, transitionLength, startSnapshot, initialSnapshot,
-                getAnimationPointAtTick(rotationKeyFrames.xKeyframes(), 0, true, Direction.Axis.X),
-                getAnimationPointAtTick(rotationKeyFrames.yKeyframes(), 0, true, Direction.Axis.Y),
-                getAnimationPointAtTick(rotationKeyFrames.zKeyframes(), 0, true, Direction.Axis.Z));
-    }
-
-    @Unique
-    private static double ayame$unboxToDouble(MathValue value) {
-        return value.get();
-    }
-
-    @Unique
-    private static MathValue ayame$boxingToMathValue(double value) {
-        return () -> value;
     }
 }

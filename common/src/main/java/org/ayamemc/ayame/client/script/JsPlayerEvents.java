@@ -26,7 +26,7 @@ import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class JsPlayerEvents {
     @JSStaticFunction
@@ -36,7 +36,7 @@ public class JsPlayerEvents {
             // 模拟事件对象
             Scriptable event = new NativeObject();
             event.put("level", event, "TestLevel");
-            event.put("player", event, new JsPlayer(minecraft.getGameProfile().getName()));
+            event.put("player", event, new JsPlayer(MINECRAFT.getGameProfile().getName()));
             callback.call(Context.getCurrentContext(), callback, callback, new Object[]{event});
         } catch (Exception e) {
             org.ayamemc.ayame.Ayame.LOGGER.error(e.toString());

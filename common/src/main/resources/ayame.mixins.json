@@ -10,7 +10,8 @@
   ],
   "mixins": [
     "AnimationControllerMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "accessor.KeyframeAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

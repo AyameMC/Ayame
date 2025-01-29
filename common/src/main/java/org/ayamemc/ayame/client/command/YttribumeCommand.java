@@ -35,7 +35,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 import static org.ayamemc.ayame.client.command.AyameCommandManager.sendMessageToClient;
 
 public class YttribumeCommand {
@@ -46,7 +46,7 @@ public class YttribumeCommand {
 
     //别改了好不好哇
     @SuppressWarnings("unchecked")
-    public static <T extends SharedSuggestionProvider> void init(CommandDispatcher<T> dispatcher, CommandBuildContext context){
+    public static <T extends SharedSuggestionProvider> void init(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
         dispatcher.register(LiteralArgumentBuilder.<T>literal("yttribume")
                 .then(LiteralArgumentBuilder.<T>literal("set")
                         .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("yttribume", ResourceLocationArgument.id())
@@ -82,7 +82,7 @@ public class YttribumeCommand {
     }
 
     public static <T extends SharedSuggestionProvider> int unlock(CommandContext<T> context) {
-        minecraft.player.ayame$setRestriction(false);
+        MINECRAFT.player.ayame$setRestriction(false);
         sendMessageToClient(Component.translatable("message.ayame.command.yttribume.unlock_success"));
         return 1;
     }
@@ -90,14 +90,14 @@ public class YttribumeCommand {
 
     @SuppressWarnings("DataFlowIssue")
     private static <T extends SharedSuggestionProvider> int help(CommandContext<T> context) {
-        minecraft.player.displayClientMessage(Component.translatable("message.ayame.command.yttribume.help"), false);
+        MINECRAFT.player.displayClientMessage(Component.translatable("message.ayame.command.yttribume.help"), false);
         return 0;
     }
 
     @SuppressWarnings("DataFlowIssue")
     private static <T extends SharedSuggestionProvider> int resetYttribume(CommandContext<T> context) {
         Yttribume yttribume = Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"));
-        minecraft.player.ayame$setYttribume(yttribume, yttribume.defaultValue());
+        MINECRAFT.player.ayame$setYttribume(yttribume, yttribume.defaultValue());
         sendMessageToClient(Component.translatable("message.ayame.command.yttribume.reset_success"));
         return 0;
     }
@@ -105,7 +105,7 @@ public class YttribumeCommand {
     @SuppressWarnings("DataFlowIssue")
     private static <T extends SharedSuggestionProvider> int getYttribume(CommandContext<T> context) {
         sendMessageToClient(Component.translatable("message.ayame.command.yttribume.get_success",
-                minecraft.player.ayame$getYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"))))
+                MINECRAFT.player.ayame$getYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"))))
         );
         return 0;
     }
@@ -115,10 +115,10 @@ public class YttribumeCommand {
         float value = FloatArgumentType.getFloat(context, "value");
         ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
         Yttribume yttribume = Yttribumes.get(resource);
-        if (!yttribume.isRegal(value, minecraft.player)) {
+        if (!yttribume.isRegal(value, MINECRAFT.player)) {
             sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_fail", yttribume.min(), yttribume.max()));
-        }else {
-            minecraft.player.ayame$setYttribume(yttribume, value);
+        } else {
+            MINECRAFT.player.ayame$setYttribume(yttribume, value);
             sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_success"));
         }
         return 0;

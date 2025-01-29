@@ -47,7 +47,7 @@ public class RegisterKeyEventHandler {
             TranslatableName.MOD_KEY_MENU_NAME
     ));
     public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_UP = Lazy.of(() -> new KeyMapping(
-            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_UP,
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CAMERA_Y_OFFSET_UP,
             KeyConflictContext.IN_GAME,
             KeyModifier.CONTROL,
             InputConstants.Type.KEYSYM,
@@ -55,7 +55,7 @@ public class RegisterKeyEventHandler {
             TranslatableName.MOD_KEY_MENU_NAME
     ));
     public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_DOWN = Lazy.of(() -> new KeyMapping(
-            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_DOWN,
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CAMERA_Y_OFFSET_DOWN,
             KeyConflictContext.IN_GAME,
             KeyModifier.CONTROL,
             InputConstants.Type.KEYSYM,
@@ -63,7 +63,7 @@ public class RegisterKeyEventHandler {
             TranslatableName.MOD_KEY_MENU_NAME
     ));
     public static final Lazy<KeyMapping> CAMERA_Y_OFFSET_RESET = Lazy.of(() -> new KeyMapping(
-            "key." + Ayame.MOD_ID + "."+TranslatableName.CAMERA_Y_OFFSET_RESET,
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CAMERA_Y_OFFSET_RESET,
             KeyConflictContext.IN_GAME,
             KeyModifier.CONTROL,
             InputConstants.Type.KEYSYM,

@@ -79,7 +79,7 @@ public class AyameKeyRegister {
      * @return 调用 {@link AyameTmsKey}
      * @see KeyMapping
      */
-    public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category,Modifier modifier) {
+    public static KeyMapping registerKeyMapping(String name, InputConstants.Type type, int keyCode, String category, Modifier modifier) {
         KeyMapping keyMapping;
         try {
             // 直接检查 TMSKeyBinding 是否存在
@@ -109,14 +109,14 @@ public class AyameKeyRegister {
         while (AyameKeyRegister.MODEL_SELECT_MENU.consumeClick()) {
             ClientEventHandler.openSelectMenuKeyPressed();
         }
-        while (AyameKeyRegister.CAMERA_Y_OFFSET_UP.consumeClick()){
-            ClientEventHandler.plusCameraYOffset(0.01f,false);
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_UP.consumeClick()) {
+            ClientEventHandler.plusCameraYOffset(0.01f, false);
         }
-        while (AyameKeyRegister.CAMERA_Y_OFFSET_DOWN.consumeClick()){
-            ClientEventHandler.plusCameraYOffset(-0.01f,false);
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_DOWN.consumeClick()) {
+            ClientEventHandler.plusCameraYOffset(-0.01f, false);
         }
-        while (AyameKeyRegister.CAMERA_Y_OFFSET_RESET.consumeClick()){
-            ClientEventHandler.plusCameraYOffset(0.0f,true);
+        while (AyameKeyRegister.CAMERA_Y_OFFSET_RESET.consumeClick()) {
+            ClientEventHandler.plusCameraYOffset(0.0f, true);
         }
 
     }

@@ -44,7 +44,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 /**
  * 用于向GeckoLib缓存和贴图写入新模型的工具类
@@ -107,7 +107,7 @@ public class ModelResourceWriterUtil {
      */
     public static void addTexture(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
         try {
-            minecraft.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
+            MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -130,7 +130,7 @@ public class ModelResourceWriterUtil {
 
     public static void addTexture(ResourceLocation resourceLocation, InputStream inputStream) {
         try {
-            minecraft.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(inputStream)));
+            MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(inputStream)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

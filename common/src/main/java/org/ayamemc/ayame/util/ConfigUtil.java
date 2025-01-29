@@ -21,8 +21,11 @@
 package org.ayamemc.ayame.util;
 
 
+import org.ayamemc.ayame.Ayame;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
@@ -35,7 +38,7 @@ public class ConfigUtil {
     public static void init() {
         if (!CONFIG_FILE.exists()) {
             // 写入默认配置文件
-            FileUtil.copyResource("assets/ayame/config.json", CONFIG_FILE.toPath());
+            FileUtil.copyBuiltinFileToDirectory(Ayame.withAyamePath("assets/ayame/config.json"), CONFIG_FILE.toPath());
         }
         try {
             config = JsonInterpreter.fromFile(CONFIG_FILE);

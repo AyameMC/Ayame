@@ -32,7 +32,7 @@ import org.mozilla.javascript.Scriptable;
 
 import java.util.concurrent.CompletableFuture;
 
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 
 @SuppressWarnings("unchecked")
@@ -93,7 +93,7 @@ public class AyameCommandManager {
 
     @SuppressWarnings("DataFlowIssue")
     public static void sendMessageToClient(Component message) {
-        minecraft.player.displayClientMessage(message, false);
+        MINECRAFT.player.displayClientMessage(message, false);
     }
 
     public static double rhinoBenchmark(boolean useInterpretedMode) {
@@ -120,9 +120,6 @@ public class AyameCommandManager {
     private static <T extends SharedSuggestionProvider> int benchmarkCompiled(CommandContext<T> tCommandContext) {
         return benchmarkTest(tCommandContext, false);
     }
-
-
-
 
 
 }

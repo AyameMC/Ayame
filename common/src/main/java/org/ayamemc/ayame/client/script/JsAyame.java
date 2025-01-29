@@ -23,6 +23,6 @@ package org.ayamemc.ayame.client.script;
 import org.ayamemc.ayame.Ayame;
 
 public class JsAyame {
-    public static final String VERSION = org.ayamemc.ayame.Ayame.VERSION;
+    public static final String VERSION = Ayame.VERSION;
     public static final String modLoader = Ayame.modLoader;
 }

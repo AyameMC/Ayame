@@ -22,48 +22,58 @@ package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.util.AyameModelScriptException;
 import org.mozilla.javascript.annotations.JSStaticFunction;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JsLogger {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger("Ayame Model Script");
+    private static final Logger LOGGER = LoggerFactory.getLogger("Ayame Model Script");
 
     @JSStaticFunction
     public static void info(String message) {
         LOGGER.info(message);
     }
+
     @JSStaticFunction
     public static void info(String message, Object... obj) {
         LOGGER.info(message, obj);
     }
+
     @JSStaticFunction
     public static void warn(String message) {
         LOGGER.warn(message);
     }
+
     @JSStaticFunction
     public static void warn(String message, Object... obj) {
         LOGGER.warn(message, obj);
     }
+
     @JSStaticFunction
     public static void error(String message) {
         LOGGER.error(message);
     }
+
     @JSStaticFunction
     public static void error(String message, Object... obj) {
         LOGGER.error(message, obj);
     }
+
     @JSStaticFunction
     public static void debug(String message) {
         LOGGER.debug(message);
     }
+
     @JSStaticFunction
     public static void debug(String message, Object... obj) {
         LOGGER.debug(message, obj);
     }
+
     @JSStaticFunction
     public static void fatal(String message) {
         LOGGER.error(message);
         throw new AyameModelScriptException(message);
     }
+
     @JSStaticFunction
     public static void fatal(String message, Object... obj) {
         LOGGER.error(message, obj);

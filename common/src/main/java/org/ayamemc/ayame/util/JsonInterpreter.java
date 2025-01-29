@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.util;
 
 import com.google.gson.*;
+import org.ayamemc.ayame.Ayame;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class JsonInterpreter {
      * @param filePath 文件路径
      */
     public JsonInterpreter(Path filePath) throws IOException {
-        this(FileUtil.readFileWithException(filePath));
+        this(FileUtil.readFile(filePath));
         this.filePath = filePath;
     }
 
@@ -93,7 +94,7 @@ public class JsonInterpreter {
     }
 
     public static JsonInterpreter fromResource(String path) {
-        InputStream content = FileUtil.getResourceAsStream(path);
+        InputStream content = FileUtil.getAyameFileResourceAsStream(path);
         return JsonInterpreter.of(content);
     }
 

@@ -122,8 +122,8 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
                     player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );
 
-            for (ResourceLocation id: Yttribumes.getIds()){
-                MathParser.setVariable(id.getNamespace()+".yttribume."+id.getPath(),()-> player.ayame$getYttribume(Yttribumes.get(id)));
+            for (ResourceLocation id : Yttribumes.getIds()) {
+                MathParser.setVariable(id.getNamespace() + ".yttribume." + id.getPath(), () -> player.ayame$getYttribume(Yttribumes.get(id)));
             }
         }
 

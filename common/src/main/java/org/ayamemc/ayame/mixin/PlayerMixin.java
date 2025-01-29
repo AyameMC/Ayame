@@ -178,7 +178,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                 AnimationProcessor.QueuedAnimation queuedAnimation = state.getController().getCurrentAnimation();
 
                 if (queuedAnimation != null) {
-                     Ayame.LOGGER.info("playing {}", queuedAnimation.animation().name());
+                    Ayame.LOGGER.info("playing {}", queuedAnimation.animation().name());
                 }
 
                 if (result != null) {

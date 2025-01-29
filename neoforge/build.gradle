@@ -85,7 +85,7 @@ processResources {
             mod_homepage_url                : project.findProperty('mod_homepage_url'),
             mod_description                 : project.findProperty('mod_description'),
             geckolib_version                : project.findProperty('geckolib_version'),
-            ayame_paperdoll_version       : project.findProperty('ayame_paperdoll_version'),
+            ayame_paperdoll_version         : project.findProperty('ayame_paperdoll_version'),
             mod_mixin_config                : project.findProperty('mod_mixin_config'),
             mod_issues_url                  : project.findProperty('mod_issues_url'),
             neoforge_version                : project.findProperty('neoforge_version'),

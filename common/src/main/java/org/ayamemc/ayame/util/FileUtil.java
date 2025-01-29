@@ -20,35 +20,42 @@
 
 package org.ayamemc.ayame.util;
 
-import org.ayamemc.ayame.Ayame;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Optional;
 import java.util.zip.ZipFile;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
+import static org.ayamemc.ayame.Ayame.*;
 
 public class FileUtil {
     /**
      * 读取文件
      *
-     * @param path {@link Path}类型，文件路径
-     * @return {@link String}
+     * @param path 文件路径
+     * @return 字符串
      */
-    public static String readFileWithException(Path path) {
+    public static String readFile(Path path) {
         try {
-            byte[] bytes = Files.readAllBytes(path);
-            return new String(bytes, StandardCharsets.UTF_8);
+            return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-            return ""; // 返回空字符串
+            LOGGER.error("Error reading file {}", path, e);
+            return "";
         }
     }
 
@@ -56,52 +63,16 @@ public class FileUtil {
     /**
      * 覆盖文件
      *
-     * @param path    {@link Path}类型，文件路径
+     * @param path    文件路径
      * @param content 覆盖的内容
      */
     public static void overwriteFile(Path path, String content) {
         try {
-            // 检查文件夹是否存在，如果不存在则创建
-            if (Files.notExists(path.getParent())) {
-                Files.createDirectories(path.getParent());
-            }
-
-            // 检查文件是否存在，如果不存在则创建
-            if (Files.notExists(path)) {
-                Files.createFile(path);
-            }
-
-            // 写入文件内容
-            Files.writeString(path, content);
+            FileUtils.writeStringToFile(path.toFile(), content, StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
     }
-
-
-    /**
-     * 将指定文件夹中的文件以名称和内容的形式保存到 Map 中。
-     *
-     * @param folderPath 文件夹路径
-     * @return 包含文件名称和内容的 Map
-     * @throws IOException 如果读取文件或目录时发生错误
-     */
-    public static Map<String, InputStream> convertFilesToMap(Path folderPath) throws IOException {
-        Map<String, InputStream> fileMap = new HashMap<>();
-
-        Stream<Path> files = Files.list(folderPath);
-        files.filter(Files::isRegularFile).forEach(file -> {
-            try {
-                fileMap.put(file.getFileName().toString(), Files.newInputStream(file));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-
-        return fileMap;
-    }
-
 
     /**
      * 将 InputStream 转换为 String
@@ -111,167 +82,163 @@ public class FileUtil {
      */
     public static String inputStreamToString(InputStream inputStream) {
         try {
-            if (inputStream == null) {
-                return "";
-            }
-
-            StringBuilder content = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-            }
-
-            return content.toString();
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("Cannot convert inputStream to String: ", e);
+            LOGGER.error(e.getMessage());
             return "";
         }
     }
 
     /**
-     * 返回 Ayame 资源路径下的 InputStream
+     * 返回包内文件资源的 InputStream
      *
-     * @param resourcePath 路径
+     * @param location 路径
      * @return 字节流
      */
-    public static InputStream getAyameResourceAsStream(String resourcePath) {
-        return getResourceAsStream("assets/ayame/" + resourcePath);
-    }
-
-    /**
-     * 返回资源的 InputStream
-     *
-     * @param resourcePath 路径
-     * @return 字节流
-     */
-    public static InputStream getResourceAsStream(String resourcePath) {
+    public static InputStream getBuiltinFileResourceAsStream(ResourceLocation location) {
+        // 使用 ClassLoader 获取资源
+        InputStream inputStream = null;
         try {
-            // 使用ClassLoader读取资源文件
-            InputStream inputStream = FileUtil.class.getClassLoader().getResourceAsStream(resourcePath);
-
-            if (inputStream == null) {
-                LOGGER.error("Cannot find resource: {}", resourcePath);
-                return null;
-            }
-
-            return inputStream;
+            inputStream = FileUtil.class.getClassLoader().getResourceAsStream(location.getPath());
         } catch (Exception e) {
-            LOGGER.error("Cannot get resource stream: ", e);
-            return null;
+            LOGGER.warn("Cannot find resource: {}", location, e);
         }
+        return inputStream;
     }
 
     /**
-     * 将资源复制到指定路径（支持文件和目录）
+     * 返回包内目录资源的 InputStream
      *
-     * @param resourcePath 起始路径
-     * @param targetPath   目标路径
+     * @param location 路径
+     * @return 字节流数组
      */
-    public static void copyResource(String resourcePath, Path targetPath) {
-        Path resource = Paths.get(resourcePath).toAbsolutePath();  // 转换为绝对路径
+    public static InputStream[] getBuiltinDirectoryResourceAsStream(ResourceLocation location) {
+        List<InputStream> inputStreams = new ArrayList<>();
 
-        if (Files.isDirectory(resource)) {
-            // 如果是目录，则调用复制目录的方法
-            copyDirectory(resource, targetPath);
-        } else if (Files.isRegularFile(resource)) {
-            // 如果是文件，则调用复制文件的方法
-            copyFile(resource, targetPath);
-        } else {
-            System.err.println("Resource is neither a file nor a directory: " + resource);
-        }
-    }
-
-
-    /**
-     * 复制文件
-     *
-     * @param sourcePath 源文件路径
-     * @param targetPath 目标文件路径
-     */
-    public static void copyFile(Path sourcePath, Path targetPath) {
-        try (InputStream inputStream = Files.newInputStream(sourcePath)) {
-
-            // 创建目标路径的父目录
-            Files.createDirectories(targetPath.getParent());
-
-            // 创建输出流
-            try (OutputStream outputStream = Files.newOutputStream(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
-                byte[] buffer = new byte[1024];
-                int length;
-                // 读取并写入二进制数据
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-            }
-        } catch (IOException e) {
-            Ayame.LOGGER.error("Cannot copy resource: ", e);
-        }
-    }
-
-    /**
-     * 复制目录及其内容
-     *
-     * @param sourceDir 源目录路径
-     * @param targetDir 目标目录路径
-     */
-    private static void copyDirectory(Path sourceDir, Path targetDir) {
         try {
-            // 创建目标目录
-            if (!Files.exists(targetDir)) {
-                Files.createDirectories(targetDir);
+            // 获取目录资源路径（通过 ClassLoader 查找）
+            String path = location.getPath();
+            ClassLoader classLoader = FileUtil.class.getClassLoader();
+
+            // 获取目录下的资源文件路径
+            Enumeration<URL> resources = classLoader.getResources(path);
+            while (resources.hasMoreElements()) {
+                URL resourceUrl = resources.nextElement();
+                inputStreams.add(resourceUrl.openStream());
             }
+        } catch (Exception e) {
+            LOGGER.warn("Cannot find directory resource: {}", location, e);
+        }
 
-            // 遍历源目录中的文件和子目录
-            Files.walkFileTree(sourceDir, new SimpleFileVisitor<>() {
-                @Override
-                public @NotNull FileVisitResult visitFile(Path file, @NotNull BasicFileAttributes attrs) {
-                    Path targetFile = targetDir.resolve(sourceDir.relativize(file));
-                    copyFile(file, targetFile); // 复制文件
-                    return FileVisitResult.CONTINUE;
-                }
+        return inputStreams.toArray(new InputStream[0]);
+    }
 
-                @Override
-                public @NotNull FileVisitResult preVisitDirectory(Path dir, @NotNull BasicFileAttributes attrs) throws IOException {
-                    // 创建子目录
-                    Path targetDirPath = targetDir.resolve(sourceDir.relativize(dir));
-                    if (!Files.exists(targetDirPath)) {
-                        Files.createDirectories(targetDirPath);
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+    /**
+     * 返回 Ayame 文件资源的 InputStream
+     *
+     * @param location 路径
+     * @return 字节流
+     */
+    public static InputStream getAyameFileResourceAsStream(String location) {
+        return getBuiltinFileResourceAsStream(withAyamePath(location));
+    }
+
+    /**
+     * 返回 Ayame 目录资源的 InputStream
+     *
+     * @param location 路径
+     * @return 字节流
+     */
+    public static InputStream[] getAyameDirectoryResourceAsStream(String location) {
+        return getBuiltinDirectoryResourceAsStream(withAyamePath(location));
+    }
+
+    /**
+     * 复制文件或目录
+     *
+     * @param sourcePathStr 源路径
+     * @param targetPath    目标路径
+     */
+    public static void copyFileOrDirectory(String sourcePathStr, Path targetPath) {
+        final Path sourcePath = Path.of(sourcePathStr);
+
+        try {
+            if (Files.isDirectory(sourcePath)) {
+                FileUtils.copyDirectory(sourcePath.toFile(), targetPath.toFile());
+            } else {
+                FileUtils.copyFile(sourcePath.toFile(), targetPath.toFile());
+            }
         } catch (IOException e) {
-            LOGGER.error("Cannot copy directory: ", e);
+            LOGGER.error("Cannot copy resource: ", e);
+        }
+
+    }
+
+    /**
+     * 将包内文件资源复制到外部目录
+     *
+     * @param location  包内文件的路径
+     * @param targetDir 目标目录
+     */
+    public static void copyBuiltinFileToDirectory(ResourceLocation location, Path targetDir) {
+        try (InputStream inputStream = getBuiltinFileResourceAsStream(location)) {
+            if (inputStream != null) {
+                Path targetFile = targetDir.resolve(location.getPath());
+                FileUtils.copyInputStreamToFile(inputStream, targetFile.toFile());
+            } else {
+                LOGGER.warn("File resource not found: {}", location);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error copying file resource: {}", location, e);
         }
     }
 
     /**
-     * 从 ZipFile 中获取指定文件的 InputStream。
+     * 将包内目录资源复制到外部目录
      *
-     * @param zipFile   ZipFile 对象
-     * @param entryName 要读取的文件名
-     * @return 指定文件的 InputStream，如果文件不存在则返回 null
+     * @param location  包内目录的路径
+     * @param targetDir 目标目录
+     */
+    public static void copyBuiltinDirectoryToDirectory(ResourceLocation location, Path targetDir) {
+        InputStream[] inputStreams = getBuiltinDirectoryResourceAsStream(location);
+
+        for (InputStream inputStream : inputStreams) {
+            if (inputStream != null) {
+                Path targetFile = targetDir.resolve(location.getPath());
+                try {
+                    FileUtils.copyInputStreamToFile(inputStream, targetFile.toFile());
+                } catch (IOException e) {
+                    LOGGER.warn("Error copying directory resource: {}", location, e);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 从 ZIP 文件中获取指定条目的 InputStream
+     *
+     * @param zipFile   ZIP 文件
+     * @param entryName 条目名称
+     * @return InputStream
      */
     public static InputStream getInputStreamFromZip(ZipFile zipFile, String entryName) {
         if (zipFile == null || entryName == null || entryName.isEmpty()) {
             return null;
         }
 
-        // 获取指定文件的 ZipEntry 对象
-        ZipEntry zipEntry = zipFile.getEntry(entryName);
-
-        if (zipEntry == null) {
-            // 文件不存在
-            return null;
-        }
-
         try {
+            // 获取 ZipEntry
+            final ZipArchiveEntry entry = (ZipArchiveEntry) zipFile.getEntry(entryName);
+
+            if (entry == null) {
+                // 条目不存在
+                return null;
+            }
+
             // 返回文件的 InputStream
-            return zipFile.getInputStream(zipEntry);
-        } catch (Exception e) {
-            // 处理异常，例如文件读取失败
+            return zipFile.getInputStream(entry);
+        } catch (IOException e) {
             LOGGER.error("Error reading file from ZipFile: ", e);
             return null;
         }

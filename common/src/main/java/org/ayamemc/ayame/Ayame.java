@@ -35,7 +35,7 @@ public final class Ayame {
     public static final String VERSION = "0.1.0";
     public static final String MOD_NAME = "Ayame";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
-    public static final Minecraft minecraft = Minecraft.getInstance();
+    public static final Minecraft MINECRAFT = Minecraft.getInstance();
     public static String modLoader;
 
     public static void init(String modLoader) {

@@ -25,7 +25,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 
 @Deprecated
@@ -36,12 +36,12 @@ public class BlurWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        minecraft.getMainRenderTarget().bindWrite(false);
+        MINECRAFT.getMainRenderTarget().bindWrite(false);
         guiGraphics.enableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
-        minecraft.gameRenderer.processBlurEffect(partialTick);
+        MINECRAFT.gameRenderer.processBlurEffect(partialTick);
         guiGraphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xFF3A3A3A);
         guiGraphics.disableScissor();
-        minecraft.getMainRenderTarget().bindWrite(true);
+        MINECRAFT.getMainRenderTarget().bindWrite(true);
     }
 
     @Override

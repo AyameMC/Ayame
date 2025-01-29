@@ -59,10 +59,10 @@ public class PlayerModelAPI {
     private static void cacheModel(Player player, ModelType model) {
         var entry = new CacheEntry(
                 model,
-                JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getGeoModel().getPath())),
-                JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getAnimation().getPath())),
-                JsonInterpreter.of(FileUtil.getAyameResourceAsStream(model.getArm().getPath())),
-                FileUtil.getResourceAsStream(model.getTexture().getPath())
+                JsonInterpreter.of(FileUtil.getAyameFileResourceAsStream(model.getGeoModel().getPath())),
+                JsonInterpreter.of(FileUtil.getAyameFileResourceAsStream(model.getAnimation().getPath())),
+                JsonInterpreter.of(FileUtil.getAyameFileResourceAsStream(model.getArm().getPath())),
+                FileUtil.getAyameFileResourceAsStream(model.getTexture().getPath())
         );
         cache.put(player, entry);
     }

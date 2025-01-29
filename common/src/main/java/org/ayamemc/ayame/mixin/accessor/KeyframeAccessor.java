@@ -18,24 +18,15 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.yttribume;
+package org.ayamemc.ayame.mixin.accessor;
 
-public interface IYttribumable {
-    default void ayame$setYttribume(Yttribume yttribume, float value) {
-        ayame$setYttribume(yttribume, value, false);
-    }
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import software.bernie.geckolib.animation.keyframe.Keyframe;
+import software.bernie.geckolib.loading.math.MathValue;
 
-    default void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
-    }
-
-    default float ayame$getYttribume(Yttribume yttribume) {
-        return yttribume.defaultValue();
-    }
-
-    default boolean ayame$isRestricted() {
-        return true;
-    }
-
-    default void ayame$setRestriction(boolean restricted) {
-    }
+@Mixin(Keyframe.class)
+public interface KeyframeAccessor<T extends MathValue> {
+    @Accessor(value = "startValue", remap = false)
+    void setStartValue(MathValue startValue);
 }

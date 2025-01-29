@@ -44,7 +44,7 @@ import org.ayamemc.ayame.util.TaskManager;
 
 import java.util.Random;
 
-import static org.ayamemc.ayame.Ayame.minecraft;
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;
@@ -52,11 +52,11 @@ public class ClientEventHandler {
     public static final int TOOLTIP_BORDER_BOTTOM_COLOR = 0xCC_fde8f5;
 
     private static Player getPlayer() {
-        return minecraft.player;
+        return MINECRAFT.player;
     }
 
     public static boolean shouldUseAyameTooltipColor() {
-        return minecraft.screen instanceof AyameScreen;
+        return MINECRAFT.screen instanceof AyameScreen;
     }
 
     public static void renderCustomHandEventHandler(InteractionHand hand, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, float partialTick, float interpolatedPitch, float swingProgress, float equipProgress, ItemStack stack) {
@@ -68,7 +68,7 @@ public class ClientEventHandler {
     }
 
     public static void openSelectMenuKeyPressed() {
-        minecraft.setScreen(new ModelSelectMenuScreen(null));
+        MINECRAFT.setScreen(new ModelSelectMenuScreen(null));
     }
 
 //    public static void renderCustomHandInHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
@@ -87,7 +87,7 @@ public class ClientEventHandler {
 //    }
 
     private static void renderEntityInGui(LivingEntity entity, int x, int y, int size) {
-        EntityRenderDispatcher dispatcher = minecraft.getEntityRenderDispatcher();
+        EntityRenderDispatcher dispatcher = MINECRAFT.getEntityRenderDispatcher();
 
 
         PoseStack poseStack = new PoseStack();
@@ -96,7 +96,7 @@ public class ClientEventHandler {
         poseStack.scale(size, size, size);
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
 
-        dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, minecraft.renderBuffers().bufferSource(), 15728880);
+        dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, MINECRAFT.renderBuffers().bufferSource(), 15728880);
         poseStack.popPose();
     }
 
@@ -120,7 +120,7 @@ public class ClientEventHandler {
 
 
     public static void renderCamera() {
-        Camera camera = minecraft.gameRenderer.getMainCamera();
+        Camera camera = MINECRAFT.gameRenderer.getMainCamera();
         Vec3 currentPosition = camera.getPosition();
         camera.setPosition(currentPosition.x, currentPosition.y + getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET), currentPosition.z);
     }

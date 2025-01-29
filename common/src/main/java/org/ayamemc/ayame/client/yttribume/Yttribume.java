@@ -38,21 +38,26 @@ public class Yttribume {
     public float defaultValue() {
         return defaultValue;
     }
+
     public float min() {
         return min;
     }
+
     public float max() {
         return max;
     }
+
     public AttributeType type() {
         return type;
     }
+
     public boolean hideInGui() {
         return hideInGui;
     }
+
     //判断是否在范围内
-    public boolean isRegal(float value,IYttribumable yttribumable){
-        if (yttribumable.ayame$isRestricted()){
+    public boolean isRegal(float value, IYttribumable yttribumable) {
+        if (yttribumable.ayame$isRestricted()) {
             return value >= min() && value <= max();
         }
         return true;
