@@ -94,9 +94,9 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
                     zKeyframe.easingArgs()
             );
 
-            xKeyframes.set(i, xKeyframeCopy);
-            yKeyframes.set(i, yKeyframeCopy);
-            zKeyframes.set(i, zKeyframeCopy);
+//            xKeyframes.set(i, xKeyframeCopy);
+//            yKeyframes.set(i, yKeyframeCopy);
+//            zKeyframes.set(i, zKeyframeCopy);
         }
     }
 }

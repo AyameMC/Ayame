@@ -61,12 +61,9 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
         Path indexFilePath = path.resolve("index.json");
 
         if (Files.exists(indexFilePath)) {
-            System.out.println("Found index.json at: " + indexFilePath);
             return new ModelResourceRegistry.ModelFile(path); // 传递目录路径
         } else {
-            System.out.println("index.json not found at: " + indexFilePath);
+            throw new RuntimeException("index.json not found at: " + indexFilePath);
         }
-
-        return null;
     }
 }

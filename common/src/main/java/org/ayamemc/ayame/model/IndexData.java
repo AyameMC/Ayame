@@ -256,7 +256,7 @@ public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelDat
             }
 
             public Builder parseJsonFromResource(ResourceLocation resourceLocation) {
-                return parseJson(JsonInterpreter.fromResource("assets/" + resourceLocation.getNamespace() + "/" + resourceLocation.getPath()));
+                return parseJson(JsonInterpreter.fromResource(resourceLocation.getPath()));
             }
 
             public ModelMetaData build() {

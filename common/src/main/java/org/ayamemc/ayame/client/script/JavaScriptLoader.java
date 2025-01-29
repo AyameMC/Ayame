@@ -53,7 +53,7 @@ public class JavaScriptLoader {
 
             // 加载并运行脚本
             // TODO: 在模型格式中包含脚本
-            context.evaluateString(scope, FileUtil.inputStreamToString(FileUtil.getAyameFileResourceAsStream("models/ayame_chan/script/main.aym.js")), "main.aym.js", 1, null);
+            context.evaluateString(scope, FileUtil.getAyameBuiltinFileResourceAsString("models/ayame_chan/script/main.aym.js"), "main.aym.js", 1, null);
 
         } catch (Exception e) {
             Ayame.LOGGER.error("Failed to run ayame", e);

@@ -27,7 +27,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.IAbleHurting;
 import org.ayamemc.ayame.client.api.IAbleToSit;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
@@ -178,7 +177,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
                 AnimationProcessor.QueuedAnimation queuedAnimation = state.getController().getCurrentAnimation();
 
                 if (queuedAnimation != null) {
-                    Ayame.LOGGER.info("playing {}", queuedAnimation.animation().name());
+//                    Ayame.LOGGER.info("playing {}", queuedAnimation.animation().name());
                 }
 
                 if (result != null) {

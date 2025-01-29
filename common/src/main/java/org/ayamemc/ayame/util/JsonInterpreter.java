@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.util;
 
 import com.google.gson.*;
-import org.ayamemc.ayame.Ayame;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +29,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//TODO: 重构，修复目前是损坏状态的bug
 public class JsonInterpreter {
     private final String original;
     private final JsonObject jsonObject;
@@ -47,7 +47,7 @@ public class JsonInterpreter {
         // 将 JSON 字符串转换为 JsonObject
         this.jsonObject = gson.fromJson(jsonString, JsonObject.class);
         if (jsonObject == null) {
-            throw new RuntimeException("JsonObject is null,the content of it:" + original);
+            throw new RuntimeException("JsonObject is null, is the json file exist?");
         }
     }
 
@@ -65,9 +65,8 @@ public class JsonInterpreter {
      * 将文件转换为JsonInterpreter
      *
      * @param file 文件
-     * @throws IOException 文件读取失败
      */
-    public JsonInterpreter(File file) throws IOException {
+    public JsonInterpreter(File file) {
         this(file.toPath());
     }
 
@@ -76,8 +75,8 @@ public class JsonInterpreter {
      *
      * @param filePath 文件路径
      */
-    public JsonInterpreter(Path filePath) throws IOException {
-        this(FileUtil.readFile(filePath));
+    public JsonInterpreter(Path filePath) {
+        this(FileUtil.getFileAsString(filePath));
         this.filePath = filePath;
     }
 
@@ -94,12 +93,12 @@ public class JsonInterpreter {
     }
 
     public static JsonInterpreter fromResource(String path) {
-        InputStream content = FileUtil.getAyameFileResourceAsStream(path);
+        InputStream content = FileUtil.getAyameBuiltinFileResourceAsStream(path);
         return JsonInterpreter.of(content);
     }
 
     public static JsonInterpreter of(InputStream content) {
-        return new JsonInterpreter(FileUtil.inputStreamToString(content));
+        return new JsonInterpreter(FileUtil.convertInputStreamToString(content));
     }
 
     public boolean isEmpty() {
@@ -243,7 +242,7 @@ public class JsonInterpreter {
      */
     public void save(Path filePath) {
         if (filePath != null) {
-            FileUtil.overwriteFile(filePath, this.jsonObject.toString());
+            FileUtil.overwriteStringToFile(filePath, this.jsonObject.toString());
         }
     }
 

@@ -43,8 +43,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import static org.ayamemc.ayame.Ayame.MOD_ID;
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 /**
  * 用于向GeckoLib缓存和贴图写入新模型的工具类

@@ -57,8 +57,7 @@ public class ModelScanner {
                     IModelResource res = IModelResource.fromFile(path);
                     // 添加到缓存
                     ModelResourceCache.addModelResource(res);
-                } catch (Exception e) {
-                    // 忽略错误
+                } catch (Exception ignored) {
                 }
             }
         }

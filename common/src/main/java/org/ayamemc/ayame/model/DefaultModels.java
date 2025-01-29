@@ -20,21 +20,19 @@
 
 package org.ayamemc.ayame.model;
 
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.FileUtil;
 
-import java.io.InputStream;
 import java.nio.file.Path;
 
 import static org.ayamemc.ayame.Ayame.withAyamePath;
 
 public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
-    public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan/");
+    public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
     public static final ModelType BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
             .setGeoModel(withAyamePath("geo/ayame/default.json"))
@@ -57,9 +55,9 @@ public class DefaultModels {
     }
 
     private static IModelResource create(String name) {
-        Path targetPath = Path.of(MODEL_PATH + name);
-        FileUtil.copyBuiltinFileToDirectory(Ayame.withAyamePath("models/" + name), targetPath);
+        final String targetPath = MODEL_PATH + name;
+        FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
 
-        return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(targetPath));
+        return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
     }
 }

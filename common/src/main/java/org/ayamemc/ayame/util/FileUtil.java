@@ -20,72 +20,63 @@
 
 package org.ayamemc.ayame.util;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Optional;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static org.ayamemc.ayame.Ayame.*;
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class FileUtil {
     /**
-     * 读取文件
+     * 将文件作为字符串获取
      *
      * @param path 文件路径
      * @return 字符串
      */
-    public static String readFile(Path path) {
+    public static String getFileAsString(Path path) {
         try {
             return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("Error reading file {}", path, e);
-            return "";
+            throw new RuntimeException("File not found at: " + path, e);
         }
     }
 
 
     /**
-     * 覆盖文件
+     * 以新字符串覆盖文件原有的内容
      *
      * @param path    文件路径
-     * @param content 覆盖的内容
+     * @param content 要写入的字符串
      */
-    public static void overwriteFile(Path path, String content) {
+    public static void overwriteStringToFile(Path path, String content) {
         try {
             FileUtils.writeStringToFile(path.toFile(), content, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            throw new RuntimeException(String.format("Cannot overwrite string to %s, content: %s", path, content), e);
         }
     }
 
     /**
-     * 将 InputStream 转换为 String
+     * 将 InputStream 转换为字符串
      *
      * @param inputStream 输入流
      * @return 转换后的字符串
      */
-    public static String inputStreamToString(InputStream inputStream) {
+    public static String convertInputStreamToString(InputStream inputStream) {
         try {
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-            return "";
+            throw new RuntimeException("Cannot convert input stream to string", e);
         }
     }
 
@@ -95,81 +86,75 @@ public class FileUtil {
      * @param location 路径
      * @return 字节流
      */
-    public static InputStream getBuiltinFileResourceAsStream(ResourceLocation location) {
+    public static InputStream getBuiltinFileResourceAsStream(String location) {
         // 使用 ClassLoader 获取资源
-        InputStream inputStream = null;
+        InputStream inputStream;
         try {
-            inputStream = FileUtil.class.getClassLoader().getResourceAsStream(location.getPath());
+            inputStream = FileUtil.class.getClassLoader().getResourceAsStream(location);
         } catch (Exception e) {
-            LOGGER.warn("Cannot find resource: {}", location, e);
+            throw new RuntimeException("Cannot find resource at: " + location, e);
         }
         return inputStream;
     }
 
     /**
-     * 返回包内目录资源的 InputStream
+     * 返回包内文件资源的 String
      *
      * @param location 路径
-     * @return 字节流数组
+     * @return 字符串
      */
-    public static InputStream[] getBuiltinDirectoryResourceAsStream(ResourceLocation location) {
-        List<InputStream> inputStreams = new ArrayList<>();
-
-        try {
-            // 获取目录资源路径（通过 ClassLoader 查找）
-            String path = location.getPath();
-            ClassLoader classLoader = FileUtil.class.getClassLoader();
-
-            // 获取目录下的资源文件路径
-            Enumeration<URL> resources = classLoader.getResources(path);
-            while (resources.hasMoreElements()) {
-                URL resourceUrl = resources.nextElement();
-                inputStreams.add(resourceUrl.openStream());
-            }
-        } catch (Exception e) {
-            LOGGER.warn("Cannot find directory resource: {}", location, e);
-        }
-
-        return inputStreams.toArray(new InputStream[0]);
+    public static String getBuiltinFileResourceAsString(String location) {
+        return convertInputStreamToString(getBuiltinFileResourceAsStream(location));
     }
 
     /**
-     * 返回 Ayame 文件资源的 InputStream
+     * 返回 Ayame 包内文件资源的 String
+     *
+     * @param location 路径
+     * @return 字符串
+     */
+    public static String getAyameBuiltinFileResourceAsString(String location) {
+        return convertInputStreamToString(getAyameBuiltinFileResourceAsStream(location));
+    }
+
+    /**
+     * 返回 Ayame 包内文件资源的 InputStream
      *
      * @param location 路径
      * @return 字节流
      */
-    public static InputStream getAyameFileResourceAsStream(String location) {
-        return getBuiltinFileResourceAsStream(withAyamePath(location));
+    public static InputStream getAyameBuiltinFileResourceAsStream(String location) {
+        return getBuiltinFileResourceAsStream("assets/ayame/" + location);
     }
 
     /**
-     * 返回 Ayame 目录资源的 InputStream
+     * 将 Ayame 包内文件资源复制到外部目录
      *
-     * @param location 路径
-     * @return 字节流
+     * @param sourcePath 包内文件的源路径
+     * @param targetPath 外部目标目录
      */
-    public static InputStream[] getAyameDirectoryResourceAsStream(String location) {
-        return getBuiltinDirectoryResourceAsStream(withAyamePath(location));
+    public static void copyAyameBuiltinFileToDirectory(String sourcePath, String targetPath) {
+        copyBuiltinFileToDirectory("assets/ayame/" + sourcePath, targetPath);
     }
 
     /**
-     * 复制文件或目录
+     * 复制外部文件或目录到目标路径
      *
-     * @param sourcePathStr 源路径
-     * @param targetPath    目标路径
+     * @param sourcePath 源路径
+     * @param targetPath 目标路径
      */
-    public static void copyFileOrDirectory(String sourcePathStr, Path targetPath) {
-        final Path sourcePath = Path.of(sourcePathStr);
+    public static void copyFileOrDirectory(String sourcePath, String targetPath) {
+        final Path sourcePathDir = Path.of(sourcePath);
+        final Path targetPathDir = Path.of(targetPath);
 
         try {
-            if (Files.isDirectory(sourcePath)) {
-                FileUtils.copyDirectory(sourcePath.toFile(), targetPath.toFile());
+            if (Files.isDirectory(sourcePathDir)) {
+                FileUtils.copyDirectory(sourcePathDir.toFile(), targetPathDir.toFile());
             } else {
-                FileUtils.copyFile(sourcePath.toFile(), targetPath.toFile());
+                FileUtils.copyFile(sourcePathDir.toFile(), targetPathDir.toFile());
             }
         } catch (IOException e) {
-            LOGGER.error("Cannot copy resource: ", e);
+            throw new RuntimeException("Cannot copy file to target directory", e);
         }
 
     }
@@ -177,41 +162,63 @@ public class FileUtil {
     /**
      * 将包内文件资源复制到外部目录
      *
-     * @param location  包内文件的路径
-     * @param targetDir 目标目录
+     * @param sourcePath 包内文件的源路径
+     * @param targetPath 外部目标目录
      */
-    public static void copyBuiltinFileToDirectory(ResourceLocation location, Path targetDir) {
-        try (InputStream inputStream = getBuiltinFileResourceAsStream(location)) {
+    public static void copyBuiltinFileToDirectory(String sourcePath, String targetPath) {
+        final Path targetPathDir = Path.of(targetPath);
+        try (final InputStream inputStream = getBuiltinFileResourceAsStream(sourcePath)) {
             if (inputStream != null) {
-                Path targetFile = targetDir.resolve(location.getPath());
-                FileUtils.copyInputStreamToFile(inputStream, targetFile.toFile());
+                final Path targetFile = targetPathDir.resolve(Path.of(sourcePath).getFileName().toString());
+                Files.createDirectories(targetFile.getParent());
+                Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
             } else {
-                LOGGER.warn("File resource not found: {}", location);
+                LOGGER.warn("File resource not found: {}", sourcePath);
             }
         } catch (IOException e) {
-            LOGGER.error("Error copying file resource: {}", location, e);
+            LOGGER.error("Error copying file resource: {}", sourcePath, e);
         }
     }
 
     /**
      * 将包内目录资源复制到外部目录
      *
-     * @param location  包内目录的路径
-     * @param targetDir 目标目录
+     * @param sourcePath 包内目录的源路径
+     * @param targetPath 目标目录
      */
-    public static void copyBuiltinDirectoryToDirectory(ResourceLocation location, Path targetDir) {
-        InputStream[] inputStreams = getBuiltinDirectoryResourceAsStream(location);
+    public static void copyBuiltinDirectoryToDirectory(String sourcePath, String targetPath) {
+        final Path targetPathDir = Path.of(targetPath);
+        try {
+            // 获取当前 JAR 文件路径
+            final String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            try (final ZipFile zipFile = new ZipFile(jarPath)) {
+                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-        for (InputStream inputStream : inputStreams) {
-            if (inputStream != null) {
-                Path targetFile = targetDir.resolve(location.getPath());
-                try {
-                    FileUtils.copyInputStreamToFile(inputStream, targetFile.toFile());
-                } catch (IOException e) {
-                    LOGGER.warn("Error copying directory resource: {}", location, e);
+                while (entries.hasMoreElements()) {
+                    final ZipEntry entry = entries.nextElement();
+                    final String entryName = entry.getName();
+
+                    // 检查是否属于指定目录
+                    if (entryName.startsWith(sourcePath) && !entry.isDirectory()) {
+                        final String relativePath = entryName.substring(sourcePath.length()); // 相对路径
+                        final Path targetFile = targetPathDir.resolve(relativePath);
+
+                        Files.createDirectories(targetFile.getParent());
+
+                        try (final InputStream inputStream = zipFile.getInputStream(entry)) {
+                            Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    }
                 }
             }
+        } catch (Exception e) {
+            // TODO: 修复无法在 NeoForge使用的Bug
+            throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPath), e);
         }
+    }
+
+    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, String targrtPath) {
+        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, targrtPath);
     }
 
 
@@ -239,8 +246,7 @@ public class FileUtil {
             // 返回文件的 InputStream
             return zipFile.getInputStream(entry);
         } catch (IOException e) {
-            LOGGER.error("Error reading file from ZipFile: ", e);
-            return null;
+            throw new RuntimeException("Error reading zip entry: " + entryName, e);
         }
     }
 
