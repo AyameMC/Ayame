@@ -173,10 +173,10 @@ public class FileUtil {
                 Files.createDirectories(targetFile.getParent());
                 Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
             } else {
-                LOGGER.warn("File resource not found: {}", sourcePath);
+                throw new RuntimeException("File not found at: " + sourcePath);
             }
         } catch (IOException e) {
-            LOGGER.error("Error copying file resource: {}", sourcePath, e);
+            throw new RuntimeException("Error copying file resource: " + sourcePath, e);
         }
     }
 
@@ -190,7 +190,7 @@ public class FileUtil {
         final Path targetPathDir = Path.of(targetPath);
         try {
             // 获取当前 JAR 文件路径
-            final String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            final String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
             try (final ZipFile zipFile = new ZipFile(jarPath)) {
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
