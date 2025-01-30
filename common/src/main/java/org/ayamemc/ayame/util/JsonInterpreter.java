@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO: 重构，修复目前是损坏状态的bug
 public class JsonInterpreter {
     private static final Gson GSON = new Gson();
     private final String original;

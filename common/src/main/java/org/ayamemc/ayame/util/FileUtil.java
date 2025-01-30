@@ -218,7 +218,6 @@ public class FileUtil {
                 }
             }
         } catch (Exception e) {
-            // TODO: 修复无法在 NeoForge使用的Bug
             throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPath), e);
         }
     }

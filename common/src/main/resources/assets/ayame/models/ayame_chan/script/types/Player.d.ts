@@ -39,4 +39,4 @@ declare interface Player {
     sendCommand(command: string): void;
 }
 
-export {Player};
+export { Player };

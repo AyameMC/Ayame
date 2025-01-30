@@ -28,4 +28,4 @@ declare interface Level {
     time: number;
 }
 
-export {Level};
+export { Level };

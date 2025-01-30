@@ -27,8 +27,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.IOException;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
-
+// TODO: 修复标题页面写入配置会崩溃的问题
 public class ConfigUtil {
     public static final File CONFIG_FILE = new File("config/ayame/config.json");
     private static final Gson GSON = new Gson();
@@ -38,18 +37,19 @@ public class ConfigUtil {
     public static void init() {
         if (!CONFIG_FILE.exists()) {
             // 创建空文件
+
             try {
                 CONFIG_FILE.createNewFile();
-                config = new ConfigData();
-                // 写入默认配置
-                FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
-            } catch (IOException e) {
-                // TODO: 修复会抛出的问题
-                LOGGER.error("Unable to create config file", e);
+            } catch (IOException ignored) {
+                //throw new RuntimeException("Unable to create config file", e);
             }
-        } else {
+            config = new ConfigData();
+            // 写入默认配置
+            FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
+
+        } else
             config = GSON.fromJson(FileUtil.getFileAsString(CONFIG_FILE.toPath()), ConfigData.class);
-        }
+
     }
 
     /**

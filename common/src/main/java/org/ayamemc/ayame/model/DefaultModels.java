@@ -38,8 +38,9 @@ public class DefaultModels {
     public static final ModelType BUILTIN_MODEL_TYPE;
 
     static {
-        final var ayameModelData = new AyameModelData();
         final var metaData = new AyameModelData.MetaData();
+        metaData.name = "Ayame酱";
+        metaData.id = "ayame_chan";
         metaData.description = "Ayame 的默认演示模型。（内置）";
         metaData.authors = List.of("羊毛wool_Official");
         metaData.license = "CC0-1.0";
@@ -64,10 +65,10 @@ public class DefaultModels {
     public static void init() {
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static IModelResource create(String name) {
         final String targetPath = MODEL_PATH + name;
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
-
         return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
     }
 }

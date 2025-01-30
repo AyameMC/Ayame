@@ -39,7 +39,7 @@ public interface IModelResource {
     AyameModelData.MetaData getMetaData();
 
     default String getName() {
-        return getMetaData().name;
+        return getMetaData().id;
     }
 
     List<AyameModelData.ModelData> getModels();

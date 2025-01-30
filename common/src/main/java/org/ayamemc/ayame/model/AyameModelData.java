@@ -73,10 +73,12 @@ public class AyameModelData {
      * 模型元数据
      */
     public static class MetaData {
-        @SerializedName("authors")
-        public List<String> authors;
         @SerializedName("name")
         public String name;
+        @SerializedName("id")
+        public String id;
+        @SerializedName("authors")
+        public List<String> authors;
         @SerializedName("description")
         public String description;
         @SerializedName("license")

@@ -57,7 +57,7 @@ public class ModelResourceCache {
      * @param modelRes 模型资源
      */
     public static void addModelResource(IModelResource modelRes) {
-        addModelResource(modelRes.getMetaData().name, modelRes);
+        addModelResource(modelRes.getMetaData().id, modelRes);
     }
 
     /**
