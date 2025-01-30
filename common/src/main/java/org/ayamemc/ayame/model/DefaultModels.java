@@ -33,6 +33,7 @@ import static org.ayamemc.ayame.Ayame.withAyamePath;
 
 public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
+    // TODO: 修复使用外置模型（内置模型没问题）时neoforge进世界ayame:geo/ayame_chan.json: Unable to find model的问题
     public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
     public static final ModelType BUILTIN_MODEL_TYPE;
