@@ -21,6 +21,9 @@
 package org.ayamemc.ayame.util;
 
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -28,30 +31,33 @@ import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class ConfigUtil {
     public static final File CONFIG_FILE = new File("config/ayame/config.json");
-    public static JsonInterpreter config = JsonInterpreter.of("{}");
+    private static final Gson GSON = new Gson();
+    public static ConfigData config = GSON.fromJson(FileUtil.getAyameBuiltinFileResourceAsString("config.json"), ConfigData.class);
 
-    public static boolean SKIP_AYAME_WARNING = false;
 
     public static void init() {
         if (!CONFIG_FILE.exists()) {
-            // 写入默认配置文件
-            FileUtil.copyAyameBuiltinFileToDirectory("config.json", "config/ayame");
+            // 创建空文件
+            try {
+                CONFIG_FILE.createNewFile();
+                // 写入默认配置
+                FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
+            } catch (IOException e) {
+                LOGGER.error("Unable to create config file", e);
+            }
         }
-        try {
-            config = JsonInterpreter.fromFile(CONFIG_FILE);
-        } catch (IOException e) {
-            LOGGER.error("Unable to read config file", e);
-        }
-
-        SKIP_AYAME_WARNING = config.getBoolean("skipAyameWarning", false);
     }
 
     /**
      * 保存配置
      */
     public static void save() {
-        config.set("skipAyameWarning", SKIP_AYAME_WARNING);
-        config.save(CONFIG_FILE.toPath());
+        FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
+    }
+
+    public static class ConfigData{
+        @SerializedName("skipAyameWarning")
+        public boolean skipAyameWarning = false;
     }
 
 }

@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 //TODO: 重构，修复目前是损坏状态的bug
 public class JsonInterpreter {
+    private static final Gson GSON = new Gson();
     private final String original;
     private final JsonObject jsonObject;
     private Path filePath;
@@ -42,10 +43,8 @@ public class JsonInterpreter {
      */
     public JsonInterpreter(String jsonString) {
         this.original = jsonString;
-        // 创建 Gson 对象
-        Gson gson = new Gson();
         // 将 JSON 字符串转换为 JsonObject
-        this.jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        this.jsonObject = GSON.fromJson(jsonString, JsonObject.class);
         if (jsonObject == null) {
             throw new RuntimeException("JsonObject is null, is the json file exist?");
         }

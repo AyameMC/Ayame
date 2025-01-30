@@ -70,7 +70,7 @@ public abstract class AyameScreen extends Screen {
         leftPos = (this.width - BACKGROUND_TEXTURE_WIDTH) / 2;
         topPos = (this.height - BACKGROUND_TEXTURE_HEIGHT) / 2;
         // 检查是否需要显示警告界面
-        if (!ConfigUtil.SKIP_AYAME_WARNING && !skipWarningOnce) {
+        if (!ConfigUtil.config.skipAyameWarning && !skipWarningOnce) {
             this.minecraft.setScreen(new StatementScreen(null, lastScreen));
             return;
         }

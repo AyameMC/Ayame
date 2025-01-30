@@ -74,7 +74,7 @@ public class StatementScreen extends WarningScreen {
         LinearLayout linearLayout = LinearLayout.horizontal().spacing(8);
         linearLayout.addChild(Button.builder(CommonComponents.GUI_PROCEED, button -> {
             if (this.stopShowing.selected()) {
-                ConfigUtil.SKIP_AYAME_WARNING = true;
+                ConfigUtil.config.skipAyameWarning= true;
             } else {
                 skipWarningOnce = true; // 设置单次跳过
             }
