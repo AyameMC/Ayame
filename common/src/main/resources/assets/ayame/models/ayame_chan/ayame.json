@@ -1,16 +1,19 @@
 {
-  "format": "SIMPLE",
+  "version": 0,
   "metadata": {
     "name": "ayame_chan",
     "authors": [
-      "homewool"
+      "羊毛wool_Official"
     ],
     "description": "Ayame 的默认演示模型。",
     "license": "CC0-1.0",
+    "license_link": "https://creativecommons.org/publicdomain/zero/1.0/",
     "links": [
+      "https://space.bilibili.com/85335217"
     ],
     "tags": [
-      ""
+      "loli",
+      "girl"
     ]
   },
   "models": [
@@ -22,8 +25,8 @@
       "arm": "default/arm.json"
     }
   ],
-  "script":{
-  	"main":"script/main.aym.js",
-  	"config":"jsconfig.json"
+  "script": {
+    "main": "script/main.aym.js",
+    "config": "script/jsconfig.json"
   }
 }

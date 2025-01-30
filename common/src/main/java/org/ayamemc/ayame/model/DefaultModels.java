@@ -37,6 +37,29 @@ public class DefaultModels {
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
     public static final ModelType BUILTIN_MODEL_TYPE;
 
+    static {
+        final var ayameModelData = new AyameModelData();
+        final var metaData = new AyameModelData.MetaData();
+        metaData.description = "Ayame 的默认演示模型。（内置）";
+        metaData.authors = List.of("羊毛wool_Official");
+        metaData.license = "CC0-1.0";
+        metaData.licenseLink = "https://creativecommons.org/publicdomain/zero/1.0/";
+        metaData.links = List.of(
+                "https://space.bilibili.com/85335217"
+        );
+        metaData.tags = List.of(
+                "loli",
+                "girl"
+        );
+        BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
+                .setGeoModel(withAyamePath("geo/ayame/default.json"))
+                .setAnimation(withAyamePath("animations/ayame/default.json"))
+                .setTexture(withAyamePath("textures/ayame/default.png"))
+                .setArm(withAyamePath("textures/ayame/default_arm.png"))
+                .setMetaData(metaData)
+                .build();
+    }
+
     // 静态初始化
     public static void init() {
     }
@@ -46,23 +69,5 @@ public class DefaultModels {
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
 
         return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
-    }
-
-
-    static {
-        var metaData = new IndexData.ModelMetaData();
-        metaData.version = "V1.0.0";
-        metaData.description = "Ayame 的默认演示模型。（内置）";
-        metaData.authors = List.of("homewool");
-        metaData.license = "CC0-1.0";
-        metaData.links = List.of("");
-        metaData.tags = List.of("default");
-        BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
-                .setGeoModel(withAyamePath("geo/ayame/default.json"))
-                .setAnimation(withAyamePath("animations/ayame/default.json"))
-                .setTexture(withAyamePath("textures/ayame/default.png"))
-                .setArm(withAyamePath("textures/ayame/default_arm.png"))
-                .setMetaData(metaData)
-                .build();
     }
 }

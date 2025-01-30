@@ -22,7 +22,7 @@ package org.ayamemc.ayame.model.resource;
 
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.model.IndexData;
+import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.TODO;
 
@@ -36,23 +36,23 @@ public interface IModelResource {
     }
 
     // TODO 完成
-    IndexData.ModelMetaData getMetaData();
+    AyameModelData.MetaData getMetaData();
 
     default String getName() {
         return getMetaData().name;
     }
 
-    List<IndexData.ModelData> getModels();
+    List<AyameModelData.ModelData> getModels();
 
-    JsonInterpreter getModelJson(IndexData.ModelData model);
+    JsonInterpreter getModelJson(AyameModelData.ModelData model);
 
-    JsonInterpreter getAnimationJson(IndexData.ModelData model);
+    JsonInterpreter getAnimationJson(AyameModelData.ModelData model);
 
-    InputStream getTexture(IndexData.ModelData model);
+    InputStream getTexture(AyameModelData.ModelData model);
 
-    JsonInterpreter getArmJson(IndexData.ModelData model);
+    JsonInterpreter getArmJson(AyameModelData.ModelData model);
 
-    default IndexData.ModelData getDefault() {
+    default AyameModelData.ModelData getDefault() {
         return getModels().getFirst();
     }
 

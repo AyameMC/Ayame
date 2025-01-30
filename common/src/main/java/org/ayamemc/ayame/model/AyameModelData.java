@@ -26,27 +26,32 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * 模型 ayame.json 的处理
- *
  */
-public class IndexData{
+public class AyameModelData {
     private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-    @SerializedName("format")
-    public String format;
+    @SerializedName("version")
+    public short version;
     @SerializedName("metadata")
-    public ModelMetaData metadata;
+    public MetaData metadata;
     @SerializedName("models")
     public List<ModelData> models;
     @SerializedName("script")
     public ScriptData script;
 
+    public static AyameModelData parse(String jsonString) {
+        return GSON.fromJson(jsonString, AyameModelData.class);
+    }
+
+    public static String toJson(AyameModelData ayameModelData) {
+        return GSON.toJson(ayameModelData);
+    }
+
     /**
      * 单个模型数据
-
      */
     public static class ModelData {
         @SerializedName("name")
@@ -66,11 +71,8 @@ public class IndexData{
 
     /**
      * 模型元数据
-     *
      */
-    public static class ModelMetaData{
-        @SerializedName("format")
-        public String format;
+    public static class MetaData {
         @SerializedName("authors")
         public List<String> authors;
         @SerializedName("name")
@@ -79,26 +81,20 @@ public class IndexData{
         public String description;
         @SerializedName("license")
         public String license;
+        @SerializedName("license_link")
+        public String licenseLink;
         @SerializedName("links")
         public List<String> links;
         @SerializedName("tags")
         public List<String> tags;
-        @SerializedName("version")
-        public String version;
+
 
     }
 
-    public static class ScriptData{
+    public static class ScriptData {
         @SerializedName("main")
         public String main;
         @SerializedName("config")
         public String config;
-    }
-
-    public static IndexData parse(String jsonString){
-        return GSON.fromJson(jsonString, IndexData.class);
-    }
-    public static String toJson(IndexData indexData){
-        return GSON.toJson(indexData);
     }
 }

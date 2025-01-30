@@ -32,9 +32,13 @@ import net.minecraft.resources.ResourceLocation;
  * @param metaData  模型元数据
  */
 
-public record DefaultModelType(ResourceLocation geoModel, ResourceLocation animation, ResourceLocation texture,
+public record DefaultModelType(ResourceLocation geoModel,
+                               ResourceLocation animation,
+                               ResourceLocation texture,
                                ResourceLocation arm,
-                               IndexData.ModelMetaData metaData) implements ModelType {
+                               AyameModelData.MetaData metaData,
+                               AyameModelData.ScriptData scriptData
+) implements ModelType {
 
 
     @Override
@@ -58,7 +62,7 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
     }
 
     @Override
-    public IndexData.ModelMetaData metaData() {
+    public AyameModelData.MetaData metaData() {
         return metaData;
     }
 
@@ -67,7 +71,9 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
         private ResourceLocation animation;
         private ResourceLocation texture;
         private ResourceLocation arm;
-        private IndexData.ModelMetaData metaData;
+        private AyameModelData.MetaData metaData;
+        private AyameModelData.ScriptData scriptData;
+
 
         public static Builder create() {
             return new Builder();
@@ -88,8 +94,13 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
             return this;
         }
 
-        public Builder setMetaData(IndexData.ModelMetaData metaData) {
+        public Builder setMetaData(AyameModelData.MetaData metaData) {
             this.metaData = metaData;
+            return this;
+        }
+
+        public Builder setScriptData(AyameModelData.ScriptData scriptData) {
+            this.scriptData = scriptData;
             return this;
         }
 
@@ -99,7 +110,7 @@ public record DefaultModelType(ResourceLocation geoModel, ResourceLocation anima
         }
 
         public DefaultModelType build() {
-            return new DefaultModelType(geoModel, animation, texture, arm, metaData);
+            return new DefaultModelType(geoModel, animation, texture, arm, metaData, scriptData);
         }
     }
 }

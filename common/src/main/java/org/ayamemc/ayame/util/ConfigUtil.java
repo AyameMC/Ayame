@@ -47,7 +47,7 @@ public class ConfigUtil {
                 // TODO: 修复会抛出的问题
                 LOGGER.error("Unable to create config file", e);
             }
-        }else {
+        } else {
             config = GSON.fromJson(FileUtil.getFileAsString(CONFIG_FILE.toPath()), ConfigData.class);
         }
     }
@@ -59,7 +59,7 @@ public class ConfigUtil {
         FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
     }
 
-    public static class ConfigData{
+    public static class ConfigData {
         @SerializedName("skipAyameWarning")
         public boolean skipAyameWarning = false;
     }

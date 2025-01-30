@@ -40,6 +40,6 @@ public interface ModelType {
 
     ResourceLocation getArm();
 
-    IndexData.ModelMetaData metaData();
+    AyameModelData.MetaData metaData();
 
 }

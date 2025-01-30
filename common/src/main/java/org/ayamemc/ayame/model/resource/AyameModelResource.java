@@ -20,7 +20,7 @@
 
 package org.ayamemc.ayame.model.resource;
 
-import org.ayamemc.ayame.model.IndexData;
+import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
 import java.io.InputStream;
@@ -28,41 +28,41 @@ import java.util.List;
 
 public class AyameModelResource implements IModelResource {
     private final ModelResourceRegistry.ModelFile modelFile;
-    private final IndexData indexData;
+    private final AyameModelData ayameModelData;
 
     public AyameModelResource(ModelResourceRegistry.ModelFile modelFile) {
         this.modelFile = modelFile;
-        this.indexData = IndexData.parse(modelFile.getIndexJson().toString());
+        this.ayameModelData = AyameModelData.parse(modelFile.getIndexJson().toString());
     }
 
 
     @Override
-    public IndexData.ModelMetaData getMetaData() {
-        return this.indexData.metadata;
+    public AyameModelData.MetaData getMetaData() {
+        return this.ayameModelData.metadata;
     }
 
     @Override
-    public List<IndexData.ModelData> getModels() {
-        return indexData.models;
+    public List<AyameModelData.ModelData> getModels() {
+        return ayameModelData.models;
     }
 
     @Override
-    public JsonInterpreter getModelJson(IndexData.ModelData model) {
+    public JsonInterpreter getModelJson(AyameModelData.ModelData model) {
         return JsonInterpreter.of(modelFile.getContent(model.model));
     }
 
     @Override
-    public JsonInterpreter getAnimationJson(IndexData.ModelData model) {
+    public JsonInterpreter getAnimationJson(AyameModelData.ModelData model) {
         return JsonInterpreter.of(modelFile.getContent(model.animation));
     }
 
     @Override
-    public InputStream getTexture(IndexData.ModelData model) {
+    public InputStream getTexture(AyameModelData.ModelData model) {
         return modelFile.getContent(model.texture);
     }
 
     @Override
-    public JsonInterpreter getArmJson(IndexData.ModelData model) {
+    public JsonInterpreter getArmJson(AyameModelData.ModelData model) {
         return JsonInterpreter.of(modelFile.getContent(model.arm));
     }
 }

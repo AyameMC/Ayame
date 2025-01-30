@@ -93,7 +93,7 @@ public class ModelResourceRegistry {
     @ApiStatus.Internal
     public static void init() {
         // 注册默认的模型格式
-        register("SIMPLE", AyameModelResource::new);
+        register("Ayame", AyameModelResource::new);
     }
 
     @FunctionalInterface
@@ -138,7 +138,7 @@ public class ModelResourceRegistry {
         }
 
         public String getFormat() {
-            return getIndexJson().getString("format");
+            return "Ayame";
         }
 
         public InputStream getContent(String path) {
