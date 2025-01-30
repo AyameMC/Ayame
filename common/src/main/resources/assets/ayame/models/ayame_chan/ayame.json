@@ -1,12 +1,12 @@
 {
   "format": "SIMPLE",
   "metadata": {
-    "name": "AyameChan",
+    "name": "ayame_chan",
     "authors": [
       "homewool"
     ],
-    "description": "默认模型",
-    "license": "CC0",
+    "description": "Ayame 的默认演示模型。",
+    "license": "CC0-1.0",
     "links": [
     ],
     "tags": [

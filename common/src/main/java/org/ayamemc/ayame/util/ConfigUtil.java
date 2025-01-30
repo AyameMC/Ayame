@@ -44,6 +44,7 @@ public class ConfigUtil {
                 // 写入默认配置
                 FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
             } catch (IOException e) {
+                // TODO: 修复会抛出的问题
                 LOGGER.error("Unable to create config file", e);
             }
         }else {

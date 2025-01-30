@@ -49,7 +49,7 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ZipEntry entry = zipFile.getEntry("index.json");
+        ZipEntry entry = zipFile.getEntry("ayame.json");
         if (entry != null) {
             return new ModelResourceRegistry.ModelFile(zipFile);
         }
@@ -58,12 +58,12 @@ public class ModelContent extends PackDetector<ModelResourceRegistry.ModelFile> 
 
     @Override
     public ModelResourceRegistry.ModelFile createDirectoryPack(Path path) {
-        Path indexFilePath = path.resolve("index.json");
+        Path indexFilePath = path.resolve("ayame.json");
 
         if (Files.exists(indexFilePath)) {
             return new ModelResourceRegistry.ModelFile(path); // 传递目录路径
         } else {
-            throw new RuntimeException("index.json not found at: " + indexFilePath);
+            throw new RuntimeException("ayame.json not found at: " + indexFilePath);
         }
     }
 }

@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 模型index.json的处理
+ * 模型 ayame.json 的处理
  *
  */
 public class IndexData{

@@ -26,11 +26,11 @@ import org.ayamemc.ayame.util.JsonInterpreter;
 import java.io.InputStream;
 import java.util.List;
 
-public class SimpleModelResource implements IModelResource {
+public class AyameModelResource implements IModelResource {
     private final ModelResourceRegistry.ModelFile modelFile;
     private final IndexData indexData;
 
-    public SimpleModelResource(ModelResourceRegistry.ModelFile modelFile) {
+    public AyameModelResource(ModelResourceRegistry.ModelFile modelFile) {
         this.modelFile = modelFile;
         this.indexData = IndexData.parse(modelFile.getIndexJson().toString());
     }

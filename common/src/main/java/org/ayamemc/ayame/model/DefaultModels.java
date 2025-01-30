@@ -52,17 +52,17 @@ public class DefaultModels {
     static {
         var metaData = new IndexData.ModelMetaData();
         metaData.version = "V1.0.0";
-        metaData.description="为了防止意外崩溃而添加的builtin模型";
-        metaData.authors= List.of("homewool");
-        metaData.license="cc0";
-        metaData.links= List.of("");
-        metaData.tags= List.of("default");
+        metaData.description = "Ayame 的默认演示模型。（内置）";
+        metaData.authors = List.of("homewool");
+        metaData.license = "CC0-1.0";
+        metaData.links = List.of("");
+        metaData.tags = List.of("default");
         BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
                 .setGeoModel(withAyamePath("geo/ayame/default.json"))
                 .setAnimation(withAyamePath("animations/ayame/default.json"))
                 .setTexture(withAyamePath("textures/ayame/default.png"))
                 .setArm(withAyamePath("textures/ayame/default_arm.png"))
                 .setMetaData(metaData)
-            .build();
+                .build();
     }
 }

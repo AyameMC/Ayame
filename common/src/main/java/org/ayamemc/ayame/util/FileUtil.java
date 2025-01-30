@@ -23,6 +23,7 @@ package org.ayamemc.ayame.util;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.ayamemc.ayame.Ayame;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +34,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class FileUtil {
     /**
@@ -190,7 +189,14 @@ public class FileUtil {
         final Path targetPathDir = Path.of(targetPath);
         try {
             // 获取当前 JAR 文件路径
-            final String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            /*
+            NeoForge在获取路径时结尾会多8个错误字符，这里进行了剔除
+            我知道这个修复方法很诡异，但是能用
+             */
+            if (Ayame.modLoader.equals("neoforge")) {
+                jarPath = jarPath.substring(0, jarPath.length() - 8);
+            }
             try (final ZipFile zipFile = new ZipFile(jarPath)) {
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
 

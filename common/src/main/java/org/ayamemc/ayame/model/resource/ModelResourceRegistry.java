@@ -93,7 +93,7 @@ public class ModelResourceRegistry {
     @ApiStatus.Internal
     public static void init() {
         // 注册默认的模型格式
-        register("SIMPLE", SimpleModelResource::new);
+        register("SIMPLE", AyameModelResource::new);
     }
 
     @FunctionalInterface
@@ -117,9 +117,9 @@ public class ModelResourceRegistry {
 
         public JsonInterpreter getIndexJson() {
             if (zipFile != null) {
-                return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "index.json"));
+                return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "ayame.json"));
             } else if (directory != null) {
-                Path indexPath = directory.resolve("index.json");
+                Path indexPath = directory.resolve("ayame.json");
                 if (Files.exists(indexPath)) {
                     try {
                         return JsonInterpreter.of(Files.newInputStream(indexPath));
@@ -128,7 +128,7 @@ public class ModelResourceRegistry {
                     }
                 } else {
                     try {
-                        throw new IOException("index.json not found in directory: " + directory);
+                        throw new IOException("ayame.json not found in directory: " + directory);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
