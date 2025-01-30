@@ -21,10 +21,9 @@
 package org.ayamemc.ayame.model;
 
 
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.util.JsonInterpreter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,239 +32,73 @@ import java.util.List;
 /**
  * 模型index.json的处理
  *
- * @param defaultModel 默认模型
- * @param presets      预设
  */
-public record IndexData(ModelMetaData metaData, ModelData defaultModel, ModelData[] presets) {
-    public static class Builder {
-        private ModelMetaData metadata = null;
-        private ModelData defaultModel = null;
-        private ModelData[] presets = new ModelData[0];
-
-        public static Builder create() {
-            return new Builder();
-        }
-
-        public Builder parseJson(@NotNull JsonInterpreter json) {
-            this.metaData(ModelMetaData.Builder.create().parseJson(json.getJsonInterpreter("metadata")).build());
-            this.defaultModel(ModelData.Builder.create().parseJson(json.getJsonInterpreter("default")).build());
-            List<ModelData> ps = new ArrayList<>();
-            json.getJsonList("presets").forEach(preset -> {
-                if (!preset.isNullOrEmpty()) {
-                    ps.add(ModelData.Builder.create().parseJson(preset).build());
-                }
-            });
-            this.presets(ps.toArray(new ModelData[0]));
-            return this;
-        }
-
-        public Builder metaData(ModelMetaData metaData) {
-            this.metadata = metaData;
-            return this;
-        }
-
-        public Builder defaultModel(ModelData defaultModel) {
-            this.defaultModel = defaultModel;
-            return this;
-        }
-
-        public Builder presets(ModelData... presets) {
-            this.presets = Arrays.copyOf(presets, presets.length);
-            return this;
-        }
-
-        public IndexData build() {
-            return new IndexData(metadata, defaultModel, presets);
-        }
-    }
+public class IndexData{
+    private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    @SerializedName("format")
+    public String format;
+    @SerializedName("metadata")
+    public ModelMetaData metadata;
+    @SerializedName("models")
+    public List<ModelData> models;
+    @SerializedName("script")
+    public ScriptData script;
 
     /**
      * 单个模型数据
-     *
-     * @param name        模型名称
-     * @param model       模型的json路径
-     * @param animation   动画
-     * @param texture     材质
-     * @param arm         手臂文件
-     * @param controllers 控制器
+
      */
-    public record ModelData(String name, String model, String animation, String texture, String arm,
-                            String[] controllers) {
+    public static class ModelData {
+        @SerializedName("name")
+        public String name;
+        @SerializedName("model")
+        public String model;
+        @SerializedName("animation")
+        public String animation;
+        @SerializedName("texture")
+        public String texture;
+        @SerializedName("arm")
+        public String arm;
+        @SerializedName("controllers")
+        public List<String> controllers = new ArrayList<>();
 
-        public ModelData build() {
-            return new ModelData(name, model, animation, texture, arm, controllers);
-        }
-
-        public static class Builder {
-            private String name = "Unknown";
-            private String model = "Unknown";
-            private String animation = "Unknown";
-            private String texture = "Unknown";
-            private String arm = "Unknown";
-            private String[] controllers = new String[0];
-
-            public static Builder create() {
-                return new Builder();
-            }
-
-            public Builder parseJson(JsonInterpreter json) {
-                this.name(json.getString("name"));
-                this.model(json.getString("model"));
-                this.animation(json.getString("animation"));
-                this.texture(json.getString("texture"));
-                this.arm(json.getString("arm"));
-                this.controllers(json.getStringList("controllers").toArray(new String[0]));
-                return this;
-            }
-
-            public Builder name(String name) {
-                this.name = name;
-                return this;
-            }
-
-            public Builder model(String model) {
-                this.model = model;
-                return this;
-            }
-
-            public Builder animation(String animation) {
-                this.animation = animation;
-                return this;
-            }
-
-            public Builder texture(String texture) {
-                this.texture = texture;
-                return this;
-            }
-
-            public Builder arm(String arm) {
-                this.arm = arm;
-                return this;
-            }
-
-            public Builder controllers(String... controllers) {
-                this.controllers = Arrays.copyOf(controllers, controllers.length);
-                return this;
-            }
-
-            public ModelData build() {
-                return new ModelData(name, model, animation, texture, arm, controllers);
-            }
-        }
     }
 
     /**
      * 模型元数据
      *
-     * @param authors     作者
-     * @param name        名称
-     * @param description 描述
-     * @param license     许可证
-     * @param links       链接
      */
-    public record ModelMetaData(@NotNull String format, @NotNull String[] authors, @NotNull String name,
-                                @Nullable String description,
-                                @Nullable String license, @Nullable String[] links, @Nullable String[] tags,
-                                @NotNull String version, @Nullable String[] animations) {
+    public static class ModelMetaData{
+        @SerializedName("format")
+        public String format;
+        @SerializedName("authors")
+        public List<String> authors;
+        @SerializedName("name")
+        public String name;
+        @SerializedName("description")
+        public String description;
+        @SerializedName("license")
+        public String license;
+        @SerializedName("links")
+        public List<String> links;
+        @SerializedName("tags")
+        public List<String> tags;
+        @SerializedName("version")
+        public String version;
 
+    }
 
-        public JsonInterpreter conversion() {
-            JsonInterpreter json = new JsonInterpreter("{}");
-            json.set("format", format);
-            json.set("authors", authors);
-            json.set("name", name);
-            json.set("description", description);
-            json.set("license", license);
-            json.set("links", links);
-            json.set("tags", tags);
-            json.set("version", version);
-            json.set("animations", animations);
-            return json;
-        }
+    public static class ScriptData{
+        @SerializedName("main")
+        public String main;
+        @SerializedName("config")
+        public String config;
+    }
 
-        public static class Builder {
-            private String format = "simple";
-            private String[] authors = new String[]{};
-            private String name = "Unknown";
-            private String description = "Unknown";
-            private String license = "Unknown";
-            private String[] links = new String[]{};
-            private String[] tags = new String[]{};
-            private String version = "1.0.0";
-            private String[] animations = new String[]{};
-
-            public static Builder create() {
-                return new Builder();
-            }
-
-            public Builder setFormat(String format) {
-                this.format = format;
-                return this;
-            }
-
-            public Builder setAuthors(String[] authors) {
-                this.authors = authors;
-                return this;
-            }
-
-            public Builder setName(String name) {
-                this.name = name;
-                return this;
-            }
-
-            public Builder setDescription(String description) {
-                this.description = description;
-                return this;
-            }
-
-            public Builder setLicense(String license) {
-                this.license = license;
-                return this;
-            }
-
-            public Builder setLinks(String[] links) {
-                this.links = links;
-                return this;
-            }
-
-            public Builder setTags(String[] tags) {
-                this.tags = tags;
-                return this;
-            }
-
-
-            public Builder setVersion(String version) {
-                this.version = version;
-                return this;
-            }
-
-            public Builder setAnimations(String[] animations) {
-                this.animations = animations;
-                return this;
-            }
-
-            public Builder parseJson(JsonInterpreter json) {
-                return this.setName(json.getString("name"))
-                        .setFormat(json.getString("format"))
-                        .setAuthors(json.getStringList("authors").toArray(new String[0]))
-                        .setDescription(json.getString("description"))
-                        .setLinks(json.getStringList("links").toArray(new String[0]))
-                        .setLicense(json.getString("license"))
-                        .setAnimations(json.getStringList("animations").toArray(new String[0]))
-                        .setVersion(json.getString("version"));
-            }
-
-            public Builder parseJsonFromResource(ResourceLocation resourceLocation) {
-                return parseJson(JsonInterpreter.fromResource(resourceLocation.getPath()));
-            }
-
-            public ModelMetaData build() {
-                return new ModelMetaData(format, authors, name, description, license, links, tags, version, animations);
-            }
-        }
-
-        public static class DefaultModelTypes {
-            public static final String AYAME = "ayame";
-        }
+    public static IndexData parse(String jsonString){
+        return GSON.fromJson(jsonString, IndexData.class);
+    }
+    public static String toJson(IndexData indexData){
+        return GSON.toJson(indexData);
     }
 }

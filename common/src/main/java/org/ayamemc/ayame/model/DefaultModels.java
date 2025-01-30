@@ -27,6 +27,7 @@ import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.FileUtil;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.ayamemc.ayame.Ayame.withAyamePath;
 
@@ -34,21 +35,7 @@ public class DefaultModels {
     public static final String MODEL_PATH = "config/ayame/models/";
     public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
-    public static final ModelType BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
-            .setGeoModel(withAyamePath("geo/ayame/default.json"))
-            .setAnimation(withAyamePath("animations/ayame/default.json"))
-            .setTexture(withAyamePath("textures/ayame/default.png"))
-            .setArm(withAyamePath("textures/ayame/default_arm.png"))
-            .setMetaData(IndexData.ModelMetaData.Builder.create()
-                    .setVersion("v1.0.0")
-                    .setDescription("为了防止意外崩溃而添加的builtin模型")
-                    .setAuthors(new String[]{"hoomwool"})
-                    .setLicense("cc0")
-                    .setLinks(new String[]{""})
-                    .setTags(new String[]{"default"})
-                    .build()
-            )
-            .build();
+    public static final ModelType BUILTIN_MODEL_TYPE;
 
     // 静态初始化
     public static void init() {
@@ -59,5 +46,23 @@ public class DefaultModels {
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
 
         return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
+    }
+
+
+    static {
+        var metaData = new IndexData.ModelMetaData();
+        metaData.version = "V1.0.0";
+        metaData.description="为了防止意外崩溃而添加的builtin模型";
+        metaData.authors= List.of("homewool");
+        metaData.license="cc0";
+        metaData.links= List.of("");
+        metaData.tags= List.of("default");
+        BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
+                .setGeoModel(withAyamePath("geo/ayame/default.json"))
+                .setAnimation(withAyamePath("animations/ayame/default.json"))
+                .setTexture(withAyamePath("textures/ayame/default.png"))
+                .setArm(withAyamePath("textures/ayame/default_arm.png"))
+                .setMetaData(metaData)
+            .build();
     }
 }

@@ -28,51 +28,41 @@ import java.util.List;
 
 public class SimpleModelResource implements IModelResource {
     private final ModelResourceRegistry.ModelFile modelFile;
-    private final IndexData.ModelMetaData metaData;
+    private final IndexData indexData;
 
     public SimpleModelResource(ModelResourceRegistry.ModelFile modelFile) {
         this.modelFile = modelFile;
-        this.metaData = createMetaData();
+        this.indexData = IndexData.parse(modelFile.getIndexJson().toString());
     }
 
-    private IndexData.ModelMetaData createMetaData() {
-        return IndexData.ModelMetaData.Builder.create().parseJson(modelFile.getIndexJson()).build();
-    }
 
     @Override
     public IndexData.ModelMetaData getMetaData() {
-        return this.metaData;
+        return this.indexData.metadata;
     }
 
     @Override
     public List<IndexData.ModelData> getModels() {
-        return List.of(IndexData.ModelData.Builder.create()
-                .model("model.json")
-                .name(getMetaData().name())
-                .animation("animation.json")
-                .texture("texture.png")
-                .arm("arm.json")
-                .build()
-        );
+        return indexData.models;
     }
 
     @Override
     public JsonInterpreter getModelJson(IndexData.ModelData model) {
-        return JsonInterpreter.of(modelFile.getContent(model.model()));
+        return JsonInterpreter.of(modelFile.getContent(model.model));
     }
 
     @Override
     public JsonInterpreter getAnimationJson(IndexData.ModelData model) {
-        return JsonInterpreter.of(modelFile.getContent(model.animation()));
+        return JsonInterpreter.of(modelFile.getContent(model.animation));
     }
 
     @Override
     public InputStream getTexture(IndexData.ModelData model) {
-        return modelFile.getContent(model.texture());
+        return modelFile.getContent(model.texture);
     }
 
     @Override
     public JsonInterpreter getArmJson(IndexData.ModelData model) {
-        return JsonInterpreter.of(modelFile.getContent(model.arm()));
+        return JsonInterpreter.of(modelFile.getContent(model.arm));
     }
 }

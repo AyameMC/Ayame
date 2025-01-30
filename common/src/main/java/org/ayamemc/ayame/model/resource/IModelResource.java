@@ -39,7 +39,7 @@ public interface IModelResource {
     IndexData.ModelMetaData getMetaData();
 
     default String getName() {
-        return getMetaData().name();
+        return getMetaData().name;
     }
 
     List<IndexData.ModelData> getModels();

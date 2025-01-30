@@ -1,14 +1,25 @@
 {
   "format": "SIMPLE",
-  "name": "AyameChan",
-  "authors": [
-    "homewool"
-  ],
-  "description": "默认模型",
-  "license": "CC0",
-  "links": [
-  ],
-  "tags": [
-    ""
+  "metadata": {
+    "name": "AyameChan",
+    "authors": [
+      "homewool"
+    ],
+    "description": "默认模型",
+    "license": "CC0",
+    "links": [
+    ],
+    "tags": [
+      ""
+    ]
+  },
+  "models": [
+    {
+      "name": "默认",
+      "model": "default/model.json",
+      "animation": "default/animation.json",
+      "texture": "default/texture.png",
+      "arm": "default/arm.json"
+    }
   ]
 }

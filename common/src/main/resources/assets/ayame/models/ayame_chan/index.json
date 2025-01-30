@@ -1,14 +1,29 @@
 {
   "format": "SIMPLE",
-  "name": "ayame_chan",
-  "authors": [
-    "homewool"
+  "metadata": {
+    "name": "AyameChan",
+    "authors": [
+      "homewool"
+    ],
+    "description": "默认模型",
+    "license": "CC0",
+    "links": [
+    ],
+    "tags": [
+      ""
+    ]
+  },
+  "models": [
+    {
+      "name": "默认",
+      "model": "default/model.json",
+      "animation": "default/animation.json",
+      "texture": "default/texture.png",
+      "arm": "default/arm.json"
+    }
   ],
-  "description": "默认模型",
-  "license": "CC0",
-  "links": [
-  ],
-  "tags": [
-    ""
-  ]
+  "script":{
+  	"main":"script/main.aym.js",
+  	"config":"jsconfig.json"
+  }
 }

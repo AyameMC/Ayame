@@ -32,7 +32,7 @@ import static org.ayamemc.ayame.Ayame.LOGGER;
 public class ConfigUtil {
     public static final File CONFIG_FILE = new File("config/ayame/config.json");
     private static final Gson GSON = new Gson();
-    public static ConfigData config = GSON.fromJson(FileUtil.getAyameBuiltinFileResourceAsString("config.json"), ConfigData.class);
+    public static ConfigData config;
 
 
     public static void init() {
@@ -40,11 +40,14 @@ public class ConfigUtil {
             // 创建空文件
             try {
                 CONFIG_FILE.createNewFile();
+                config = new ConfigData();
                 // 写入默认配置
                 FileUtil.overwriteStringToFile(CONFIG_FILE.toPath(), GSON.toJson(config));
             } catch (IOException e) {
                 LOGGER.error("Unable to create config file", e);
             }
+        }else {
+            config = GSON.fromJson(FileUtil.getFileAsString(CONFIG_FILE.toPath()), ConfigData.class);
         }
     }
 
