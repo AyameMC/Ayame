@@ -54,10 +54,10 @@ public class DefaultModels {
                 "girl"
         );
         BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
-                .setGeoModel(withAyamePath("geo/ayame/default.json"))
-                .setAnimation(withAyamePath("animations/ayame/default.json"))
-                .setTexture(withAyamePath("textures/ayame/default.png"))
-                .setArm(withAyamePath("textures/ayame/default_arm.png"))
+                .setGeoModel(withAyamePath("geo/ayame/ayame_chan.json"))
+                .setAnimation(withAyamePath("animations/ayame/ayame_chan.json"))
+                .setTexture(withAyamePath("textures/ayame/ayame_chan.png"))
+                .setArm(withAyamePath("textures/ayame/ayame_chan_arm.png"))
                 .setMetaData(metaData)
                 .build();
     }

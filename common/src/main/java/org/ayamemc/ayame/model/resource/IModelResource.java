@@ -38,7 +38,7 @@ public interface IModelResource {
     // TODO 完成
     AyameModelData.MetaData getMetaData();
 
-    default String getName() {
+    default String getId() {
         return getMetaData().id;
     }
 
@@ -57,18 +57,18 @@ public interface IModelResource {
     }
 
     default ResourceLocation createModelResourceLocation() {
-        return Ayame.withAyamePath("geo/" + getName() + ".json");
+        return Ayame.withAyamePath("geo/" + getId() + ".json");
     }
 
     default ResourceLocation createAnimationResourceLocation() {
-        return Ayame.withAyamePath("animations/" + getName() + ".json");
+        return Ayame.withAyamePath("animations/" + getId() + ".json");
     }
 
     default ResourceLocation createTextureResourceLocation() {
-        return Ayame.withAyamePath("textures/" + getName() + ".png");
+        return Ayame.withAyamePath("textures/" + getId() + ".png");
     }
 
     default ResourceLocation createArmResourceLocation() {
-        return Ayame.withAyamePath("arms/" + getName() + ".json");
+        return Ayame.withAyamePath("arm/" + getId() + ".json");
     }
 }

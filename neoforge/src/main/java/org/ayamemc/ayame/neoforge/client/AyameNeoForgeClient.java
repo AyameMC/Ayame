@@ -21,6 +21,8 @@
 package org.ayamemc.ayame.neoforge.client;
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -31,12 +33,15 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
+import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
 import org.ayamemc.ayame.neoforge.client.event.RegisterKeyEventHandler;
+import software.bernie.geckolib.cache.GeckoLibCache;
 
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
     public AyameNeoForgeClient(IEventBus modBus) {
+        registerReloadListener();
         AyameClient.init();
 
         NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
@@ -52,5 +57,11 @@ public class AyameNeoForgeClient {
 
     }
 
+    public static void registerReloadListener() {
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager)
+            resourceManager.registerReloadListener(AyameModelCache::reload);
+    }
 
 }

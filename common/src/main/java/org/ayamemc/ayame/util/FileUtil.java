@@ -50,6 +50,19 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 获取文件的字节流
+     * @param path 文件路径
+     * @return 字节流
+     */
+    public static InputStream getFileAsStream(Path path) {
+        try {
+            return FileUtils.openInputStream(path.toFile());
+        } catch (IOException e) {
+            throw new RuntimeException("File not found at: " + path, e);
+        }
+    }
+
 
     /**
      * 以新字符串覆盖文件原有的内容

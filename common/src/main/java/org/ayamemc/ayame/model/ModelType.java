@@ -42,4 +42,6 @@ public interface ModelType {
 
     AyameModelData.MetaData metaData();
 
+    AyameModelData.ScriptData scriptData();
+
 }

@@ -21,8 +21,20 @@
 package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
+import org.ayamemc.ayame.model.AyameModelCache;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -34,6 +46,18 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+                .registerReloadListener(new IdentifiableResourceReloadListener() {
+                    @Override
+                    public ResourceLocation getFabricId() {
+                        return Ayame.withAyamePath("model_reload");
+                    }
+
+                    @Override
+                    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                        return AyameModelCache.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                    }
+                });
         AyameClient.init();
         // 不要动AyameKeyMappingEventHandler的init方法
         AyameKeyRegister.init();

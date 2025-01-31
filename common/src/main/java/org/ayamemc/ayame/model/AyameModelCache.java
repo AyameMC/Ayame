@@ -20,11 +20,24 @@
 
 package org.ayamemc.ayame.model;
 
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.api.PlayerModelAPI;
+import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.ayamemc.ayame.util.FileUtil;
+import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 
 /**
  * 正在渲染中的模型缓存，它同时运行在服务端和客户端
@@ -56,4 +69,29 @@ public class AyameModelCache {
         return playerModelCache.containsKey(player);
     }
 
+    public static @NotNull CompletableFuture<Void> reload(PreparableReloadListener.PreparationBarrier preparationBarrier,
+                                                          ResourceManager resourceManager,
+                                                          ProfilerFiller preparationsProfiler,
+                                                          ProfilerFiller reloadProfiler,
+                                                          Executor backgroundExecutor,
+                                                          Executor gameExecutor) {
+        Map<Player, PlayerModelAPI.CacheEntry> newCache = new HashMap<>();
+        // TODO: 完成 reload
+        return CompletableFuture.runAsync(() -> {
+            PlayerModelAPI.getCache().forEach((player, cacheEntry) -> {
+                final ModelType model = cacheEntry.model();
+                JsonInterpreter modelJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getGeoModel().getPath())));
+                JsonInterpreter animJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getAnimation().getPath())));
+                JsonInterpreter armJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getArm().getPath())));
+                InputStream texture = FileUtil.getFileAsStream(Path.of(model.getTexture().getPath()));
+
+                PlayerModelAPI.CacheEntry newEntry = new PlayerModelAPI.CacheEntry(model, modelJson, animJson, armJson, texture);
+                newCache.put(player, newEntry);
+            });
+        }, backgroundExecutor).thenCompose(preparationBarrier::wait).thenAcceptAsync(empty -> {
+            newCache.forEach((player, cacheEntry) -> {
+                ModelResourceWriterUtil.addBakedModel(cacheEntry.model().getGeoModel(), cacheEntry.modelJson());
+            });
+        }, gameExecutor);
+    }
 }
