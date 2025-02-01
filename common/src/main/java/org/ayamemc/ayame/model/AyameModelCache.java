@@ -77,15 +77,8 @@ public class AyameModelCache {
                                                           Executor backgroundExecutor,
                                                           Executor gameExecutor) {
         Map<Player, PlayerModelAPI.CacheEntry> newCache = new HashMap<>();
-        // TODO: 完成 reload
         return CompletableFuture.runAsync(() -> {
             PlayerModelAPI.getCache().forEach((player, cacheEntry) -> {
-//                final ModelType model = cacheEntry.model();
-//                JsonInterpreter modelJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getGeoModel().getPath())));
-//                JsonInterpreter animJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getAnimation().getPath())));
-//                JsonInterpreter armJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getArm().getPath())));
-//                InputStream texture = FileUtil.getFileAsStream(Path.of(model.getTexture().getPath()));
-
                 PlayerModelAPI.CacheEntry newEntry = cacheEntry.clone();
                 newCache.put(player, newEntry);
             });
@@ -94,6 +87,7 @@ public class AyameModelCache {
             newCache.forEach((player, cacheEntry) -> {
                 ModelResourceWriterUtil.addModelResource(cacheEntry);
             });
+            LOGGER.info("Applied Ayame Model Cache");
         }, gameExecutor);
     }
 }

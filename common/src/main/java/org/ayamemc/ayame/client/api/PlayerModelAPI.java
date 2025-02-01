@@ -75,8 +75,8 @@ public class PlayerModelAPI {
         return cache;
     }
 
-    public record CacheEntry(ModelType model, BakedGeoModel modelJson, BakedAnimations animJson,
-                             BakedGeoModel armJson,
+    public record CacheEntry(ModelType model, BakedGeoModel bakedModel, BakedAnimations anim,
+                             BakedGeoModel arm,
                              InputStream texture) implements Cloneable{
         public CacheEntry clone() {
             try {

@@ -150,12 +150,13 @@ public class ModelResourceWriterUtil {
     }
 
     public static DefaultModelType.Builder addModelResource(PlayerModelAPI.CacheEntry entry) {
-        addBakedModel(entry.model().getGeoModel(), entry.modelJson());
-        addBakedModel(entry.model().getArm(), entry.armJson());
-        addBakedAnimation(entry.model().getAnimation(), entry.animJson());
+        addBakedModel(entry.model().getGeoModel(), entry.bakedModel());
+        addBakedModel(entry.model().getArm(), entry.arm());
+        addBakedAnimation(entry.model().getAnimation(), entry.anim());
         addTexture(entry.model().getTexture(), entry.texture());
         return DefaultModelType.Builder.create()
                 .setGeoModel(entry.model().getGeoModel())
+                .setArm(entry.model().getArm())
                 .setAnimation(entry.model().getAnimation())
                 .setTexture(entry.model().getTexture());
     }

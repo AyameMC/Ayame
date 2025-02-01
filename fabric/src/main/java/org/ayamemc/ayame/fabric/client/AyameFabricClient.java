@@ -32,7 +32,10 @@ import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.GeckoLibConstants;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -54,8 +57,26 @@ public final class AyameFabricClient implements ClientModInitializer {
                     }
 
                     @Override
-                    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                        return AyameModelCache.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                    public Collection<ResourceLocation> getFabricDependencies() {
+                        // 在geckolib之后reload
+                        return Collections.singletonList(
+                                GeckoLibConstants.id("models_animations")
+                        );
+                    }
+
+                    @Override
+                    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier,
+                                                                   ResourceManager resourceManager,
+                                                                   ProfilerFiller preparationsProfiler,
+                                                                   ProfilerFiller reloadProfiler,
+                                                                   Executor backgroundExecutor,
+                                                                   Executor gameExecutor) {
+                        return AyameModelCache.reload(preparationBarrier,
+                                resourceManager,
+                                preparationsProfiler,
+                                reloadProfiler,
+                                backgroundExecutor,
+                                gameExecutor);
                     }
                 });
         AyameClient.init();
