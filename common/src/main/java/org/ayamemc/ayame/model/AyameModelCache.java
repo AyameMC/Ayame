@@ -80,13 +80,13 @@ public class AyameModelCache {
         // TODO: 完成 reload
         return CompletableFuture.runAsync(() -> {
             PlayerModelAPI.getCache().forEach((player, cacheEntry) -> {
-                final ModelType model = cacheEntry.model();
-                JsonInterpreter modelJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getGeoModel().getPath())));
-                JsonInterpreter animJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getAnimation().getPath())));
-                JsonInterpreter armJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getArm().getPath())));
-                InputStream texture = FileUtil.getFileAsStream(Path.of(model.getTexture().getPath()));
+//                final ModelType model = cacheEntry.model();
+//                JsonInterpreter modelJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getGeoModel().getPath())));
+//                JsonInterpreter animJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getAnimation().getPath())));
+//                JsonInterpreter armJson = JsonInterpreter.of(FileUtil.getFileAsStream(Path.of(model.getArm().getPath())));
+//                InputStream texture = FileUtil.getFileAsStream(Path.of(model.getTexture().getPath()));
 
-                PlayerModelAPI.CacheEntry newEntry = new PlayerModelAPI.CacheEntry(model, modelJson, animJson, armJson, texture);
+                PlayerModelAPI.CacheEntry newEntry = cacheEntry.clone();
                 newCache.put(player, newEntry);
             });
             LOGGER.info("Reloaded Ayame Model Cache");

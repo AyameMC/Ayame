@@ -27,6 +27,8 @@ import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.ModelType;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.JsonInterpreter;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.loading.object.BakedAnimations;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -61,9 +63,9 @@ public class PlayerModelAPI {
         // 应该从geckolib读取
         var entry = new CacheEntry(
                 model,
-                ModelResourceWriterUtil.readModelJson(model.getGeoModel()),
-                ModelResourceWriterUtil.readAnimationJson(model.getAnimation()),
-                ModelResourceWriterUtil.readModelJson(model.getArm()),
+                ModelResourceWriterUtil.readModel(model.getGeoModel()),
+                ModelResourceWriterUtil.readAnimation(model.getAnimation()),
+                ModelResourceWriterUtil.readModel(model.getArm()),
                 ModelResourceWriterUtil.readTexture(model.getTexture())
         );
         cache.put(player, entry);
@@ -73,8 +75,15 @@ public class PlayerModelAPI {
         return cache;
     }
 
-    public record CacheEntry(ModelType model, JsonInterpreter modelJson, JsonInterpreter animJson,
-                             JsonInterpreter armJson,
-                             InputStream texture) {
+    public record CacheEntry(ModelType model, BakedGeoModel modelJson, BakedAnimations animJson,
+                             BakedGeoModel armJson,
+                             InputStream texture) implements Cloneable{
+        public CacheEntry clone() {
+            try {
+                return (CacheEntry) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
