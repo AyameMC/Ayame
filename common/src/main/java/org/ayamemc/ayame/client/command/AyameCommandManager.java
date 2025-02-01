@@ -66,7 +66,7 @@ public class AyameCommandManager {
         YttribumeCommand.init(dispatcher, context);
 
         // 重定向到
-        dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame:ayame").redirect(dispatcher.getRoot().getChild("ayame")));
+        dispatcher.register(LiteralArgumentBuilder.<T>literal("aym").redirect(dispatcher.getRoot().getChild("ayame")));
 
     }
 

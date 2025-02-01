@@ -47,7 +47,7 @@ public class YttribumeCommand {
     //别改了好不好哇
     @SuppressWarnings("unchecked")
     public static <T extends SharedSuggestionProvider> void init(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
-        dispatcher.register(LiteralArgumentBuilder.<T>literal("yttribume")
+        dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame-yttribume")
                 .then(LiteralArgumentBuilder.<T>literal("set")
                         .then(RequiredArgumentBuilder.<T, ResourceLocation>argument("yttribume", ResourceLocationArgument.id())
                                 .suggests((SuggestionProvider<T>) YTTRIBUME_SUGGESTION_PROVIDER)
@@ -78,7 +78,7 @@ public class YttribumeCommand {
         );
 
         // 重定向
-        dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame:yttribume").redirect(dispatcher.getRoot().getChild("yttribume")));
+        dispatcher.register(LiteralArgumentBuilder.<T>literal("aym-yttribume").redirect(dispatcher.getRoot().getChild("yttribume")));
     }
 
     public static <T extends SharedSuggestionProvider> int unlock(CommandContext<T> context) {

@@ -23,12 +23,15 @@ package org.ayamemc.ayame.neoforge.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
@@ -36,7 +39,11 @@ import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
 import org.ayamemc.ayame.neoforge.client.event.RegisterKeyEventHandler;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
@@ -61,7 +68,17 @@ public class AyameNeoForgeClient {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager)
-            resourceManager.registerReloadListener(AyameModelCache::reload);
+            resourceManager.registerReloadListener(new ContextAwareReloadListener() {
+                @Override
+                public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier preparationBarrier,
+                                                               @NotNull ResourceManager resourceManager,
+                                                               @NotNull ProfilerFiller preparationsProfiler,
+                                                               @NotNull ProfilerFiller reloadProfiler,
+                                                               @NotNull Executor backgroundExecutor,
+                                                               @NotNull Executor gameExecutor) {
+                    return AyameModelCache.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                }
+            });
     }
 
 }
