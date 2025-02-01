@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client.api;
 
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
+import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.ModelType;
 import org.ayamemc.ayame.util.FileUtil;
@@ -57,12 +58,13 @@ public class PlayerModelAPI {
     }
 
     private static void cacheModel(Player player, ModelType model) {
+        // 应该从geckolib读取
         var entry = new CacheEntry(
                 model,
-                JsonInterpreter.of(FileUtil.getAyameBuiltinFileResourceAsStream(model.getGeoModel().getPath())),
-                JsonInterpreter.of(FileUtil.getAyameBuiltinFileResourceAsStream(model.getAnimation().getPath())),
-                JsonInterpreter.of(FileUtil.getAyameBuiltinFileResourceAsStream(model.getArm().getPath())),
-                FileUtil.getAyameBuiltinFileResourceAsStream(model.getTexture().getPath())
+                ModelResourceWriterUtil.readModelJson(model.getGeoModel()),
+                ModelResourceWriterUtil.readAnimationJson(model.getAnimation()),
+                ModelResourceWriterUtil.readModelJson(model.getArm()),
+                ModelResourceWriterUtil.readTexture(model.getTexture())
         );
         cache.put(player, entry);
     }

@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client.util;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
@@ -39,6 +40,7 @@ import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -145,5 +147,33 @@ public class ModelResourceWriterUtil {
                 .setGeoModel(entry.model().getGeoModel())
                 .setAnimation(entry.model().getAnimation())
                 .setTexture(entry.model().getTexture());
+    }
+
+    public static JsonInterpreter readModelJson(ResourceLocation resourceLocation) {
+        Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
+        if (!models.containsKey(resourceLocation)){
+            throw new RuntimeException("Model not found: " + resourceLocation);
+        }
+        return new JsonInterpreter(KeyFramesAdapter.GEO_GSON.toJson(models.get(resourceLocation)));
+    }
+
+    public static JsonInterpreter readAnimationJson(ResourceLocation resourceLocation) {
+        Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
+        if (!animations.containsKey(resourceLocation)){
+            throw new RuntimeException("Animation not found: " + resourceLocation);
+        }
+        return new JsonInterpreter(KeyFramesAdapter.GEO_GSON.toJson(animations.get(resourceLocation).animations()));
+    }
+
+    public static InputStream readTexture(ResourceLocation resourceLocation) {
+        TextureManager textureManager = MINECRAFT.getTextureManager();
+        if (!textureManager.getTexture(resourceLocation, null).getClass().equals(DynamicTexture.class)){
+            throw new RuntimeException("Texture not found: " + resourceLocation);
+        }
+        try {
+            return new ByteArrayInputStream(((DynamicTexture) textureManager.getTexture(resourceLocation, null)).getPixels().asByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to trad Textures",e);
+        }
     }
 }

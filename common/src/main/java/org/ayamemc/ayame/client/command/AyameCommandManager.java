@@ -21,15 +21,23 @@
 package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.ayamemc.ayame.client.api.PlayerModelAPI;
+import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.ayamemc.ayame.model.resource.IModelResource;
+import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
@@ -46,8 +54,10 @@ public class AyameCommandManager {
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
-                .then(LiteralArgumentBuilder.<T>literal("yttribume")
-                        .redirect(dispatcher.getRoot().getChild("yttribume"))
+                .then(LiteralArgumentBuilder.<T>literal("load")
+                        .then(RequiredArgumentBuilder.<T,String>argument("name", StringArgumentType.string())
+                                .executes(AyameCommandManager::load)
+                        )
                 )
         );
 
@@ -58,6 +68,14 @@ public class AyameCommandManager {
         // 重定向到
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame:ayame").redirect(dispatcher.getRoot().getChild("ayame")));
 
+    }
+
+    private static <T extends SharedSuggestionProvider> int load(CommandContext<T> context) {
+        // TODO 暂时只用于测试，需要后续完善
+        String name = StringArgumentType.getString(context, "name");
+        IModelResource res = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(Path.of("config/ayame/models/"+name)));
+        PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(res).build());
+        return 1;
     }
 
     private static <T extends SharedSuggestionProvider> int benchmarkTest(CommandContext<T> tCommandContext, boolean useInterpretedMode) {

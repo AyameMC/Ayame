@@ -39,6 +39,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 /**
  * 正在渲染中的模型缓存，它同时运行在服务端和客户端
  */
@@ -62,7 +63,7 @@ public class AyameModelCache {
      */
     @NotNull
     public static ModelType getPlayerModel(Player player) {
-        return playerModelCache.getOrDefault(player, DefaultModels.AYAME_CHAN_TYPE);
+        return playerModelCache.getOrDefault(player, DefaultModels.BUILTIN_MODEL_TYPE);
     }
 
     public static boolean hasPlayerModel(Player player) {
@@ -88,9 +89,10 @@ public class AyameModelCache {
                 PlayerModelAPI.CacheEntry newEntry = new PlayerModelAPI.CacheEntry(model, modelJson, animJson, armJson, texture);
                 newCache.put(player, newEntry);
             });
+            LOGGER.info("Reloaded Ayame Model Cache");
         }, backgroundExecutor).thenCompose(preparationBarrier::wait).thenAcceptAsync(empty -> {
             newCache.forEach((player, cacheEntry) -> {
-                ModelResourceWriterUtil.addBakedModel(cacheEntry.model().getGeoModel(), cacheEntry.modelJson());
+                ModelResourceWriterUtil.addModelResource(cacheEntry);
             });
         }, gameExecutor);
     }
