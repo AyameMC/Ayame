@@ -40,6 +40,7 @@ import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipFile;
 
@@ -49,13 +50,9 @@ import static org.ayamemc.ayame.Ayame.MINECRAFT;
 @SuppressWarnings("unchecked")
 public class AyameCommandManager {
     private static final SuggestionProvider<?> MODEL_LIST = (context, builder) -> {
-        ModelResourceAPI.listModels(true).forEach(
-                iModelResource -> {
-                    builder.suggest(
-                            iModelResource.getId()
-                    );
-                }
-
+        final List<IModelResource> models = ModelResourceAPI.listModels(true);
+        models.forEach(
+                (resource) -> builder.suggest(resource.getMetaData().id)
         );
         return builder.buildFuture();
     };
