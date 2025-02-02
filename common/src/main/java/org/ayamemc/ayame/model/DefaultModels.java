@@ -26,6 +26,7 @@ import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.FileUtil;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -70,6 +71,10 @@ public class DefaultModels {
     private static IModelResource create(String name) {
         final String targetPath = MODEL_PATH + name;
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
-        return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
+        try {
+            return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -38,9 +38,7 @@ public interface IModelResource {
     // TODO 完成
     AyameModelData.MetaData getMetaData();
 
-    default String getId() {
-        return getMetaData().id;
-    }
+    String getId();
 
     List<AyameModelData.ModelData> getModels();
 

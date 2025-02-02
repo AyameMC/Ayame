@@ -24,22 +24,16 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
-import org.ayamemc.ayame.util.FileUtil;
-import org.ayamemc.ayame.util.JsonInterpreter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
 /**
  * 正在渲染中的模型缓存，它同时运行在服务端和客户端
  */
@@ -82,12 +76,10 @@ public class AyameModelCache {
                 PlayerModelAPI.CacheEntry newEntry = cacheEntry.clone();
                 newCache.put(player, newEntry);
             });
-            LOGGER.info("Reloaded Ayame Model Cache");
         }, backgroundExecutor).thenCompose(preparationBarrier::wait).thenAcceptAsync(empty -> {
             newCache.forEach((player, cacheEntry) -> {
                 ModelResourceWriterUtil.addModelResource(cacheEntry);
             });
-            LOGGER.info("Applied Ayame Model Cache");
         }, gameExecutor);
     }
 }

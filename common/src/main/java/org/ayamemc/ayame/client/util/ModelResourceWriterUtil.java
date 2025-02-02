@@ -87,7 +87,8 @@ public class ModelResourceWriterUtil {
         BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
         models.put(resourceLocation, bakedGeoModel);
     }
-    public static void addBakedModel(ResourceLocation resourceLocation, @NotNull BakedGeoModel model){
+
+    public static void addBakedModel(ResourceLocation resourceLocation, @NotNull BakedGeoModel model) {
         Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
         if (models.containsKey(resourceLocation)) return;
         models.put(resourceLocation, model);
@@ -106,7 +107,8 @@ public class ModelResourceWriterUtil {
         BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(modelRes.getAnimationJson(modelRes.getDefault()).toGson(), "animations"), BakedAnimations.class);
         animations.put(resourceLocation, ani);
     }
-    public static void addBakedAnimation(ResourceLocation resourceLocation,@NotNull  BakedAnimations ani){
+
+    public static void addBakedAnimation(ResourceLocation resourceLocation, @NotNull BakedAnimations ani) {
         Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
         if (animations.containsKey(resourceLocation)) return;
         animations.put(resourceLocation, ani);
@@ -163,7 +165,7 @@ public class ModelResourceWriterUtil {
 
     public static BakedGeoModel readModel(ResourceLocation resourceLocation) {
         Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
-        if (!models.containsKey(resourceLocation)){
+        if (!models.containsKey(resourceLocation)) {
             throw new RuntimeException("Model not found: " + resourceLocation);
         }
         return models.get(resourceLocation);
@@ -171,7 +173,7 @@ public class ModelResourceWriterUtil {
 
     public static BakedAnimations readAnimation(ResourceLocation resourceLocation) {
         Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
-        if (!animations.containsKey(resourceLocation)){
+        if (!animations.containsKey(resourceLocation)) {
             throw new RuntimeException("Animation not found: " + resourceLocation);
         }
         return animations.get(resourceLocation);
@@ -179,13 +181,13 @@ public class ModelResourceWriterUtil {
 
     public static InputStream readTexture(ResourceLocation resourceLocation) {
         TextureManager textureManager = MINECRAFT.getTextureManager();
-        if (!textureManager.getTexture(resourceLocation, null).getClass().equals(DynamicTexture.class)){
+        if (!textureManager.getTexture(resourceLocation, null).getClass().equals(DynamicTexture.class)) {
             throw new RuntimeException("Texture not found: " + resourceLocation);
         }
         try {
             return new ByteArrayInputStream(((DynamicTexture) textureManager.getTexture(resourceLocation, null)).getPixels().asByteArray());
         } catch (IOException e) {
-            throw new RuntimeException("Failed to trad Textures",e);
+            throw new RuntimeException("Failed to trad Textures", e);
         }
     }
 }

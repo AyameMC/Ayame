@@ -78,7 +78,7 @@ public class YttribumeCommand {
         );
 
         // 重定向
-        dispatcher.register(LiteralArgumentBuilder.<T>literal("aym-yttribume").redirect(dispatcher.getRoot().getChild("yttribume")));
+        dispatcher.register(LiteralArgumentBuilder.<T>literal("aym-yttribume").redirect(dispatcher.getRoot().getChild("ayame-yttribume")));
     }
 
     public static <T extends SharedSuggestionProvider> int unlock(CommandContext<T> context) {
@@ -105,7 +105,7 @@ public class YttribumeCommand {
     @SuppressWarnings("DataFlowIssue")
     private static <T extends SharedSuggestionProvider> int getYttribume(CommandContext<T> context) {
         sendMessageToClient(Component.translatable("message.ayame.command.yttribume.get_success",
-                MINECRAFT.player.ayame$getYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"))))
+                "§e" + MINECRAFT.player.ayame$getYttribume(Yttribumes.get(ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume"))))
         );
         return 0;
     }
@@ -116,7 +116,8 @@ public class YttribumeCommand {
         ResourceLocation resource = ResourceLocationArgument.getId((CommandContext<CommandSourceStack>) context, "yttribume");
         Yttribume yttribume = Yttribumes.get(resource);
         if (!yttribume.isRegal(value, MINECRAFT.player)) {
-            sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_fail", yttribume.min(), yttribume.max()));
+            sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_fail",
+                    "§e" + yttribume.min(), "§e" + yttribume.max()));
         } else {
             MINECRAFT.player.ayame$setYttribume(yttribume, value);
             sendMessageToClient(Component.translatable("message.ayame.command.yttribume.set_success"));

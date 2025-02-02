@@ -18,11 +18,21 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script;
+package org.ayamemc.ayame.util;
 
-public class JsModLoader {
-    public static final String FABRIC = "fabric";
-    public static final String NEOFORGE = "neoforge";
-    public static final String FORGE = "forge";
+public enum ModLoader {
+    FABRIC("fabric"),
+    NEOFORGE("neoforge"),
+    FORGE("forge");
+
+    private final String loaderName;
+
+    ModLoader(String loaderName) {
+        this.loaderName = loaderName;
+    }
+
+    @Override
+    public String toString() {
+        return loaderName;
+    }
 }
-

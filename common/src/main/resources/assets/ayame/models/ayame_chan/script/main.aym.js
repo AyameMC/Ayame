@@ -28,16 +28,16 @@
 
 
 function _main() {
-  Logger.info("Version:" + Ayame.VERSION);
-  Logger.info("Version {}", Ayame.VERSION);
-  switch (Ayame.modLoader) {
-    case ModLoader.FABRIC:
-      Logger.info("It's Fabric!");
-      break;
-    case ModLoader.NEOFORGE:
-      Logger.info("It's NeoForge!");
-      break;
-  }
+    Logger.info("Version:" + Ayame.VERSION);
+    Logger.info("Version {}", Ayame.VERSION);
+    switch (Ayame.modLoader) {
+        case ModLoader.FABRIC:
+            Logger.info("It's Fabric!");
+            break;
+        case ModLoader.NEOFORGE:
+            Logger.info("It's NeoForge!");
+            break;
+    }
 
 }
 
@@ -49,10 +49,10 @@ function _main() {
 _main()
 
 PlayerEvents.tick((event) => {
-  const {level, player} = event;
-  player.sendChat("I'm " + player.name);
-  if (player.name === "homewool") {
-    Logger.debug("羊毛")
-  }
+    const {level, player} = event;
+    player.sendChat("I'm " + player.name);
+    if (player.name === "homewool") {
+        Logger.debug("羊毛")
+    }
 
 });

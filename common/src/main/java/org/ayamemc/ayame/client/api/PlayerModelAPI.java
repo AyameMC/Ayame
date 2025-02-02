@@ -25,8 +25,6 @@ import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.ModelType;
-import org.ayamemc.ayame.util.FileUtil;
-import org.ayamemc.ayame.util.JsonInterpreter;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.object.BakedAnimations;
 
@@ -77,7 +75,7 @@ public class PlayerModelAPI {
 
     public record CacheEntry(ModelType model, BakedGeoModel bakedModel, BakedAnimations anim,
                              BakedGeoModel arm,
-                             InputStream texture) implements Cloneable{
+                             InputStream texture) implements Cloneable {
         public CacheEntry clone() {
             try {
                 return (CacheEntry) super.clone();

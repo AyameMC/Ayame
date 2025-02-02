@@ -1,30 +1,18 @@
 {
   "compilerOptions": {
-    // 目标语言为 ECMAScript 5，确保与 Rhino 兼容
     "target": "ES5",
-    // 使用 ES5 标准库，确保与 Rhino 支持的功能一致
     "lib": [
       "ES5"
     ],
-    // 允许编译 JavaScript 文件，支持混合项目
     "allowJs": true,
-    // 启用对 JavaScript 的类型检查
     "checkJs": true,
-    // 启用严格类型检查
     "strict": true,
-    // 禁止隐式的 any 类型
     "noImplicitAny": true,
-    // 禁止对 null 或 undefined 的调用
     "strictNullChecks": true,
-    // 禁止对不存在属性的访问
     "noPropertyAccessFromIndexSignature": true,
-    // 防止访问对象不存在的字段或函数
     "noImplicitThis": true,
-    // 保留 JSX 语法，仅当需要时启用，避免报错
     "jsx": "preserve",
-    // 允许从没有默认导出的模块导入默认内容
     "allowSyntheticDefaultImports": true,
-    // 使用 Node 风格的模块解析方式
     "moduleResolution": "node10",
     "typeRoots": [
       "types/@types"

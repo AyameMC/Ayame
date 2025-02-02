@@ -23,6 +23,7 @@ package org.ayamemc.ayame.model.resource;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class AyameModelResource implements IModelResource {
     private final ModelResourceRegistry.ModelFile modelFile;
     private final AyameModelData ayameModelData;
 
-    public AyameModelResource(ModelResourceRegistry.ModelFile modelFile) {
+    public AyameModelResource(ModelResourceRegistry.ModelFile modelFile) throws IOException {
         this.modelFile = modelFile;
         this.ayameModelData = AyameModelData.parse(modelFile.getIndexJson().toString());
     }
@@ -40,6 +41,12 @@ public class AyameModelResource implements IModelResource {
     public AyameModelData.MetaData getMetaData() {
         return this.ayameModelData.metadata;
     }
+
+    @Override
+    public String getId() {
+        return ayameModelData.metadata.id;
+    }
+
 
     @Override
     public List<AyameModelData.ModelData> getModels() {

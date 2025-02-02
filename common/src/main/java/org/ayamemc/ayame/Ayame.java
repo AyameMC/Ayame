@@ -27,6 +27,7 @@ import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.DefaultModels;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.ConfigUtil;
+import org.ayamemc.ayame.util.ModLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +37,9 @@ public final class Ayame {
     public static final String MOD_NAME = "Ayame";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
-    public static String modLoader;
+    public static ModLoader modLoader;
 
-    public static void init(String modLoader) {
+    public static void init(ModLoader modLoader) {
         Ayame.modLoader = modLoader;
         ConfigUtil.init();
         ModelResourceRegistry.init();

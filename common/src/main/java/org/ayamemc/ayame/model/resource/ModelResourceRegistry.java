@@ -56,7 +56,7 @@ public class ModelResourceRegistry {
      * @return 模型实例
      */
 
-    public static IModelResource create(String format, ModelFile modelFile) {
+    public static IModelResource create(String format, ModelFile modelFile) throws IOException {
         return registry.get(format).create(modelFile);
     }
 
@@ -66,7 +66,7 @@ public class ModelResourceRegistry {
      * @param modelFile 模型文件
      * @return 模型实例
      */
-    public static IModelResource create(ModelFile modelFile) {
+    public static IModelResource create(ModelFile modelFile) throws IOException {
         return create(modelFile.getFormat(), modelFile);
     }
 
@@ -98,7 +98,7 @@ public class ModelResourceRegistry {
 
     @FunctionalInterface
     public interface ResourceFactory {
-        IModelResource create(ModelFile modelFile);
+        IModelResource create(ModelFile modelFile) throws IOException;
     }
 
     public static class ModelFile {
@@ -115,7 +115,7 @@ public class ModelResourceRegistry {
             this.zipFile = null;
         }
 
-        public JsonInterpreter getIndexJson() {
+        public JsonInterpreter getIndexJson() throws IOException {
             if (zipFile != null) {
                 return JsonInterpreter.of(FileUtil.getInputStreamFromZip(zipFile, "ayame.json"));
             } else if (directory != null) {
@@ -127,11 +127,7 @@ public class ModelResourceRegistry {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    try {
-                        throw new IOException("ayame.json not found in directory: " + directory);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    throw new IOException("ayame.json not found in directory: " + directory);
                 }
             }
             throw new IllegalStateException("ModelFile must be either a directory or a zip file");

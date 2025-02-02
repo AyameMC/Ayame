@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.FileUtil;
+import org.ayamemc.ayame.util.ModLoader;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -36,7 +37,7 @@ public class JavaScriptLoader {
 
             final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
             final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);
-            final Object wrappedModLoader = Context.javaToJS(new JsModLoader(), scope);
+            final Object wrappedModLoader = Context.javaToJS(ModLoader.class, scope);
             final Object wrappedPlayerEvents = Context.javaToJS(new JsPlayerEvents(), scope);
             ScriptableObject.putProperty(scope, "Mod", wrappedAyame);
             ScriptableObject.putProperty(scope, "Logger", wrappedLogger);

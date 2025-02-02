@@ -23,11 +23,12 @@ package org.ayamemc.ayame.neoforge;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.util.ModLoader;
 
 @Mod(Ayame.MOD_ID)
 public final class AyameNeoForge {
     public AyameNeoForge(IEventBus modBus) {
         // Run our common setup.
-        Ayame.init("neoforge");
+        Ayame.init(ModLoader.NEOFORGE);
     }
 }

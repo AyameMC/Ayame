@@ -22,14 +22,15 @@ package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
 import org.ayamemc.ayame.model.resource.IModelResource;
@@ -37,14 +38,28 @@ import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
+import java.util.zip.ZipFile;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 
 @SuppressWarnings("unchecked")
 public class AyameCommandManager {
+    private static final SuggestionProvider<?> MODEL_LIST = (context, builder) -> {
+        ModelResourceAPI.listModels(true).forEach(
+                iModelResource -> {
+                    builder.suggest(
+                            iModelResource.getId()
+                    );
+                }
+
+        );
+        return builder.buildFuture();
+    };
+
     public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
         // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
@@ -55,8 +70,9 @@ public class AyameCommandManager {
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
                 .then(LiteralArgumentBuilder.<T>literal("load")
-                        .then(RequiredArgumentBuilder.<T,String>argument("name", StringArgumentType.string())
+                        .then(RequiredArgumentBuilder.<T, String>argument("name", StringArgumentType.string())
                                 .executes(AyameCommandManager::load)
+                                .suggests((SuggestionProvider<T>) MODEL_LIST)
                         )
                 )
         );
@@ -72,9 +88,24 @@ public class AyameCommandManager {
 
     private static <T extends SharedSuggestionProvider> int load(CommandContext<T> context) {
         // TODO 暂时只用于测试，需要后续完善
-        String name = StringArgumentType.getString(context, "name");
-        IModelResource res = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(Path.of("config/ayame/models/"+name)));
-        PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(res).build());
+        final String name = StringArgumentType.getString(context, "name");
+        IModelResource model;
+        final String modelPath = "config/ayame/models/";
+        final String modelDirectoryPath = modelPath + name;
+        final String modelZipPath = modelDirectoryPath + ".zip";
+        try {
+            model = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(Path.of(modelDirectoryPath)));
+        } catch (IOException e) {
+            try {
+                model = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(new ZipFile(Path.of(modelZipPath).toFile())));
+            } catch (IOException ex) {
+                final String modelDirectoryOrZipPath = "§e" + modelDirectoryPath + "§8(.zip)";
+                sendMessageToClient(Component.translatable("message.ayame.command.load.not_found_json", modelDirectoryOrZipPath));
+                return 0;
+            }
+        }
+        PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(model).build());
+        sendMessageToClient(Component.translatable("message.ayame.command.load.success", "§e" + model.getMetaData().name, "§e" + model.getMetaData().authors.getFirst()));
         return 1;
     }
 
