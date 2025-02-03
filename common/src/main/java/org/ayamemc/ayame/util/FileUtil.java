@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.util;
 
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.ayamemc.ayame.Ayame;
@@ -255,16 +254,10 @@ public class FileUtil {
 
         try {
             // 获取 ZipEntry
-            final ZipArchiveEntry entry = (ZipArchiveEntry) zipFile.getEntry(entryName);
-
-            if (entry == null) {
-                // 条目不存在
-                return null;
-            }
-
-            // 返回文件的 InputStream
-            return zipFile.getInputStream(entry);
+            ZipEntry entry = zipFile.getEntry(entryName);
+            return (entry != null) ? zipFile.getInputStream(entry) : null;
         } catch (IOException e) {
+            // 记录错误，避免直接抛异常导致程序崩溃
             throw new RuntimeException("Error reading zip entry: " + entryName, e);
         }
     }

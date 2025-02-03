@@ -53,6 +53,7 @@ public class ModelScanner {
             try {
                 if (path.isDirectory()) {
                     res = ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(path.toPath()));
+
                 }
                 if (path.isFile()) {
                     res = ModelResourceRegistry.create(ModelContent.create().createZipPack(path.toPath()));
