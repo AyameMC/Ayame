@@ -100,13 +100,7 @@ public class AyameCommandManager {
                                     final String allModels = MODELS.stream()
                                             .map(resource -> {
                                                         final AyameModelData.MetaData metaData = resource.getMetaData();
-                                                        return String.format(
-                                                                "§b%s（%s）：\n作者：%s\n简介：%s\n",
-                                                                metaData.name,
-                                                                metaData.id,
-                                                                metaData.authors.getFirst(),
-                                                                metaData.description
-                                                        );
+                                                        return "§e" + metaData.id + " " + "(" + metaData.name + ")";
                                                     }
                                             )
                                             .collect(Collectors.joining("\n"));
