@@ -33,25 +33,29 @@ import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
 import org.ayamemc.ayame.client.api.PlayerModelAPI;
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.ayamemc.ayame.model.AyameModelCache;
+import org.ayamemc.ayame.model.AyameModelData;
+import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
+import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.zip.ZipFile;
+import java.util.stream.Collectors;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 
 @SuppressWarnings("unchecked")
 public class AyameCommandManager {
+    private static final List<IModelResource> MODELS = ModelResourceAPI.listModels(true);
     private static final SuggestionProvider<?> MODEL_LIST = (context, builder) -> {
-        final List<IModelResource> models = ModelResourceAPI.listModels(true);
-        models.forEach(
+
+        MODELS.forEach(
                 (resource) -> builder.suggest(resource.getMetaData().id)
         );
         return builder.buildFuture();
@@ -66,11 +70,50 @@ public class AyameCommandManager {
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
-                .then(LiteralArgumentBuilder.<T>literal("load")
-                        .then(RequiredArgumentBuilder.<T, String>argument("name", StringArgumentType.string())
-                                .executes(AyameCommandManager::load)
+                .then(LiteralArgumentBuilder.<T>literal("set-model")
+                        .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
+                                .executes(AyameCommandManager::setModel)
                                 .suggests((SuggestionProvider<T>) MODEL_LIST)
-                        )
+                        ))
+                .then(LiteralArgumentBuilder.<T>literal("rescan")
+                        .executes(commandContext -> {
+                            ModelScanner.scanModel();
+                            sendMessageToClient(Component.translatable("message.ayame.command.rescan"));
+                            return 0;
+                        }))
+                .then(LiteralArgumentBuilder.<T>literal("reload")
+                        .executes(commandContext -> {
+                            final String modelId = AyameModelCache.getPlayerModel(MINECRAFT.player).metaData().id;
+                            final IModelResource modelRes;
+                            try {
+                                modelRes = ModelResourceRegistry.create(AyameModelResource.MODEL_PATH + modelId);
+                            } catch (IOException e) {
+                                sendMessageToClient(Component.translatable("message.ayame.command.reload_failed"));
+                                return 1;
+                            }
+                            PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(modelRes).build());
+                            return 0;
+                        })
+                )
+                .then(LiteralArgumentBuilder.<T>literal("list")
+                        .executes(commandContext -> {
+                            final String allModels = MODELS.stream()
+                                    .map(resource -> {
+                                        final AyameModelData.MetaData metaData = resource.getMetaData();
+                                                return String.format(
+                                                        "%s（%s）：\n作者：%s\n简介：%s\n",
+                                                        metaData.name,
+                                                        metaData.id,
+                                                        metaData.authors.getFirst(),
+                                                        metaData.description
+                                                );
+                                            }
+                                    )
+                                    .collect(Collectors.joining("\n"));
+
+                            sendMessageToClient(Component.translatable("message.ayame.command.list", allModels));
+                            return 0;
+                        })
                 )
         );
 
@@ -83,23 +126,16 @@ public class AyameCommandManager {
 
     }
 
-    private static <T extends SharedSuggestionProvider> int load(CommandContext<T> context) {
+    private static <T extends SharedSuggestionProvider> int setModel(CommandContext<T> context) {
         // TODO 暂时只用于测试，需要后续完善
-        final String name = StringArgumentType.getString(context, "name");
+        final String name = StringArgumentType.getString(context, "model_id");
+        final String modelPath = AyameModelResource.MODEL_PATH + name;
         IModelResource model;
-        final String modelPath = "config/ayame/models/";
-        final String modelDirectoryPath = modelPath + name;
-        final String modelZipPath = modelDirectoryPath + ".zip";
         try {
-            model = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(Path.of(modelDirectoryPath)));
+            model = ModelResourceRegistry.create(modelPath);
         } catch (IOException e) {
-            try {
-                model = ModelResourceRegistry.create(new ModelResourceRegistry.ModelFile(new ZipFile(Path.of(modelZipPath).toFile())));
-            } catch (IOException ex) {
-                final String modelDirectoryOrZipPath = "§e" + modelDirectoryPath + "§8(.zip)";
-                sendMessageToClient(Component.translatable("message.ayame.command.load.not_found_json", modelDirectoryOrZipPath));
-                return 0;
-            }
+            sendMessageToClient(Component.translatable("message.ayame.command.load", name));
+            return 0;
         }
         PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(model).build());
         sendMessageToClient(Component.translatable("message.ayame.command.load.success", "§e" + model.getMetaData().name, "§e" + model.getMetaData().authors.getFirst()));

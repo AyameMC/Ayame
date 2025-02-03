@@ -39,6 +39,9 @@ public final class Ayame {
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
     public static ModLoader modLoader;
 
+    /**
+     * @see org.ayamemc.ayame.client.AyameClient
+     */
     public static void init(ModLoader modLoader) {
         Ayame.modLoader = modLoader;
         ConfigUtil.init();

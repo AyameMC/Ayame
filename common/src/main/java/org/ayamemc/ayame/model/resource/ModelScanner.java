@@ -48,26 +48,31 @@ public class ModelScanner {
         }
         // 遍历目录
         for (File path : Objects.requireNonNull(dir.toFile().listFiles())) {
-            // 如果是目录，递归扫描
-            if (path.isDirectory()) {
-                scanModel(path.toPath());
-            } else {
-                // 如果是文件，尝试解析为模型资源
-                try {
-                    IModelResource res = IModelResource.fromFile(path);
-                    // 添加到缓存
+            IModelResource res = null;
+            // 只扫描当前目录的目录与文件夹（不递归扫描）
+            try {
+                if (path.isDirectory()) {
+                    res = ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(path.toPath()));
+                }
+                if (path.isFile()) {
+                    res = ModelResourceRegistry.create(ModelContent.create().createZipPack(path.toPath()));
+                }
+            } catch (Exception ignored) {
+            } finally {
+                if (res != null) {
                     ModelResourceCache.addModelResource(res);
-                } catch (Exception ignored) {
                 }
             }
+
         }
+
     }
 
     /**
      * 从默认目录扫描模型
      */
     public static void scanModel() {
-        scanModel(Path.of(DefaultModels.MODEL_PATH));
+        scanModel(Path.of(AyameModelResource.MODEL_PATH));
     }
 
 }

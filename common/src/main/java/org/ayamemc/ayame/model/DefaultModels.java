@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.model;
 
 import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
@@ -33,7 +34,6 @@ import java.util.List;
 import static org.ayamemc.ayame.Ayame.withAyamePath;
 
 public class DefaultModels {
-    public static final String MODEL_PATH = "config/ayame/models/";
     // TODO: 修复使用外置模型（内置模型没问题）时neoforge进世界ayame:geo/ayame_chan.json: Unable to find model的问题
     public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
     public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
@@ -69,7 +69,7 @@ public class DefaultModels {
 
     @SuppressWarnings("SameParameterValue")
     private static IModelResource create(String name) {
-        final String targetPath = MODEL_PATH + name;
+        final String targetPath = AyameModelResource.MODEL_PATH + name;
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
         try {
             return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));

@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.util.List;
 
 public class AyameModelResource implements IModelResource {
+    public static final String MODEL_PATH = "config/ayame/models/";
+
     private final ModelResourceRegistry.ModelFile modelFile;
     private final AyameModelData ayameModelData;
 
@@ -35,7 +37,6 @@ public class AyameModelResource implements IModelResource {
         this.modelFile = modelFile;
         this.ayameModelData = AyameModelData.parse(modelFile.getIndexJson().toString());
     }
-
 
     @Override
     public AyameModelData.MetaData getMetaData() {

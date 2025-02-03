@@ -31,9 +31,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface IModelResource {
-    static IModelResource fromFile(File file) {
-        throw new TODO("create model from file");
-    }
 
     // TODO 完成
     AyameModelData.MetaData getMetaData();

@@ -70,6 +70,17 @@ public class ModelResourceRegistry {
         return create(modelFile.getFormat(), modelFile);
     }
 
+    public static IModelResource create(String modelDirectoryPath) throws IOException {
+        final String modelZipPath = modelDirectoryPath + ".zip";
+        IModelResource modelRes;
+        try {
+            modelRes = ModelResourceRegistry.create(new ModelFile(Path.of(modelDirectoryPath)));
+        } catch (IOException e) {
+            modelRes = ModelResourceRegistry.create(new ModelFile(new ZipFile(Path.of(modelZipPath).toFile())));
+        }
+        return modelRes;
+    }
+
     /**
      * 判断一个模型格式是否被注册
      *
