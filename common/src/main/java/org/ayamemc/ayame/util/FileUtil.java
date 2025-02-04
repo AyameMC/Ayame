@@ -26,6 +26,7 @@ import org.ayamemc.ayame.Ayame;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -203,13 +204,16 @@ public class FileUtil {
         try {
             // 获取当前 JAR 文件路径
             String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
             /*
             NeoForge在获取路径时结尾会多8个错误字符，这里进行了剔除
             我知道这个修复方法很诡异，但是能用
              */
-            if (Ayame.modLoader.equals("neoforge")) {
+            if (Ayame.modLoader == ModLoader.NEOFORGE) {
                 jarPath = jarPath.substring(0, jarPath.length() - 8);
             }
+            jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
+
             try (final ZipFile zipFile = new ZipFile(jarPath)) {
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
