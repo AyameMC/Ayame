@@ -204,18 +204,15 @@ public class FileUtil {
         try {
             // 获取当前 JAR 文件路径
             String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            Ayame.LOGGER.info("原版 {}", jarPath);
+            Ayame.LOGGER.info("Ayame jar path: {}", jarPath);
+
             /*
             NeoForge在获取路径时结尾会多8个错误字符，这里进行了剔除
             我知道这个修复方法很诡异，但是能用
              */
-            Ayame.LOGGER.info("好了forge前 {}", jarPath);
-
             if (Ayame.modLoader == ModLoader.NEOFORGE) {
                 jarPath = jarPath.substring(0, jarPath.length() - 8);
             }
-            Ayame.LOGGER.info("真好了 {}", jarPath);
-
 
             try (final ZipFile zipFile = new ZipFile(jarPath)) {
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
