@@ -203,9 +203,8 @@ public class FileUtil {
         final Path targetPathDir = Path.of(targetPath);
         try {
             // 获取当前 JAR 文件路径
-            String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
             Ayame.LOGGER.info("原版 {}", jarPath);
-            jarPath = URLDecoder.decode(jarPath, StandardCharsets.UTF_8);
             /*
             NeoForge在获取路径时结尾会多8个错误字符，这里进行了剔除
             我知道这个修复方法很诡异，但是能用
