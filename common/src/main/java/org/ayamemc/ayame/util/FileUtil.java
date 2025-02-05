@@ -26,7 +26,6 @@ import org.ayamemc.ayame.Ayame;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -193,6 +192,18 @@ public class FileUtil {
         }
     }
 
+    public static String getTruncatedJarPath(String input) {
+        // 查找 .jar 出现的起始位置
+        int jarIndex = input.indexOf(".jar");
+        if (jarIndex != -1) {
+            // 因为要包含 .jar 整个字符串，所以需要加上4（".jar" 的长度）
+            return input.substring(0, jarIndex + 4);
+        } else {
+            // 如果没有找到 .jar，则返回原始字符串或根据需要处理
+            return input;
+        }
+    }
+
     /**
      * 将包内目录资源复制到外部目录
      *
@@ -204,15 +215,25 @@ public class FileUtil {
         try {
             // 获取当前 JAR 文件路径
             String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            Ayame.LOGGER.info("Ayame jar path: {}", jarPath);
+            Ayame.LOGGER.info("Ayame jar path before correct: {}", jarPath);
 
             /*
-            NeoForge在获取路径时结尾会多8个错误字符，这里进行了剔除
-            我知道这个修复方法很诡异，但是能用
+            NeoForge在获取路径时结尾会多几个错误字符，在不同操作系统上也不同，这里进行了剔除
+            我知道这很诡异，但是，能修好就行……
              */
             if (Ayame.modLoader == ModLoader.NEOFORGE) {
-                jarPath = jarPath.substring(0, jarPath.length() - 8);
+                final int jarIndex = jarPath.indexOf(".jar");
+
+                // 如果找到了.jar这个字样
+                if (jarIndex != -1) {
+                    // + 4，因为.jar是4个字
+                    jarPath = jarPath.substring(0, jarIndex + 4);
+                } else {
+                    Ayame.LOGGER.error("Unable to correct NeoForge's erroneous jar path. folder copying may encounter issues!");
+                }
+
             }
+            Ayame.LOGGER.info("Ayame jar path after correct: {}", jarPath);
 
             try (final ZipFile zipFile = new ZipFile(jarPath)) {
                 final Enumeration<? extends ZipEntry> entries = zipFile.entries();
