@@ -28,6 +28,6 @@ public class AyameClient {
     public static void init() {
         ConfigUtil.init();
         // 扫描模型
-        ModelScanner.scanModel();
+       //  ModelScanner.scanModel();
     }
 }

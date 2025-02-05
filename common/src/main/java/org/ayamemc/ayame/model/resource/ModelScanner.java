@@ -46,32 +46,27 @@ public class ModelScanner {
                 LOGGER.error("Failed to create directory:{}", dir, e);
             }
         }
-        try {
+        // 遍历目录
+        for (File path : Objects.requireNonNull(dir.toFile().listFiles())) {
+            IModelResource res = null;
+            // 只扫描当前目录的目录与文件夹（不递归扫描）
+            try {
+                if (path.isDirectory()) {
+                    res = ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(path.toPath()));
 
-
-            // 遍历目录
-            for (File path : Objects.requireNonNull(dir.toFile().listFiles())) {
-                IModelResource res = null;
-                // 只扫描当前目录的目录与文件夹（不递归扫描）
-                try {
-                    if (path.isDirectory()) {
-                        res = ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(path.toPath()));
-
-                    }
-                    if (path.isFile()) {
-                        res = ModelResourceRegistry.create(ModelContent.create().createZipPack(path.toPath()));
-                    }
-                } catch (Exception ignored) {
-                } finally {
-                    if (res != null) {
-                        ModelResourceCache.addModelResource(res);
-                    }
                 }
-
+                if (path.isFile()) {
+                    res = ModelResourceRegistry.create(ModelContent.create().createZipPack(path.toPath()));
+                }
+            } catch (Exception ignored) {
+            } finally {
+                if (res != null) {
+                    ModelResourceCache.addModelResource(res);
+                }
             }
-        }catch (Exception ignored) {
 
         }
+
     }
 
     /**
