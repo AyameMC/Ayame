@@ -69,7 +69,8 @@ public class ModelScanner {
                 }
 
             }
-        }catch (Exception ignored) {
+        }catch (Exception e) {
+            LOGGER.error("nulll?", e);
 
         }
     }
