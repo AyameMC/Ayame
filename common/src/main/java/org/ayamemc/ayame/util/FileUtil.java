@@ -222,7 +222,7 @@ public class FileUtil {
             我知道这很诡异，但是，能修好就行……
              */
             if (Ayame.modLoader == ModLoader.NEOFORGE) {
-                final int jarIndex = jarPath.indexOf(".jar");
+                final int jarIndex = jarPath.lastIndexOf(".jar");
 
                 // 如果找到了.jar这个字样
                 if (jarIndex != -1) {
