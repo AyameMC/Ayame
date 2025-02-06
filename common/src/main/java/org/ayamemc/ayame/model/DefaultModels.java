@@ -20,11 +20,13 @@
 
 package org.ayamemc.ayame.model;
 
-import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import org.ayamemc.ayame.client.util.ModelResourceLoadUtil;
 import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelContent;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
+import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.ayamemc.ayame.model.sync.data.DefaultModelSelection;
 import org.ayamemc.ayame.util.FileUtil;
 
 import java.io.IOException;
@@ -35,9 +37,9 @@ import static org.ayamemc.ayame.Ayame.withAyamePath;
 
 public class DefaultModels {
     // TODO: 修复使用外置模型（内置模型没问题）时neoforge进世界ayame:geo/ayame_chan.json: Unable to find model的问题
-    public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
-    public static final ModelType AYAME_CHAN_TYPE = ModelResourceWriterUtil.addModelResource(AYAME_CHAN_RESOURCE).build();
-    public static final ModelType BUILTIN_MODEL_TYPE;
+    /*public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");
+    public static final ModelSelection AYAME_CHAN_TYPE = ModelResourceLoadUtil.registerModelSafely(AYAME_CHAN_RESOURCE).build();
+    public static final ModelSelection BUILTIN_MODEL_TYPE;
 
     static {
         final var metaData = new AyameModelData.MetaData();
@@ -54,27 +56,27 @@ public class DefaultModels {
                 "loli",
                 "girl"
         );
-        BUILTIN_MODEL_TYPE = DefaultModelType.Builder.create()
+        BUILTIN_MODEL_TYPE = DefaultModelSelection.Builder.create()
                 .setGeoModel(withAyamePath("geo/ayame/ayame_chan.json"))
                 .setAnimation(withAyamePath("animations/ayame/ayame_chan.json"))
                 .setTexture(withAyamePath("textures/ayame/ayame_chan.png"))
                 .setArm(withAyamePath("textures/ayame/ayame_chan_arm.png"))
                 .setMetaData(metaData)
                 .build();
-    }
+    }*/
 
     // 静态初始化
     public static void init() {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static IModelResource create(String name) {
-        final String targetPath = AyameModelResource.MODEL_PATH + name;
+    private static void create(String name) {
+        /*final String targetPath = AyameModelResource.MODEL_PATH + name;
         FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", targetPath);
         try {
             return ModelResourceRegistry.create(ModelContent.create().createDirectoryPack(Path.of(targetPath)));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 }

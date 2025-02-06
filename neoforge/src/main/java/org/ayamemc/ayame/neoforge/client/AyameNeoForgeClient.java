@@ -36,11 +36,10 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
-import org.ayamemc.ayame.model.AyameModelCache;
+import org.ayamemc.ayame.model.sync.ModelSelectionManager;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
 import org.ayamemc.ayame.neoforge.client.event.RegisterKeyEventHandler;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.cache.GeckoLibCache;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -76,7 +75,7 @@ public class AyameNeoForgeClient {
                                                                @NotNull ProfilerFiller reloadProfiler,
                                                                @NotNull Executor backgroundExecutor,
                                                                @NotNull Executor gameExecutor) {
-                    return AyameModelCache.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor);
+                    return ModelSelectionManager.reload(preparationBarrier, backgroundExecutor);
                 }
             });
     }

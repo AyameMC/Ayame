@@ -10,7 +10,8 @@
   ],
   "mixins": [
     "AnimationControllerMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "server.MinecraftServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

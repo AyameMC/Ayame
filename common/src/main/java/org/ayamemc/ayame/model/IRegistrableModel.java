@@ -20,28 +20,10 @@
 
 package org.ayamemc.ayame.model;
 
-import net.minecraft.resources.ResourceLocation;
+public interface IRegistrableModel {
+    void register();
 
-/// Ayame通用模型接口，适用于所有Geo模型
-///
-/// 模型类型指的是使用了哪种模型，例如ayame的模型类型为`ayame`，兼容ysm的为`ysm`，值与{@link ModelMetaData#type()}的值对应
+    void deregister();
 
-public interface ModelType {
-    /**
-     * 从geckolib缓存中获取模型资源
-     *
-     * @return 模型资源
-     */
-    ResourceLocation getGeoModel();
-
-    ResourceLocation getTexture();
-
-    ResourceLocation getAnimation();
-
-    ResourceLocation getArm();
-
-    AyameModelData.MetaData metaData();
-
-    AyameModelData.ScriptData scriptData();
-
+    boolean canDeregister();
 }

@@ -18,15 +18,13 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.client.api;
 
-import org.ayamemc.ayame.util.ConfigUtil;
+import org.ayamemc.ayame.model.sync.client.ClientModelManager;
+
+public class PlayerModelAPIHooks {
+    public static final ClientModelManager modelManagerClient = new ClientModelManager();
 
 
-public class AyameClient {
-    public static void init() {
-        ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
-    }
+
 }

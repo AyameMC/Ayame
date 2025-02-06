@@ -18,15 +18,20 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.mixin.server;
 
-import org.ayamemc.ayame.util.ConfigUtil;
+import net.minecraft.server.MinecraftServer;
+import org.ayamemc.ayame.util.MainThreadUtil;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-
-public class AyameClient {
-    public static void init() {
-        ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
+@Mixin(MinecraftServer.class)
+public class MinecraftServerMixin {
+    @Redirect(method = "spin", at = @At(value = "INVOKE", target = "Ljava/lang/Thread;start()V"))
+    private static void onServerSpin(@NotNull Thread instance) {
+        instance.start();
+        MainThreadUtil.setMainThreadServer(instance);
     }
 }

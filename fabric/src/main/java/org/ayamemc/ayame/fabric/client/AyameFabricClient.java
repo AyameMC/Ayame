@@ -30,7 +30,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
-import org.ayamemc.ayame.model.AyameModelCache;
+import org.ayamemc.ayame.model.sync.ModelSelectionManager;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.GeckoLibConstants;
 
@@ -71,12 +71,9 @@ public final class AyameFabricClient implements ClientModInitializer {
                                                                    ProfilerFiller reloadProfiler,
                                                                    Executor backgroundExecutor,
                                                                    Executor gameExecutor) {
-                        return AyameModelCache.reload(preparationBarrier,
-                                resourceManager,
-                                preparationsProfiler,
-                                reloadProfiler,
-                                backgroundExecutor,
-                                gameExecutor);
+                        return ModelSelectionManager.reload(preparationBarrier,
+                                backgroundExecutor
+                        );
                     }
                 });
         AyameClient.init();

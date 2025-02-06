@@ -26,10 +26,9 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import org.ayamemc.ayame.client.api.PlayerModelAPI;
-import org.ayamemc.ayame.model.DefaultModelType;
+import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
+import org.ayamemc.ayame.model.sync.data.DefaultModelSelection;
 import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.TaskManager;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
@@ -54,24 +53,14 @@ import static org.ayamemc.ayame.Ayame.MOD_ID;
  * @see GeckoLibCache
  */
 
-public class ModelResourceWriterUtil {
+public class ModelResourceLoadUtil {
     /**
      * @param modelRes 模型资源
      * @return 未完成的模型构建器
      */
-    public static DefaultModelType.Builder addModelResource(@NotNull IModelResource modelRes) {
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
-            addBakedModel(modelRes.createModelResourceLocation(), modelRes);
-            addBakedModel(modelRes.createArmResourceLocation(), modelRes);
-            addBakedAnimation(modelRes.createAnimationResourceLocation(), modelRes);
-            addTexture(modelRes.createTextureResourceLocation(), modelRes);
-        });
-        return DefaultModelType.Builder.create()
-                .setGeoModel(modelRes.createModelResourceLocation())
-                .setArm(modelRes.createArmResourceLocation())
-                .setAnimation(modelRes.createAnimationResourceLocation())
-                .setTexture(modelRes.createTextureResourceLocation());
-    }
+
+
+
 
     /**
      * 向模型缓存中添加新条目
@@ -83,15 +72,26 @@ public class ModelResourceWriterUtil {
         Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
         // 如果已经存在了
         if (models.containsKey(resourceLocation)) return;
-        Model m = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON, modelRes.getModelJson(modelRes.getDefault()).toString(), JsonObject.class), Model.class);
-        BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
-        models.put(resourceLocation, bakedGeoModel);
+
+        models.put(resourceLocation, instanceBakedModel(modelRes));
     }
 
-    public static void addBakedModel(ResourceLocation resourceLocation, @NotNull BakedGeoModel model) {
+    public static BakedGeoModel instanceBakedModel(@NotNull IModelResource resource) {
+        Model m = KeyFramesAdapter.GEO_GSON
+                .fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON, resource.getModelJson(resource.getDefault()).toString(), JsonObject.class), Model.class);
+
+        return BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
+    }
+
+    public static void addBakedModelDirectly(ResourceLocation resourceLocation, @NotNull BakedGeoModel model) {
         Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
         if (models.containsKey(resourceLocation)) return;
         models.put(resourceLocation, model);
+    }
+
+    public static BakedAnimations instanceBakedAnimation(@NotNull IModelResource resource) {
+        return KeyFramesAdapter.GEO_GSON
+                .fromJson(GsonHelper.getAsJsonObject(resource.getAnimationJson(resource.getDefault()).toGson(), "animations"), BakedAnimations.class);
     }
 
     /**
@@ -101,14 +101,13 @@ public class ModelResourceWriterUtil {
      * @param modelRes         模型资源
      * @see ResourceLocation
      */
-    public static void addBakedAnimation(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
+    public static void addBakedAnimationFromModelResource(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
         Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
         if (animations.containsKey(resourceLocation)) return;
-        BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(GsonHelper.getAsJsonObject(modelRes.getAnimationJson(modelRes.getDefault()).toGson(), "animations"), BakedAnimations.class);
-        animations.put(resourceLocation, ani);
+        addBakedAnimationDirectly(resourceLocation, instanceBakedAnimation(modelRes));
     }
 
-    public static void addBakedAnimation(ResourceLocation resourceLocation, @NotNull BakedAnimations ani) {
+    public static void addBakedAnimationDirectly(ResourceLocation resourceLocation, @NotNull BakedAnimations ani) {
         Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
         if (animations.containsKey(resourceLocation)) return;
         animations.put(resourceLocation, ani);
@@ -120,7 +119,7 @@ public class ModelResourceWriterUtil {
      * @param resourceLocation 传入{@link ResourceLocation}类型的文件路径
      * @param modelRes         模型资源
      */
-    public static void addTexture(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
+    public static void registerTextureDynamically(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
         try {
             MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
         } catch (IOException e) {
@@ -128,39 +127,12 @@ public class ModelResourceWriterUtil {
         }
     }
 
-    public static void addBakedModel(ResourceLocation resourceLocation, JsonInterpreter json) {
-        Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
-        if (models.containsKey(resourceLocation)) return;
-        Model m = KeyFramesAdapter.GEO_GSON.fromJson(json.toString(), Model.class);
-        BakedGeoModel bakedGeoModel = BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
-        models.put(resourceLocation, bakedGeoModel);
-    }
-
-    public static void addBakedAnimation(ResourceLocation resourceLocation, JsonInterpreter json) {
-        Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
-        if (animations.containsKey(resourceLocation)) return;
-        BakedAnimations ani = KeyFramesAdapter.GEO_GSON.fromJson(json.toString(), BakedAnimations.class);
-        animations.put(resourceLocation, ani);
-    }
-
-    public static void addTexture(ResourceLocation resourceLocation, InputStream inputStream) {
+    public static void registerTextureDynamically(ResourceLocation resourceLocation, InputStream inputStream) {
         try {
             MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(inputStream)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static DefaultModelType.Builder addModelResource(PlayerModelAPI.CacheEntry entry) {
-        addBakedModel(entry.model().getGeoModel(), entry.bakedModel());
-        addBakedModel(entry.model().getArm(), entry.arm());
-        addBakedAnimation(entry.model().getAnimation(), entry.anim());
-        addTexture(entry.model().getTexture(), entry.texture());
-        return DefaultModelType.Builder.create()
-                .setGeoModel(entry.model().getGeoModel())
-                .setArm(entry.model().getArm())
-                .setAnimation(entry.model().getAnimation())
-                .setTexture(entry.model().getTexture());
     }
 
     public static BakedGeoModel readModel(ResourceLocation resourceLocation) {

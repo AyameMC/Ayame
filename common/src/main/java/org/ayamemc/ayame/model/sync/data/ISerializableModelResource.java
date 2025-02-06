@@ -18,15 +18,16 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.model.sync.data;
 
-import org.ayamemc.ayame.util.ConfigUtil;
+import org.ayamemc.ayame.model.resource.IModelResource;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
-public class AyameClient {
-    public static void init() {
-        ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
-    }
+public interface ISerializableModelResource extends IModelResource {
+    void serialize(DataOutputStream outBuffer) throws IOException;
+
+    void deserialize(DataInputStream inBuffer) throws IOException;
 }

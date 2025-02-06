@@ -18,15 +18,9 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.model.sync;
 
-import org.ayamemc.ayame.util.ConfigUtil;
+import java.util.Map;
 
-
-public class AyameClient {
-    public static void init() {
-        ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
-    }
+public class ModelCacheManager {
 }

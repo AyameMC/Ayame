@@ -18,15 +18,20 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client;
+package org.ayamemc.ayame.model.sync;
 
-import org.ayamemc.ayame.util.ConfigUtil;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
-public class AyameClient {
-    public static void init() {
-        ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
+/**
+ * 正在渲染中的模型缓存，它同时运行在服务端和客户端
+ */
+public class ModelSelectionManager {
+    public static @NotNull CompletableFuture<Void> reload(PreparableReloadListener.@NotNull PreparationBarrier preparationBarrier, Executor backgroundExecutor) {
+        return CompletableFuture.runAsync(PlayerModelAPIHooks.modelManagerClient::reloadAll, backgroundExecutor).thenCompose(preparationBarrier::wait);
     }
 }

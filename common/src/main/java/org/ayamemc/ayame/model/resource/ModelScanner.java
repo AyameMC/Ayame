@@ -21,8 +21,6 @@
 package org.ayamemc.ayame.model.resource;
 
 
-import org.ayamemc.ayame.model.DefaultModels;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

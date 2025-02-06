@@ -28,10 +28,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
-import org.ayamemc.ayame.model.ModelType;
+import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -84,10 +84,10 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         /**
          * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
          *
-         * @param model 传入{@link ModelType}类型的模型资源
+         * @param model 传入{@link ModelSelection}类型的模型资源
          */
-        public static void switchModel(Player player, ModelType model) {
-            AyameModelCache.setPlayerModel(player, model);
+        public static void switchModel(Player player, ModelSelection model) {
+            PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(player.getUUID(), model);
         }
 
         @Override
@@ -96,12 +96,15 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             MathParser.setVariable(
                     AyameMolangVars.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(
                     AyameMolangVars.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(
                     AyameMolangVars.IS_RIPTIDE, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
                     player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
@@ -130,18 +133,24 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getGeoModel();
+            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
+
+            return selection.getGeoModel();
         }
 
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getTexture();
+            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
+
+            return selection.getTexture();
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getAnimation();
+            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
+
+            return selection.getAnimation();
         }
 
 

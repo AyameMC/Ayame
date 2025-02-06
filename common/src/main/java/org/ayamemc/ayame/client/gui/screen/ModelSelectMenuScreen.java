@@ -34,8 +34,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.model.AyameModelCache;
-import org.ayamemc.ayame.model.ModelType;
+import org.ayamemc.ayame.model.sync.ModelSelectionManager;
+import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,8 +61,6 @@ public class ModelSelectMenuScreen extends AyameScreen {
     public static final int searchBarHeight = 23;
     protected static final Path MODEL_DIR = Path.of("config/ayame/models/");
     public final List<IModelResource> modelResources;
-    public @Nullable ModelType selectedModel = AyameModelCache.getPlayerModel(Minecraft.getInstance().player);
-
 
     /**
      * 构造方法，允许设置是否单次跳过警告界面。

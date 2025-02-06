@@ -30,19 +30,22 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import org.ayamemc.ayame.client.api.ModelResourceAPI;
-import org.ayamemc.ayame.client.api.PlayerModelAPI;
-import org.ayamemc.ayame.client.util.ModelResourceWriterUtil;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
+import org.ayamemc.ayame.client.util.ModelResourceLoadUtil;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.model.resource.ModelScanner;
+import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.ayamemc.ayame.model.sync.data.DefaultInMemoryModelResource;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -51,12 +54,10 @@ import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 @SuppressWarnings("unchecked")
 public class AyameCommandManager {
-    private static final List<IModelResource> MODELS = ModelResourceAPI.listModels(true);
     private static final SuggestionProvider<?> MODEL_LIST = (context, builder) -> {
-
-        MODELS.forEach(
-                (resource) -> builder.suggest(resource.getMetaData().id)
-        );
+        for (DefaultInMemoryModelResource modelData : PlayerModelAPIHooks.modelManagerClient.getAllModels()) {
+            builder.suggest(modelData.getId());
+        }
         return builder.buildFuture();
     };
 
@@ -66,40 +67,46 @@ public class AyameCommandManager {
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-compiled")
                         .executes(AyameCommandManager::benchmarkCompiled)
                 )
+
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
+
                 .then(LiteralArgumentBuilder.<T>literal("model")
                         .then(LiteralArgumentBuilder.<T>literal("set")
                                 .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
                                         .executes(AyameCommandManager::setModel)
                                         .suggests((SuggestionProvider<T>) MODEL_LIST)
                                 ))
+
                         .then(LiteralArgumentBuilder.<T>literal("rescan")
                                 .executes(commandContext -> {
                                     ModelScanner.scanModel();
                                     sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
                                     return 0;
                                 }))
+
                         .then(LiteralArgumentBuilder.<T>literal("reload")
                                 .executes(commandContext -> {
-                                    final String modelId = PlayerModelAPI.getCache().get(MINECRAFT.player).model().metaData().id;
-                                    final IModelResource modelRes;
-                                    try {
-                                        modelRes = ModelResourceRegistry.create(AyameModelResource.MODEL_PATH + modelId);
-                                    } catch (IOException e) {
+                                    final String modelId = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).metaData().id;
+                                    final IModelResource modelRes = PlayerModelAPIHooks.modelManagerClient.getModel(modelId);
+
+                                    if (modelRes == null) {
                                         sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
                                         return 1;
                                     }
-                                    PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(modelRes).build());
+
+                                    PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
                                     return 0;
                                 })
                         )
+
                         .then(LiteralArgumentBuilder.<T>literal("list")
                                 .executes(commandContext -> {
-                                    final String allModels = MODELS.stream()
+                                    final String allModels = PlayerModelAPIHooks.modelManagerClient.getAllModels().stream()
                                             .map(resource -> {
                                                         final AyameModelData.MetaData metaData = resource.getMetaData();
+
                                                         return "§e" + metaData.id + " " + "(" + metaData.name + ")";
                                                     }
                                             )
@@ -124,16 +131,27 @@ public class AyameCommandManager {
     private static <T extends SharedSuggestionProvider> int setModel(CommandContext<T> context) {
         // TODO 暂时只用于测试，需要后续完善
         final String name = StringArgumentType.getString(context, "model_id");
-        final String modelPath = AyameModelResource.MODEL_PATH + name;
-        IModelResource model;
-        try {
-            model = ModelResourceRegistry.create(modelPath);
-        } catch (IOException e) {
+        final DefaultInMemoryModelResource modelData = PlayerModelAPIHooks.modelManagerClient.getModel(name);
+
+        if (modelData == null) {
             sendMessageToClient(Component.translatable("message.ayame.command.model.set.failed", name));
             return 0;
         }
-        PlayerModelAPI.switchModel(MINECRAFT.player, ModelResourceWriterUtil.addModelResource(model).build());
-        sendMessageToClient(Component.translatable("message.ayame.command.model.set.successes", "§e" + model.getMetaData().name, "§e" + model.getMetaData().authors.getFirst()));
+
+        final UUID targetPlayer = MINECRAFT.player.getUUID(); // TODO - Multi players?
+
+        // TODO - ???
+        // TODO - 这东西怎么设置玩家模型的到底?
+        PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
+
+        sendMessageToClient(
+                Component.translatable(
+                        "message.ayame.command.model.set.successes",
+                        "§e" + modelData.getMetaData().name,
+                        "§e" + modelData.getMetaData().authors.getFirst()
+                )
+        );
+
         return 1;
     }
 

@@ -18,10 +18,12 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model;
+package org.ayamemc.ayame.model.sync.data;
 
 
 import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.model.AyameModelData;
+import org.ayamemc.ayame.model.sync.ModelSelection;
 
 /**
  * 默认模型类型，适用于Ayame模型
@@ -32,13 +34,13 @@ import net.minecraft.resources.ResourceLocation;
  * @param metaData  模型元数据
  */
 
-public record DefaultModelType(ResourceLocation geoModel,
-                               ResourceLocation animation,
-                               ResourceLocation texture,
-                               ResourceLocation arm,
-                               AyameModelData.MetaData metaData,
-                               AyameModelData.ScriptData scriptData
-) implements ModelType {
+public record DefaultModelSelection(ResourceLocation geoModel,
+                                    ResourceLocation animation,
+                                    ResourceLocation texture,
+                                    ResourceLocation arm,
+                                    AyameModelData.MetaData metaData,
+                                    AyameModelData.ScriptData scriptData
+) implements ModelSelection {
 
 
     @Override
@@ -64,6 +66,31 @@ public record DefaultModelType(ResourceLocation geoModel,
     @Override
     public AyameModelData.MetaData metaData() {
         return metaData;
+    }
+
+    @Override
+    public ModelSelection withArm(ResourceLocation location) {
+        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.metaData, this.scriptData);
+    }
+
+    @Override
+    public ModelSelection withGeoModel(ResourceLocation location) {
+        return new DefaultModelSelection(location, this.animation, this.texture, this.arm, this.metaData, this.scriptData);
+    }
+
+    @Override
+    public ModelSelection withTexture(ResourceLocation location) {
+        return new DefaultModelSelection(this.geoModel, this.animation, location, this.arm, this.metaData, this.scriptData);
+    }
+
+    @Override
+    public ModelSelection withAnimation(ResourceLocation location) {
+        return new DefaultModelSelection(this.geoModel, location, this.texture, this.arm, this.metaData, this.scriptData);
+    }
+
+    @Override
+    public ModelSelection withScriptData(AyameModelData.ScriptData scriptData) {
+        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, this.arm, this.metaData, scriptData);
     }
 
     public static class Builder {
@@ -109,8 +136,8 @@ public record DefaultModelType(ResourceLocation geoModel,
             return this;
         }
 
-        public DefaultModelType build() {
-            return new DefaultModelType(geoModel, animation, texture, arm, metaData, scriptData);
+        public DefaultModelSelection build() {
+            return new DefaultModelSelection(geoModel, animation, texture, arm, metaData, scriptData);
         }
     }
 }
