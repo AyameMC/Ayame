@@ -88,8 +88,8 @@ public class AyameCommandManager {
 
                         .then(LiteralArgumentBuilder.<T>literal("reload")
                                 .executes(commandContext -> {
-                                    final String modelId = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).metaData().id;
-                                    final IModelResource modelRes = PlayerModelAPIHooks.modelManagerClient.getModel(modelId);
+                                    final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
+                                    final IModelResource modelRes = PlayerModelAPIHooks.modelManagerClient.getModel(selection.getId());
 
                                     if (modelRes == null) {
                                         sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));

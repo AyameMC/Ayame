@@ -21,9 +21,11 @@
 package org.ayamemc.ayame.model.sync.data;
 
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 默认模型类型，适用于Ayame模型
@@ -31,17 +33,55 @@ import org.ayamemc.ayame.model.sync.ModelSelection;
  * @param geoModel  模型文件
  * @param animation 动画文件
  * @param texture   贴图文件
- * @param metaData  模型元数据
+ * @param id  模型id
  */
 
 public record DefaultModelSelection(ResourceLocation geoModel,
                                     ResourceLocation animation,
                                     ResourceLocation texture,
                                     ResourceLocation arm,
-                                    AyameModelData.MetaData metaData,
+                                    String id,
                                     AyameModelData.ScriptData scriptData
 ) implements ModelSelection {
 
+    @Override
+    public @NotNull CompoundTag serializeToNbt() {
+        final CompoundTag built = new CompoundTag();
+
+        built.putString("geo_model", this.geoModel.toString());
+        built.putString("animation", this.animation.toString());
+        built.putString("texture", this.texture.toString());
+        built.putString("arm", this.arm.toString());
+        built.putString("model_id", this.id);
+
+        final CompoundTag scriptData = new CompoundTag();
+
+        scriptData.putString("config", this.scriptData.config);
+        scriptData.putString("main", this.scriptData.main);
+
+        built.put("script_data", scriptData);
+
+        return built;
+    }
+
+    @Override
+    public ModelSelection fromNbt(CompoundTag tag) {
+        final CompoundTag scriptDataNbt = (CompoundTag) tag.get("script_data");
+
+        final AyameModelData.ScriptData scriptData = new AyameModelData.ScriptData();
+
+        scriptData.config = scriptDataNbt.getString("config");
+        scriptData.main = scriptDataNbt.getString("main");
+
+        return new DefaultModelSelection(
+                ResourceLocation.parse(tag.getString("geo_model")),
+                ResourceLocation.parse(tag.getString("animation")),
+                ResourceLocation.parse(tag.getString("texture")),
+                ResourceLocation.parse(tag.getString("arm")),
+                tag.getString("model_id"),
+                scriptData
+        );
+    }
 
     @Override
     public ResourceLocation getGeoModel() {
@@ -64,33 +104,33 @@ public record DefaultModelSelection(ResourceLocation geoModel,
     }
 
     @Override
-    public AyameModelData.MetaData metaData() {
-        return metaData;
+    public String getId() {
+        return this.id;
     }
 
     @Override
     public ModelSelection withArm(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.metaData, this.scriptData);
+        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.id, this.scriptData);
     }
 
     @Override
     public ModelSelection withGeoModel(ResourceLocation location) {
-        return new DefaultModelSelection(location, this.animation, this.texture, this.arm, this.metaData, this.scriptData);
+        return new DefaultModelSelection(location, this.animation, this.texture, this.arm, this.id, this.scriptData);
     }
 
     @Override
     public ModelSelection withTexture(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, this.animation, location, this.arm, this.metaData, this.scriptData);
+        return new DefaultModelSelection(this.geoModel, this.animation, location, this.arm, this.id, this.scriptData);
     }
 
     @Override
     public ModelSelection withAnimation(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, location, this.texture, this.arm, this.metaData, this.scriptData);
+        return new DefaultModelSelection(this.geoModel, location, this.texture, this.arm, this.id, this.scriptData);
     }
 
     @Override
     public ModelSelection withScriptData(AyameModelData.ScriptData scriptData) {
-        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, this.arm, this.metaData, scriptData);
+        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, this.arm, this.id, scriptData);
     }
 
     public static class Builder {
@@ -98,7 +138,7 @@ public record DefaultModelSelection(ResourceLocation geoModel,
         private ResourceLocation animation;
         private ResourceLocation texture;
         private ResourceLocation arm;
-        private AyameModelData.MetaData metaData;
+        private String id;
         private AyameModelData.ScriptData scriptData;
 
 
@@ -121,8 +161,8 @@ public record DefaultModelSelection(ResourceLocation geoModel,
             return this;
         }
 
-        public Builder setMetaData(AyameModelData.MetaData metaData) {
-            this.metaData = metaData;
+        public Builder setId(String id) {
+            this.id = id;
             return this;
         }
 
@@ -137,7 +177,7 @@ public record DefaultModelSelection(ResourceLocation geoModel,
         }
 
         public DefaultModelSelection build() {
-            return new DefaultModelSelection(geoModel, animation, texture, arm, metaData, scriptData);
+            return new DefaultModelSelection(geoModel, animation, texture, arm, this.id, scriptData);
         }
     }
 }

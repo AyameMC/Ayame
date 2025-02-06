@@ -33,6 +33,11 @@ public class ClientModelManager {
     private final Map<UUID, ModelSelection> playerModelSelections = Maps.newHashMap();
     private final Set<DefaultInMemoryModelResource> loadedModels = ConcurrentHashMap.newKeySet();
 
+
+    public void loadModel(DefaultInMemoryModelResource model) {
+        this.loadedModels.add(model);
+    }
+
     public void unloadAll() {
         for (DefaultInMemoryModelResource modelData : this.loadedModels) {
             if (!modelData.canDeregister()) {

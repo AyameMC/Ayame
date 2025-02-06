@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.model.sync;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.model.AyameModelData;
 
@@ -41,7 +42,7 @@ public interface ModelSelection {
 
     ResourceLocation getArm();
 
-    AyameModelData.MetaData metaData();
+    String getId();
 
     AyameModelData.ScriptData scriptData();
 
@@ -54,4 +55,8 @@ public interface ModelSelection {
     ModelSelection withAnimation(ResourceLocation location);
 
     ModelSelection withScriptData(AyameModelData.ScriptData scriptData);
+
+    CompoundTag serializeToNbt();
+
+    ModelSelection fromNbt(CompoundTag tag);
 }
