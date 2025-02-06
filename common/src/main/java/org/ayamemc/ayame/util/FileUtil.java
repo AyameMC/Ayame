@@ -23,14 +23,24 @@ package org.ayamemc.ayame.util;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.ayamemc.ayame.Ayame;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.function.Function;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -41,7 +51,7 @@ public class FileUtil {
      * @param path 文件路径
      * @return 字符串
      */
-    public static String getFileAsString(Path path) {
+    public static String getFileAsString(@NotNull Path path) {
         try {
             return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -55,7 +65,7 @@ public class FileUtil {
      * @param path 文件路径
      * @return 字节流
      */
-    public static InputStream getFileAsStream(Path path) {
+    public static @NotNull InputStream getFileAsStream(Path path) {
         try {
             return FileUtils.openInputStream(path.toFile());
         } catch (IOException e) {
@@ -70,7 +80,7 @@ public class FileUtil {
      * @param path    文件路径
      * @param content 要写入的字符串
      */
-    public static void overwriteStringToFile(Path path, String content) {
+    public static void overwriteStringToFile(@NotNull Path path, String content) {
         try {
             FileUtils.writeStringToFile(path.toFile(), content, StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -179,10 +189,13 @@ public class FileUtil {
      */
     public static void copyBuiltinFileToDirectory(String sourcePath, String targetPath) {
         final Path targetPathDir = Path.of(targetPath);
+
         try (final InputStream inputStream = getBuiltinFileResourceAsStream(sourcePath)) {
             if (inputStream != null) {
                 final Path targetFile = targetPathDir.resolve(Path.of(sourcePath).getFileName().toString());
+
                 Files.createDirectories(targetFile.getParent());
+
                 Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
             } else {
                 throw new RuntimeException("File not found at: " + sourcePath);
@@ -192,9 +205,10 @@ public class FileUtil {
         }
     }
 
-    public static String getTruncatedJarPath(String input) {
+    public static @NotNull String getTruncatedJarPath(@NotNull String input) {
         // 查找 .jar 出现的起始位置
         int jarIndex = input.indexOf(".jar");
+
         if (jarIndex != -1) {
             // 因为要包含 .jar 整个字符串，所以需要加上4（".jar" 的长度）
             return input.substring(0, jarIndex + 4);
@@ -213,44 +227,35 @@ public class FileUtil {
     public static void copyBuiltinDirectoryToDirectory(String sourcePath, String targetPath) {
         final Path targetPathDir = Path.of(targetPath);
         try {
-            // 获取当前 JAR 文件路径
-            String jarPath = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-            Ayame.LOGGER.info("Ayame jar path before correct: {}", jarPath);
-
-            /*
-            NeoForge在获取路径时结尾会多几个错误字符，在不同操作系统上也不同，这里进行了剔除
-            我知道这很诡异，但是，能修好就行……
-             */
-            if (Ayame.modLoader == ModLoader.NEOFORGE) {
-                final int jarIndex = jarPath.lastIndexOf(".jar");
-
-                // 如果找到了.jar这个字样
-                if (jarIndex != -1) {
-                    // + 4，因为.jar是4个字
-                    jarPath = jarPath.substring(0, jarIndex + 4);
-                } else {
-                    Ayame.LOGGER.error("Unable to correct NeoForge's erroneous jar path. folder copying may encounter issues!");
-                }
-
-            }
-            Ayame.LOGGER.info("Ayame jar path after correct: {}", jarPath);
-
-            try (final ZipFile zipFile = new ZipFile(jarPath)) {
-                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
+            try (JarFile targetFile = getCurrentJarFile()) {
+                final Enumeration<JarEntry> entries = targetFile.entries();
                 while (entries.hasMoreElements()) {
-                    final ZipEntry entry = entries.nextElement();
-                    final String entryName = entry.getName();
+                    final JarEntry entry = entries.nextElement();
+                    final String name = entry.getName();
 
-                    // 检查是否属于指定目录
-                    if (entryName.startsWith(sourcePath) && !entry.isDirectory()) {
-                        final String relativePath = entryName.substring(sourcePath.length()); // 相对路径
-                        final Path targetFile = targetPathDir.resolve(relativePath);
+                    if (name.startsWith(sourcePath)) {
+                        final String relativePath = name.substring(sourcePath.length());
+                        final File target = targetPathDir.resolve(relativePath).toFile();
 
-                        Files.createDirectories(targetFile.getParent());
+                        if (entry.isDirectory()) {
+                            if (target.mkdirs()) {
+                                Ayame.LOGGER.info("Creating directory for built-in files: {}", name);
+                            }
+                            continue;
+                        }
 
-                        try (final InputStream inputStream = zipFile.getInputStream(entry)) {
-                            Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                        Ayame.LOGGER.info("Copying built-in files: {}", name);
+
+                        try (
+                                InputStream is = targetFile.getInputStream(entry);
+                                FileOutputStream fos = new FileOutputStream(target)
+                        ) {
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = is.read(buffer)) > 0) {
+                                fos.write(buffer, 0, len);
+                            }
+                            fos.flush();
                         }
                     }
                 }
@@ -258,6 +263,44 @@ public class FileUtil {
         } catch (Exception e) {
             throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPath), e);
         }
+    }
+
+    /**
+     * 获取当前 Jar 文件
+     * @return JarFile
+     * @throws URISyntaxException URI 语法错误
+     * @throws IOException IO 异常
+     */
+    public static JarFile getCurrentJarFile() throws URISyntaxException, IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        final URI target = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+        JarFile targetFile;
+
+        final String scheme = target.getScheme();
+
+        switch (scheme) {
+            case "file" -> targetFile = new JarFile(target.getRawSchemeSpecificPart());
+
+            case "jar" -> targetFile = ((JarURLConnection) target.toURL().openConnection()).getJarFile();
+
+            // This is neoforge's black magic
+            case "union" -> {
+                String spec = target.getRawSchemeSpecificPart();
+
+                int sep = spec.indexOf("!/");
+                if (sep != -1) {
+                    spec = spec.substring(0, sep);
+                }
+
+                // Remove the key which is generated by the union file system
+                spec = spec.replaceAll("%.*", "");
+
+                return new JarFile(spec);
+            }
+
+            default -> throw new RuntimeException("Unknown scheme " + target);
+        }
+
+        return targetFile;
     }
 
     public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, String targrtPath) {
