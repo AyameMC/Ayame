@@ -58,8 +58,6 @@ public class FabricClientEventHandler {
         ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
         HudRenderCallback.EVENT.register(ClientEventHandler::renderHud);
         WorldRenderEvents.START.register((context) -> ClientEventHandler.renderCamera());
-
-        RenderArmCallback.ON_RENDER_ARM.register(FabricClientEventHandler::renderCustomHand);
     }
 
 

@@ -6,7 +6,8 @@
   "client": [
     "client.ClientEntityRenderersMixin",
     "client.ItemInHandRendererMixin",
-    "client.LocalPlayerMixin"
+    "client.LocalPlayerMixin",
+    "client.PlayerRendererMixin"
   ],
   "mixins": [
     "AnimationControllerMixin",

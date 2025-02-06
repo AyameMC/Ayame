@@ -20,6 +20,10 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
@@ -66,22 +70,6 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
-    }
-
-    @SubscribeEvent
-    public static void renderCustomModelHand(RenderHandEvent event) {
-        event.setCanceled(true); // 取消渲染默认手臂
-        ClientEventHandler.renderCustomHandEventHandler(
-                event.getHand(),
-                event.getPoseStack(),
-                event.getMultiBufferSource(),
-                event.getPackedLight(),
-                event.getPartialTick(),
-                event.getInterpolatedPitch(),
-                event.getSwingProgress(),
-                event.getEquipProgress(),
-                event.getItemStack()
-        );
     }
 
     @SubscribeEvent

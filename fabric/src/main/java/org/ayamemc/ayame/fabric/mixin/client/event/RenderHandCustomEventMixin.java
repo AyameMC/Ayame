@@ -36,50 +36,50 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
-@Mixin(ItemInHandRenderer.class)
+//@Mixin(ItemInHandRenderer.class)
 public abstract class RenderHandCustomEventMixin {
-    @Shadow
-    private float oMainHandHeight;
-    @Shadow
-    private float mainHandHeight;
-    @Shadow
-    private ItemStack mainHandItem;
-    @Shadow
-    private float oOffHandHeight;
-    @Shadow
-    private float offHandHeight;
-    @Shadow
-    private ItemStack offHandItem;
-
-    @Shadow
-    static ItemInHandRenderer.HandRenderSelection evaluateWhichHandsToRender(LocalPlayer player) {
-        return null;
-        // 这里return null实际上应该没什么问题，毕竟它只是个影子，真正被调用的不是它
-    }
-
-    @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
-    private void renderHandsWithItems(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
-        float f = playerEntity.getAttackAnim(partialTicks);
-        InteractionHand interactionHand = playerEntity.swingingArm;
-        float pitch = Mth.lerp(partialTicks, playerEntity.xRotO, playerEntity.getXRot());
-        ItemInHandRenderer.HandRenderSelection handsToRender = evaluateWhichHandsToRender(playerEntity);
-        if (handsToRender == null) {
-            return;
-        }
-        if (handsToRender.renderMainHand) {
-            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.MAIN_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.MAIN_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oMainHandHeight, this.mainHandHeight), this.mainHandItem, playerEntity);
-            if (result != InteractionResult.PASS) {
-                ci.cancel();
-                return;
-            }
-        }
-
-        if (handsToRender.renderOffHand) {
-            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.OFF_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.OFF_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight), this.offHandItem, playerEntity);
-            if (result != InteractionResult.PASS) {
-                ci.cancel();
-            }
-            ci.cancel();
-        }
-    }
+//    @Shadow
+//    private float oMainHandHeight;
+//    @Shadow
+//    private float mainHandHeight;
+//    @Shadow
+//    private ItemStack mainHandItem;
+//    @Shadow
+//    private float oOffHandHeight;
+//    @Shadow
+//    private float offHandHeight;
+//    @Shadow
+//    private ItemStack offHandItem;
+//
+//    @Shadow
+//    static ItemInHandRenderer.HandRenderSelection evaluateWhichHandsToRender(LocalPlayer player) {
+//        return null;
+//        // 这里return null实际上应该没什么问题，毕竟它只是个影子，真正被调用的不是它
+//    }
+//
+//    @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
+//    private void renderHandsWithItems(float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource buffer, LocalPlayer playerEntity, int combinedLight, CallbackInfo ci) {
+//        float f = playerEntity.getAttackAnim(partialTicks);
+//        InteractionHand interactionHand = playerEntity.swingingArm;
+//        float pitch = Mth.lerp(partialTicks, playerEntity.xRotO, playerEntity.getXRot());
+//        ItemInHandRenderer.HandRenderSelection handsToRender = evaluateWhichHandsToRender(playerEntity);
+//        if (handsToRender == null) {
+//            return;
+//        }
+//        if (handsToRender.renderMainHand) {
+//            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.MAIN_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.MAIN_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oMainHandHeight, this.mainHandHeight), this.mainHandItem, playerEntity);
+//            if (result != InteractionResult.PASS) {
+//                ci.cancel();
+//                return;
+//            }
+//        }
+//
+//        if (handsToRender.renderOffHand) {
+//            InteractionResult result = RenderArmCallback.ON_RENDER_ARM.invoker().onRenderArm(InteractionHand.OFF_HAND, poseStack, buffer, combinedLight, partialTicks, pitch, interactionHand == InteractionHand.OFF_HAND ? f : 0.0F, 1.0F - Mth.lerp(partialTicks, this.oOffHandHeight, this.offHandHeight), this.offHandItem, playerEntity);
+//            if (result != InteractionResult.PASS) {
+//                ci.cancel();
+//            }
+//            ci.cancel();
+//        }
+//    }
 }

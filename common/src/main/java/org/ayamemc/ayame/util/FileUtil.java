@@ -29,16 +29,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.*;
+import java.net.JarURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -205,19 +203,6 @@ public class FileUtil {
         }
     }
 
-    public static @NotNull String getTruncatedJarPath(@NotNull String input) {
-        // 查找 .jar 出现的起始位置
-        int jarIndex = input.indexOf(".jar");
-
-        if (jarIndex != -1) {
-            // 因为要包含 .jar 整个字符串，所以需要加上4（".jar" 的长度）
-            return input.substring(0, jarIndex + 4);
-        } else {
-            // 如果没有找到 .jar，则返回原始字符串或根据需要处理
-            return input;
-        }
-    }
-
     /**
      * 将包内目录资源复制到外部目录
      *
@@ -267,11 +252,12 @@ public class FileUtil {
 
     /**
      * 获取当前 Jar 文件
+     *
      * @return JarFile
      * @throws URISyntaxException URI 语法错误
-     * @throws IOException IO 异常
+     * @throws IOException        IO 异常
      */
-    public static JarFile getCurrentJarFile() throws URISyntaxException, IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public static JarFile getCurrentJarFile() throws URISyntaxException, IOException {
         final URI target = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI();
         JarFile targetFile;
 

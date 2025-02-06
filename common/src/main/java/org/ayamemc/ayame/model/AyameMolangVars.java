@@ -90,6 +90,11 @@ public class AyameMolangVars {
      */
     public static final String WHICH_PERSON = "aym.which_person";
 
+    /**
+     * 玩家身体与头部旋转角的差
+     */
+    public static final String BODY_HEAD_DIFF = "aym.body_head_diff";
+
     public static void registerMolangVars() {
         MolangQueries.<Player>setActorVariable(WHICH_PERSON, actor -> {
             final Minecraft minecraft = actor.mc();
@@ -100,6 +105,12 @@ public class AyameMolangVars {
                 case THIRD_PERSON_FRONT -> 2;
             };
         });
+
+        MolangQueries.<Player>setActorVariable(BODY_HEAD_DIFF, actor -> {
+            final Player player = actor.animatable();
+            return player.yHeadRot - player.yBodyRot;
+        });
+
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)
         );
