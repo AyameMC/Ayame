@@ -20,9 +20,6 @@
 
 package org.ayamemc.ayame.client;
 
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.entity.EntityType;
-import org.ayamemc.ayame.client.renderer.AyamePlayerRenderProxy;
 import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.ayamemc.ayame.util.ConfigUtil;
 

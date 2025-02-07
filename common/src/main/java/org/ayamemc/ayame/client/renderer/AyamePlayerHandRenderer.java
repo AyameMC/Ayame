@@ -22,12 +22,13 @@ package org.ayamemc.ayame.client.renderer;
 
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
-public class AyamePlayerHandRenderer extends GeoObjectRenderer<ItemInHandRenderer> {
-    public AyamePlayerHandRenderer(GeoModel<ItemInHandRenderer> model) {
+public class AyamePlayerHandRenderer extends GeoObjectRenderer {
+
+
+    public AyamePlayerHandRenderer(GeoModel model) {
         super(model);
     }
-
-
 }

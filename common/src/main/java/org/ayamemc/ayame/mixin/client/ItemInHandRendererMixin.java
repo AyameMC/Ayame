@@ -20,27 +20,33 @@
 
 package org.ayamemc.ayame.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import org.ayamemc.ayame.client.renderer.AyameGeoAnimatable;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.entity.HumanoidArm;
+import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
-public abstract class ItemInHandRendererMixin implements AyameGeoAnimatable {
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add();
-    }
+public abstract class ItemInHandRendererMixin {
+    @Shadow
+    @Final
+    private EntityRenderDispatcher entityRenderDispatcher;
 
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return GeckoLibUtil.createInstanceCache(this);
-    }
-
-    @Override
-    public double getTick(Object object) {
-        return AyameGeoAnimatable.super.getTick(object);
+    @Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;getRenderer(Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/client/renderer/entity/EntityRenderer;"), cancellable = true)
+    private void renderAyameModelRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, float equippedProgress, float swingProgress, HumanoidArm side, CallbackInfo ci, @Local AbstractClientPlayer abstractClientPlayer, @Local boolean isRightHand) {
+        AyamePlayerRender ayamePlayerRender = (AyamePlayerRender) this.entityRenderDispatcher.getRenderer(abstractClientPlayer);
+        if (isRightHand) {
+            ayamePlayerRender.render(abstractClientPlayer, 0, 0, poseStack, buffer, packedLight);
+        }
+        ci.cancel();
     }
 }
