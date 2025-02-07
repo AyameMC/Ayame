@@ -22,7 +22,8 @@ package org.ayamemc.ayame.model.sync.client;
 
 import com.google.common.collect.Maps;
 import org.ayamemc.ayame.model.sync.ModelSelection;
-import org.ayamemc.ayame.model.sync.data.DefaultInMemoryModelResource;
+import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -31,25 +32,32 @@ import java.util.stream.Stream;
 
 public class ClientModelManager {
     private final Map<UUID, ModelSelection> playerModelSelections = Maps.newHashMap();
-    private final Set<DefaultInMemoryModelResource> loadedModels = ConcurrentHashMap.newKeySet();
+    // 已经加载的模型
+    private final Set<InMemoryModelData> loadedModels = ConcurrentHashMap.newKeySet();
 
+    // 添加新的模型
+    public void addLoadedModelAndRegister(@NotNull InMemoryModelData model) {
+        model.register();
 
-    public void loadModel(DefaultInMemoryModelResource model) {
         this.loadedModels.add(model);
     }
 
     public void unloadAll() {
-        for (DefaultInMemoryModelResource modelData : this.loadedModels) {
-            if (!modelData.canDeregister()) {
+        final Iterator<InMemoryModelData> modelResourceIterator = this.loadedModels.iterator();
+        while (modelResourceIterator.hasNext()) {
+            final InMemoryModelData resource = modelResourceIterator.next();
+
+            if (!resource.canDeregister()) {
                 continue;
             }
 
-            modelData.deregister();
+            resource.deregister();
+            modelResourceIterator.remove();
         }
     }
 
     public void reloadAll() {
-        for (DefaultInMemoryModelResource modelData : this.loadedModels) {
+        for (InMemoryModelData modelData : this.loadedModels) {
             if (!modelData.canDeregister()) {
                 continue;
             }
@@ -57,7 +65,7 @@ public class ClientModelManager {
             modelData.deregister();
         }
 
-        for (DefaultInMemoryModelResource modelData : this.loadedModels) {
+        for (InMemoryModelData modelData : this.loadedModels) {
             modelData.register();
         }
     }
@@ -66,12 +74,24 @@ public class ClientModelManager {
         this.playerModelSelections.put(playerUUID, modelSelection);
     }
 
-    public Stream<DefaultInMemoryModelResource> filterOutDefaultModel() {
-        return this.loadedModels.stream().filter(DefaultInMemoryModelResource::isDefaultModel);
+    public Stream<InMemoryModelData> filterOutDefaultModel() {
+        return this.loadedModels.stream().filter(InMemoryModelData::isDefaultModel);
+    }
+
+    public ModelSelection getDefaultModelFallback() {
+        final Optional<InMemoryModelData> got = this.filterOutDefaultModel().findFirst();
+
+        if (got.isEmpty()) {
+            throw new IllegalStateException("No default model found!");
+        }
+
+        final InMemoryModelData actual = got.get();
+
+        return actual.getFallbackModelSelection();
     }
 
     public ModelSelection getModelOfPlayer(UUID playerUUID){
-        final Optional<DefaultInMemoryModelResource> defaultModelResource = this.filterOutDefaultModel().findFirst();
+        final Optional<InMemoryModelData> defaultModelResource = this.filterOutDefaultModel().findFirst();
 
         if (defaultModelResource.isEmpty()) {
             throw new IllegalStateException("No default models has been found!");
@@ -81,7 +101,7 @@ public class ClientModelManager {
     }
 
     public boolean hasModel(String id) {
-        for (DefaultInMemoryModelResource loaded : this.loadedModels) {
+        for (InMemoryModelData loaded : this.loadedModels) {
             if (loaded.getId().equals(id)) {
                 return true;
             }
@@ -91,8 +111,8 @@ public class ClientModelManager {
     }
 
     @Nullable
-    public DefaultInMemoryModelResource getModel(String id) {
-        for (DefaultInMemoryModelResource loaded : this.loadedModels) {
+    public InMemoryModelData getModel(String id) {
+        for (InMemoryModelData loaded : this.loadedModels) {
             if (loaded.getId().equals(id)) {
                 return loaded;
             }
@@ -101,7 +121,7 @@ public class ClientModelManager {
         return null;
     }
 
-    public Collection<DefaultInMemoryModelResource> getAllModels() {
+    public Collection<InMemoryModelData> getAllModels() {
         return new ArrayList<>(this.loadedModels); // Copy to ensure safe
     }
 }

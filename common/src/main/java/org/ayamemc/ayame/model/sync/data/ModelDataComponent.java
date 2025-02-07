@@ -18,9 +18,11 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model.sync;
+package org.ayamemc.ayame.model.sync.data;
+
+import org.ayamemc.ayame.model.AyameModelData;
 
 import java.util.Map;
 
-public class ModelCacheManager {
+public record ModelDataComponent(AyameModelData modelMeta, Map<String, byte[]> byteStorage, String contentHash) {
 }

@@ -21,7 +21,7 @@
 package org.ayamemc.ayame.model.sync;
 
 import net.minecraft.server.packs.resources.PreparableReloadListener;
-import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
+import org.ayamemc.ayame.client.api.ClientAPIHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +32,6 @@ import java.util.concurrent.Executor;
  */
 public class ModelSelectionManager {
     public static @NotNull CompletableFuture<Void> reload(PreparableReloadListener.@NotNull PreparationBarrier preparationBarrier, Executor backgroundExecutor) {
-        return CompletableFuture.runAsync(PlayerModelAPIHooks.modelManagerClient::reloadAll, backgroundExecutor).thenCompose(preparationBarrier::wait);
+        return CompletableFuture.runAsync(ClientAPIHooks.modelManagerClient::reloadAll, backgroundExecutor).thenCompose(preparationBarrier::wait);
     }
 }

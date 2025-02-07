@@ -20,101 +20,52 @@
 
 package org.ayamemc.ayame.model.sync;
 
+import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
+import org.ayamemc.ayame.util.HashUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ModelCacheDatabase {
     private final Path parentFolder;
 
-    private final FileChannel indexFileChannel;
-    private final ReadWriteLock databaseLock = new ReentrantReadWriteLock();
-    private final DatabaseIndex databaseIndex = new DatabaseIndex();
-
     public ModelCacheDatabase(Path parentFolder) throws IOException {
         this.parentFolder = parentFolder;
-        this.indexFileChannel = FileChannel.open(this.parentFolder.resolve("cache_index.bin"), StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
     }
 
-    private class DatabaseIndex {
-        private final Set<String> modelCacheHashes = new HashSet<>();
-        private final Set<String> modelCacheNames = new HashSet<>();
+    public boolean hasCache(String cacheHash) {
+        final Path target = this.parentFolder.resolve(cacheHash);
+        final File cacheFile = target.toFile();
 
-        private void loadFromEncoded(byte[] data){
-            ModelCacheDatabase.this.databaseLock.writeLock().lock();
-            try {
-                try (
-                        ByteArrayInputStream bis = new ByteArrayInputStream(data);
-                        DataInputStream dis = new DataInputStream(bis)
-                ) {
-                    final int hashCount = dis.readInt();
-                    for (int i = 0; i < hashCount; i++) {
-                        this.modelCacheHashes.add(dis.readUTF());
-                    }
+        return cacheFile.exists();
+    }
 
-                    final int nameCount = dis.readInt();
-                    for (int i = 0; i < nameCount; i++) {
-                        this.modelCacheNames.add(dis.readUTF());
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+    public boolean removeCache(String cacheHash) {
+        final Path target = this.parentFolder.resolve(cacheHash);
+        final File cacheFile = target.toFile();
 
-                }
-            }finally {
-                ModelCacheDatabase.this.databaseLock.writeLock().unlock();
-            }
+        return cacheFile.delete();
+    }
+
+    public void addCache(@NotNull InMemoryModelData cache) throws IOException {
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        final DataOutputStream bufferHelper = new DataOutputStream(buffer);
+
+        cache.serialize(bufferHelper);
+        bufferHelper.flush();
+
+        final byte[] data = buffer.toByteArray();
+        final String hash = HashUtils.lowercaseHashOf(data);
+
+        final Path target = this.parentFolder.resolve(hash);
+        final File cacheFile = target.toFile();
+
+        if (cacheFile.exists()) {
+            return;
         }
 
-        private byte @NotNull [] encode() {
-            ModelCacheDatabase.this.databaseLock.readLock().lock();
-            try (
-                    final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    final DataOutputStream dos = new DataOutputStream(bos)
-            ){
-                dos.writeInt(this.modelCacheHashes.size());
-                for (String hash : this.modelCacheHashes) {
-                    dos.writeUTF(hash);
-                }
-
-                dos.writeInt(this.modelCacheNames.size());
-                for (String name : this.modelCacheNames) {
-                    dos.writeUTF(name);
-                }
-
-                return bos.toByteArray();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }finally {
-                ModelCacheDatabase.this.databaseLock.readLock().unlock();
-            }
-        }
-
-        public void loadFromFile() throws IOException {
-            final ByteBuffer buffer = ByteBuffer.allocate((int) ModelCacheDatabase.this.indexFileChannel.size());
-
-            ModelCacheDatabase.this.indexFileChannel.read(buffer);
-
-            this.loadFromEncoded(buffer.array());
-        }
-
-        public void saveIndex() throws IOException {
-            final byte[] encoded = this.encode();
-
-            final ByteBuffer buffer = ByteBuffer.allocate(encoded.length);
-
-            buffer.put(encoded);
-            buffer.flip();
-
-            ModelCacheDatabase.this.indexFileChannel.write(buffer);
-        }
-
+        Files.write(target ,data);
     }
 }

@@ -30,21 +30,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
-import org.ayamemc.ayame.client.util.ModelResourceLoadUtil;
+import org.ayamemc.ayame.client.api.ClientAPIHooks;
 import org.ayamemc.ayame.model.AyameModelData;
-import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.ayamemc.ayame.model.sync.ModelSelection;
-import org.ayamemc.ayame.model.sync.data.DefaultInMemoryModelResource;
+import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -55,7 +49,7 @@ import static org.ayamemc.ayame.Ayame.MINECRAFT;
 @SuppressWarnings("unchecked")
 public class AyameCommandManager {
     private static final SuggestionProvider<?> MODEL_LIST = (context, builder) -> {
-        for (DefaultInMemoryModelResource modelData : PlayerModelAPIHooks.modelManagerClient.getAllModels()) {
+        for (InMemoryModelData modelData : ClientAPIHooks.modelManagerClient.getAllModels()) {
             builder.suggest(modelData.getId());
         }
         return builder.buildFuture();
@@ -88,22 +82,22 @@ public class AyameCommandManager {
 
                         .then(LiteralArgumentBuilder.<T>literal("reload")
                                 .executes(commandContext -> {
-                                    final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
-                                    final IModelResource modelRes = PlayerModelAPIHooks.modelManagerClient.getModel(selection.getId());
+                                    final ModelSelection selection = ClientAPIHooks.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
+                                    final IModelResource modelRes = ClientAPIHooks.modelManagerClient.getModel(selection.getId());
 
                                     if (modelRes == null) {
                                         sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
                                         return 1;
                                     }
 
-                                    PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
+                                    ClientAPIHooks.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
                                     return 0;
                                 })
                         )
 
                         .then(LiteralArgumentBuilder.<T>literal("list")
                                 .executes(commandContext -> {
-                                    final String allModels = PlayerModelAPIHooks.modelManagerClient.getAllModels().stream()
+                                    final String allModels = ClientAPIHooks.modelManagerClient.getAllModels().stream()
                                             .map(resource -> {
                                                         final AyameModelData.MetaData metaData = resource.getMetaData();
 
@@ -131,7 +125,7 @@ public class AyameCommandManager {
     private static <T extends SharedSuggestionProvider> int setModel(CommandContext<T> context) {
         // TODO 暂时只用于测试，需要后续完善
         final String name = StringArgumentType.getString(context, "model_id");
-        final DefaultInMemoryModelResource modelData = PlayerModelAPIHooks.modelManagerClient.getModel(name);
+        final InMemoryModelData modelData = ClientAPIHooks.modelManagerClient.getModel(name);
 
         if (modelData == null) {
             sendMessageToClient(Component.translatable("message.ayame.command.model.set.failed", name));
@@ -142,7 +136,7 @@ public class AyameCommandManager {
 
         // TODO - ???
         // TODO - 这东西怎么设置玩家模型的到底?
-        PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
+        ClientAPIHooks.modelManagerClient.updateModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
 
         sendMessageToClient(
                 Component.translatable(

@@ -28,10 +28,11 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.ayamemc.ayame.client.api.PlayerModelAPIHooks;
+import org.ayamemc.ayame.client.api.ClientAPIHooks;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -39,13 +40,14 @@ import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
+import java.util.UUID;
+
 
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int BOOT_SLOT = 0;
     private static final int LEGGINGS_SLOT = 1;
     private static final int CHEST_PLATE_SLOT = 2;
     private static final int HELMET_SLOT = 3;
-
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
@@ -62,7 +64,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     @Override
     public void actuallyRender(PoseStack poseStack, Player player, BakedGeoModel model, @Nullable RenderType renderType,
-                               MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
+                               @NotNull MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
                                int packedLight, int packedOverlay, int colour) {
         RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
         VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
@@ -74,25 +76,29 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, modifiedColour);
     }
 
+    protected static class GeoPlayerModel extends GeoModel<Player> {
+        private ModelSelection getPlayerModelSelectionOrFallback(@NotNull Player player) {
+            final UUID playerUUID = player.getUUID();
 
-    // TODO : 添加API
-    public static class GeoPlayerModel extends GeoModel<Player> {
+            ModelSelection ret = ClientAPIHooks.modelManagerClient.getModelOfPlayer(playerUUID);
 
-        public GeoPlayerModel() {
-        }
+            final String selectedModelId = ret.getId();
 
-        /**
-         * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
-         *
-         * @param model 传入{@link ModelSelection}类型的模型资源
-         */
-        public static void switchModel(Player player, ModelSelection model) {
-            PlayerModelAPIHooks.modelManagerClient.updateModelOfPlayer(player.getUUID(), model);
+            // 如果没有这个模型, 或者没有加载完成
+            if (!ClientAPIHooks.modelManagerClient.hasModel(selectedModelId)) {
+
+                ret = ClientAPIHooks.modelManagerClient.getDefaultModelFallback(); // 落回默认模型
+
+                return ret;
+            }
+
+           return ret;
         }
 
         @Override
-        public void applyMolangQueries(AnimationState<Player> animationState, double animTime) {
+        public void applyMolangQueries(@NotNull AnimationState<Player> animationState, double animTime) {
             final Player player = animationState.getAnimatable();
+
             MathParser.setVariable(
                     AyameMolangVars.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
             );
@@ -133,27 +139,19 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(Player animatable) {
-            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
-
-            return selection.getGeoModel();
+            return this.getPlayerModelSelectionOrFallback(animatable).getGeoModel();
         }
 
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
-
-            return selection.getTexture();
+            return this.getPlayerModelSelectionOrFallback(animatable).getTexture();
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            final ModelSelection selection = PlayerModelAPIHooks.modelManagerClient.getModelOfPlayer(animatable.getUUID());
-
-            return selection.getAnimation();
+            return this.getPlayerModelSelectionOrFallback(animatable).getAnimation();
         }
-
-
     }
 
 }

@@ -18,13 +18,14 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.api;
+package org.ayamemc.ayame.model.sync;
 
-import org.ayamemc.ayame.model.sync.client.ClientModelManager;
+import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
 
-public class PlayerModelAPIHooks {
-    public static final ClientModelManager modelManagerClient = new ClientModelManager();
+import java.io.File;
 
+public interface IModelLoader {
+    ModelDataComponent loadModel(File modelFile);
 
-
+    boolean wantLoad(File modelFile);
 }

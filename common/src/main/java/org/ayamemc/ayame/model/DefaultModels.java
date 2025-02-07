@@ -20,21 +20,6 @@
 
 package org.ayamemc.ayame.model;
 
-import org.ayamemc.ayame.client.util.ModelResourceLoadUtil;
-import org.ayamemc.ayame.model.resource.AyameModelResource;
-import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.model.resource.ModelContent;
-import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
-import org.ayamemc.ayame.model.sync.ModelSelection;
-import org.ayamemc.ayame.model.sync.data.DefaultModelSelection;
-import org.ayamemc.ayame.util.FileUtil;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-
-import static org.ayamemc.ayame.Ayame.withAyamePath;
-
 public class DefaultModels {
     // TODO: 修复使用外置模型（内置模型没问题）时neoforge进世界ayame:geo/ayame_chan.json: Unable to find model的问题
     /*public static final IModelResource AYAME_CHAN_RESOURCE = create("ayame_chan");

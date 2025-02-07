@@ -24,7 +24,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +33,7 @@ import org.ayamemc.ayame.model.IRegistrableModel;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.util.JsonInterpreter;
-import org.ayamemc.ayame.util.TaskManager;
+import org.ayamemc.ayame.util.MainThreadUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.cache.GeckoLibCache;
@@ -53,7 +52,7 @@ import java.util.Map;
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
-public class DefaultInMemoryModelResource implements ISerializableModelResource, IRegistrableModel {
+public class InMemoryModelData implements ISerializableModelResource, IRegistrableModel {
     private static final int DATA_HEADER = 0x4D524D44;
     private static final int VERSION = 0x0001;
 
@@ -64,18 +63,30 @@ public class DefaultInMemoryModelResource implements ISerializableModelResource,
     private boolean isDefaultModel = false;
 
     private final Map<String, byte[]> internalDataStorage = new HashMap<>();
-    private final Registrar registrar = new Registrar(this);
+    private final Registrar registrar = new Registrar(this); // Only used on client side
 
-    public DefaultInMemoryModelResource(AyameModelData modelMetaData, boolean canUnload, boolean isDefaultModel) {
-        this.modelMetaData = modelMetaData;
+    public InMemoryModelData(boolean canUnload, boolean isDefaultModel) {
+        this.modelMetaData = AyameModelData.parse(this.getIndexJson().toString());
         this.canUnload = canUnload;
         this.isDefaultModel = isDefaultModel;
     }
 
-    public DefaultInMemoryModelResource(boolean canUnload, boolean isDefaultModel) {
-        // Empty
-        this.canUnload = canUnload;
-        this.isDefaultModel = isDefaultModel;
+    public JsonInterpreter getIndexJson() {
+        final byte[] data = this.internalDataStorage.get("ayame.json");
+
+        if (data == null) {
+            throw new IllegalStateException("ayame.json not found!");
+        }
+
+        return JsonInterpreter.of(new ByteArrayInputStream(data));
+    }
+
+    public void restoreFrom(AyameModelData modelData) {
+        this.modelMetaData = modelData;
+    }
+
+    public void restoreFrom(Map<String, byte[]> data) {
+        this.internalDataStorage.putAll(data);
     }
 
     @Override
@@ -204,31 +215,42 @@ public class DefaultInMemoryModelResource implements ISerializableModelResource,
     }
 
     public static class Registrar {
-        private final DefaultInMemoryModelResource modelResource;
+        private final InMemoryModelData modelResource;
 
-        public Registrar(DefaultInMemoryModelResource modelResource) {
+        public Registrar(InMemoryModelData modelResource) {
             this.modelResource = modelResource;
         }
 
-        public DefaultModelSelection.Builder register() {
-            TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.addTask(() -> {
+        public void register() {
+            final Runnable scheduledRegister = () -> {
                 addBakedModel(this.modelResource.createModelResourceLocation(), this.modelResource);
                 addBakedModel(this.modelResource.createArmResourceLocation(), this.modelResource);
                 addBakedAnimationFromModelResource(this.modelResource.createAnimationResourceLocation(), this.modelResource);
                 registerTextureDynamically(this.modelResource.createTextureResourceLocation(), this.modelResource);
-            });
-            return DefaultModelSelection.Builder.create()
-                    .setGeoModel(this.modelResource.createModelResourceLocation())
-                    .setArm(this.modelResource.createArmResourceLocation())
-                    .setAnimation(this.modelResource.createAnimationResourceLocation())
-                    .setTexture(this.modelResource.createTextureResourceLocation());
+            };
+
+            if (!MainThreadUtil.runningOnClientMain()) {
+                MINECRAFT.execute(scheduledRegister);
+                return;
+            }
+
+            scheduledRegister.run();
         }
 
         public void deregister() {
-            removeBakedModel(this.modelResource.createModelResourceLocation());
-            removeBakedModel(this.modelResource.createArmResourceLocation());
-            removeBakedAnimation(this.modelResource.createAnimationResourceLocation());
-            deregisterTextureDynamically(this.modelResource.createTextureResourceLocation());
+            final Runnable scheduledDeregister = () -> {
+                removeBakedModel(this.modelResource.createModelResourceLocation());
+                removeBakedModel(this.modelResource.createArmResourceLocation());
+                removeBakedAnimation(this.modelResource.createAnimationResourceLocation());
+                deregisterTextureDynamically(this.modelResource.createTextureResourceLocation());
+            };
+
+            if (!MainThreadUtil.runningOnClientMain()) {
+                MINECRAFT.execute(scheduledDeregister);
+                return;
+            }
+
+            scheduledDeregister.run();
         }
 
         public static void removeBakedAnimation(ResourceLocation location) {
@@ -264,7 +286,6 @@ public class DefaultInMemoryModelResource implements ISerializableModelResource,
         }
 
         public static void addBakedAnimationFromModelResource(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
-            Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
             addBakedAnimationDirectly(resourceLocation, instanceBakedAnimation(modelRes));
         }
 
@@ -278,53 +299,6 @@ public class DefaultInMemoryModelResource implements ISerializableModelResource,
                 MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-        }
-
-        public static @NotNull BakedGeoModel readModel(ResourceLocation resourceLocation) {
-            Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
-
-            final BakedGeoModel model = models.get(resourceLocation);
-
-            if (model == null) {
-                throw new RuntimeException("Model not found: " + resourceLocation);
-            }
-
-            return model;
-        }
-
-        public static @NotNull BakedAnimations readAnimation(ResourceLocation resourceLocation) {
-            Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
-
-            final BakedAnimations animation = animations.get(resourceLocation);
-
-            if (animation == null) {
-                throw new RuntimeException("Animation not found: " + resourceLocation);
-            }
-
-            return animation;
-        }
-
-        @Contract("_ -> new")
-        public static @NotNull InputStream readTexture(ResourceLocation resourceLocation) {
-            TextureManager textureManager = MINECRAFT.getTextureManager();
-
-            final AbstractTexture texture = textureManager.getTexture(resourceLocation, null);
-
-            if (!(texture instanceof DynamicTexture dynamicTexture)) {
-                throw new RuntimeException("Texture not found: " + resourceLocation);
-            }
-
-            final NativeImage pixels = dynamicTexture.getPixels();
-
-            if (pixels == null) {
-                throw new RuntimeException("Texture not found: " + resourceLocation);
-            }
-
-            try {
-                return new ByteArrayInputStream(pixels.asByteArray());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to trad Textures", e);
             }
         }
     }
