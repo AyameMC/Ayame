@@ -27,6 +27,8 @@ import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 
+import java.util.function.ToDoubleFunction;
+
 public class AyameMolangVars {
     /**
      * 护甲值（0-20）。
@@ -96,20 +98,26 @@ public class AyameMolangVars {
     public static final String BODY_HEAD_DIFF = "aym.body_head_diff";
 
     public static void registerMolangVars() {
-        MolangQueries.<Player>setActorVariable(WHICH_PERSON, actor -> {
-            final Minecraft minecraft = actor.mc();
-            final CameraType person = minecraft.options.getCameraType();
-            return switch (person) {
-                case FIRST_PERSON -> 0;
-                case THIRD_PERSON_BACK -> 1;
-                case THIRD_PERSON_FRONT -> 2;
-            };
+        MolangQueries.<Player>setActorVariable(WHICH_PERSON, new ToDoubleFunction<MolangQueries.Actor<Player>>() {
+            @Override
+            public double applyAsDouble(MolangQueries.Actor<Player> actor) {
+                final Minecraft minecraft = actor.mc();
+                final CameraType person = minecraft.options.getCameraType();
+                return switch (person) {
+                    case FIRST_PERSON -> 0;
+                    case THIRD_PERSON_BACK -> 1;
+                    case THIRD_PERSON_FRONT -> 2;
+                };
+            }
         });
 
-        MolangQueries.<Player>setActorVariable(BODY_HEAD_DIFF, actor -> {
-            final Player player = actor.animatable();
-            return player.yHeadRot - player.yBodyRot;
-        });
+        MolangQueries.<Player>setActorVariable(BODY_HEAD_DIFF,
+                actor -> {
+                    final Player player = actor.animatable();
+                    return player.yBodyRotO - player.yBodyRot;
+                }
+        );
+
 
         MathParser.registerVariable(
                 new Variable(AyameMolangVars.HAS_BOOTS, 0)

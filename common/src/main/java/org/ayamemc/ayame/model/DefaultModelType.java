@@ -36,6 +36,7 @@ public record DefaultModelType(ResourceLocation geoModel,
                                ResourceLocation animation,
                                ResourceLocation texture,
                                ResourceLocation arm,
+                               ResourceLocation armModel,
                                AyameModelData.MetaData metaData,
                                AyameModelData.ScriptData scriptData
 ) implements ModelType {
@@ -71,6 +72,7 @@ public record DefaultModelType(ResourceLocation geoModel,
         private ResourceLocation animation;
         private ResourceLocation texture;
         private ResourceLocation arm;
+        private ResourceLocation armModel;
         private AyameModelData.MetaData metaData;
         private AyameModelData.ScriptData scriptData;
 
@@ -109,8 +111,13 @@ public record DefaultModelType(ResourceLocation geoModel,
             return this;
         }
 
+        public Builder setArmModel(ResourceLocation armModel) {
+            this.armModel = armModel;
+            return this;
+        }
+
         public DefaultModelType build() {
-            return new DefaultModelType(geoModel, animation, texture, arm, metaData, scriptData);
+            return new DefaultModelType(geoModel, animation, texture, arm, armModel, metaData, scriptData);
         }
     }
 }

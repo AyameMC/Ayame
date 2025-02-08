@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.HumanoidArm;
+import org.ayamemc.ayame.client.renderer.AyamePlayerHandRenderer;
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,9 +44,12 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(method = "renderPlayerArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;getRenderer(Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/client/renderer/entity/EntityRenderer;"), cancellable = true)
     private void renderAyameModelRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, float equippedProgress, float swingProgress, HumanoidArm side, CallbackInfo ci, @Local AbstractClientPlayer abstractClientPlayer, @Local boolean isRightHand) {
-        AyamePlayerRender ayamePlayerRender = (AyamePlayerRender) this.entityRenderDispatcher.getRenderer(abstractClientPlayer);
+        AyamePlayerRender playerRenderer = (AyamePlayerRender) this.entityRenderDispatcher.getRenderer(abstractClientPlayer);
+        poseStack.scale(2.0F, 2.0F, 2.0F);
         if (isRightHand) {
-            ayamePlayerRender.render(abstractClientPlayer, 0, 0, poseStack, buffer, packedLight);
+            playerRenderer.renderRightHand(poseStack, buffer, packedLight, abstractClientPlayer);
+        } else {
+            playerRenderer.renderLeftHand(poseStack, buffer, packedLight, abstractClientPlayer);
         }
         ci.cancel();
     }

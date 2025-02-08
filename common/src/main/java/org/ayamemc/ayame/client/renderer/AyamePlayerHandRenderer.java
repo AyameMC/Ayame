@@ -20,15 +20,40 @@
 
 package org.ayamemc.ayame.client.renderer;
 
-import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayame.Ayame;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
-public class AyamePlayerHandRenderer extends GeoObjectRenderer {
+public class AyamePlayerHandRenderer extends GeoObjectRenderer<AyameHand> {
 
+    public AyamePlayerHandRenderer() {
+        super(new GeoHandModel());
+    }
 
-    public AyamePlayerHandRenderer(GeoModel model) {
-        super(model);
+    @Override
+    public long getInstanceId(AyameHand abstractClientPlayer) {
+
+        return this.animatable.hashCode();
+    }
+
+    public static class GeoHandModel extends GeoModel<AyameHand> {
+
+        @SuppressWarnings("removal")
+        @Override
+        public ResourceLocation getModelResource(AyameHand animatable) {
+            return Ayame.withAyamePath("geo/ayame/ayame_chan_hand.json");
+        }
+
+        @SuppressWarnings("removal")
+        @Override
+        public ResourceLocation getTextureResource(AyameHand animatable) {
+            return Ayame.withAyamePath("textures/ayame/ayame_chan.png");
+        }
+
+        @Override
+        public ResourceLocation getAnimationResource(AyameHand animatable) {
+            return Ayame.withAyamePath("animations/ayame/ayame_chan.json");
+        }
     }
 }

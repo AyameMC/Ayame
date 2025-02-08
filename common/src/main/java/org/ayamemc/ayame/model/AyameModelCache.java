@@ -57,8 +57,9 @@ public class AyameModelCache {
      */
     @NotNull
     public static ModelType getPlayerModel(Player player) {
-        return playerModelCache.getOrDefault(player, DefaultModels.AYAME_CHAN_TYPE);
+        return playerModelCache.getOrDefault(player, DefaultModels.BUILTIN_MODEL_TYPE);
     }
+
 
     public static boolean hasPlayerModel(Player player) {
         return playerModelCache.containsKey(player);

@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -46,11 +47,14 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int CHEST_PLATE_SLOT = 2;
     private static final int HELMET_SLOT = 3;
 
+    private final AyamePlayerHandRenderer handRenderer;
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
+        handRenderer = new AyamePlayerHandRenderer();
     }
+
 
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
@@ -72,6 +76,15 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         int modifiedColour = (a << 24) | (colour & 0x00FFFFFF);
 
         super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, modifiedColour);
+    }
+
+    public void renderRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer abstractClientPlayer) {
+        handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
+    }
+    public void renderLeftHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Player player) {
+        // X 轴镜像
+        poseStack.scale(-1.0F, 1.0F, 1.0F);
+        handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
     }
 
 

@@ -58,7 +58,8 @@ public class DefaultModels {
                 .setGeoModel(withAyamePath("geo/ayame/ayame_chan.json"))
                 .setAnimation(withAyamePath("animations/ayame/ayame_chan.json"))
                 .setTexture(withAyamePath("textures/ayame/ayame_chan.png"))
-                .setArm(withAyamePath("textures/ayame/ayame_chan_arm.png"))
+                .setArm(withAyamePath("textures/ayame/ayame_chan.png"))
+                .setArmModel(withAyamePath("geo/ayame/ayame_chan_hand.json"))
                 .setMetaData(metaData)
                 .build();
     }
