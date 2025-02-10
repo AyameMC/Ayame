@@ -10,7 +10,8 @@
   ],
   "mixins": [
     "AnimationControllerMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "accessor.MolangQueriesInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

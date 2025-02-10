@@ -215,7 +215,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
 
             state.getController().forceAnimationReset();
 
-            return PlayState.STOP;
+            return PlayState.CONTINUE;
         }));
 
         // TODO 添加events

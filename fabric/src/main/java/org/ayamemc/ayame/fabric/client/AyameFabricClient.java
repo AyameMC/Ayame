@@ -57,14 +57,6 @@ public final class AyameFabricClient implements ClientModInitializer {
                     }
 
                     @Override
-                    public Collection<ResourceLocation> getFabricDependencies() {
-                        // 在geckolib之后reload
-                        return Collections.singletonList(
-                                GeckoLibConstants.id("models_animations")
-                        );
-                    }
-
-                    @Override
                     public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier,
                                                                    ResourceManager resourceManager,
                                                                    ProfilerFiller preparationsProfiler,

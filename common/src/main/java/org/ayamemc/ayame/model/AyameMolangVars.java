@@ -23,6 +23,7 @@ package org.ayamemc.ayame.model;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.util.MolangUtil;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
@@ -111,7 +112,7 @@ public class AyameMolangVars {
             }
         });
 
-        MolangQueries.<Player>setActorVariable(BODY_HEAD_DIFF,
+        MolangUtil.<Player>setActorVariable(BODY_HEAD_DIFF,
                 actor -> {
                     final Player player = actor.animatable();
                     return player.yBodyRotO - player.yBodyRot;
