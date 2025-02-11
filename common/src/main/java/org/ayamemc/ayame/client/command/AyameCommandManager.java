@@ -74,8 +74,9 @@ public class AyameCommandManager {
 
                         .then(LiteralArgumentBuilder.<T>literal("rescan")
                                 .executes(commandContext -> {
-                                    AyameClient.loadAllModelLocal();
-                                    sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
+                                    AyameClient.loadAllModelLocal().whenComplete((r, ex) -> {
+                                        sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
+                                    });
                                     return 0;
                                 }))
 

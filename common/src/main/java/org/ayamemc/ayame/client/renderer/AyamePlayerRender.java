@@ -86,7 +86,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
             // 如果没有这个模型, 或者没有加载完成
             if (!AyameClient.modelManagerClient.hasModel(selectedModelId)) {
-
                 ret = AyameClient.modelManagerClient.getDefaultModelFallback(); // 落回默认模型
 
                 return ret;

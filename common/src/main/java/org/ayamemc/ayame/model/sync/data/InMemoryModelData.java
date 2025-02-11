@@ -165,6 +165,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
                 .setArm(this.createArmResourceLocation())
                 .setAnimation(this.createAnimationResourceLocation())
                 .setTexture(this.createTextureResourceLocation())
+                .setId(this.getId())
                 .build();
     }
 

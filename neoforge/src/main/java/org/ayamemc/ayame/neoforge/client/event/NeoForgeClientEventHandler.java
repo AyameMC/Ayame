@@ -20,12 +20,14 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
+import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
@@ -56,6 +58,16 @@ public class NeoForgeClientEventHandler {
         // 执行所有任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
+
+        final Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.isLocalServer()) {
+            AyameClient.loadAllModelLocal().join();
+            return;
+        }
+
+        AyameClient.requestServerSync();
+
     }
 
     @SubscribeEvent
@@ -66,6 +78,8 @@ public class NeoForgeClientEventHandler {
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+
+        AyameClient.unloadAllModels();
     }
 
     @SubscribeEvent

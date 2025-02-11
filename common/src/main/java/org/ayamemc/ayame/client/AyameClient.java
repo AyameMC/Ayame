@@ -57,6 +57,7 @@ public class AyameClient {
 
     public static void init() {
         ConfigUtil.init();
+
         registerDefaultModeLoaders();
         exportDefaultModels();
         loadAllDefaultModels();
@@ -86,6 +87,14 @@ public class AyameClient {
 
     public static CompletableFuture<Boolean> tryLoadModelCacheFromServer(String hash) {
         return modelLoaderClient.loadModelIfCached(hash);
+    }
+
+    public static void unloadAllModels() {
+        modelManagerClient.unloadAll();
+    }
+
+    public static void requestServerSync() {
+
     }
 
     public static @NotNull CompletableFuture<Void> loadAllModelLocal() {
