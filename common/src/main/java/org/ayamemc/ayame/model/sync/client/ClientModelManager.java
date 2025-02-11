@@ -42,9 +42,25 @@ public class ClientModelManager {
 
     // 添加新的模型
     public void addLoadedModelAndRegister(@NotNull InMemoryModelData model) {
+        if (this.modelDuplicated(model)) {
+            return;
+        }
+
         model.register();
 
         this.loadedModels.add(model);
+    }
+
+    public boolean modelDuplicated(@NotNull InMemoryModelData data) {
+        final String id = data.getId();
+
+        for (InMemoryModelData dataCurr : this.loadedModels) {
+            if (dataCurr.getId().equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

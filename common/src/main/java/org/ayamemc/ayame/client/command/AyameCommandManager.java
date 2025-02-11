@@ -33,7 +33,6 @@ import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.model.resource.ModelScanner;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.mozilla.javascript.Context;
@@ -75,7 +74,7 @@ public class AyameCommandManager {
 
                         .then(LiteralArgumentBuilder.<T>literal("rescan")
                                 .executes(commandContext -> {
-                                    ModelScanner.scanModel();
+                                    AyameClient.loadAllModelLocal();
                                     sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
                                     return 0;
                                 }))

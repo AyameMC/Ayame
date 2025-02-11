@@ -20,81 +20,52 @@
 
 package org.ayamemc.ayame.model.sync.client;
 
-import org.ayamemc.ayame.model.sync.IModelLoader;
+import org.ayamemc.ayame.model.sync.AbstractModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
-import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Consumer;
 
-public class ClientModelLoader {
-    private final ExecutorService worker;
-
-    private final ModelCacheDatabase modelCacheDatabase;
+public class ClientModelLoader extends AbstractModelLoader {
     private final ClientModelManager modelManager;
 
-    private final Set<IModelLoader> modelLoaders= new HashSet<>();
-
     public ClientModelLoader(ExecutorService worker, ModelCacheDatabase modelCacheDatabase, ClientModelManager modelManager) {
-        this.worker = worker;
-        this.modelCacheDatabase = modelCacheDatabase;
+        super(worker, modelCacheDatabase);
         this.modelManager = modelManager;
     }
 
-    public void loadModel0(@NotNull ModelDataComponent dataComponent, Consumer<ModelDataComponent> componentModifier) throws IOException {
-        if (componentModifier != null) componentModifier.accept(dataComponent);
+    public CompletableFuture<Boolean> loadModelIfCached(String hash) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                final byte[] data = this.modelCacheDatabase.getCache(hash);
 
-        final InMemoryModelData built = new InMemoryModelData(dataComponent.canUnload(), dataComponent.loadAsDefaultModel());
+                if (data == null) {
+                    return false;
+                }
 
-        built.restoreFrom(dataComponent.modelMeta());
-        built.restoreFrom(dataComponent.byteStorage());
+                final ByteArrayInputStream streamIn = new ByteArrayInputStream(data);
+                final DataInputStream helperStreamIn = new DataInputStream(streamIn);
 
-        this.modelCacheDatabase.addCache(built);
+                final InMemoryModelData modelData = new InMemoryModelData(true, false); // We will initialize these params soon
 
-        this.modelManager.addLoadedModelAndRegister(built);
-    }
+                modelData.deserialize(helperStreamIn);
 
-    public void registerModelLoader(IModelLoader modelLoader) {
-        this.modelLoaders.add(modelLoader);
-    }
+                this.onModelLoaded(modelData);
 
-    public void deregisterModelLoader(IModelLoader modelLoader) {
-        this.modelLoaders.remove(modelLoader);
-    }
+                return true;
+            }catch (Exception e){
+                e.printStackTrace();
 
-    public IModelLoader selectModelLoaderFor(File target) {
-        for (IModelLoader modelLoader : this.modelLoaders) {
-            if (modelLoader.wantLoad(target)) {
-                return modelLoader;
+                return false;
             }
-        }
-
-        throw new IllegalStateException("No model loaders have been found!");
+        }, this.worker);
     }
 
-    public void loadModelSync(File file, Consumer<ModelDataComponent> modelDataComponentModifier) {
-        final IModelLoader selectedLoader = this.selectModelLoaderFor(file);
-        final ModelDataComponent dataComponent = selectedLoader.loadModel(file);
-
-        if (dataComponent == null) {
-            throw new IllegalStateException();
-        }
-
-        try {
-            this.loadModel0(dataComponent, modelDataComponentModifier);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public CompletableFuture<Void> loadModelAsync(File file, Consumer<ModelDataComponent> modelDataComponentModifier) {
-        return CompletableFuture.runAsync(() -> this.loadModelSync(file, modelDataComponentModifier), this.worker);
+    @Override
+    protected void onModelLoaded(InMemoryModelData modelData) {
+        this.modelManager.addLoadedModelAndRegister(modelData);
     }
 }

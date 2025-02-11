@@ -22,18 +22,21 @@ package org.ayamemc.ayame.client;
 
 import com.mojang.logging.LogUtils;
 import org.ayamemc.ayame.Constants;
-import org.ayamemc.ayame.model.resource.AyameModelResource;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.client.ClientModelLoader;
 import org.ayamemc.ayame.model.sync.client.ClientModelManager;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.ayamemc.ayame.util.FileUtil;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class AyameClient {
@@ -49,29 +52,29 @@ public class AyameClient {
         }
     }
 
-    public static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
+    private static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
 
 
     public static void init() {
         ConfigUtil.init();
-        // 扫描模型
-       //  ModelScanner.scanModel();
-        registerDefaultModelLoaders();
-        injectDefaultModels();
-        registerDefaultModels();
+        registerDefaultModeLoaders();
+        exportDefaultModels();
+        loadAllDefaultModels();
     }
 
-    public static void registerDefaultModelLoaders(){
+    public static void registerDefaultModeLoaders(){
         for (IModelLoader modelLoader : Constants.DEFAULT_MODEL_LOADERS) {
             modelLoaderClient.registerModelLoader(modelLoader);
         }
     }
 
-    private static void injectDefaultModels() {
-        FileUtil.copyAyameBuiltinDirectoryToDirectory("models/ayame_chan/", AyameModelResource.MODEL_PATH + "ayame_chan");
+    private static void exportDefaultModels() {
+        for (String defaultModel : Constants.DEFAULT_MODELS) {
+            FileUtil.copyAyameBuiltinDirectoryToDirectory("models/" + defaultModel, Constants.MODELS_DIR.resolve(defaultModel));
+        }
     }
 
-    public static void registerDefaultModels() {
+    public static void loadAllDefaultModels() {
         LogUtils.getLogger().info("Register default models");
 
         for (String defaultModelName : Constants.DEFAULT_MODELS) {
@@ -79,5 +82,39 @@ public class AyameClient {
 
             modelLoaderClient.loadModelSync(targetPath.toFile(), Constants.DEFAULT_MODEL_DATA_MODIFIER);
         }
+    }
+
+    public static CompletableFuture<Boolean> tryLoadModelCacheFromServer(String hash) {
+        return modelLoaderClient.loadModelIfCached(hash);
+    }
+
+    public static @NotNull CompletableFuture<Void> loadAllModelLocal() {
+        LogUtils.getLogger().info("Loading models in local");
+
+        final File targetDir = Constants.MODELS_DIR.toFile();
+        final File[] files = targetDir.listFiles();
+
+        if (files == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        final AtomicInteger taskCountDown = new AtomicInteger(files.length);
+        final CompletableFuture<Void> callback = new CompletableFuture<>();
+
+        for (File targetFile : files) {
+            modelLoaderClient.loadModelAsync(targetFile, null).whenComplete((unused, ex) -> {
+                if (ex != null) {
+                    ex.printStackTrace();
+                }
+
+                final int curr = taskCountDown.decrementAndGet();
+
+                if (curr == 0) {
+                    callback.complete(null);
+                }
+            });
+        }
+
+        return callback;
     }
 }

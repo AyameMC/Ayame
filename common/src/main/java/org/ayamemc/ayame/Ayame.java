@@ -24,8 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
-import org.ayamemc.ayame.model.DefaultModels;
-import org.ayamemc.ayame.model.resource.ModelResourceRegistry;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.ayamemc.ayame.util.ModLoader;
 import org.slf4j.Logger;
@@ -45,10 +43,7 @@ public final class Ayame {
     public static void init(ModLoader modLoader) {
         Ayame.modLoader = modLoader;
         ConfigUtil.init();
-        ModelResourceRegistry.init();
-        DefaultModels.init();
         Yttribumes.init();
-
         AyameMolangVars.registerMolangVars();
     }
 
