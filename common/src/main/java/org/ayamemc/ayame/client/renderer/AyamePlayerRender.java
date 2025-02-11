@@ -29,16 +29,19 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameModelCache;
 import org.ayamemc.ayame.model.AyameMolangVars;
-import org.ayamemc.ayame.model.ModelType;
+import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+
+import java.util.UUID;
 
 
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
@@ -47,14 +50,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int CHEST_PLATE_SLOT = 2;
     private static final int HELMET_SLOT = 3;
 
-    private final AyamePlayerHandRenderer handRenderer;
+    private final AyamePlayerHandRenderer handRenderer = new AyamePlayerHandRenderer();
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
-        handRenderer = new AyamePlayerHandRenderer();
     }
-
 
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
@@ -66,7 +67,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     @Override
     public void actuallyRender(PoseStack poseStack, Player player, BakedGeoModel model, @Nullable RenderType renderType,
-                               MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
+                               @NotNull MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
                                int packedLight, int packedOverlay, int colour) {
         RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
         VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
@@ -87,34 +88,40 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
     }
 
+    protected static class GeoPlayerModel extends GeoModel<Player> {
+        private ModelSelection getPlayerModelSelectionOrFallback(@NotNull Player player) {
+            final UUID playerUUID = player.getUUID();
 
-    // TODO : 添加API
-    public static class GeoPlayerModel extends GeoModel<Player> {
+            ModelSelection ret = AyameClient.modelManagerClient.getModelOfPlayer(playerUUID);
 
-        public GeoPlayerModel() {
-        }
+            final String selectedModelId = ret.getId();
 
-        /**
-         * 将玩家模型切换为对应外观，TODO: 同时告诉服务器
-         *
-         * @param model 传入{@link ModelType}类型的模型资源
-         */
-        public static void switchModel(Player player, ModelType model) {
-            AyameModelCache.setPlayerModel(player, model);
+            // 如果没有这个模型, 或者没有加载完成
+            if (!AyameClient.modelManagerClient.hasModel(selectedModelId)) {
+                ret = AyameClient.modelManagerClient.getDefaultModelFallback(); // 落回默认模型
+
+                return ret;
+            }
+
+            return ret;
         }
 
         @Override
-        public void applyMolangQueries(AnimationState<Player> animationState, double animTime) {
+        public void applyMolangQueries(@NotNull AnimationState<Player> animationState, double animTime) {
             final Player player = animationState.getAnimatable();
+
             MathParser.setVariable(
                     AyameMolangVars.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(
                     AyameMolangVars.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(
                     AyameMolangVars.IS_RIPTIDE, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
+
             MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
                     player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
@@ -143,21 +150,19 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getGeoModel();
+            return this.getPlayerModelSelectionOrFallback(animatable).getGeoModel();
         }
 
         @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getTexture();
+            return this.getPlayerModelSelectionOrFallback(animatable).getTexture();
         }
 
         @Override
         public ResourceLocation getAnimationResource(Player animatable) {
-            return AyameModelCache.getPlayerModel(animatable).getAnimation();
+            return this.getPlayerModelSelectionOrFallback(animatable).getAnimation();
         }
-
-
     }
 
 }

@@ -31,9 +31,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
@@ -64,14 +66,21 @@ public class FabricClientEventHandler {
     private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
         // 停止执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+
+        AyameClient.unloadAllModels();
     }
 
     private static void joinServer(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-//        // 开新线程扫描模型
-//        new Thread(ModelScanner::scanModel).start();
+
+        if (minecraft.isLocalServer()) {
+            AyameClient.loadAllModelLocal().join();
+            return;
+        }
+
+        AyameClient.requestServerSync();
     }
 
     /**

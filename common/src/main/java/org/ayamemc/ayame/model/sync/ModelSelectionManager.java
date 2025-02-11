@@ -18,30 +18,10 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model;
+package org.ayamemc.ayame.model.sync;
 
-import net.minecraft.resources.ResourceLocation;
-
-/// Ayame通用模型接口，适用于所有Geo模型
-///
-/// 模型类型指的是使用了哪种模型，例如ayame的模型类型为`ayame`，兼容ysm的为`ysm`，值与{@link ModelMetaData#type()}的值对应
-
-public interface ModelType {
-    /**
-     * 从geckolib缓存中获取模型资源
-     *
-     * @return 模型资源
-     */
-    ResourceLocation getGeoModel();
-
-    ResourceLocation getTexture();
-
-    ResourceLocation getAnimation();
-
-    ResourceLocation getArm();
-
-    AyameModelData.MetaData metaData();
-
-    AyameModelData.ScriptData scriptData();
-
+/**
+ * 正在渲染中的模型缓存，它同时运行在服务端和客户端
+ */
+public class ModelSelectionManager {
 }
