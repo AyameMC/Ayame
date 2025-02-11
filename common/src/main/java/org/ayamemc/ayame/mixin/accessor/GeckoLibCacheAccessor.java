@@ -20,20 +20,37 @@
 
 package org.ayamemc.ayame.mixin.accessor;
 
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
-import software.bernie.geckolib.loading.math.MolangQueries;
-import software.bernie.geckolib.loading.math.value.Variable;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import software.bernie.geckolib.cache.GeckoLibCache;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.loading.object.BakedAnimations;
 
-@Mixin(value = MolangQueries.class, remap = false)
-public interface MolangQueriesInvoker {
-    @Invoker(value = "getVariableFor")
-    static Variable invokeGetVariableFor(String name) {
+import java.util.Map;
+
+@Mixin(value = GeckoLibCache.class, remap = false)
+public interface GeckoLibCacheAccessor {
+    @Accessor(value = "MODELS")
+    static Map<ResourceLocation, BakedGeoModel> getModels() {
         throw new AssertionError();
     }
 
-    @Invoker(value = "getActor")
-    static MolangQueries.Actor<?> invokeGetActor() {
+    @Mutable
+    @Accessor(value = "MODELS")
+    static void setModels(Map<ResourceLocation, BakedGeoModel> models) {
+        throw new AssertionError();
+    }
+
+    @Accessor(value = "ANIMATIONS")
+    static Map<ResourceLocation, BakedAnimations> getAnimations() {
+        throw new AssertionError();
+    }
+
+    @Mutable
+    @Accessor(value = "ANIMATIONS")
+    static void setAnimations(Map<ResourceLocation, BakedAnimations> animations) {
         throw new AssertionError();
     }
 }

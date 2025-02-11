@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
     @Redirect(method = "spin", at = @At(value = "INVOKE", target = "Ljava/lang/Thread;start()V"))
     private static void onServerSpin(@NotNull Thread instance) {
         instance.start();

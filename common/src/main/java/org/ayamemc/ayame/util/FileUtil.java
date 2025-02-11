@@ -225,7 +225,7 @@ public class FileUtil {
                     final String name = entry.getName();
 
                     if (name.startsWith(sourcePath)) {
-                        final String relativePath = name.substring(sourcePath.length());
+                        final String relativePath = name.substring(sourcePath.length() + 1);
                         final File target = targetPathDir.resolve(relativePath).toFile();
 
                         if (entry.isDirectory()) {

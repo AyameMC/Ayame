@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.mixin;
 
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.model.sync.ModelSelectionManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -32,7 +31,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 @Mixin(GeckoLibCache.class)
-public class GeckoLibCacheMixin {
+public abstract class GeckoLibCacheMixin {
     @Redirect(method = "reload", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;thenAcceptAsync(Ljava/util/function/Consumer;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"))
     private static CompletableFuture<Void> onGeckoLibReload(CompletableFuture<Void> previous, Consumer<Void> originalAction, Executor gameExecutor) {
         return previous.thenAcceptAsync(originalAction, gameExecutor).thenAccept(unused -> {

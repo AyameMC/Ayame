@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.model.sync.client;
 
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.sync.AbstractModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
@@ -57,8 +58,7 @@ public class ClientModelLoader extends AbstractModelLoader {
 
                 return true;
             }catch (Exception e){
-                e.printStackTrace();
-
+                Ayame.LOGGER.error("Failed to load ayame model", e);
                 return false;
             }
         }, this.worker);

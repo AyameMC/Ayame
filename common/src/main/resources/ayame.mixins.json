@@ -12,8 +12,11 @@
     "AnimationControllerMixin",
     "GeckoLibCacheMixin",
     "PlayerMixin",
-    "server.MinecraftServerMixin",
-    "accessor.MolangQueriesInvoker"
+    "accessor.GeckoLibCacheAccessor",
+    "accessor.KeyframeAccessor",
+    "accessor.KeyframeStackAccessor",
+    "accessor.MolangQueriesInvoker",
+    "server.MinecraftServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

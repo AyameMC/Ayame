@@ -18,22 +18,23 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model.sync.server;
+package org.ayamemc.ayame.mixin.accessor;
 
-import org.ayamemc.ayame.model.sync.AbstractModelLoader;
-import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
-import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import software.bernie.geckolib.animation.keyframe.Keyframe;
+import software.bernie.geckolib.animation.keyframe.KeyframeStack;
 
-import java.util.concurrent.ExecutorService;
+import java.util.List;
 
-public class ServerModelLoader extends AbstractModelLoader {
-    public ServerModelLoader(ExecutorService worker, ModelCacheDatabase modelCacheDatabase) {
-        super(worker, modelCacheDatabase);
-    }
+@Mixin(KeyframeStack.class)
+public interface KeyframeStackAccessor<T extends Keyframe<?>> {
+    @Accessor("xKeyframes")
+    void setXKeyframes(List<T> keyframes);
 
-    @Override
-    protected void onModelLoaded(InMemoryModelData modelData) {
+    @Accessor("yKeyframes")
+    void setYKeyframes(List<T> keyframes);
 
-    }
+    @Accessor("zKeyframes")
+    void setZKeyframes(List<T> keyframes);
 }

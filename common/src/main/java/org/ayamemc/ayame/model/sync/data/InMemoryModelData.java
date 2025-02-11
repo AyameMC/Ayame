@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import org.ayamemc.ayame.mixin.accessor.GeckoLibCacheAccessor;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.IRegistrableModel;
 import org.ayamemc.ayame.model.resource.IModelResource;
@@ -46,7 +47,6 @@ import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -315,51 +315,33 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
             }
         }
 
+
         // Our black magic of GeckoLib
         public static Map<ResourceLocation, BakedGeoModel> getInjectedModelsMap() {
-            try {
-                final Class<GeckoLibCache> targetClazz = GeckoLibCache.class;
+            final Map<ResourceLocation, BakedGeoModel> GECKO_MODELS = GeckoLibCacheAccessor.getModels();
 
-                final Field modelsField = targetClazz.getDeclaredField("MODELS");
-                modelsField.setAccessible(true);
-
-                final Map<ResourceLocation, BakedGeoModel> originalValue = (Map<ResourceLocation, BakedGeoModel>) modelsField.get(null);
-
-                // Already replaced
-                if (Object2ObjectOpenHashMap.class.isAssignableFrom(originalValue.getClass())) {
-                    return originalValue;
-                }
-
-                final Map<ResourceLocation, BakedGeoModel> newValue = new Object2ObjectOpenHashMap<>(originalValue);
-
-                modelsField.set(null, newValue);
-                return newValue;
-            }catch (Exception e) {
-                throw new RuntimeException(e);
+            // Already replaced
+            if (GECKO_MODELS instanceof Object2ObjectOpenHashMap) {
+                return GECKO_MODELS;
             }
+
+            Map<ResourceLocation, BakedGeoModel> newValue = new Object2ObjectOpenHashMap<>(GECKO_MODELS);
+
+            GeckoLibCacheAccessor.setModels(newValue);
+            return newValue;
         }
 
         public static Map<ResourceLocation, BakedAnimations> getInjectedAnimationsMap() {
-            try {
-                final Class<GeckoLibCache> targetClazz = GeckoLibCache.class;
-
-                final Field modelsField = targetClazz.getDeclaredField("ANIMATIONS");
-                modelsField.setAccessible(true);
-
-                final Map<ResourceLocation, BakedAnimations> originalValue = (Map<ResourceLocation, BakedAnimations>) modelsField.get(null);
-
-                // Already replaced
-                if (Object2ObjectOpenHashMap.class.isAssignableFrom(originalValue.getClass())) {
-                    return originalValue;
-                }
-
-                final Map<ResourceLocation, BakedAnimations> newValue = new Object2ObjectOpenHashMap<>(originalValue);
-
-                modelsField.set(null, newValue);
-                return newValue;
-            }catch (Exception e) {
-                throw new RuntimeException(e);
+            final Map<ResourceLocation, BakedAnimations> GECKO_ANIMATIONS = GeckoLibCacheAccessor.getAnimations();
+            // Already replaced
+            if (GECKO_ANIMATIONS instanceof Object2ObjectOpenHashMap) {
+                return GECKO_ANIMATIONS;
             }
+
+            Map<ResourceLocation, BakedAnimations> newValue = new Object2ObjectOpenHashMap<>(GECKO_ANIMATIONS);
+
+            GeckoLibCacheAccessor.setAnimations(newValue);
+            return newValue;
         }
     }
 }
