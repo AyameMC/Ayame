@@ -23,10 +23,9 @@ package org.ayamemc.ayame.model.resource;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.model.AyameModelData;
+import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.util.JsonInterpreter;
-import org.ayamemc.ayame.util.TODO;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -47,6 +46,8 @@ public interface IModelResource {
 
     JsonInterpreter getArmJson(AyameModelData.ModelData model);
 
+    ModelSelection getFallbackModelSelection();
+
     default AyameModelData.ModelData getDefault() {
         return getModels().getFirst();
     }
@@ -66,4 +67,6 @@ public interface IModelResource {
     default ResourceLocation createArmResourceLocation() {
         return Ayame.withAyamePath("arm/" + getId() + ".json");
     }
+
+    boolean isDefaultModel();
 }

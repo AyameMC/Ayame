@@ -10,7 +10,9 @@
   ],
   "mixins": [
     "AnimationControllerMixin",
+    "GeckoLibCacheMixin",
     "PlayerMixin",
+    "server.MinecraftServerMixin",
     "accessor.MolangQueriesInvoker"
   ],
   "injectors": {

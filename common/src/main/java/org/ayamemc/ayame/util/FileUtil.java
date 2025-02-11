@@ -29,18 +29,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.JarURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.Enumeration;
+import java.nio.file.*;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class FileUtil {
     /**
@@ -203,14 +197,26 @@ public class FileUtil {
         }
     }
 
+    public static @NotNull String getTruncatedJarPath(@NotNull String input) {
+        // 查找 .jar 出现的起始位置
+        int jarIndex = input.indexOf(".jar");
+
+        if (jarIndex != -1) {
+            // 因为要包含 .jar 整个字符串，所以需要加上4（".jar" 的长度）
+            return input.substring(0, jarIndex + 4);
+        } else {
+            // 如果没有找到 .jar，则返回原始字符串或根据需要处理
+            return input;
+        }
+    }
+
     /**
      * 将包内目录资源复制到外部目录
      *
      * @param sourcePath 包内目录的源路径
-     * @param targetPath 目标目录
+     * @param targetPathDir 目标目录
      */
-    public static void copyBuiltinDirectoryToDirectory(String sourcePath, String targetPath) {
-        final Path targetPathDir = Path.of(targetPath);
+    public static void copyBuiltinDirectoryToDirectory(String sourcePath, Path targetPathDir) {
         try {
             try (JarFile targetFile = getCurrentJarFile()) {
                 final Enumeration<JarEntry> entries = targetFile.entries();
@@ -223,13 +229,9 @@ public class FileUtil {
                         final File target = targetPathDir.resolve(relativePath).toFile();
 
                         if (entry.isDirectory()) {
-                            if (target.mkdirs()) {
-                                Ayame.LOGGER.info("Creating directory for built-in files: {}", name);
-                            }
+                            target.mkdirs();
                             continue;
                         }
-
-                        Ayame.LOGGER.info("Copying built-in files: {}", name);
 
                         try (
                                 InputStream is = targetFile.getInputStream(entry);
@@ -246,16 +248,15 @@ public class FileUtil {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPath), e);
+            throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPathDir), e);
         }
     }
 
     /**
      * 获取当前 Jar 文件
-     *
      * @return JarFile
      * @throws URISyntaxException URI 语法错误
-     * @throws IOException        IO 异常
+     * @throws IOException IO 异常
      */
     public static JarFile getCurrentJarFile() throws URISyntaxException, IOException {
         final URI target = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI();
@@ -289,31 +290,9 @@ public class FileUtil {
         return targetFile;
     }
 
-    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, String targrtPath) {
-        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, targrtPath);
+    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, Path target) {
+        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, target);
     }
 
-
-    /**
-     * 从 ZIP 文件中获取指定条目的 InputStream
-     *
-     * @param zipFile   ZIP 文件
-     * @param entryName 条目名称
-     * @return InputStream
-     */
-    public static InputStream getInputStreamFromZip(ZipFile zipFile, String entryName) {
-        if (zipFile == null || entryName == null || entryName.isEmpty()) {
-            return null;
-        }
-
-        try {
-            // 获取 ZipEntry
-            ZipEntry entry = zipFile.getEntry(entryName);
-            return (entry != null) ? zipFile.getInputStream(entry) : null;
-        } catch (IOException e) {
-            // 记录错误，避免直接抛异常导致程序崩溃
-            throw new RuntimeException("Error reading zip entry: " + entryName, e);
-        }
-    }
 
 }

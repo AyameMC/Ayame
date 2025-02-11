@@ -48,6 +48,7 @@ public abstract class ClientEntityRenderersMixin {
                 new HashMap<>(Map.of(PlayerSkin.Model.WIDE, new AyamePlayerRender(context)));
 
         m.put(PlayerSkin.Model.SLIM, new AyamePlayerRender(context));
+
         cir.setReturnValue(ImmutableMap.copyOf(m));
     }
 }
