@@ -10,6 +10,7 @@
   ],
   "mixins": [
     "AnimationControllerMixin",
+    "GeckoLibCacheMixin",
     "PlayerMixin",
     "server.MinecraftServerMixin"
   ],

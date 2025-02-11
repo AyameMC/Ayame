@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class AyameModelData {
     private static final Gson GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+
     @SerializedName("version")
     public short version;
     @SerializedName("metadata")

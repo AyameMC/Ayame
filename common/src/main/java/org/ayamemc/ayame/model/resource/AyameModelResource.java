@@ -21,12 +21,14 @@
 package org.ayamemc.ayame.model.resource;
 
 import org.ayamemc.ayame.model.AyameModelData;
+import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public class AyameModelResource implements IModelResource {
     public static final String MODEL_PATH = "config/ayame/models/";
 
@@ -72,5 +74,15 @@ public class AyameModelResource implements IModelResource {
     @Override
     public JsonInterpreter getArmJson(AyameModelData.ModelData model) {
         return JsonInterpreter.of(modelFile.getContent(model.arm));
+    }
+
+    @Override
+    public ModelSelection getFallbackModelSelection() {
+        return null;
+    }
+
+    @Override
+    public boolean isDefaultModel() {
+        return false;
     }
 }

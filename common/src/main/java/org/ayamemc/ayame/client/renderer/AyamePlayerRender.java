@@ -28,7 +28,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.ayamemc.ayame.client.api.ClientAPIHooks;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.sync.ModelSelection;
@@ -80,14 +80,14 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         private ModelSelection getPlayerModelSelectionOrFallback(@NotNull Player player) {
             final UUID playerUUID = player.getUUID();
 
-            ModelSelection ret = ClientAPIHooks.modelManagerClient.getModelOfPlayer(playerUUID);
+            ModelSelection ret = AyameClient.modelManagerClient.getModelOfPlayer(playerUUID);
 
             final String selectedModelId = ret.getId();
 
             // 如果没有这个模型, 或者没有加载完成
-            if (!ClientAPIHooks.modelManagerClient.hasModel(selectedModelId)) {
+            if (!AyameClient.modelManagerClient.hasModel(selectedModelId)) {
 
-                ret = ClientAPIHooks.modelManagerClient.getDefaultModelFallback(); // 落回默认模型
+                ret = AyameClient.modelManagerClient.getDefaultModelFallback(); // 落回默认模型
 
                 return ret;
             }

@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
@@ -45,6 +46,7 @@ import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,12 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
     private final Registrar registrar = new Registrar(this); // Only used on client side
 
     public InMemoryModelData(boolean canUnload, boolean isDefaultModel) {
+        this.canUnload = canUnload;
+        this.isDefaultModel = isDefaultModel;
+    }
+
+    public InMemoryModelData(Map<String, byte[]> dataStorage, boolean canUnload, boolean isDefaultModel) {
+        this.internalDataStorage.putAll(dataStorage);
         this.modelMetaData = AyameModelData.parse(this.getIndexJson().toString());
         this.canUnload = canUnload;
         this.isDefaultModel = isDefaultModel;
@@ -254,22 +262,26 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
         }
 
         public static void removeBakedAnimation(ResourceLocation location) {
-            final Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
+            final Map<ResourceLocation, BakedAnimations> animations = getInjectedAnimationsMap();
+
             animations.remove(location);
         }
 
         public static void removeBakedModel(ResourceLocation location) {
-            final Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
+            final Map<ResourceLocation, BakedGeoModel> models = getInjectedModelsMap();
+
             models.remove(location);
         }
 
         public static void deregisterTextureDynamically(ResourceLocation target) {
             final TextureManager textureManager = MINECRAFT.getTextureManager();
+
             textureManager.release(target);
         }
 
         public static void addBakedModel(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
-            Map<ResourceLocation, BakedGeoModel> models = GeckoLibCache.getBakedModels();
+            Map<ResourceLocation, BakedGeoModel> models = getInjectedModelsMap();
+
             models.put(resourceLocation, instanceBakedModel(modelRes));
         }
 
@@ -290,7 +302,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
         }
 
         public static void addBakedAnimationDirectly(ResourceLocation resourceLocation, @NotNull BakedAnimations ani) {
-            Map<ResourceLocation, BakedAnimations> animations = GeckoLibCache.getBakedAnimations();
+            Map<ResourceLocation, BakedAnimations> animations = getInjectedAnimationsMap();
             animations.put(resourceLocation, ani);
         }
 
@@ -298,6 +310,53 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
             try {
                 MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // Our black magic of GeckoLib
+        public static Map<ResourceLocation, BakedGeoModel> getInjectedModelsMap() {
+            try {
+                final Class<GeckoLibCache> targetClazz = GeckoLibCache.class;
+
+                final Field modelsField = targetClazz.getDeclaredField("MODELS");
+                modelsField.setAccessible(true);
+
+                final Map<ResourceLocation, BakedGeoModel> originalValue = (Map<ResourceLocation, BakedGeoModel>) modelsField.get(null);
+
+                // Already replaced
+                if (Object2ObjectOpenHashMap.class.isAssignableFrom(originalValue.getClass())) {
+                    return originalValue;
+                }
+
+                final Map<ResourceLocation, BakedGeoModel> newValue = new Object2ObjectOpenHashMap<>(originalValue);
+
+                modelsField.set(null, newValue);
+                return newValue;
+            }catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public static Map<ResourceLocation, BakedAnimations> getInjectedAnimationsMap() {
+            try {
+                final Class<GeckoLibCache> targetClazz = GeckoLibCache.class;
+
+                final Field modelsField = targetClazz.getDeclaredField("ANIMATIONS");
+                modelsField.setAccessible(true);
+
+                final Map<ResourceLocation, BakedAnimations> originalValue = (Map<ResourceLocation, BakedAnimations>) modelsField.get(null);
+
+                // Already replaced
+                if (Object2ObjectOpenHashMap.class.isAssignableFrom(originalValue.getClass())) {
+                    return originalValue;
+                }
+
+                final Map<ResourceLocation, BakedAnimations> newValue = new Object2ObjectOpenHashMap<>(originalValue);
+
+                modelsField.set(null, newValue);
+                return newValue;
+            }catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

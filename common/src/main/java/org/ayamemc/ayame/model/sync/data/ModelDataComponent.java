@@ -21,8 +21,67 @@
 package org.ayamemc.ayame.model.sync.data;
 
 import org.ayamemc.ayame.model.AyameModelData;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
-public record ModelDataComponent(AyameModelData modelMeta, Map<String, byte[]> byteStorage, String contentHash) {
+public class ModelDataComponent{
+    private static final String SPECTOR = "/";
+
+    public final AyameModelData modelMeta;
+    public final Map<String, byte[]> byteStorage;
+
+    private boolean canUnload = true;
+    private boolean loadAsDefaultModel = false;
+
+    public ModelDataComponent(AyameModelData modelMeta, Map<String, byte[]> byteStorage) {
+        this.modelMeta = modelMeta;
+        this.byteStorage = byteStorage;
+    }
+
+    public AyameModelData modelMeta() {
+        return this.modelMeta;
+    }
+
+    public Map<String, byte[]> byteStorage() {
+        return this.byteStorage;
+    }
+
+    public boolean canUnload() {
+        return this.canUnload;
+    }
+
+    public boolean loadAsDefaultModel() {
+        return this.loadAsDefaultModel;
+    }
+
+    public void setCanUnload(boolean value) {
+        this.canUnload = value;
+    }
+
+    public void setLoadAsDefaultModel(boolean value) {
+        this.loadAsDefaultModel = value;
+    }
+
+    @Contract("_ -> new")
+    public static @NotNull ModelDataComponent fromMapBuffer(@NotNull Map<String, byte[]> buffer) {
+        final String metaJsonContent = new String(buffer.get("ayame.json"));
+        final AyameModelData parsed = AyameModelData.parse(metaJsonContent);
+
+        final Map<String, byte[]> remaining = new HashMap<>();
+
+        for (Map.Entry<String, byte[]> fileEntry : buffer.entrySet()) {
+            String fileNameWithPath = fileEntry.getKey();
+            final byte[] fileData = fileEntry.getValue();
+
+            fileNameWithPath = fileNameWithPath.replace(File.separator, SPECTOR);
+
+            remaining.put(fileNameWithPath, fileData);
+        }
+
+        return new ModelDataComponent(parsed, remaining);
+    }
 }

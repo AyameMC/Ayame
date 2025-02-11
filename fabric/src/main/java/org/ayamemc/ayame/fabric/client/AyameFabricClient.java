@@ -49,7 +49,7 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
+        /*ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
                 .registerReloadListener(new IdentifiableResourceReloadListener() {
                     @Override
                     public ResourceLocation getFabricId() {
@@ -75,7 +75,7 @@ public final class AyameFabricClient implements ClientModInitializer {
                                 backgroundExecutor
                         );
                     }
-                });
+                });*/
         AyameClient.init();
         // 不要动AyameKeyMappingEventHandler的init方法
         AyameKeyRegister.init();

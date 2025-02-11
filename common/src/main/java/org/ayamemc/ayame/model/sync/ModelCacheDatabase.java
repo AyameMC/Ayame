@@ -23,6 +23,7 @@ package org.ayamemc.ayame.model.sync;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.util.HashUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -33,6 +34,18 @@ public class ModelCacheDatabase {
 
     public ModelCacheDatabase(Path parentFolder) throws IOException {
         this.parentFolder = parentFolder;
+        Files.createDirectories(this.parentFolder);
+    }
+
+    public byte @Nullable [] getCache(String cacheHash) throws IOException {
+        final Path target = this.parentFolder.resolve(cacheHash);
+        final File cacheFile = target.toFile();
+
+        if (!cacheFile.exists()) {
+            return null;
+        }
+
+        return Files.readAllBytes(target);
     }
 
     public boolean hasCache(String cacheHash) {

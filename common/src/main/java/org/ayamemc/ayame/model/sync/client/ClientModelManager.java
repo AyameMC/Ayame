@@ -30,6 +30,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+/**
+ * 用于管理已经加载的模型和服务端发给客户端的实体数据
+ * @see ModelSelection
+ * @see InMemoryModelData
+ */
 public class ClientModelManager {
     private final Map<UUID, ModelSelection> playerModelSelections = Maps.newHashMap();
     // 已经加载的模型
@@ -42,6 +47,10 @@ public class ClientModelManager {
         this.loadedModels.add(model);
     }
 
+    /**
+     * 卸载并删除掉可以卸载的模型
+     * 一般只有默认模型被标记为不可卸载
+     */
     public void unloadAll() {
         final Iterator<InMemoryModelData> modelResourceIterator = this.loadedModels.iterator();
         while (modelResourceIterator.hasNext()) {
@@ -56,6 +65,9 @@ public class ClientModelManager {
         }
     }
 
+    /**
+     * 重载模型
+     */
     public void reloadAll() {
         for (InMemoryModelData modelData : this.loadedModels) {
             if (!modelData.canDeregister()) {
@@ -70,6 +82,11 @@ public class ClientModelManager {
         }
     }
 
+    /**
+     * 更新玩家的客户端侧的实体数据
+     * @param playerUUID 玩家uuid
+     * @param modelSelection 实体数据
+     */
     public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection){
         this.playerModelSelections.put(playerUUID, modelSelection);
     }
@@ -78,6 +95,10 @@ public class ClientModelManager {
         return this.loadedModels.stream().filter(InMemoryModelData::isDefaultModel);
     }
 
+    /**
+     * 获取默认模型的实体数据
+     * @return 在第一位的默认模型的实体数据
+     */
     public ModelSelection getDefaultModelFallback() {
         final Optional<InMemoryModelData> got = this.filterOutDefaultModel().findFirst();
 
@@ -90,6 +111,11 @@ public class ClientModelManager {
         return actual.getFallbackModelSelection();
     }
 
+    /**
+     * 获取或临时创建玩家的实体数据
+     * @param playerUUID 玩家uuid
+     * @return 新的或者已经发给客户端的实体数据
+     */
     public ModelSelection getModelOfPlayer(UUID playerUUID){
         final Optional<InMemoryModelData> defaultModelResource = this.filterOutDefaultModel().findFirst();
 
@@ -100,6 +126,11 @@ public class ClientModelManager {
         return this.playerModelSelections.computeIfAbsent(playerUUID, unused -> defaultModelResource.get().getFallbackModelSelection());
     }
 
+    /**
+     * 检查是否有某个模型
+     * @param id 模型id
+     * @return 有为true,无为false
+     */
     public boolean hasModel(String id) {
         for (InMemoryModelData loaded : this.loadedModels) {
             if (loaded.getId().equals(id)) {
@@ -110,6 +141,11 @@ public class ClientModelManager {
         return false;
     }
 
+    /**
+     * 获取某个模型
+     * @param id 模型id
+     * @return 模型的内存中数据,如果没有这个模型则返回false
+     */
     @Nullable
     public InMemoryModelData getModel(String id) {
         for (InMemoryModelData loaded : this.loadedModels) {
@@ -121,6 +157,10 @@ public class ClientModelManager {
         return null;
     }
 
+    /**
+     * 获取全部模型
+     * @return 全部模型的复制
+     */
     public Collection<InMemoryModelData> getAllModels() {
         return new ArrayList<>(this.loadedModels); // Copy to ensure safe
     }

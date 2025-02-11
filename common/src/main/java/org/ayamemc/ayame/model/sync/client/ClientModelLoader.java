@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public class ClientModelLoader {
     private final ExecutorService worker;
@@ -47,8 +48,10 @@ public class ClientModelLoader {
         this.modelManager = modelManager;
     }
 
-    public void loadModel0(@NotNull ModelDataComponent dataComponent, boolean canUnload, boolean isDefaultModel) throws IOException {
-        final InMemoryModelData built = new InMemoryModelData(canUnload, isDefaultModel);
+    public void loadModel0(@NotNull ModelDataComponent dataComponent, Consumer<ModelDataComponent> componentModifier) throws IOException {
+        if (componentModifier != null) componentModifier.accept(dataComponent);
+
+        final InMemoryModelData built = new InMemoryModelData(dataComponent.canUnload(), dataComponent.loadAsDefaultModel());
 
         built.restoreFrom(dataComponent.modelMeta());
         built.restoreFrom(dataComponent.byteStorage());
@@ -76,7 +79,7 @@ public class ClientModelLoader {
         throw new IllegalStateException("No model loaders have been found!");
     }
 
-    public void loadModelSync(File file) {
+    public void loadModelSync(File file, Consumer<ModelDataComponent> modelDataComponentModifier) {
         final IModelLoader selectedLoader = this.selectModelLoaderFor(file);
         final ModelDataComponent dataComponent = selectedLoader.loadModel(file);
 
@@ -85,13 +88,13 @@ public class ClientModelLoader {
         }
 
         try {
-            this.loadModel0(dataComponent, true, false);
+            this.loadModel0(dataComponent, modelDataComponentModifier);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public CompletableFuture<Void> loadModelAsync(File file) {
-        return CompletableFuture.runAsync(() -> this.loadModelSync(file), this.worker);
+    public CompletableFuture<Void> loadModelAsync(File file, Consumer<ModelDataComponent> modelDataComponentModifier) {
+        return CompletableFuture.runAsync(() -> this.loadModelSync(file, modelDataComponentModifier), this.worker);
     }
 }

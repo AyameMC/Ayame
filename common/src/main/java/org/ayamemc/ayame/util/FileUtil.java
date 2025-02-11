@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.ayamemc.ayame.Ayame;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,9 +36,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -303,8 +302,8 @@ public class FileUtil {
         return targetFile;
     }
 
-    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, String targrtPath) {
-        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, targrtPath);
+    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, String target) {
+        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, target);
     }
 
 
@@ -329,5 +328,4 @@ public class FileUtil {
             throw new RuntimeException("Error reading zip entry: " + entryName, e);
         }
     }
-
 }

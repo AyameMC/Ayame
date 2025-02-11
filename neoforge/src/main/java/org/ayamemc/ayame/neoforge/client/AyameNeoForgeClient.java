@@ -66,7 +66,7 @@ public class AyameNeoForgeClient {
     public static void registerReloadListener() {
         Minecraft mc = Minecraft.getInstance();
 
-        if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager)
+        /*if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager)
             resourceManager.registerReloadListener(new ContextAwareReloadListener() {
                 @Override
                 public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier preparationBarrier,
@@ -77,7 +77,7 @@ public class AyameNeoForgeClient {
                                                                @NotNull Executor gameExecutor) {
                     return ModelSelectionManager.reload(preparationBarrier, backgroundExecutor);
                 }
-            });
+            });*/
     }
 
 }
