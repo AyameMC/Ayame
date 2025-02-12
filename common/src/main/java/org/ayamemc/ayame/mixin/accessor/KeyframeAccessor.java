@@ -20,7 +20,9 @@
 
 package org.ayamemc.ayame.mixin.accessor;
 
+
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import software.bernie.geckolib.animation.EasingType;
 import software.bernie.geckolib.animation.keyframe.Keyframe;
@@ -30,18 +32,23 @@ import java.util.List;
 
 @Mixin(value = Keyframe.class, remap = false)
 public interface KeyframeAccessor<T extends MathValue> {
+    @Mutable
     @Accessor("length")
     void setLength(double length);
 
+    @Mutable
     @Accessor("startValue")
     void setStartValue(T startValue);
 
+    @Mutable
     @Accessor("endValue")
     void setEndValue(T endValue);
 
+    @Mutable
     @Accessor("easingType")
     void setEasingType(EasingType easingType);
 
+    @Mutable
     @Accessor("easingArgs")
     void setEasingArgs(List<T> easingArgs);
 }

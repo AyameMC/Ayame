@@ -27,7 +27,7 @@ import software.bernie.geckolib.animation.keyframe.KeyframeStack;
 
 import java.util.List;
 
-@Mixin(KeyframeStack.class)
+@Mixin(value = KeyframeStack.class, remap = false)
 public interface KeyframeStackAccessor<T extends Keyframe<?>> {
     @Accessor("xKeyframes")
     void setXKeyframes(List<T> keyframes);
