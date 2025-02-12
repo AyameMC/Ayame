@@ -36,4 +36,9 @@ public class TranslatableName {
     public static final String CAMERA_Y_OFFSET_UP = "camera_y_offset_up";
     public static final String CAMERA_Y_OFFSET_DOWN = "camera_y_offset_down";
     public static final String CAMERA_Y_OFFSET_RESET = "camera_y_offset_reset";
+    // 自定义按键
+    public static final String CUSTOM_KEY_0 = "custom_key_0";
+    public static final String CUSTOM_KEY_1 = "custom_key_1";
+    public static final String CUSTOM_KEY_2 = "custom_key_2";
+    public static final String CUSTOM_KEY_3 = "custom_key_3";
 }

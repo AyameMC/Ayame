@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.model.sync.client;
 
 import com.google.common.collect.Maps;
+import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.jetbrains.annotations.NotNull;
@@ -105,6 +106,8 @@ public class ClientModelManager {
      */
     public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection){
         this.playerModelSelections.put(playerUUID, modelSelection);
+        // 同时加载脚本,调用脚本的onStart()
+        JavaScriptLoader.runJs(); // TODO: 可能需要异步?
     }
 
     public Stream<InMemoryModelData> filterOutDefaultModel() {
@@ -160,7 +163,7 @@ public class ClientModelManager {
     /**
      * 获取某个模型
      * @param id 模型id
-     * @return 模型的内存中数据,如果没有这个模型则返回false
+     * @return 模型的内存中数据,如果没有这个模型则返回null
      */
     @Nullable
     public InMemoryModelData getModel(String id) {

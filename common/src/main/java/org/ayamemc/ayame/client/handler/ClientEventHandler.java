@@ -39,6 +39,7 @@ import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.TaskManager;
 
@@ -133,6 +134,7 @@ public class ClientEventHandler {
 
     public static void tick(Minecraft minecraft) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
+        JsPlayerTickEvent.triggerTick(); // 执行脚本
     }
 
 

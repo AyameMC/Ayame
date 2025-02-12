@@ -18,29 +18,12 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script;
+package org.ayamemc.ayame.fabric.client.test;
 
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
-import org.mozilla.javascript.annotations.JSFunction;
-import static net.minecraft.client.Minecraft.getInstance;
-public class JsPlayer {
-    public LocalPlayer player;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 
-    public JsPlayer(LocalPlayer player) {
-        this.player = player;
+public class JSTest {
+    public static void init(){
     }
-
-    @JSFunction
-    public void sendMessage(String message) {
-        getInstance().player.sendSystemMessage(Component.nullToEmpty(message));
-    }
-
-    @JSFunction
-    public JsWorld getWorld() {
-        Level world = player.level(); // 获取玩家所在的Level对象
-        return new JsWorld(world);    // 返回JsWorld实例
-    }
-
 }

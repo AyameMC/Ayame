@@ -48,11 +48,12 @@ function _main() {
 // test();
 _main()
 
-PlayerEvents.tick((event) => {
-    const {level, player} = event;
-    player.sendChat("I'm " + player.name);
-    if (player.name === "homewool") {
-        Logger.debug("羊毛")
-    }
+PlayerTickEvent.register((event)=>{
+    const {player} = event;
+//    Logger.info(`${player.getWorld().getDayTime()}`)
 
-});
+})
+
+KeyPressEvent.register((key,player)=>{
+    Logger.info(`按下了自定义按键${key}`)
+})

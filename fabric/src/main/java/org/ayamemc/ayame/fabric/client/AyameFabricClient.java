@@ -21,23 +21,9 @@
 package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.fabric.client.test.JSTest;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
-import org.ayamemc.ayame.model.sync.ModelSelectionManager;
-import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.GeckoLibConstants;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -72,5 +58,12 @@ public final class AyameFabricClient implements ClientModInitializer {
         // 不要动AyameKeyMappingEventHandler的init方法
         AyameKeyRegister.init();
         FabricClientEventHandler.init();
+
+
+
+
+
+        // 测试代码
+        JSTest.init();
     }
 }

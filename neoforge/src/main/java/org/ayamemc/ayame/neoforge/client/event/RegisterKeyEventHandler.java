@@ -70,6 +70,38 @@ public class RegisterKeyEventHandler {
             GLFW.GLFW_KEY_R,
             TranslatableName.MOD_KEY_MENU_NAME
     ));
+    public static final Lazy<KeyMapping> CUSTOM_KEY_0 = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CUSTOM_KEY_0,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.NONE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_0,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
+    public static final Lazy<KeyMapping> CUSTOM_KEY_1 = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CUSTOM_KEY_1,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.NONE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_1,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
+    public static final Lazy<KeyMapping> CUSTOM_KEY_2 = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CUSTOM_KEY_2,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.NONE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_2,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
+    public static final Lazy<KeyMapping> CUSTOM_KEY_3 = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "." + TranslatableName.CUSTOM_KEY_3,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.NONE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_3,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
 
     /**
      * 在NeoForge中注册该按键按下的行为
@@ -83,5 +115,9 @@ public class RegisterKeyEventHandler {
         event.register(CAMERA_Y_OFFSET_UP.get());
         event.register(CAMERA_Y_OFFSET_DOWN.get());
         event.register(CAMERA_Y_OFFSET_RESET.get());
+        event.register(CUSTOM_KEY_0.get());
+        event.register(CUSTOM_KEY_1.get());
+        event.register(CUSTOM_KEY_2.get());
+        event.register(CUSTOM_KEY_3.get());
     }
 }

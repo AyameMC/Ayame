@@ -25,12 +25,14 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
 import org.ayamemc.ayame.util.JavaUtil;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.lwjgl.glfw.GLFW;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
-
+import static net.minecraft.client.Minecraft.getInstance;
 /**
  * 注册Ayame所使用的按键，若安装了 <a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>组则会使用其提供的组合按键绑定。
  *
@@ -66,6 +68,34 @@ public class AyameKeyRegister {
             GLFW.GLFW_KEY_R,
             TranslatableName.MOD_KEY_MENU_NAME,
             Modifier.CTRL
+    );
+    public static final KeyMapping CUSTOM_KEY_0 = registerKeyMapping(
+            TranslatableName.CUSTOM_KEY_0,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UNKNOWN,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.EMPTY
+    );
+    public static final KeyMapping CUSTOM_KEY_1 = registerKeyMapping(
+            TranslatableName.CUSTOM_KEY_1,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UNKNOWN,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.EMPTY
+    );
+    public static final KeyMapping CUSTOM_KEY_2 = registerKeyMapping(
+            TranslatableName.CUSTOM_KEY_2,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UNKNOWN,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.EMPTY
+    );
+    public static final KeyMapping CUSTOM_KEY_3 = registerKeyMapping(
+            TranslatableName.CUSTOM_KEY_3,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_UNKNOWN,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.EMPTY
     );
 
     /**
@@ -117,6 +147,18 @@ public class AyameKeyRegister {
         }
         while (AyameKeyRegister.CAMERA_Y_OFFSET_RESET.consumeClick()) {
             ClientEventHandler.plusCameraYOffset(0.0f, true);
+        }
+        while (CUSTOM_KEY_0.consumeClick()){
+            JsKeyPressEvent.triggerEvent(0, new JsPlayer(getInstance().player));
+        }
+        while (CUSTOM_KEY_1.consumeClick()){
+            JsKeyPressEvent.triggerEvent(1, new JsPlayer(getInstance().player));
+        }
+        while (CUSTOM_KEY_2.consumeClick()){
+            JsKeyPressEvent.triggerEvent(2, new JsPlayer(getInstance().player));
+        }
+        while (CUSTOM_KEY_3.consumeClick()){
+            JsKeyPressEvent.triggerEvent(3, new JsPlayer(getInstance().player));
         }
 
     }

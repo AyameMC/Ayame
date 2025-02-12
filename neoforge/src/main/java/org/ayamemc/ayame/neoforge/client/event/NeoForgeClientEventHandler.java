@@ -31,8 +31,10 @@ import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
 import org.ayamemc.ayame.util.TaskManager;
-
+import static net.minecraft.client.Minecraft.getInstance;
 public class NeoForgeClientEventHandler {
     /**
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
@@ -50,6 +52,18 @@ public class NeoForgeClientEventHandler {
         }
         while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_RESET.get().consumeClick()) {
             ClientEventHandler.plusCameraYOffset(0.0f, true);
+        }
+        while (RegisterKeyEventHandler.CUSTOM_KEY_0.get().consumeClick()){
+            JsKeyPressEvent.triggerEvent(0, new JsPlayer(getInstance().player));
+        }
+        while (RegisterKeyEventHandler.CUSTOM_KEY_1.get().consumeClick()){
+            JsKeyPressEvent.triggerEvent(1, new JsPlayer(getInstance().player));
+        }
+        while (RegisterKeyEventHandler.CUSTOM_KEY_2.get().consumeClick()){
+            JsKeyPressEvent.triggerEvent(2, new JsPlayer(getInstance().player));
+        }
+        while (RegisterKeyEventHandler.CUSTOM_KEY_3.get().consumeClick()){
+            JsKeyPressEvent.triggerEvent(3, new JsPlayer(getInstance().player));
         }
     }
 

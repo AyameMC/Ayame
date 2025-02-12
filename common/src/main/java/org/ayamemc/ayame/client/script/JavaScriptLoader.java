@@ -21,12 +21,14 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
+import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-
+import static net.minecraft.client.Minecraft.getInstance;
 public class JavaScriptLoader {
     public static void runJs() {
         Context context = Context.enter();
@@ -38,11 +40,15 @@ public class JavaScriptLoader {
             final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
             final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);
             final Object wrappedModLoader = Context.javaToJS(ModLoader.class, scope);
-            final Object wrappedPlayerEvents = Context.javaToJS(new JsPlayerEvents(), scope);
-            ScriptableObject.putProperty(scope, "Mod", wrappedAyame);
+            final Object wrappedPlayerTickEvent = Context.javaToJS(new JsPlayerTickEvent(), scope);
+            final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
+            ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
             ScriptableObject.putProperty(scope, "Logger", wrappedLogger);
             ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
-            ScriptableObject.putProperty(scope, "PlayerEvents", wrappedPlayerEvents);
+            ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
+            ScriptableObject.putProperty(scope, "KeyPressEvent", wrappedKeyPressEvent);
+            ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
+            ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
 
 //            final Object mainFunObj = scope.get("_main", scope);
 //            if (!(mainFunObj instanceof Function function)) {

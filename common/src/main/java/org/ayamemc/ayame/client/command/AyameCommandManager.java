@@ -132,7 +132,7 @@ public class AyameCommandManager {
             return 0;
         }
 
-        final UUID targetPlayer = MINECRAFT.player.getUUID(); // TODO - Multi players?
+        final UUID targetPlayer = MINECRAFT.player.getUUID(); // Client-only
 
         // TODO - ???
         // TODO - 这东西怎么设置玩家模型的到底?

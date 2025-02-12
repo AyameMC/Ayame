@@ -33,5 +33,6 @@ public abstract class MinecraftServerMixin {
     private static void onServerSpin(@NotNull Thread instance) {
         instance.start();
         MainThreadUtil.setMainThreadServer(instance);
+        // TODO 修复第二次加入单人游戏崩溃
     }
 }
