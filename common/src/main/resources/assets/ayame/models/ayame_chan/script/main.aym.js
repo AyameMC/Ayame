@@ -73,4 +73,14 @@ KeyPressEvent.register((key,player)=>{
         let value = player.getYttribume(shake)
         player.setYttribume(shake,value+0.01)
     }
+    if (key == 3){
+        // 播放猫叫
+        player.playSound("minecraft","entity.cat.ambient", 1.0,1.0)
+    }
+})
+
+AttackEntityEvent.register((event)=>{
+    const {player,world,target} = event
+    let name = target.getName()
+    Logger.info(`你攻击了下${name}`)
 })

@@ -20,10 +20,24 @@
 
 package org.ayamemc.ayame.fabric.client.test;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionResult;
+import org.ayamemc.ayame.client.script.JsEntity;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.JsWorld;
+import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 
-public class JSTest {
+/**
+ * 一个便于测试的类,在发布前这个类应该是空的或者没有被调用
+ */
+public class AyameTest {
     public static void init(){
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClientSide()) {
+                JsAttackEntityEvent.trigger(new JsPlayer(player), new JsWorld(world), new JsEntity(entity));
+            }
+            return InteractionResult.PASS;
+        });
     }
 }

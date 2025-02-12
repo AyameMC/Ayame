@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
@@ -44,11 +45,14 @@ public class JavaScriptLoader {
             final Object wrappedModLoader = Context.javaToJS(ModLoader.class, scope);
             final Object wrappedPlayerTickEvent = Context.javaToJS(new JsPlayerTickEvent(), scope);
             final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
+            final Object wrappedAttackEntityEvent = Context.javaToJS(new JsAttackEntityEvent(), scope);
             ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
             ScriptableObject.putProperty(scope, "Logger", wrappedLogger);
             ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
             ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
+            ScriptableObject.putProperty(scope, "AttackEntityEvent", wrappedAttackEntityEvent);
             ScriptableObject.putProperty(scope, "KeyPressEvent", wrappedKeyPressEvent);
+            ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
             ScriptableObject.putProperty(scope, "Yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));

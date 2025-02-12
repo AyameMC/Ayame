@@ -59,7 +59,7 @@ public class JsYttribume {
 
     @JSFunction
     public boolean isRegal(float value,JsPlayer player) {
-        return yttribume.isRegal(value, player.player); // 返回是否合法
+        return yttribume.isRegal(value, player.getEntity()); // 返回是否合法
     }
 
     @JSStaticFunction

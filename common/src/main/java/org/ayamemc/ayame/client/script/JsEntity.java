@@ -20,36 +20,36 @@
 
 package org.ayamemc.ayame.client.script;
 
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import org.mozilla.javascript.annotations.JSFunction;
+import org.mozilla.javascript.annotations.JSGetter;
 
-public class JsPlayer extends JsEntity{
-    private final Player player;
-
-    public JsPlayer(Player player) {
-        super(player);
-        this.player = player;
+public class JsEntity {
+    public final Entity entity;
+    public JsEntity(Entity entity) {
+        this.entity = entity;
     }
-
-    public Player getEntity(){
-        return player;
-    }
-
-    @JSFunction
-    public float getYttribume(JsYttribume yttribume){
-        return player.ayame$getYttribume(yttribume.yttribume);
+    public Entity getEntity() {
+        return entity;
     }
     @JSFunction
-    public void setYttribume(JsYttribume yttribume,float value){
-        player.ayame$setYttribume(yttribume.yttribume,value);
+    public JsWorld getWorld() {
+        Level world = entity.level(); // 获取所在的Level对象
+        return new JsWorld(world);    // 返回JsWorld实例
     }
     @JSFunction
-    public void playSound(String id,String sound, float volume, float pitch) {
-        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id,sound)), SoundSource.PLAYERS, volume, pitch);
+    public void sendMessage(String message) {
+        entity.sendSystemMessage(Component.nullToEmpty(message));
     }
-
+    @JSGetter
+    public String getType(){
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
+    }
+    @JSGetter
+    public String getName(){
+        return entity.getName().getString();
+    }
 }

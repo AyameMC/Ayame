@@ -22,7 +22,7 @@ package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.fabric.client.test.JSTest;
+import org.ayamemc.ayame.fabric.client.test.AyameTest;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
 /**
@@ -64,6 +64,6 @@ public final class AyameFabricClient implements ClientModInitializer {
 
 
         // 测试代码
-        JSTest.init();
+        AyameTest.init();
     }
 }
