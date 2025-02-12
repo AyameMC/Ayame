@@ -22,6 +22,7 @@ package org.ayamemc.ayame.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Direction;
+import org.ayamemc.ayame.mixin.accessor.KeyframeAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -61,42 +62,14 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
     private void processCurrentAnimation(double adjustedTick, double seekTime, boolean crashWhenCantFindBone, CallbackInfo ci,
                                          @Local(name = "rotationKeyFrames") KeyframeStack<Keyframe<MathValue>> rotationKeyFrames,
                                          @Local BoneAnimation boneAnimation) {
-        final List<Keyframe<MathValue>> xKeyframes = rotationKeyFrames.xKeyframes();
-        final List<Keyframe<MathValue>> yKeyframes = rotationKeyFrames.yKeyframes();
-        final List<Keyframe<MathValue>> zKeyframes = rotationKeyFrames.zKeyframes();
-
-        for (int i = 0; i < xKeyframes.size(); i++) {
-            final Keyframe<MathValue> xKeyframe = xKeyframes.get(i);
-            final Keyframe<MathValue> yKeyframe = yKeyframes.get(i);
-            final Keyframe<MathValue> zKeyframe = zKeyframes.get(i);
-            final Keyframe<MathValue> xKeyframeCopy = new Keyframe<>(
-                    xKeyframe.length(),
-                    ayame$boxingToMathValue(ayame$unboxToDouble(xKeyframe.startValue())),
-//                    xKeyframe.startValue(),
-                    xKeyframe.endValue(),
-                    xKeyframe.easingType(),
-                    xKeyframe.easingArgs()
-            );
-            final Keyframe<MathValue> yKeyframeCopy = new Keyframe<>(
-                    yKeyframe.length(),
-                    ayame$boxingToMathValue(ayame$unboxToDouble(yKeyframe.startValue())),
-//                    yKeyframe.startValue(),
-                    yKeyframe.endValue(),
-                    yKeyframe.easingType(),
-                    yKeyframe.easingArgs()
-            );
-            final Keyframe<MathValue> zKeyframeCopy = new Keyframe<>(
-                    zKeyframe.length(),
-                    ayame$boxingToMathValue(ayame$unboxToDouble(zKeyframe.startValue())),
-//                    zKeyframe.startValue(),
-                    zKeyframe.endValue(),
-                    zKeyframe.easingType(),
-                    zKeyframe.easingArgs()
-            );
-
-//            xKeyframes.set(i, xKeyframeCopy);
-//            yKeyframes.set(i, yKeyframeCopy);
-//            zKeyframes.set(i, zKeyframeCopy);
+        for (Keyframe<MathValue> keyframe : rotationKeyFrames.xKeyframes()) {
+            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
+        }
+        for (Keyframe<MathValue> keyframe : rotationKeyFrames.yKeyframes()) {
+            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
+        }
+        for (Keyframe<MathValue> keyframe : rotationKeyFrames.zKeyframes()) {
+            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
         }
     }
 }
