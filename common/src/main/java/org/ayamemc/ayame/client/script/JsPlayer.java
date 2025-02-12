@@ -23,7 +23,11 @@ package org.ayamemc.ayame.client.script;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.mozilla.javascript.annotations.JSFunction;
+
+import java.util.List;
+
 import static net.minecraft.client.Minecraft.getInstance;
 public class JsPlayer {
     public LocalPlayer player;
@@ -41,6 +45,14 @@ public class JsPlayer {
     public JsWorld getWorld() {
         Level world = player.level(); // 获取玩家所在的Level对象
         return new JsWorld(world);    // 返回JsWorld实例
+    }
+    @JSFunction
+    public float getYttribume(JsYttribume yttribume){
+        return player.ayame$getYttribume(yttribume.yttribume);
+    }
+    @JSFunction
+    public void setYttribume(JsYttribume yttribume,float value){
+        player.ayame$setYttribume(yttribume.yttribume,value);
     }
 
 }

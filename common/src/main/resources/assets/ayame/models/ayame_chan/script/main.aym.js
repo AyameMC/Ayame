@@ -55,5 +55,22 @@ PlayerTickEvent.register((event)=>{
 })
 
 KeyPressEvent.register((key,player)=>{
-    Logger.info(`按下了自定义按键${key}`)
+    if (key == 0){
+        // 增大scale
+        let scale = Yttribume.get("ayame","model.scale") // Yttribume对象
+        let value = player.getYttribume(scale) // 属性值
+        player.setYttribume(scale,value+0.1)
+    }
+    if (key == 1){
+        // 减小alpha
+        let alpha = Yttribume.get("ayame","model.alpha")
+        let value = player.getYttribume(alpha)
+        player.setYttribume(alpha,value-0.01)
+    }
+    if (key == 2){
+        // 抖起来
+        let shake = Yttribume.get("ayame","global.screen.shake")
+        let value = player.getYttribume(shake)
+        player.setYttribume(shake,value+0.01)
+    }
 })
