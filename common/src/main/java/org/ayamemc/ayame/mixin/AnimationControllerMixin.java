@@ -54,22 +54,22 @@ public abstract class AnimationControllerMixin<T extends GeoAnimatable> {
     @Shadow
     protected abstract AnimationPoint getAnimationPointAtTick(List<Keyframe<MathValue>> frames, double tick, boolean isRotation, Direction.Axis axis);
 
-    @Inject(
-            method = "processCurrentAnimation",
-            at = @At(value = "INVOKE", target = "Lsoftware/bernie/geckolib/animation/keyframe/BoneAnimationQueue;addRotations(Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;)V"),
-            remap = false
-    )
-    private void processCurrentAnimation(double adjustedTick, double seekTime, boolean crashWhenCantFindBone, CallbackInfo ci,
-                                         @Local(name = "rotationKeyFrames") KeyframeStack<Keyframe<MathValue>> rotationKeyFrames,
-                                         @Local BoneAnimation boneAnimation) {
-        for (Keyframe<MathValue> keyframe : rotationKeyFrames.xKeyframes()) {
-            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
-        }
-        for (Keyframe<MathValue> keyframe : rotationKeyFrames.yKeyframes()) {
-            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
-        }
-        for (Keyframe<MathValue> keyframe : rotationKeyFrames.zKeyframes()) {
-            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
-        }
-    }
+//    @Inject(
+//            method = "processCurrentAnimation",
+//            at = @At(value = "INVOKE", target = "Lsoftware/bernie/geckolib/animation/keyframe/BoneAnimationQueue;addRotations(Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;Lsoftware/bernie/geckolib/animation/keyframe/AnimationPoint;)V"),
+//            remap = false
+//    )
+//    private void processCurrentAnimation(double adjustedTick, double seekTime, boolean crashWhenCantFindBone, CallbackInfo ci,
+//                                         @Local(name = "rotationKeyFrames") KeyframeStack<Keyframe<MathValue>> rotationKeyFrames,
+//                                         @Local BoneAnimation boneAnimation) {
+//        for (Keyframe<MathValue> keyframe : rotationKeyFrames.xKeyframes()) {
+//            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
+//        }
+//        for (Keyframe<MathValue> keyframe : rotationKeyFrames.yKeyframes()) {
+//            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
+//        }
+//        for (Keyframe<MathValue> keyframe : rotationKeyFrames.zKeyframes()) {
+//            ((KeyframeAccessor<MathValue>) (Object) keyframe).setStartValue(ayame$boxingToMathValue(ayame$unboxToDouble(keyframe.startValue()) + 1));
+//        }
+//    }
 }

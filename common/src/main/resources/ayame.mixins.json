@@ -12,6 +12,8 @@
     "AnimationControllerMixin",
     "GeckoLibCacheMixin",
     "PlayerMixin",
+    "accessor.AnimationControllerAccessor",
+    "accessor.AnimationControllerInvoker",
     "accessor.GeckoLibCacheAccessor",
     "accessor.KeyframeAccessor",
     "accessor.KeyframeStackAccessor",

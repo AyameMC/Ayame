@@ -33,6 +33,7 @@ import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.model.AyameAnimations;
+import org.ayamemc.ayame.model.AyameBlendedAnimationController;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -77,7 +78,7 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         final Pose pose = player.getPose();
 
 
-        controllers.add(new AnimationController<>(this, 2, state -> {
+        controllers.add(new AyameBlendedAnimationController<>(this, 2, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
