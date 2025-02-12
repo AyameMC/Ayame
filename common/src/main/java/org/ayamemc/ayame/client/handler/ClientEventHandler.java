@@ -32,13 +32,20 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.script.JsEntity;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.JsWorld;
+import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.TaskManager;
@@ -135,6 +142,10 @@ public class ClientEventHandler {
     public static void tick(Minecraft minecraft) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
         JsPlayerTickEvent.triggerTick(); // 执行脚本
+    }
+
+    public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target){
+        JsAttackEntityEvent.trigger(new JsPlayer(player), new JsWorld(level), new JsEntity(target));
     }
 
 

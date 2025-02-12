@@ -26,6 +26,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -60,6 +61,12 @@ public class FabricClientEventHandler {
         ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
         HudRenderCallback.EVENT.register(ClientEventHandler::renderHud);
         WorldRenderEvents.START.register((context) -> ClientEventHandler.renderCamera());
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClientSide()) {
+                ClientEventHandler.attackEntity(player,world,hand,entity);
+            }
+            return InteractionResult.PASS;
+        });
     }
 
 

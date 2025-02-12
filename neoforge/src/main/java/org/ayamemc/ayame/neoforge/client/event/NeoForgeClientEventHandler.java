@@ -21,11 +21,14 @@
 package org.ayamemc.ayame.neoforge.client.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
@@ -118,6 +121,14 @@ public class NeoForgeClientEventHandler {
             event.setBorderStart(ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR);
             event.setBorderEnd(ClientEventHandler.TOOLTIP_BORDER_BOTTOM_COLOR);
             event.setBackground(ClientEventHandler.TOOLTIP_BACKGROUND_COLOR);
+        }
+    }
+
+    @SubscribeEvent
+    public static void attackEntity(AttackEntityEvent event){
+        Level level = event.getEntity().level();
+        if (level.isClientSide()){
+            ClientEventHandler.attackEntity(event.getEntity(), level, event.getEntity().getUsedItemHand(), event.getTarget());
         }
     }
 
