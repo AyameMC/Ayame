@@ -21,9 +21,7 @@
 package org.ayamemc.ayame.client.script.event;
 
 import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import java.util.ArrayList;
@@ -39,24 +37,6 @@ public class JsKeyPressEvent {
 
     // 触发所有注册的回调函数
     public static void triggerEvent(int key, JsPlayer player) {
-        Context context = Context.enter();
-        try {
-            Scriptable scope = context.initStandardObjects(); // 初始化作用域
-
-            for (Function callback : callbacks) {
-                try {
-                    // 将key和player转换为JavaScript可识别的对象
-                    Object jsKey = Context.javaToJS(key, scope);
-                    Object jsPlayer = Context.javaToJS(player, scope);
-
-                    // 调用回调函数，传递key和player
-                    callback.call(context, scope, null, new Object[]{jsKey, jsPlayer});
-                } catch (Exception e) {
-                    System.err.println("Error triggering callback: " + e.getMessage());
-                }
-            }
-        } finally {
-            Context.exit(); // 释放Context
-        }
+        JsEventHelper.executeCallbacks(callbacks, key, player);
     }
 }

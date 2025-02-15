@@ -20,11 +20,9 @@
 
 package org.ayamemc.ayame.client.script.event;
 
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
@@ -32,8 +30,6 @@ import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class JsAttackEntityEvent {
     private static final List<Function> tickCallbacks = new ArrayList<>();
@@ -46,31 +42,10 @@ public class JsAttackEntityEvent {
 
     // 触发所有注册的回调函数
     public static void trigger(JsPlayer player, JsWorld world, JsEntity target) {
-        if (tickCallbacks.isEmpty()) return;
-
-        // 创建并进入Context
-        Context context = Context.enter();
-        try {
-            // 初始化作用域
-            Scriptable scope = context.initStandardObjects();
-
-            for (Function callback : tickCallbacks) {
-                try {
-                    // 创建事件对象
-                    Scriptable event = new NativeObject();
-                    event.put("player", event, player);
-                    event.put("world", event, world);
-                    event.put("target", event, target);
-
-                    // 调用回调函数
-                    callback.call(context, scope, null, new Object[]{event});
-                } catch (Exception e) {
-                    Ayame.LOGGER.error("Error triggering tick callback: ", e);
-                }
-            }
-        } finally {
-            // 释放Context
-            Context.exit();
-        }
+        Scriptable event = new NativeObject();
+        event.put("player", event, player);
+        event.put("world", event, world);
+        event.put("target", event, target);
+        JsEventHelper.executeCallbacks(tickCallbacks, event);
     }
 }

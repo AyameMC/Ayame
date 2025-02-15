@@ -23,49 +23,25 @@ package org.ayamemc.ayame.client.script.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.script.JsPlayer;
-import org.ayamemc.ayame.client.script.JsWorld;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class JsPlayerTickEvent {
-    private static final List<Function> tickCallbacks = new ArrayList<>();
+    private static final List<Function> callbacks = new ArrayList<>();
 
     // 注册回调函数
     @JSStaticFunction
     public static void register(Function callback) {
-        tickCallbacks.add(callback);
+        callbacks.add(callback);
     }
 
     // 触发所有注册的回调函数
     public static void triggerTick() {
-        if (tickCallbacks.isEmpty()) return;
-
-        // 创建并进入Context
-        Context context = Context.enter();
-        try {
-            // 初始化作用域
-            Scriptable scope = context.initStandardObjects();
-
-            for (Function callback : tickCallbacks) {
-                try {
-                    // 创建事件对象
-                    Scriptable event = new NativeObject();
-                    Object jsPlayer = Context.javaToJS(new JsPlayer(MINECRAFT.player), scope);
-                    event.put("player", event, jsPlayer);
-
-                    // 调用回调函数
-                    callback.call(context, scope, null, new Object[]{event});
-                } catch (Exception e) {
-                    Ayame.LOGGER.error("Error triggering tick callback: ", e);
-                }
-            }
-        } finally {
-            // 释放Context
-            Context.exit();
-        }
+        NativeObject event = new NativeObject();
+        event.put("player", event, new JsPlayer(MINECRAFT.player));
+        JsEventHelper.executeCallbacks(callbacks, event);
     }
 }
