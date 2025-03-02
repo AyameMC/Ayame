@@ -32,6 +32,8 @@ public class TranslatableName {
     public static final String MOD_KEY_MENU_NAME = "key.categories.ayame";
     // 按键绑定页面的对应按键显示的名称 打开模型选择菜单
     public static final String SELECT_MODEL_MENU = "model_select_menu";
+    // 动画轮盘按键绑定名称
+    public static final String ANIMATION_ROULETTE = "animation_roulette";
     // 摄像机上下的偏移键
     public static final String CAMERA_Y_OFFSET_UP = "camera_y_offset_up";
     public static final String CAMERA_Y_OFFSET_DOWN = "camera_y_offset_down";

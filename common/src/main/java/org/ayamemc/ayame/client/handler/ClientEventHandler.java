@@ -22,24 +22,21 @@ package org.ayamemc.ayame.client.handler;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
+import org.ayamemc.ayame.client.gui.screen.AnimationRouletteScreen;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.script.JsEntity;
@@ -79,33 +76,8 @@ public class ClientEventHandler {
         MINECRAFT.setScreen(new ModelSelectMenuScreen(null));
     }
 
-//    public static void renderCustomHandInHud(GuiGraphics guiGraphics, DeltaTracker tickDelta) {
-//
-//        if (minecraft.level == null) return;
-//
-//        LivingEntity entity = new Pig(EntityType.PIG, minecraft.level);
-//
-//        // 设置实体的起始位置
-//        entity.setPos(player.getX(), player.getY(), player.getZ());
-//
-//        // 渲染逻辑
-//        int x = minecraft.getWindow().getGuiScaledWidth() - 50; // 右下角的X坐标
-//        int y = minecraft.getWindow().getGuiScaledHeight() - 50; // 右下角的Y坐标
-//        renderEntityInGui(entity, x, y, 30); // 实体大小为30
-//    }
-
-    private static void renderEntityInGui(LivingEntity entity, int x, int y, int size) {
-        EntityRenderDispatcher dispatcher = MINECRAFT.getEntityRenderDispatcher();
-
-
-        PoseStack poseStack = new PoseStack();
-        poseStack.pushPose();
-        poseStack.translate(x, y, 1050.0);
-        poseStack.scale(size, size, size);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-
-        dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, poseStack, MINECRAFT.renderBuffers().bufferSource(), 15728880);
-        poseStack.popPose();
+    public static void openRouletteScreen() {
+        MINECRAFT.setScreen(new AnimationRouletteScreen(null));
     }
 
 
@@ -144,9 +116,7 @@ public class ClientEventHandler {
         JsPlayerTickEvent.triggerTick(); // 执行脚本
     }
 
-    public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target){
+    public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
         JsAttackEntityEvent.trigger(new JsPlayer(player), new JsWorld(level), new JsEntity(target));
     }
-
-
 }

@@ -18,11 +18,28 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client.test;
-/**
- * 一个便于测试的类,在发布前这个类应该是空的或者没有被调用
- */
-public class AyameTest {
-    public static void init(){
-    }
+package org.ayamemc.ayame.client;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.util.TranslatableName;
+import org.lwjgl.glfw.GLFW;
+
+import static org.ayamemc.ayame.Ayame.MOD_ID;
+
+public class KeyList {
+    public static final KeyMapping ROULETTE_KEY = new KeyMapping(
+            "key.ayame." + TranslatableName.ANIMATION_ROULETTE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C,
+            TranslatableName.MOD_KEY_MENU_NAME
+    );
+
+//    public static final KeyMapping CAMERA_Y_OFFSET_DOWN = registerKeyMapping(
+//            TranslatableName.CAMERA_Y_OFFSET_DOWN,
+//            InputConstants.Type.KEYSYM,
+//            GLFW.GLFW_KEY_DOWN,
+//            TranslatableName.MOD_KEY_MENU_NAME,
+//            Modifier.CTRL
+//    );
 }

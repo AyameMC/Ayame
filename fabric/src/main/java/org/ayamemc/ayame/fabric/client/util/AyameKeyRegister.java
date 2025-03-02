@@ -23,6 +23,7 @@ package org.ayamemc.ayame.fabric.client.util;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.client.KeyList;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.client.script.JsPlayer;
@@ -138,6 +139,9 @@ public class AyameKeyRegister {
     public static void processKeyPressed() {
         while (AyameKeyRegister.MODEL_SELECT_MENU.consumeClick()) {
             ClientEventHandler.openSelectMenuKeyPressed();
+        }
+        while (KeyList.ROULETTE_KEY.consumeClick()) {
+            ClientEventHandler.openRouletteScreen();
         }
         while (AyameKeyRegister.CAMERA_Y_OFFSET_UP.consumeClick()) {
             ClientEventHandler.plusCameraYOffset(0.01f, false);

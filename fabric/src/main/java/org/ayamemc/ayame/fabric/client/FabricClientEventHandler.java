@@ -32,13 +32,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.ayamemc.ayame.fabric.client.api.event.RenderArmCallback;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 import org.ayamemc.ayame.util.TaskManager;
 
@@ -63,7 +61,7 @@ public class FabricClientEventHandler {
         WorldRenderEvents.START.register((context) -> ClientEventHandler.renderCamera());
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (world.isClientSide()) {
-                ClientEventHandler.attackEntity(player,world,hand,entity);
+                ClientEventHandler.attackEntity(player, world, hand, entity);
             }
             return InteractionResult.PASS;
         });

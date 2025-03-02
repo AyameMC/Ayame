@@ -22,7 +22,6 @@ package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.fabric.client.test.AyameTest;
 import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
 /**
@@ -58,12 +57,5 @@ public final class AyameFabricClient implements ClientModInitializer {
         // 不要动AyameKeyMappingEventHandler的init方法
         AyameKeyRegister.init();
         FabricClientEventHandler.init();
-
-
-
-
-
-        // 测试代码
-        AyameTest.init();
     }
 }
