@@ -77,7 +77,7 @@ public class ClientEventHandler {
     }
 
     public static void openRouletteScreen() {
-        MINECRAFT.setScreen(new AnimationRouletteScreen(null));
+        AnimationRouletteScreen.open();
     }
 
 

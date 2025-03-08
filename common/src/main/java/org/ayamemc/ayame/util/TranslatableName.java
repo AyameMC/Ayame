@@ -43,4 +43,6 @@ public class TranslatableName {
     public static final String CUSTOM_KEY_1 = "custom_key_1";
     public static final String CUSTOM_KEY_2 = "custom_key_2";
     public static final String CUSTOM_KEY_3 = "custom_key_3";
+    // 打开轮盘
+    public static final String OPEN_ROULETTE = "open_roulette";
 }

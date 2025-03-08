@@ -1,0 +1,62 @@
+package org.ayamemc.ayame.client.gui.screen.music;
+
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+
+import java.util.Map;
+import java.util.Random;
+
+import static org.ayamemc.ayame.client.gui.screen.music.AyameMusic.MUSICS;
+import static org.ayamemc.ayame.client.gui.screen.music.AyameMusic.NOTE_MAP;
+
+
+public class ClientMusicPlayer {
+
+
+    private static final Map<NoteBlockInstrument, Integer> INSTRUMENT_BASE_NOTE = Map.of(
+            NoteBlockInstrument.HARP, 60
+    );
+
+    private MusicRecord currentMusic;
+    private int currentIndex;
+    private long lastNoteTime;
+
+    public ClientMusicPlayer() {
+        randomSwitchMusic();
+    }
+
+    public void randomSwitchMusic() {
+        Random random = new Random();
+        this.currentMusic = MUSICS.get(random.nextInt(MUSICS.size()));
+        this.currentIndex = 0;
+        this.lastNoteTime = 0;
+    }
+
+    public void tryPlayNextNote(NotePlayer player) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - this.lastNoteTime < currentMusic.noteDuration() / 2) {
+            return;
+        }
+
+        if (this.currentIndex >= this.currentMusic.music().length) {
+            this.currentIndex = 0; // 循环播放
+        }
+
+        int noteValue = this.currentMusic.music()[this.currentIndex];
+        if (noteValue != 0) {
+            int midiNote = NOTE_MAP.getOrDefault(noteValue, 0);
+            int baseMidiNote = INSTRUMENT_BASE_NOTE.getOrDefault(this.currentMusic.instrument(), 60);
+            // 计算倍频因子：当 midiNote == baseMidiNote 时，pitch 为 1.0
+            float pitch = (float) Math.pow(2.0, (midiNote - baseMidiNote) / 12.0);
+            NoteBlockInstrument instrument = currentMusic.instrument();
+            player.playNote(instrument, pitch, 1.0f);
+        }
+
+        this.currentIndex = (this.currentIndex + 1) % this.currentMusic.music().length;
+        this.lastNoteTime = currentTime;
+    }
+
+    public interface NotePlayer {
+        void playNote(NoteBlockInstrument instrument, float pitch, float volume);
+    }
+
+}
