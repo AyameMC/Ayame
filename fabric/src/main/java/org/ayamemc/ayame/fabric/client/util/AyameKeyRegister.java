@@ -98,6 +98,13 @@ public class AyameKeyRegister {
             TranslatableName.MOD_KEY_MENU_NAME,
             Modifier.EMPTY
     );
+    public static final KeyMapping OPEN_ROULETTE = registerKeyMapping(
+            TranslatableName.OPEN_ROULETTE,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            TranslatableName.MOD_KEY_MENU_NAME,
+            Modifier.ALT
+    );
 
     /**
      * 注册按键
@@ -163,6 +170,9 @@ public class AyameKeyRegister {
         }
         while (CUSTOM_KEY_3.consumeClick()){
             JsKeyPressEvent.triggerEvent(3, new JsPlayer(getInstance().player));
+        }
+        while (OPEN_ROULETTE.consumeClick()){
+            ClientEventHandler.openRouletteScreen();
         }
 
     }

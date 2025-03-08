@@ -102,6 +102,14 @@ public class RegisterKeyEventHandler {
             GLFW.GLFW_KEY_3,
             TranslatableName.MOD_KEY_MENU_NAME
     ));
+    public static final Lazy<KeyMapping> ANIMATION_ROULETTE = Lazy.of(() -> new KeyMapping(
+            "key." + Ayame.MOD_ID + "." + TranslatableName.OPEN_ROULETTE,
+            KeyConflictContext.IN_GAME,
+            KeyModifier.ALT,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            TranslatableName.MOD_KEY_MENU_NAME
+    ));
 
     /**
      * 在NeoForge中注册该按键按下的行为
@@ -119,5 +127,6 @@ public class RegisterKeyEventHandler {
         event.register(CUSTOM_KEY_1.get());
         event.register(CUSTOM_KEY_2.get());
         event.register(CUSTOM_KEY_3.get());
+        event.register(ANIMATION_ROULETTE.get());
     }
 }
