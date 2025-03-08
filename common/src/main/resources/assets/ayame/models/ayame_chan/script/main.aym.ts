@@ -18,14 +18,10 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// / <reference path="./types/Ayame.d.ts" />
-// / <reference path="./types/Logger.d.ts" />
-// / <reference path="./types/ModLoader.d.ts" />
 
-// const Logger = require("./types/Logger.d.ts");
-// const Ayame = require("./types/Ayame.d.ts");
-// const ModLoader = require("./types/ModLoader.d.ts");
+class A{
 
+}
 
 function _main() {
     Logger.info("Version:" + Ayame.VERSION);
