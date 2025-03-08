@@ -18,9 +18,9 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import EventHandler from "./EventHandler.d.ts";
-import {Level} from "./Level.d.ts";
-import {Player} from "./Player.d.ts";
+import EventHandler from "./EventHandler.js";
+import {Level} from "./Level.js";
+import {Player} from "./Player.js";
 
 /**
  * 与玩家相关的事件。

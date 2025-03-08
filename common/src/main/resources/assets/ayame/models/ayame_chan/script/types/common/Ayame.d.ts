@@ -18,8 +18,7 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ModLoader from "./ModLoader";
-
+import ModLoader from "./ModLoader.js";
 
 /**
  * Ayame 的主要功能入口点，

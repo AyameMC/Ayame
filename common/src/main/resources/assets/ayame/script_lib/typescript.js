@@ -159693,27 +159693,14 @@ var ts = {};
     }
 });
 
-function compileTs(tsCode){
-    const options =  {
-        noEmitOnError: true,
+function compileTs(tsCode) {
+    const options = {
         target: ts.ScriptTarget.ES5,
-        module: ts.ModuleKind.CommonJS
+        module: ts.ModuleKind.CommonJS,
+        removeComments: true
     };
 
-    const result = ts.transpileModule(tsCode, { compilerOptions: options });
+    const result = ts.transpileModule(tsCode, {compilerOptions: options});
 
-    return result.outputText;  // 返回编译后的 JavaScript 代码
+    return result.outputText;
 }
-
-// // 测试 TypeScript 代码
-// const tsCode = `
-// class TestClass{
-//     const filed1: number;
-//     static toString(): string{
-//         return "1"
-//     }
-//
-// `;
-//
-// const jsCode = compileTs(tsCode);
-// console.log(jsCode);  // 打印编译后的 JavaScript 代码

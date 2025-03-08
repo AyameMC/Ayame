@@ -23,6 +23,7 @@ class A{
 
 }
 
+
 function _main() {
     Logger.info("Version:" + Ayame.VERSION);
     Logger.info("Version {}", Ayame.VERSION);
@@ -36,6 +37,7 @@ function _main() {
     }
 
 }
+
 
 // function test(){
 //     Logger.info("loop...");
