@@ -18,11 +18,9 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 class A{
 
 }
-
 
 function _main() {
     Logger.info("Version:" + Ayame.VERSION);
@@ -38,13 +36,13 @@ function _main() {
 
 }
 
-
 // function test(){
 //     Logger.info("loop...");
 //     test();
 // }
 // test();
 _main()
+
 
 PlayerTickEvent.register((event)=>{
     const {player} = event;
