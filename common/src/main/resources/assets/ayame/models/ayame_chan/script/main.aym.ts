@@ -18,65 +18,50 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class A{
-
-}
 
 function _main() {
-    Logger.info("Version:" + Ayame.VERSION);
-    Logger.info("Version {}", Ayame.VERSION);
-    switch (Ayame.modLoader) {
-        case ModLoader.FABRIC:
-            Logger.info("It's Fabric!");
-            break;
-        case ModLoader.NEOFORGE:
-            Logger.info("It's NeoForge!");
-            break;
-    }
+    logger.info(`Version: ${Ayame.version}`);
 
 }
 
-// function test(){
-//     Logger.info("loop...");
-//     test();
-// }
-// test();
 _main()
 
 
-PlayerTickEvent.register((event)=>{
-    const {player} = event;
-//    Logger.info(`${player.getWorld().getDayTime()}`)
+PlayerTickEvent.register((event) => {
+    const { player } = event;
+    player.sendChatMessage('a');
 
 })
 
-KeyPressEvent.register((key,player)=>{
-    if (key == 0){
+KeyPressEvent.register((event) => {
+
+    const { key, player } = event;
+    if (key === 0) {
         // 增大scale
-        let scale = Yttribume.get("ayame","model.scale") // Yttribume对象
-        let value = player.getYttribume(scale) // 属性值
-        player.setYttribume(scale,value+0.1)
+        let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
+        let value: number = player.getYttribumeValve(scale) // 属性值
+        player.setYttribume(scale, value + 0.1)
     }
-    if (key == 1){
+    if (key === 1) {
         // 减小alpha
-        let alpha = Yttribume.get("ayame","model.alpha")
-        let value = player.getYttribume(alpha)
-        player.setYttribume(alpha,value-0.01)
+        let alpha = yttribume.get('ayame', 'model.alpha')
+        let value = player.getYttribumeValve(alpha)
+        player.setYttribume(alpha, value - 0.01)
     }
-    if (key == 2){
+    if (key === 2) {
         // 抖起来
-        let shake = Yttribume.get("ayame","global.screen.shake")
-        let value = player.getYttribume(shake)
-        player.setYttribume(shake,value+0.01)
+        let shake = yttribume.get('ayame', 'global.screen.shake')
+        let value = player.getYttribumeValve(shake)
+        player.setYttribume(shake, value + 0.01)
     }
-    if (key == 3){
+    if (key == 3) {
         // 播放猫叫
-        player.playSound("minecraft","entity.cat.ambient", 1.0,1.0)
+        player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0)
     }
 })
 
-AttackEntityEvent.register((event)=>{
-    const {player,world,target} = event
+AttackEntityEvent.register((event) => {
+    const { player, target } = event
     let name = target.getName()
-    Logger.info(`你攻击了下${name}`)
+    logger.info(`你攻击了下${name}`)
 })

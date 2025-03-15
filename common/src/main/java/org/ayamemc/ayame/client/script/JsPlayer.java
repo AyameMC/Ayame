@@ -35,6 +35,7 @@ public class JsPlayer extends JsEntity{
         this.player = player;
     }
 
+    @Override
     public Player getEntity(){
         return player;
     }
