@@ -73,6 +73,11 @@ dependencies {
     forgeRuntimeLibrary("org.mozilla:rhino:${rhino_version}")
     include("org.mozilla:rhino:${rhino_version}")
 
+    // Mocha 库
+    implementation("team.unnamed:mocha:${mocha_version}")
+    forgeRuntimeLibrary("team.unnamed:mocha:${mocha_version}")
+    include("team.unnamed:mocha:${mocha_version}")
+
 }
 
 processResources {

@@ -41,7 +41,7 @@ public class JsEntity {
         return new JsWorld(world);    // 返回JsWorld实例
     }
     @JSFunction
-    public void sendMessage(String message) {
+    public void sendChatMessage(String message) {
         entity.sendSystemMessage(Component.nullToEmpty(message));
     }
     @JSGetter

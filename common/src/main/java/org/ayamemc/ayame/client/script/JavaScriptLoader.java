@@ -56,7 +56,7 @@ public class JavaScriptLoader {
             final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
             final Object wrappedAttackEntityEvent = Context.javaToJS(new JsAttackEntityEvent(), scope);
             ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
-            ScriptableObject.putProperty(scope, "Logger", wrappedLogger);
+            ScriptableObject.putProperty(scope, "logger", wrappedLogger);
             ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
             ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
             ScriptableObject.putProperty(scope, "AttackEntityEvent", wrappedAttackEntityEvent);
@@ -64,7 +64,7 @@ public class JavaScriptLoader {
             ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
-            ScriptableObject.putProperty(scope, "Yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));
+            ScriptableObject.putProperty(scope, "yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));
 
 
             String js = Context.toString(compiledJs);
@@ -74,7 +74,7 @@ public class JavaScriptLoader {
             LOGGER.info(js);
 
         } catch (Exception e) {
-            Ayame.LOGGER.error("Failed to run ayame", e);
+            Ayame.LOGGER.error("Failed to run ayame model script", e);
         } finally {
             Context.exit();
         }

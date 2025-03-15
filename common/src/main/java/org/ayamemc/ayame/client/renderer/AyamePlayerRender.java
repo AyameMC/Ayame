@@ -59,10 +59,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+        poseStack.pushPose();
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         // 实体缩放
         float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
+
         poseStack.scale(scale, scale, scale);
+        poseStack.popPose();
     }
 
     @Override
@@ -84,7 +87,9 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     }
     public void renderLeftHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Player player) {
         // X 轴镜像
+        poseStack.pushPose();
         poseStack.scale(-1.0F, 1.0F, 1.0F);
+        poseStack.popPose();
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
     }
 

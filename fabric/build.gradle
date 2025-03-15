@@ -68,6 +68,9 @@ dependencies {
     // Rhino库
     implementation("org.mozilla:rhino:${rhino_version}")
     include("org.mozilla:rhino:${rhino_version}")
+    // Mocha 库
+    implementation("team.unnamed:mocha:${mocha_version}")
+    include("team.unnamed:mocha:${mocha_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

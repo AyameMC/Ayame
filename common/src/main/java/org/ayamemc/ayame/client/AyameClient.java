@@ -29,6 +29,9 @@ import org.ayamemc.ayame.model.sync.client.ClientModelManager;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.ayamemc.ayame.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.cache.GeckoLibCache;
+import team.unnamed.mocha.MochaEngine;
+import team.unnamed.mocha.runtime.MochaFunction;
 
 import java.io.File;
 import java.io.IOException;
