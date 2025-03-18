@@ -41,7 +41,7 @@ public class JsPlayer extends JsEntity{
     }
 
     @JSFunction
-    public float getYttribume(JsYttribume yttribume){
+    public float getYttribumeValve(JsYttribume yttribume){
         return player.ayame$getYttribume(yttribume.yttribume);
     }
     @JSFunction

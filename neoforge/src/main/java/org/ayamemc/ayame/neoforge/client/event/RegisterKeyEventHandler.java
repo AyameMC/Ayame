@@ -32,6 +32,8 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.function.Supplier;
+
 /**
  * 注册Ayame所使用的按键，由于NeoForge提供了组合按键绑定的支持，因此不依赖<a href="https://github.com/wyatt-herkamp/too-many-shortcuts">too-many-shortcuts</a>。
  *

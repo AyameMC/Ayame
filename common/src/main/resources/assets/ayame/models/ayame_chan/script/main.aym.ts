@@ -29,13 +29,15 @@ _main()
 
 PlayerTickEvent.register((event) => {
     const { player } = event;
-    player.sendChatMessage('a');
-
+    let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
+    let value = player.getYttribumeValve(scale);
+    player.setYttribume(scale, 2);
 })
 
 KeyPressEvent.register((event) => {
 
     const { key, player } = event;
+    player.sendChatMessage("aa")
     if (key === 0) {
         // 增大scale
         let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
@@ -63,5 +65,5 @@ KeyPressEvent.register((event) => {
 AttackEntityEvent.register((event) => {
     const { player, target } = event
     let name = target.getName()
-    logger.info(`你攻击了下${name}`)
+    player.sendChatMessage(`你攻击了下${name}`)
 })
