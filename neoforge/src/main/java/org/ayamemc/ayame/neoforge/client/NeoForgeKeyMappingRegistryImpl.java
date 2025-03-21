@@ -24,10 +24,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
-import net.neoforged.neoforge.common.util.Lazy;
 import org.ayamemc.ayame.client.ModifierKey;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
-import org.jetbrains.annotations.Nullable;
 
 public class NeoForgeKeyMappingRegistryImpl implements KeyMappingRegistry {
 
@@ -36,14 +34,14 @@ public class NeoForgeKeyMappingRegistryImpl implements KeyMappingRegistry {
         return new KeyMapping(
                 description,
                 KeyConflictContext.IN_GAME,
-                toKeyModifier(modifierKey),
+                toNeoForgeKeyModifier(modifierKey),
                 inputType,
                 keyCode,
                 category
         );
     }
 
-    private KeyModifier toKeyModifier(ModifierKey modifierKey) {
+    private static KeyModifier toNeoForgeKeyModifier(ModifierKey modifierKey) {
         return switch (modifierKey) {
             case ALT -> KeyModifier.ALT;
             case SHIFT -> KeyModifier.SHIFT;

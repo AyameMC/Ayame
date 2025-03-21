@@ -23,8 +23,7 @@ package org.ayamemc.ayame.client.api;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.ModifierKey;
-import org.jetbrains.annotations.Nullable;
 
 public interface KeyMappingRegistry {
-    KeyMapping registerKey(String description,  ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category);
+    KeyMapping registerKey(String description, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category);
 }
