@@ -18,25 +18,26 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client;
+package org.ayamemc.ayame.neoforge.client.impl;
 
+import net.neoforged.neoforge.common.NeoForge;
 import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.fabric.client.api.event.ModelResourceEvents;
 import org.ayamemc.ayame.model.resource.IModelResource;
+import org.ayamemc.ayame.neoforge.client.api.event.ModelResourceEvents;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-@ApiStatus.Internal
 
-public class AyameClientEventsFabricImpl implements IAyameClientEvents {
+@ApiStatus.Internal
+public class AyameClientEventsNeoForgeImpl implements IAyameClientEvents {
     @Override
-    public void ModelResource_onResourceCreate(IModelResource modelResource) {
-        ModelResourceEvents.ON_RESOURCE_CREATE.invoker().onResourceCreate(modelResource);
+    public void onModelResourceCreate(IModelResource modelResource) {
+        NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnResourceCreate(modelResource));
     }
 
     @Override
-    public void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted) {
-        ModelResourceEvents.ON_LIST_RESOURCE.invoker().onListResource(modelResources, sorted);
+    public void onListModelResource(List<IModelResource> modelResources, boolean sorted) {
+        NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnListResource(modelResources, sorted));
     }
 }

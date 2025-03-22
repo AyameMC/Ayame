@@ -31,9 +31,9 @@ import java.util.List;
  */
 @ApiStatus.Internal
 public interface IAyameClientEvents {
-    void ModelResource_onResourceCreate(IModelResource modelResource);
+    void onModelResourceCreate(IModelResource modelResource);
 
-    void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted);
+    void onListModelResource(List<IModelResource> modelResources, boolean sorted);
 
     class Instance {
         public static IAyameClientEvents INSTANCE;

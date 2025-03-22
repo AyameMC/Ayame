@@ -90,18 +90,4 @@ public class NeoForgeClientEventHandler {
             ClientEventHandler.attackEntity(event.getEntity(), level, event.getEntity().getUsedItemHand(), event.getTarget());
         }
     }
-
-
-    @SubscribeEvent
-    public static void onKeyPressed(RegisterKeyMappingsEvent event) {
-        event.register(AyameKeyRegister.MODEL_SELECT_MENU);
-        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_UP);
-        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_DOWN);
-        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_RESET);
-        event.register(AyameKeyRegister.CUSTOM_KEY_0);
-        event.register(AyameKeyRegister.CUSTOM_KEY_1);
-        event.register(AyameKeyRegister.CUSTOM_KEY_2);
-        event.register(AyameKeyRegister.CUSTOM_KEY_3);
-        event.register(AyameKeyRegister.ROULETTE_KEY);
-    }
 }

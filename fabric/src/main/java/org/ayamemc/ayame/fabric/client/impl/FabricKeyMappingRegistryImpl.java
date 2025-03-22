@@ -18,26 +18,26 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.neoforge.client;
+package org.ayamemc.ayame.fabric.client.impl;
 
-import net.neoforged.neoforge.common.NeoForge;
-import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.model.resource.IModelResource;
-import org.ayamemc.ayame.neoforge.client.api.event.ModelResourceEvents;
-import org.jetbrains.annotations.ApiStatus;
+import com.mojang.blaze3d.platform.InputConstants;
+import dev.kingtux.tms.api.TMSKeyBinding;
+import dev.kingtux.tms.api.modifiers.BindingModifiers;
+import dev.kingtux.tms.api.modifiers.KeyModifier;
+import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.client.ModifierKey;
+import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 
-import java.util.List;
-
-
-@ApiStatus.Internal
-public class AyameClientEventsNeoForgeImpl implements IAyameClientEvents {
+public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
     @Override
-    public void ModelResource_onResourceCreate(IModelResource modelResource) {
-        NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnResourceCreate(modelResource));
+    public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
+        return new KeyMapping(
+                handleNameTranslateKey(name),
+                InputConstants.Type.KEYSYM,
+                keyCode,
+                category
+        );
     }
 
-    @Override
-    public void ModelResource_onListResource(List<IModelResource> modelResources, boolean sorted) {
-        NeoForge.EVENT_BUS.post(new ModelResourceEvents.OnListResource(modelResources, sorted));
-    }
+
 }

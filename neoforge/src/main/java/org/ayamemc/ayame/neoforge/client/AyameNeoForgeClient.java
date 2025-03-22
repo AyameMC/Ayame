@@ -21,10 +21,8 @@
 package org.ayamemc.ayame.neoforge.client;
 
 
-import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -36,6 +34,8 @@ import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
+import org.ayamemc.ayame.neoforge.client.impl.AyameClientEventsNeoForgeImpl;
+import org.ayamemc.ayame.neoforge.client.impl.NeoForgeKeyMappingRegistryImpl;
 
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
@@ -44,7 +44,18 @@ public class AyameNeoForgeClient {
 
         NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
 
-
+        modBus.addListener(RegisterKeyMappingsEvent.class, event -> {
+            event.register(AyameKeyRegister.MODEL_SELECT_MENU);
+            event.register(AyameKeyRegister.CAMERA_Y_OFFSET_UP);
+            event.register(AyameKeyRegister.CAMERA_Y_OFFSET_DOWN);
+            event.register(AyameKeyRegister.CAMERA_Y_OFFSET_RESET);
+            event.register(AyameKeyRegister.CUSTOM_KEY_0);
+            event.register(AyameKeyRegister.CUSTOM_KEY_1);
+            event.register(AyameKeyRegister.CUSTOM_KEY_2);
+            event.register(AyameKeyRegister.CUSTOM_KEY_3);
+            event.register(AyameKeyRegister.OPEN_ROULETTE);
+            event.register(AyameKeyRegister.ROULETTE_KEY);
+        });
 
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
 
@@ -54,7 +65,6 @@ public class AyameNeoForgeClient {
         );
 
     }
-
 
 
 }

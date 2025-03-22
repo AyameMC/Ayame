@@ -23,8 +23,7 @@ package org.ayamemc.ayame.fabric;
 import net.fabricmc.api.ModInitializer;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.IAyameClientEvents;
-import org.ayamemc.ayame.fabric.client.AyameClientEventsFabricImpl;
-import org.ayamemc.ayame.fabric.client.FabricKeyMappingRegistryImpl;
+import org.ayamemc.ayame.fabric.client.impl.AyameClientEventsFabricImpl;
 import org.ayamemc.ayame.util.ModLoader;
 
 /**

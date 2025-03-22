@@ -18,21 +18,25 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.fabric.client;
+package org.ayamemc.ayame.fabric.client.impl;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.KeyMapping;
-import org.ayamemc.ayame.client.ModifierKey;
-import org.ayamemc.ayame.client.api.KeyMappingRegistry;
+import org.ayamemc.ayame.client.IAyameClientEvents;
+import org.ayamemc.ayame.fabric.client.api.event.ModelResourceEvents;
+import org.ayamemc.ayame.model.resource.IModelResource;
+import org.jetbrains.annotations.ApiStatus;
 
-public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
+import java.util.List;
+
+@ApiStatus.Internal
+
+public class AyameClientEventsFabricImpl implements IAyameClientEvents {
+    @Override
+    public void onModelResourceCreate(IModelResource modelResource) {
+        ModelResourceEvents.ON_RESOURCE_CREATE.invoker().onResourceCreate(modelResource);
+    }
 
     @Override
-    public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
-        return new KeyMapping(
-                handleNameTranslateKey(name),
-                InputConstants.Type.KEYSYM,
-                keyCode,
-                category);
+    public void onListModelResource(List<IModelResource> modelResources, boolean sorted) {
+        ModelResourceEvents.ON_LIST_RESOURCE.invoker().onListResource(modelResources, sorted);
     }
 }

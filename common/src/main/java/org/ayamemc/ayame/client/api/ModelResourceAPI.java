@@ -40,7 +40,7 @@ public class ModelResourceAPI {
         // 从缓存中获取
         List<IModelResource> modelResources = ModelResourceCache.getAllModelResource(sorted);
         // 处理事件
-        IAyameClientEvents.Instance.INSTANCE.ModelResource_onListResource(modelResources, sorted);
+        IAyameClientEvents.Instance.INSTANCE.onListModelResource(modelResources, sorted);
         return modelResources;
     }
 }

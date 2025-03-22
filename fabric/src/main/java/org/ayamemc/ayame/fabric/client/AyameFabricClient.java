@@ -21,7 +21,10 @@
 package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.AyameKeyRegister;
+import org.ayamemc.ayame.fabric.client.impl.FabricKeyMappingRegistryImpl;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -33,26 +36,23 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        /*ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)
-                .registerReloadListener(new IdentifiableResourceReloadListener() {
-                    @Override
-                    public ResourceLocation getFabricId() {
-                        return Ayame.withAyamePath("model_reload");
-                    }
-
-                    @Override
-                    public @NotNull CompletableFuture<Void> reload(PreparationBarrier preparationBarrier,
-                                                                   ResourceManager resourceManager,
-                                                                   ProfilerFiller preparationsProfiler,
-                                                                   ProfilerFiller reloadProfiler,
-                                                                   Executor backgroundExecutor,
-                                                                   Executor gameExecutor) {
-                        return ModelSelectionManager.reload(preparationBarrier,
-                                backgroundExecutor
-                        );
-                    }
-                });*/
         AyameClient.init(new FabricKeyMappingRegistryImpl());
         FabricClientEventHandler.init();
+
+        initKeyBinding();
+    }
+
+    private void initKeyBinding() {
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.MODEL_SELECT_MENU);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CAMERA_Y_OFFSET_UP);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CAMERA_Y_OFFSET_DOWN);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CAMERA_Y_OFFSET_RESET);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CUSTOM_KEY_0);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CUSTOM_KEY_1);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CUSTOM_KEY_2);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.CUSTOM_KEY_3);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.OPEN_ROULETTE);
+        KeyBindingHelper.registerKeyBinding(AyameKeyRegister.ROULETTE_KEY);
+
     }
 }
