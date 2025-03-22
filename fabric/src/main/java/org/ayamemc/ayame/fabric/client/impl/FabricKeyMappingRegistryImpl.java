@@ -27,16 +27,39 @@ import dev.kingtux.tms.api.modifiers.KeyModifier;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.ModifierKey;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
+import org.ayamemc.ayame.util.ClassUtil;
+
+import java.util.Optional;
 
 public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
+    private static final boolean TMS_KEYBINDING_EXISTS = ClassUtil.isClassPresent("dev.kingtux.tms.api.TMSKeyBinding");
+
     @Override
     public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
-        return new KeyMapping(
+        if (!TMS_KEYBINDING_EXISTS || modifierKey == ModifierKey.NONE) {
+            return createVanillaKey(name, inputType, keyCode, category);
+        }
+        return new TMSKeyBinding(
                 handleNameTranslateKey(name),
-                InputConstants.Type.KEYSYM,
+                inputType,
                 keyCode,
-                category
+                category,
+                toTmsModifiers(modifierKey)
         );
+    }
+
+    private static BindingModifiers toTmsModifiers(ModifierKey modifierKey) {
+        BindingModifiers modifiers = new BindingModifiers();
+        switch (modifierKey) {
+            case SHIFT -> modifiers.set(KeyModifier.SHIFT, true);
+            case ALT -> modifiers.set(KeyModifier.ALT, true);
+            case CONTROL -> modifiers.set(KeyModifier.CONTROL, true);
+        }
+        return modifiers;
+    }
+
+    private KeyMapping createVanillaKey(String name, InputConstants.Type inputType, int keyCode, String category) {
+        return new KeyMapping(handleNameTranslateKey(name), inputType, keyCode, category);
     }
 
 
