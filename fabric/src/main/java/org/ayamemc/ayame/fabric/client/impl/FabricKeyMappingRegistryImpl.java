@@ -29,8 +29,6 @@ import org.ayamemc.ayame.client.ModifierKey;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 import org.ayamemc.ayame.util.ClassUtil;
 
-import java.util.Optional;
-
 public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
     private static final boolean TMS_KEYBINDING_EXISTS = ClassUtil.isClassPresent("dev.kingtux.tms.api.TMSKeyBinding");
 
