@@ -22,37 +22,29 @@ package org.ayamemc.ayame.neoforge.client;
 
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
-import org.ayamemc.ayame.model.sync.ModelSelectionManager;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
-import org.ayamemc.ayame.neoforge.client.event.RegisterKeyEventHandler;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
     public AyameNeoForgeClient(IEventBus modBus) {
-        registerReloadListener();
-        AyameClient.init();
+        AyameClient.init(new NeoForgeKeyMappingRegistryImpl());
 
         NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
 
-        modBus.register(RegisterKeyEventHandler.class);
+
 
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsNeoForgeImpl();
 
@@ -63,21 +55,6 @@ public class AyameNeoForgeClient {
 
     }
 
-    public static void registerReloadListener() {
-        Minecraft mc = Minecraft.getInstance();
 
-        /*if (mc.getResourceManager() instanceof ReloadableResourceManager resourceManager)
-            resourceManager.registerReloadListener(new ContextAwareReloadListener() {
-                @Override
-                public @NotNull CompletableFuture<Void> reload(@NotNull PreparationBarrier preparationBarrier,
-                                                               @NotNull ResourceManager resourceManager,
-                                                               @NotNull ProfilerFiller preparationsProfiler,
-                                                               @NotNull ProfilerFiller reloadProfiler,
-                                                               @NotNull Executor backgroundExecutor,
-                                                               @NotNull Executor gameExecutor) {
-                    return ModelSelectionManager.reload(preparationBarrier, backgroundExecutor);
-                }
-            });*/
-    }
 
 }

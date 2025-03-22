@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client;
 
 import com.mojang.logging.LogUtils;
 import org.ayamemc.ayame.Constants;
+import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.client.ClientModelLoader;
@@ -46,6 +47,7 @@ public class AyameClient {
     public static final ExecutorService modWorker = Executors.newCachedThreadPool();
     public static final ModelCacheDatabase cacheDatabase;
     public static final ClientModelManager modelManagerClient = new ClientModelManager();
+    public static KeyMappingRegistry keyMappingRegistry ;
 
     static {
         try {
@@ -58,7 +60,8 @@ public class AyameClient {
     private static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
 
 
-    public static void init() {
+    public static void init(@NotNull KeyMappingRegistry keyMappingRegistry) {
+        AyameClient.keyMappingRegistry = keyMappingRegistry;
         ConfigUtil.init();
 
         registerDefaultModeLoaders();

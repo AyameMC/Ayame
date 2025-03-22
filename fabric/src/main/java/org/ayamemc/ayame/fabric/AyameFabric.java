@@ -35,7 +35,7 @@ import org.ayamemc.ayame.util.ModLoader;
 public final class AyameFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        Ayame.init(ModLoader.FABRIC, new FabricKeyMappingRegistryImpl());
+        Ayame.init(ModLoader.FABRIC);
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
     }
 }

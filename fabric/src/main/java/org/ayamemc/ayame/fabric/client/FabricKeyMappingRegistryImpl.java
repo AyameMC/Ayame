@@ -24,14 +24,13 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.ModifierKey;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
-import org.jetbrains.annotations.Nullable;
 
 public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
 
     @Override
-    public KeyMapping registerKey(String description, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
+    public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
         return new KeyMapping(
-                description,
+                handleNameTranslateKey(name),
                 InputConstants.Type.KEYSYM,
                 keyCode,
                 category);

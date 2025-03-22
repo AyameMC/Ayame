@@ -30,9 +30,9 @@ import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 public class NeoForgeKeyMappingRegistryImpl implements KeyMappingRegistry {
 
     @Override
-    public KeyMapping registerKey(String description, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
+    public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
         return new KeyMapping(
-                description,
+                handleNameTranslateKey(name),
                 KeyConflictContext.IN_GAME,
                 toNeoForgeKeyModifier(modifierKey),
                 inputType,

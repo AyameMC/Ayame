@@ -35,9 +35,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
+import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 import org.ayamemc.ayame.util.TaskManager;
 
 
@@ -88,44 +88,6 @@ public class FabricClientEventHandler {
         AyameClient.requestServerSync();
     }
 
-    /**
-     * 渲染玩家手之前调用
-     *
-     * @param hand              正在渲染的手
-     * @param poseStack         用于渲染的姿势堆栈
-     * @param multiBufferSource 渲染缓冲区的来源
-     * @param packedLight       用于渲染的压缩（天空和方块）光量
-     * @param partialTick       Partial Tick
-     * @param interpolatedPitch 玩家实体的插值音高
-     * @param swingProgress     正在渲染的手牌的挥动进度
-     * @param equipProgress     装备动画的进度，从 { 0.0} 到 { 1.0}
-     * @param stack             要渲染的物品组
-     */
-    private static InteractionResult renderCustomHand(
-            InteractionHand hand,
-            PoseStack poseStack,
-            MultiBufferSource multiBufferSource,
-            int packedLight,
-            float partialTick,
-            float interpolatedPitch,
-            float swingProgress,
-            float equipProgress,
-            ItemStack stack,
-            LocalPlayer player
-    ) {
-        ClientEventHandler.renderCustomHandEventHandler(
-                hand,
-                poseStack,
-                multiBufferSource,
-                packedLight,
-                partialTick,
-                interpolatedPitch,
-                swingProgress,
-                equipProgress,
-                stack
-        );
-        return InteractionResult.FAIL;
-    }
 
     private static void endClientTickEvent(Minecraft minecraft) {
         AyameKeyRegister.processKeyPressed();

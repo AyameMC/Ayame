@@ -30,6 +30,6 @@ import org.ayamemc.ayame.util.ModLoader;
 public final class AyameNeoForge {
     public AyameNeoForge(IEventBus modBus) {
         // Run our common setup.
-        Ayame.init(ModLoader.NEOFORGE, new NeoForgeKeyMappingRegistryImpl());
+        Ayame.init(ModLoader.NEOFORGE);
     }
 }

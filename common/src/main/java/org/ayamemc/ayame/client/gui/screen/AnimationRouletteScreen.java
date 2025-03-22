@@ -29,10 +29,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import org.ayamemc.ayame.client.KeyList;
 import org.ayamemc.ayame.client.gui.screen.music.ClientMusicPlayer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;

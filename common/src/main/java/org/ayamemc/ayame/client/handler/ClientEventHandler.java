@@ -64,9 +64,6 @@ public class ClientEventHandler {
         return MINECRAFT.screen instanceof AyameScreen;
     }
 
-    public static void renderCustomHandEventHandler(InteractionHand hand, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, float partialTick, float interpolatedPitch, float swingProgress, float equipProgress, ItemStack stack) {
-
-    }
 
     public static <T extends SharedSuggestionProvider> void registerClientCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
         AyameCommandManager.createCommands(dispatcher, context);

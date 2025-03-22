@@ -37,14 +37,12 @@ public final class Ayame {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
     public static ModLoader modLoader;
-    public static KeyMappingRegistry keyMappingRegistry;
 
     /**
      * @see org.ayamemc.ayame.client.AyameClient
      */
-    public static void init(ModLoader modLoader, KeyMappingRegistry keyMappingRegistry) {
+    public static void init(ModLoader modLoader) {
         Ayame.modLoader = modLoader;
-        Ayame.keyMappingRegistry = keyMappingRegistry;
         ConfigUtil.init();
         Yttribumes.init();
         AyameMolangVars.registerMolangVars();

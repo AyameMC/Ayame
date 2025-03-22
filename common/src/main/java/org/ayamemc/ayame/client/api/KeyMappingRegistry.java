@@ -22,8 +22,13 @@ package org.ayamemc.ayame.client.api;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.ModifierKey;
 
 public interface KeyMappingRegistry {
-    KeyMapping registerKey(String description, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category);
+    KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category);
+
+    default String handleNameTranslateKey(String name) {
+        return "key." + Ayame.MOD_ID + "." + name;
+    }
 }

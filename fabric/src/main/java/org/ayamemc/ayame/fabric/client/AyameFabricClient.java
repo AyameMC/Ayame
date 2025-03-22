@@ -22,7 +22,6 @@ package org.ayamemc.ayame.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import org.ayamemc.ayame.client.AyameClient;
-import org.ayamemc.ayame.fabric.client.util.AyameKeyRegister;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -53,9 +52,7 @@ public final class AyameFabricClient implements ClientModInitializer {
                         );
                     }
                 });*/
-        AyameClient.init();
-        // 不要动AyameKeyMappingEventHandler的init方法
-        AyameKeyRegister.init();
+        AyameClient.init(new FabricKeyMappingRegistryImpl());
         FabricClientEventHandler.init();
     }
 }

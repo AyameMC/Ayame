@@ -20,54 +20,30 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
 import org.ayamemc.ayame.util.TaskManager;
-import static net.minecraft.client.Minecraft.getInstance;
+
+import static org.ayamemc.ayame.Ayame.MINECRAFT;
+
 public class NeoForgeClientEventHandler {
     /**
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
      */
     @SubscribeEvent
     public static void onClientClick(ClientTickEvent.Post event) {
-        while (RegisterKeyEventHandler.MODEL_SELECT_MENU.get().consumeClick()) {
-            ClientEventHandler.openSelectMenuKeyPressed();
-        }
-        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_UP.get().consumeClick()) {
-            ClientEventHandler.plusCameraYOffset(0.01f, false);
-        }
-        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_DOWN.get().consumeClick()) {
-            ClientEventHandler.plusCameraYOffset(-0.01f, false);
-        }
-        while (RegisterKeyEventHandler.CAMERA_Y_OFFSET_RESET.get().consumeClick()) {
-            ClientEventHandler.plusCameraYOffset(0.0f, true);
-        }
-        while (RegisterKeyEventHandler.CUSTOM_KEY_0.get().consumeClick()){
-            JsKeyPressEvent.triggerEvent(0, new JsPlayer(getInstance().player));
-        }
-        while (RegisterKeyEventHandler.CUSTOM_KEY_1.get().consumeClick()){
-            JsKeyPressEvent.triggerEvent(1, new JsPlayer(getInstance().player));
-        }
-        while (RegisterKeyEventHandler.CUSTOM_KEY_2.get().consumeClick()){
-            JsKeyPressEvent.triggerEvent(2, new JsPlayer(getInstance().player));
-        }
-        while (RegisterKeyEventHandler.CUSTOM_KEY_3.get().consumeClick()){
-            JsKeyPressEvent.triggerEvent(3, new JsPlayer(getInstance().player));
-        }
+        AyameKeyRegister.processKeyPressed();
     }
 
     @SubscribeEvent
@@ -76,9 +52,8 @@ public class NeoForgeClientEventHandler {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
 
-        final Minecraft minecraft = Minecraft.getInstance();
 
-        if (minecraft.isLocalServer()) {
+        if (MINECRAFT.isLocalServer()) {
             AyameClient.loadAllModelLocal().join();
             return;
         }
@@ -100,22 +75,6 @@ public class NeoForgeClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void renderCustomModelHand(RenderHandEvent event) {
-        event.setCanceled(true); // 取消渲染默认手臂
-        ClientEventHandler.renderCustomHandEventHandler(
-                event.getHand(),
-                event.getPoseStack(),
-                event.getMultiBufferSource(),
-                event.getPackedLight(),
-                event.getPartialTick(),
-                event.getInterpolatedPitch(),
-                event.getSwingProgress(),
-                event.getEquipProgress(),
-                event.getItemStack()
-        );
-    }
-
-    @SubscribeEvent
     public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
         if (ClientEventHandler.shouldUseAyameTooltipColor()) {
             event.setBorderStart(ClientEventHandler.TOOLTIP_BORDER_TOP_COLOR);
@@ -125,12 +84,24 @@ public class NeoForgeClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void attackEntity(AttackEntityEvent event){
+    public static void attackEntity(AttackEntityEvent event) {
         Level level = event.getEntity().level();
-        if (level.isClientSide()){
+        if (level.isClientSide()) {
             ClientEventHandler.attackEntity(event.getEntity(), level, event.getEntity().getUsedItemHand(), event.getTarget());
         }
     }
 
 
+    @SubscribeEvent
+    public static void onKeyPressed(RegisterKeyMappingsEvent event) {
+        event.register(AyameKeyRegister.MODEL_SELECT_MENU);
+        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_UP);
+        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_DOWN);
+        event.register(AyameKeyRegister.CAMERA_Y_OFFSET_RESET);
+        event.register(AyameKeyRegister.CUSTOM_KEY_0);
+        event.register(AyameKeyRegister.CUSTOM_KEY_1);
+        event.register(AyameKeyRegister.CUSTOM_KEY_2);
+        event.register(AyameKeyRegister.CUSTOM_KEY_3);
+        event.register(AyameKeyRegister.ROULETTE_KEY);
+    }
 }
