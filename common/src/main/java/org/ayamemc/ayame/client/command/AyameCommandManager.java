@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.resource.IModelResource;
@@ -64,11 +65,21 @@ public class AyameCommandManager {
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
+                .then(LiteralArgumentBuilder.<T>literal("play-animation")
+                        .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
+                                .executes(context1 -> {
+                                    MINECRAFT.player.ayame$playAnimation(StringArgumentType.getString(context1, "animation_name"));
+                                    Ayame.LOGGER.info(String.format("Play animation '%s'", StringArgumentType.getString(context1, "animation_name")));
+                                    return 1;
+                                })
+                        )
+
+                )
 
                 .then(LiteralArgumentBuilder.<T>literal("model")
                         .then(LiteralArgumentBuilder.<T>literal("set")
                                 .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
-                                        .executes(AyameCommandManager::setModel)
+                                        .executes(context1 -> setModel(context1))
                                         .suggests((SuggestionProvider<T>) MODEL_LIST)
                                 ))
 

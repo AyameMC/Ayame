@@ -73,6 +73,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
     @Unique
     private boolean ayame$isLoopAnimation;
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 
@@ -81,7 +82,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
         final Pose pose = player.getPose();
 
         controllers.add(new AnimationController<>(this, 2, state -> {
-            if (this.ayame$playAnimationName != null ) {
+            if (this.ayame$playAnimationName != null) {
                 state.setAndContinue(AyameAnimations.create(ayame$playAnimationName, false));
             }
             return PlayState.CONTINUE;
@@ -294,6 +295,6 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
     @Override
     public void ayame$playAnimation(String animationName) {
-
+        this.ayame$playAnimationName = animationName;
     }
 }
