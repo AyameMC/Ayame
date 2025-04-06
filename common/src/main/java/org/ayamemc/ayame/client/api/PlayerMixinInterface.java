@@ -20,11 +20,27 @@
 
 package org.ayamemc.ayame.client.api;
 
-public interface IAbleHurting {
+// 扩展方法
+public interface PlayerMixinInterface {
+    // 有没有被伤害（未完成）
+    // TODO: 完成
     default void ayame$setHurting(boolean hurting) {
     }
 
     default boolean ayame$isHurting() {
         return false;
+    }
+
+    // 是否坐下的
+    default void ayame$setSitting(boolean sitting) {
+    }
+
+    default boolean ayame$isSitting() {
+        return false;
+    }
+
+    // 播放动画
+    default void ayame$playAnimation(String animationName) {
+
     }
 }

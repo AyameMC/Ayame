@@ -27,13 +27,11 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import org.ayamemc.ayame.client.api.IAbleHurting;
-import org.ayamemc.ayame.client.api.IAbleToSit;
+import org.ayamemc.ayame.client.api.PlayerMixinInterface;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.model.AyameAnimations;
-import org.ayamemc.ayame.model.AyameBlendedAnimationController;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -58,7 +56,7 @@ import java.util.function.Supplier;
  */
 
 @Mixin(Player.class)
-public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumable, IAbleHurting {
+public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IYttribumable {
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
     @Unique
@@ -70,6 +68,11 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
     @Unique
     private boolean ayame$isHurting = false;
 
+    @Unique
+    private String ayame$playAnimationName;
+
+    @Unique
+    private boolean ayame$isLoopAnimation;
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 
@@ -77,8 +80,14 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
 
+        controllers.add(new AnimationController<>(this, 2, state -> {
+            if (this.ayame$playAnimationName != null ) {
+                state.setAndContinue(AyameAnimations.create(ayame$playAnimationName, false));
+            }
+            return PlayState.CONTINUE;
+        }));
 
-        controllers.add(new AyameBlendedAnimationController<>(this, 2, state -> {
+        controllers.add(new AnimationController<>(this, 2, state -> {
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
@@ -283,4 +292,8 @@ public abstract class PlayerMixin implements GeoEntity, IAbleToSit, IYttribumabl
         this.ayame$isYttribumeRestricted = restricted;
     }
 
+    @Override
+    public void ayame$playAnimation(String animationName) {
+
+    }
 }
