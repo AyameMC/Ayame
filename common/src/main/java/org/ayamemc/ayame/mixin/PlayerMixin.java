@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.mixin;
 
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Pose;
@@ -33,6 +34,7 @@ import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.model.AyameAnimations;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -57,6 +59,8 @@ import java.util.function.Supplier;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IYttribumable {
+    @Shadow protected abstract boolean freeAt(BlockPos pos);
+
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
     @Unique
@@ -74,6 +78,9 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
     @Unique
     private boolean ayame$isLoopAnimation;
 
+    @Unique
+    private boolean ayame$isrResetAnimation = false;
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 
@@ -81,12 +88,6 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
         final Player player = (Player) (Object) this;
         final Pose pose = player.getPose();
 
-        controllers.add(new AnimationController<>(this, 2, state -> {
-            if (this.ayame$playAnimationName != null) {
-                state.setAndContinue(AyameAnimations.create(ayame$playAnimationName, false));
-            }
-            return PlayState.CONTINUE;
-        }));
 
         controllers.add(new AnimationController<>(this, 2, state -> {
             // 动画任务处理
@@ -228,7 +229,25 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
             return PlayState.CONTINUE;
         }));
+        controllers.add(new AnimationController<>(this, "animation_player", 2, state -> {
+            state.resetCurrentAnimation();
+            if (this.ayame$isrResetAnimation){
+                state.setAnimation(null);
+                this.ayame$isrResetAnimation = false;
+                state.resetCurrentAnimation();
+            }
+            if (this.ayame$playAnimationName != null) {
+                state.setAnimation(AyameAnimations.create(ayame$playAnimationName, ayame$isLoopAnimation));
+                this.ayame$playAnimationName = null;
+                state.resetCurrentAnimation();
+            }
 
+
+//            state.getController().forceAnimationReset();
+
+            return PlayState.CONTINUE;
+
+        }));
         // TODO 添加events
     }
 
@@ -294,7 +313,13 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
     }
 
     @Override
-    public void ayame$playAnimation(String animationName) {
+    public void ayame$playAnimation(String animationName, boolean isLoop) {
         this.ayame$playAnimationName = animationName;
+        this.ayame$isLoopAnimation = isLoop;
+    }
+
+    @Override
+    public void ayame$resetAnimation() {
+        this.ayame$isrResetAnimation = true;
     }
 }

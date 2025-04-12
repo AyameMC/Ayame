@@ -40,7 +40,11 @@ public interface PlayerMixinInterface {
     }
 
     // 播放动画
-    default void ayame$playAnimation(String animationName) {
+    default void ayame$playAnimation(String animationName, boolean isLoop) {
+
+    }
+
+    default void ayame$resetAnimation() {
 
     }
 }

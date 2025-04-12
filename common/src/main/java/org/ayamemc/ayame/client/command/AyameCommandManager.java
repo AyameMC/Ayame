@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.client.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -65,15 +66,26 @@ public class AyameCommandManager {
                 .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
                         .executes(AyameCommandManager::benchmarkInterpreted)
                 )
-                .then(LiteralArgumentBuilder.<T>literal("play-animation")
-                        .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
+                .then(LiteralArgumentBuilder.<T>literal("animation")
+                        .then(LiteralArgumentBuilder.<T>literal("play")
+                                .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
+                                        .then(RequiredArgumentBuilder.<T, Boolean>argument("is_loop", BoolArgumentType.bool())
+                                                .executes(context1 -> {
+                                                    MINECRAFT.player.ayame$playAnimation(context1.getArgument("animation_name", String.class), context1.getArgument("is_loop", Boolean.class));
+
+                                                    Ayame.LOGGER.info("Play animation {}", context1.getArgument("animation_name", String.class));
+                                                    return 1;
+                                                })
+                                        )
+
+                                )
+                        )
+                        .then(LiteralArgumentBuilder.<T>literal("reset")
                                 .executes(context1 -> {
-                                    MINECRAFT.player.ayame$playAnimation(StringArgumentType.getString(context1, "animation_name"));
-                                    Ayame.LOGGER.info(String.format("Play animation '%s'", StringArgumentType.getString(context1, "animation_name")));
+                                    MINECRAFT.player.ayame$resetAnimation();
                                     return 1;
                                 })
                         )
-
                 )
 
                 .then(LiteralArgumentBuilder.<T>literal("model")
@@ -88,7 +100,7 @@ public class AyameCommandManager {
                                     AyameClient.loadAllModelLocal().whenComplete((r, ex) -> {
                                         sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
                                     });
-                                    return 0;
+                                    return 1;
                                 }))
 
                         .then(LiteralArgumentBuilder.<T>literal("reload")
@@ -188,7 +200,7 @@ public class AyameCommandManager {
             });
         });
 
-        return 0;
+        return 1;
     }
 
     @SuppressWarnings("DataFlowIssue")
