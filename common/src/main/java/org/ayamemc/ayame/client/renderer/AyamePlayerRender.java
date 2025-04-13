@@ -152,13 +152,11 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             }
         }
 
-        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(Player animatable) {
             return this.getPlayerModelSelectionOrFallback(animatable).getGeoModel();
         }
 
-        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(Player animatable) {
             return this.getPlayerModelSelectionOrFallback(animatable).getTexture();
