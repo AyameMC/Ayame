@@ -78,6 +78,9 @@ dependencies {
     forgeRuntimeLibrary("team.unnamed:mocha:${mocha_version}")
     include("team.unnamed:mocha:${mocha_version}")
 
+    // Mocha库额外依赖
+    include "org.javassist:javassist:${javassist_version}"
+
 }
 
 processResources {

@@ -72,6 +72,9 @@ dependencies {
     implementation("team.unnamed:mocha:${mocha_version}")
     include("team.unnamed:mocha:${mocha_version}")
 
+    // Mocha库额外依赖
+    include "org.javassist:javassist:${javassist_version}"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 

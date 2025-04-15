@@ -21,32 +21,31 @@
 package org.ayamemc.ayame.fabric.client.impl;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.kingtux.tms.api.TMSKeyBinding;
+import dev.kingtux.tms.api.modifiers.BindingModifiers;
+import dev.kingtux.tms.api.modifiers.KeyModifier;
 import net.minecraft.client.KeyMapping;
 import org.ayamemc.ayame.client.ModifierKey;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
-import org.ayamemc.ayame.util.ClassUtil;
-import org.jetbrains.annotations.Nullable;
 
-public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
-    @Nullable
-    private final KeyMappingRegistry TMS_KEY_MAPPING_REGISTRY = createTmsKeyMappingRegistry();
-    private KeyMappingRegistry createTmsKeyMappingRegistry() {
-        if (ClassUtil.isClassPresent("dev.kingtux.tms.api.TMSKeyBinding")){
-            return new TMSKeyMappingRegistryImpl();
+public class TMSKeyMappingRegistryImpl implements KeyMappingRegistry {
+    private static BindingModifiers toTmsModifiers(ModifierKey modifierKey) {
+        BindingModifiers modifiers = new BindingModifiers();
+        switch (modifierKey) {
+            case SHIFT -> modifiers.set(KeyModifier.SHIFT, true);
+            case ALT -> modifiers.set(KeyModifier.ALT, true);
+            case CONTROL -> modifiers.set(KeyModifier.CONTROL, true);
         }
-        return null;
+        return modifiers;
     }
     @Override
     public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
-        if (TMS_KEY_MAPPING_REGISTRY == null || modifierKey == ModifierKey.NONE) {
-            return createVanillaKey(name, inputType, keyCode, category);
-        }
-        return TMS_KEY_MAPPING_REGISTRY.registerKey(name, modifierKey, inputType, keyCode, category);
+        return new TMSKeyBinding(
+                handleNameTranslateKey(name),
+                inputType,
+                keyCode,
+                category,
+                toTmsModifiers(modifierKey)
+        );
     }
-
-    private KeyMapping createVanillaKey(String name, InputConstants.Type inputType, int keyCode, String category) {
-        return new KeyMapping(handleNameTranslateKey(name), inputType, keyCode, category);
-    }
-
-
 }

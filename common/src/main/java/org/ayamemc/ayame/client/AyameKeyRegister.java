@@ -22,13 +22,14 @@ package org.ayamemc.ayame.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
 import org.ayamemc.ayame.util.TranslatableName;
 import org.lwjgl.glfw.GLFW;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static net.minecraft.client.Minecraft.getInstance;
 import static org.ayamemc.ayame.client.AyameClient.keyMappingRegistry;
 
 public class AyameKeyRegister {
@@ -123,16 +124,16 @@ public class AyameKeyRegister {
             ClientEventHandler.plusCameraYOffset(0.0f, true);
         }
         while (CUSTOM_KEY_0.consumeClick()) {
-            JsKeyPressEvent.triggerEvent(0, new JsPlayer(MINECRAFT.player));
+            JsKeyPressEvent.triggerEvent(0, new JsPlayer(getInstance().player));
         }
         while (CUSTOM_KEY_1.consumeClick()) {
-            JsKeyPressEvent.triggerEvent(1, new JsPlayer(MINECRAFT.player));
+            JsKeyPressEvent.triggerEvent(1, new JsPlayer(getInstance().player));
         }
         while (CUSTOM_KEY_2.consumeClick()) {
-            JsKeyPressEvent.triggerEvent(2, new JsPlayer(MINECRAFT.player));
+            JsKeyPressEvent.triggerEvent(2, new JsPlayer(getInstance().player));
         }
         while (CUSTOM_KEY_3.consumeClick()) {
-            JsKeyPressEvent.triggerEvent(3, new JsPlayer(MINECRAFT.player));
+            JsKeyPressEvent.triggerEvent(3, new JsPlayer(getInstance().player));
         }
         while (OPEN_ROULETTE.consumeClick()) {
             ClientEventHandler.openRouletteScreen();

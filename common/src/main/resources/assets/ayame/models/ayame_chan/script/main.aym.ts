@@ -31,13 +31,12 @@ PlayerTickEvent.register((event) => {
     const { player } = event;
     let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
-    player.setYttribume(scale, 2);
+    // player.setYttribume(scale, 2);
 })
 
 KeyPressEvent.register((event) => {
 
-    const { key, player } = event;
-    player.sendChatMessage("aa")
+    const { player,key } = event;
     if (key === 0) {
         // 增大scale
         let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
@@ -58,7 +57,7 @@ KeyPressEvent.register((event) => {
     }
     if (key == 3) {
         // 播放猫叫
-        player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0)
+        player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0);
     }
 })
 

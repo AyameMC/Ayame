@@ -22,6 +22,8 @@ package org.ayamemc.ayame.client.script.event;
 
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class JsKeyPressEvent {
 
     // 触发所有注册的回调函数
     public static void triggerEvent(int key, JsPlayer player) {
-        JsEventHelper.executeCallbacks(callbacks, key, player);
+        Scriptable event = new NativeObject();
+        event.put("player", event, player);
+        event.put("key", event, key);
+        JsEventHelper.executeCallbacks(callbacks, event);
     }
 }
