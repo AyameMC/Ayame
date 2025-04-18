@@ -22,12 +22,18 @@ package org.ayamemc.ayame.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
@@ -35,12 +41,16 @@ import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.loading.json.raw.Bone;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -70,27 +80,132 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     @Override
     public void actuallyRender(PoseStack poseStack, Player player, BakedGeoModel model, @Nullable RenderType renderType,
-                               @NotNull MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
-                               int packedLight, int packedOverlay, int colour) {
+                               @NotNull MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender,
+                               float partialTick, int packedLight, int packedOverlay, int colour) {
+        // 先渲染玩家模型
         RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
         VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
 
-        // 透明渲染
         int a = (int) (player.ayame$getYttribume(Yttribumes.MODEL_ALPHA) * 255);
         int modifiedColour = (a << 24) | (colour & 0x00FFFFFF);
 
-        super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer, isReRender, partialTick, packedLight, packedOverlay, modifiedColour);
+        super.actuallyRender(poseStack, player, model, translucentRenderType, bufferSource, translucentBuffer,
+                isReRender, partialTick, packedLight, packedOverlay, modifiedColour);
+
+        // 渲染手持物品
+        renderHeldItems(poseStack, bufferSource, packedLight, player, partialTick);
     }
 
-    public void renderRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer abstractClientPlayer) {
-        handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
+
+    private void renderHeldItems(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
+                                 Player player, float partialTick) {
+        GeoPlayerModel model = (GeoPlayerModel) getGeoModel();
+
+        // 获取骨骼信息
+        Optional<GeoBone> rightHandBone = model.getBone("RightHand");
+        Optional<GeoBone> leftHandBone = model.getBone("LeftHand");
+
+        // 渲染主手物品
+        if (rightHandBone.isPresent()) {
+            poseStack.pushPose();
+
+            // 应用骨骼的变换
+            Matrix4f boneTransform = rightHandBone.get().getModelSpaceMatrix();
+            poseStack.last().pose().mul(boneTransform);
+
+
+            // 调整物品位置和方向
+            poseStack.translate(0.1f, 0, 0.1f); // X,Y,Z微调
+            poseStack.mulPose(Axis.XP.rotationDegrees(90)); // 调整物品方向
+            poseStack.scale(0.5f, 0.5f, 0.5f); // 物品大小
+
+            renderItem(player.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
+                    poseStack, bufferSource, packedLight);
+            poseStack.popPose();
+        }
+
+        // 渲染副手物品
+        if (leftHandBone.isPresent()) {
+            poseStack.pushPose();
+
+            Matrix4f boneTransform = leftHandBone.get().getModelSpaceMatrix();
+            poseStack.last().pose().mul(boneTransform);
+
+            poseStack.translate(-0.1f, 0, 0.1f);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90));
+            poseStack.scale(0.5f, 0.5f, 0.5f);
+
+            renderItem(player.getOffhandItem(), ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                    poseStack, bufferSource, packedLight);
+            poseStack.popPose();
+        }
     }
+
+    private void renderItem(ItemStack stack, ItemDisplayContext context,
+                            PoseStack poseStack, MultiBufferSource buffer, int light) {
+        if (stack.isEmpty()) return;
+
+        Minecraft.getInstance().getItemRenderer().renderStatic(
+                stack,
+                context,
+                light,
+                OverlayTexture.NO_OVERLAY,
+                poseStack,
+                buffer,
+                Minecraft.getInstance().level,
+                0
+        );
+    }
+
+    public void renderRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player) {
+        handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
+
+        // 渲染主手物品
+        ItemStack mainHandItem = player.getMainHandItem();
+        if (!mainHandItem.isEmpty()) {
+            poseStack.pushPose();
+            // 调整物品位置
+            poseStack.translate(0.0f, 0.0f, 0.1f);
+            Minecraft.getInstance().getItemRenderer().renderStatic(
+                    mainHandItem,
+                    ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+                    packedLight,
+                    OverlayTexture.NO_OVERLAY,
+                    poseStack,
+                    buffer,
+                    player.level(),
+                    0
+            );
+            poseStack.popPose();
+        }
+    }
+
     public void renderLeftHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Player player) {
         // X 轴镜像
         poseStack.pushPose();
         poseStack.scale(-1.0F, 1.0F, 1.0F);
-        poseStack.popPose();
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
+
+        // 渲染副手物品
+        ItemStack offHandItem = player.getOffhandItem();
+        if (!offHandItem.isEmpty()) {
+            poseStack.pushPose();
+            // 调整物品位置
+            poseStack.translate(0.0f, 0.0f, 0.1f);
+            Minecraft.getInstance().getItemRenderer().renderStatic(
+                    offHandItem,
+                    ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+                    packedLight,
+                    OverlayTexture.NO_OVERLAY,
+                    poseStack,
+                    buffer,
+                    player.level(),
+                    0
+            );
+            poseStack.popPose();
+        }
+
+        poseStack.popPose();
     }
 
     protected static class GeoPlayerModel extends GeoModel<Player> {
