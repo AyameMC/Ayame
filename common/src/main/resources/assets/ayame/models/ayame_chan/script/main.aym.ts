@@ -72,7 +72,7 @@ RouletteOption.add("坐下动画","minecraft:textures/item/diamond.png",(event)=
     player.playAnim("state.sit",true)
 })
 
-RouletteOption.add("awsl","minecraft:textures/item/tnt.png",(event)=>{
+RouletteOption.add("awsl","minecraft:textures/blocks/tnt.png",(event)=>{
     const { player } = event
     player.playAnim("special.death",false)
 })

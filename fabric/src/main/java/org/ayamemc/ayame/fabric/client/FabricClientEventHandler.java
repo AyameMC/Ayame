@@ -20,25 +20,19 @@
 
 package org.ayamemc.ayame.fabric.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.client.AyameKeyRegister;
-import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.ayamemc.ayame.util.TaskManager;
 
 
 /**
@@ -54,8 +48,8 @@ public class FabricClientEventHandler {
     public static void init() {
         ClientTickEvents.START_CLIENT_TICK.register(ClientEventHandler::tick);
         ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
-        ClientPlayConnectionEvents.JOIN.register(FabricClientEventHandler::joinServer);
-        ClientPlayConnectionEvents.DISCONNECT.register(FabricClientEventHandler::quitServer);
+        ClientEntityEvents.ENTITY_LOAD.register(FabricClientEventHandler::joinWorld);
+        ClientEntityEvents.ENTITY_UNLOAD.register(FabricClientEventHandler::quitWorld);
         ClientCommandRegistrationCallback.EVENT.register(ClientEventHandler::registerClientCommands);
         HudRenderCallback.EVENT.register(ClientEventHandler::renderHud);
         WorldRenderEvents.START.register((context) -> ClientEventHandler.renderCamera());
@@ -65,27 +59,20 @@ public class FabricClientEventHandler {
             }
             return InteractionResult.PASS;
         });
+
     }
 
-
-    private static void quitServer(ClientPacketListener clientPacketListener, Minecraft minecraft) {
-        // 停止执行玩家进入世界的任务
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
-
-        AyameClient.unloadAllModels();
-    }
-
-    private static void joinServer(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        // 执行玩家进入世界的任务
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-
-        if (minecraft.isLocalServer()) {
-            AyameClient.loadAllModelLocal().join();
-            return;
+    private static void quitWorld(Entity entity, ClientLevel clientLevel) {
+        if (entity instanceof Player && clientLevel.isClientSide()) {
+            ClientEventHandler.quiltWorld();
         }
 
-        AyameClient.requestServerSync();
+    }
+
+    private static void joinWorld(Entity entity, ClientLevel clientLevel) {
+        if (entity instanceof Player && clientLevel.isClientSide()) {
+            ClientEventHandler.johnWorld();
+        }
     }
 
 

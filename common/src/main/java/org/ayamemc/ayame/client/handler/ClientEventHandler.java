@@ -20,25 +20,24 @@
 
 package org.ayamemc.ayame.client.handler;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AnimationRouletteScreen;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
+import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
@@ -115,5 +114,26 @@ public class ClientEventHandler {
 
     public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
         JsAttackEntityEvent.trigger(new JsPlayer(player), new JsWorld(level), new JsEntity(target));
+    }
+
+    public static void johnWorld() {
+        // 执行玩家进入世界的任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
+
+        if (MINECRAFT.isLocalServer()) {
+            AyameClient.loadAllModelLocal().join();
+            return;
+        }
+
+        AyameClient.requestServerSync();
+        JavaScriptLoader.runJs();
+    }
+
+    public static void quiltWorld() {
+        // 停止执行玩家进入世界的任务
+        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
+
+        AyameClient.unloadAllModels();
     }
 }

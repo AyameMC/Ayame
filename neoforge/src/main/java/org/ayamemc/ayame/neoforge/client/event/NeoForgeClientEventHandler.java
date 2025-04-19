@@ -20,22 +20,19 @@
 
 package org.ayamemc.ayame.neoforge.client.event;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
-import org.ayamemc.ayame.util.TaskManager;
-
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class NeoForgeClientEventHandler {
     /**
@@ -47,19 +44,17 @@ public class NeoForgeClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        // 执行所有任务
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
-
-
-        if (MINECRAFT.isLocalServer()) {
-            AyameClient.loadAllModelLocal().join();
-            return;
+    public static void onPlayerLeave(EntityLeaveLevelEvent event) {
+        if (event.getEntity() instanceof Player && event.getLevel().isClientSide()) {
+            ClientEventHandler.quiltWorld();
         }
+    }
 
-        AyameClient.requestServerSync();
-
+    @SubscribeEvent
+    public static void onPlayerJoin(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof Player && event.getLevel().isClientSide()) {
+            ClientEventHandler.johnWorld();
+        }
     }
 
     @SubscribeEvent
@@ -67,12 +62,6 @@ public class NeoForgeClientEventHandler {
         AyameCommandManager.createCommands(event.getDispatcher(), event.getBuildContext());
     }
 
-    @SubscribeEvent
-    public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-        TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
-
-        AyameClient.unloadAllModels();
-    }
 
     @SubscribeEvent
     public static void renderAyameTooltipColor(RenderTooltipEvent.Color event) {
