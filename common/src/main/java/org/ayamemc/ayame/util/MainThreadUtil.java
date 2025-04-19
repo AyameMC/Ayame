@@ -54,7 +54,8 @@ public class MainThreadUtil {
     }
 
     public static void setMainThreadServer(Thread thread) {
-        ensureThreadNoDuplicateServer();
+        //ensureThreadNoDuplicateServer();
+        // IDK why do that,But you know that if you rejoin a world, the game will crash
         mainThreadServer = thread;
     }
 

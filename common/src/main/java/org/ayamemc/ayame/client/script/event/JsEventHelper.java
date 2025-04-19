@@ -30,4 +30,11 @@ public class JsEventHelper {
             Context.exit();
         }
     }
+
+    public static void clearAllCallbacks() {
+        JsAttackEntityEvent.clearCallbacks();
+        JsPlayerTickEvent.clearCallbacks();
+        JsKeyPressEvent.clearCallbacks();
+        JsRouletteOption.clearCallbacks();
+    }
 }

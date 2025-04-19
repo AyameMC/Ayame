@@ -44,4 +44,8 @@ public class JsPlayerTickEvent {
         event.put("player", event, new JsPlayer(MINECRAFT.player));
         JsEventHelper.executeCallbacks(callbacks, event);
     }
+
+    public static void clearCallbacks() {
+        callbacks.clear();
+    }
 }

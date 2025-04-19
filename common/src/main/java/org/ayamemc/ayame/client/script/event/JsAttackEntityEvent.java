@@ -48,4 +48,8 @@ public class JsAttackEntityEvent {
         event.put("target", event, target);
         JsEventHelper.executeCallbacks(tickCallbacks, event);
     }
+
+    public static void clearCallbacks() {
+        tickCallbacks.clear();
+    }
 }

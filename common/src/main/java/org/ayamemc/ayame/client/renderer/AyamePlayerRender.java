@@ -22,16 +22,14 @@ package org.ayamemc.ayame.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +43,6 @@ import org.joml.Matrix4f;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.loading.json.raw.Bone;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -59,12 +56,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int LEGGINGS_SLOT = 1;
     private static final int CHEST_PLATE_SLOT = 2;
     private static final int HELMET_SLOT = 3;
-
     private final AyamePlayerHandRenderer handRenderer = new AyamePlayerHandRenderer();
+    private final ItemInHandRenderer itemInHandRenderer;
 
     // TODO : 完善代码 & 添加API
     public AyamePlayerRender(EntityRendererProvider.Context context) {
         super(context, new GeoPlayerModel());
+        this.itemInHandRenderer = context.getItemInHandRenderer();
     }
 
     @Override
@@ -99,85 +97,77 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
     private void renderHeldItems(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
                                  Player player, float partialTick) {
-        GeoPlayerModel model = (GeoPlayerModel) getGeoModel();
 
-        // 获取骨骼信息
-        Optional<GeoBone> rightHandBone = model.getBone("RightHand");
-        Optional<GeoBone> leftHandBone = model.getBone("LeftHand");
-
-        // 渲染主手物品
-        if (rightHandBone.isPresent()) {
-            poseStack.pushPose();
-
-            // 应用骨骼的变换
-            Matrix4f boneTransform = rightHandBone.get().getModelSpaceMatrix();
-            poseStack.last().pose().mul(boneTransform);
+        renderArmWithItem(
+                player,
+                player.getMainHandItem(),
+                ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
+                HumanoidArm.RIGHT,
+                poseStack,
+                bufferSource,
+                packedLight
+        );
 
 
-            // 调整物品位置和方向
-            poseStack.translate(0.1f, 0, 0.1f); // X,Y,Z微调
-            poseStack.mulPose(Axis.XP.rotationDegrees(90)); // 调整物品方向
-            poseStack.scale(0.5f, 0.5f, 0.5f); // 物品大小
-
-            renderItem(player.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
-                    poseStack, bufferSource, packedLight);
-            poseStack.popPose();
-        }
-
-        // 渲染副手物品
-        if (leftHandBone.isPresent()) {
-            poseStack.pushPose();
-
-            Matrix4f boneTransform = leftHandBone.get().getModelSpaceMatrix();
-            poseStack.last().pose().mul(boneTransform);
-
-            poseStack.translate(-0.1f, 0, 0.1f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90));
-            poseStack.scale(0.5f, 0.5f, 0.5f);
-
-            renderItem(player.getOffhandItem(), ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
-                    poseStack, bufferSource, packedLight);
-            poseStack.popPose();
-        }
+        renderArmWithItem(
+                player,
+                player.getOffhandItem(),
+                ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                HumanoidArm.LEFT,
+                poseStack,
+                bufferSource,
+                packedLight
+        );
     }
 
-    private void renderItem(ItemStack stack, ItemDisplayContext context,
-                            PoseStack poseStack, MultiBufferSource buffer, int light) {
-        if (stack.isEmpty()) return;
+    protected void renderArmWithItem(
+            LivingEntity entity,
+            ItemStack itemStack,
+            ItemDisplayContext displayContext,
+            HumanoidArm arm,
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            int packedLight
+    ) {
+        if (!itemStack.isEmpty()) {
+            poseStack.pushPose();
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(
-                stack,
-                context,
-                light,
-                OverlayTexture.NO_OVERLAY,
-                poseStack,
-                buffer,
-                Minecraft.getInstance().level,
-                0
-        );
+            // 获取手部骨骼并应用变换
+            Optional<GeoBone> handBone = getGeoModel().getBone(
+                    arm == HumanoidArm.RIGHT ? "RightHand" : "LeftHand"
+            );
+
+            if (handBone.isPresent()) {
+                // 应用骨骼的模型空间变换
+                Matrix4f boneMatrix = handBone.get().getModelSpaceMatrix();
+                poseStack.last().pose().mul(boneMatrix);
+            }
+
+            // 调整物品方向
+//            poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+//            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+
+            // 调整位置偏移
+            boolean isLeft = arm == HumanoidArm.LEFT;
+//            poseStack.translate((isLeft ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+
+            // 渲染物品
+            itemInHandRenderer.renderItem(
+                    entity,
+                    itemStack,
+                    displayContext,
+                    isLeft,
+                    poseStack,
+                    buffer,
+                    packedLight
+            );
+
+            poseStack.popPose();
+        }
     }
 
     public void renderRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player) {
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
-
-        // 渲染主手物品
-        ItemStack mainHandItem = player.getMainHandItem();
-        if (!mainHandItem.isEmpty()) {
-            poseStack.pushPose();
-            // 调整物品位置
-            poseStack.translate(0.0f, 0.0f, 0.1f);
-            Minecraft.getInstance().getItemRenderer().renderStatic(
-                    mainHandItem,
-                    ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-                    packedLight,
-                    OverlayTexture.NO_OVERLAY,
-                    poseStack,
-                    buffer,
-                    player.level(),
-                    0
-            );
-            poseStack.popPose();
-        }
     }
 
     public void renderLeftHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Player player) {
@@ -185,26 +175,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         poseStack.pushPose();
         poseStack.scale(-1.0F, 1.0F, 1.0F);
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
-
-        // 渲染副手物品
-        ItemStack offHandItem = player.getOffhandItem();
-        if (!offHandItem.isEmpty()) {
-            poseStack.pushPose();
-            // 调整物品位置
-            poseStack.translate(0.0f, 0.0f, 0.1f);
-            Minecraft.getInstance().getItemRenderer().renderStatic(
-                    offHandItem,
-                    ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                    packedLight,
-                    OverlayTexture.NO_OVERLAY,
-                    poseStack,
-                    buffer,
-                    player.level(),
-                    0
-            );
-            poseStack.popPose();
-        }
-
         poseStack.popPose();
     }
 

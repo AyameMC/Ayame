@@ -27,25 +27,39 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class JsKeyPressEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
+public class JsRouletteOption {
+    private static final Map<String, List<Function>> optionCallbacks = new HashMap<>();
+    private static final Map<String, String> optionIcons = new HashMap<>();
 
     @JSStaticFunction
-    public static void register(Function callback) {
-        callbacks.add(callback); // 将回调函数添加到列表中
+    public static void add(String name,String icon, Function callback) {
+        optionCallbacks.computeIfAbsent(name, k -> new ArrayList<>()).add(callback);
+        optionIcons.put(name, icon);
     }
 
-    // 触发所有注册的回调函数
-    public static void triggerEvent(int key, JsPlayer player) {
+    public static void trigger(String optionName, JsPlayer player) {
+        List<Function> callbacks = optionCallbacks.get(optionName);
+        if (callbacks == null || callbacks.isEmpty()) return;
+
         Scriptable event = new NativeObject();
         event.put("player", event, player);
-        event.put("key", event, key);
+
         JsEventHelper.executeCallbacks(callbacks, event);
     }
 
+    public static List<String> getOptions() {
+        return new ArrayList<>(optionCallbacks.keySet());
+    }
+    public static String getIcon(String optionName) {
+        return optionIcons.get(optionName);
+    }
+
     public static void clearCallbacks() {
-        callbacks.clear();
+        optionCallbacks.clear();
+        optionIcons.clear();
     }
 }

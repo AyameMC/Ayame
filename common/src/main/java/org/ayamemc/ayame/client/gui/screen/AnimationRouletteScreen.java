@@ -30,10 +30,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.ayamemc.ayame.client.gui.screen.music.ClientMusicPlayer;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.event.JsRouletteOption;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static net.minecraft.client.Minecraft.getInstance;
 
 @SuppressWarnings("DataFlowIssue")
 public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer.NotePlayer {
@@ -196,13 +201,32 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
 
     public static void open() {
         // TODO 获取动画
-        Minecraft.getInstance().setScreen(new AnimationRouletteScreen(List.of(
-                new DefaultRouletteAction(
-                        ResourceLocation.withDefaultNamespace("textures/item/barrier.png"),
-                        Component.translatable("gui.back"),
-                        () -> Minecraft.getInstance().setScreen(null)
-                )
-        )));
+        List<IRouletteAction> actions = new ArrayList<>();
+        actions.add(new DefaultRouletteAction(
+                ResourceLocation.withDefaultNamespace("textures/item/barrier.png"),
+                Component.translatable("gui.back"),
+                () -> Minecraft.getInstance().setScreen(null)
+        ));
+        for (String option: JsRouletteOption.getOptions()){
+            String icon = JsRouletteOption.getIcon(option);
+            ResourceLocation iconRes;
+            // 默认使用apple的图标
+            if (icon == null){
+                iconRes = ResourceLocation.withDefaultNamespace("textures/item/apple.png");
+            }else {
+                iconRes = ResourceLocation.tryParse(icon);
+                if (iconRes == null){
+                    // 解析失败则使用屏障图标
+                    iconRes = ResourceLocation.withDefaultNamespace("textures/item/barrier.png");
+                }
+            }
+            actions.add(new DefaultRouletteAction(
+                    iconRes,
+                    Component.literal(option),
+                    () -> JsRouletteOption.trigger(option, new JsPlayer(getInstance().player))
+            ));
+        }
+        Minecraft.getInstance().setScreen(new AnimationRouletteScreen(actions));
     }
 
     private record DefaultRouletteAction(ResourceLocation icon, Component name, Runnable action) implements IRouletteAction {

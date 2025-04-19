@@ -53,4 +53,9 @@ public class JsPlayer extends JsEntity{
         player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id,sound)), SoundSource.PLAYERS, volume, pitch);
     }
 
+    @JSFunction
+    public void playAnim(String animationName, boolean isLoop) {
+        player.ayame$playAnimation(animationName, isLoop);
+    }
+
 }

@@ -21,9 +21,7 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
-import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
-import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
+import org.ayamemc.ayame.client.script.event.*;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
@@ -40,6 +38,9 @@ public class JavaScriptLoader {
     public static void runJs() {
         Context context = Context.enter();
         try {
+            // 清理脚本事件
+            JsEventHelper.clearAllCallbacks();
+
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             context.setInterpretedMode(false); // 禁用优化以支持动态特性
             final Scriptable scope = context.initStandardObjects();
@@ -55,12 +56,14 @@ public class JavaScriptLoader {
             final Object wrappedPlayerTickEvent = Context.javaToJS(new JsPlayerTickEvent(), scope);
             final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
             final Object wrappedAttackEntityEvent = Context.javaToJS(new JsAttackEntityEvent(), scope);
+            final Object wrappedRouletteOption = Context.javaToJS(new JsRouletteOption(), scope);
             ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
             ScriptableObject.putProperty(scope, "logger", wrappedLogger);
             ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
             ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
             ScriptableObject.putProperty(scope, "AttackEntityEvent", wrappedAttackEntityEvent);
             ScriptableObject.putProperty(scope, "KeyPressEvent", wrappedKeyPressEvent);
+            ScriptableObject.putProperty(scope, "RouletteOption",wrappedRouletteOption);
             ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
