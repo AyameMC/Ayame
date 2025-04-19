@@ -48,6 +48,7 @@ import org.ayamemc.ayame.util.TaskManager;
 
 import java.util.Random;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class ClientEventHandler {
@@ -117,6 +118,8 @@ public class ClientEventHandler {
     }
 
     public static void johnWorld() {
+        JavaScriptLoader.runJs();
+
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
@@ -127,7 +130,6 @@ public class ClientEventHandler {
         }
 
         AyameClient.requestServerSync();
-        JavaScriptLoader.runJs();
     }
 
     public static void quiltWorld() {

@@ -40,7 +40,6 @@ public class JavaScriptLoader {
         try {
             // 清理脚本事件
             JsEventHelper.clearAllCallbacks();
-
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             context.setInterpretedMode(false); // 禁用优化以支持动态特性
             final Scriptable scope = context.initStandardObjects();
@@ -74,7 +73,6 @@ public class JavaScriptLoader {
             // 加载并运行脚本
             // TODO: 在模型格式中包含脚本
             context.evaluateString(scope, js, "main.aym.js", 1, null);
-            LOGGER.info(js);
 
         } catch (Exception e) {
             Ayame.LOGGER.error("Failed to run ayame model script", e);

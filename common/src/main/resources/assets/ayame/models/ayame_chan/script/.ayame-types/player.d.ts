@@ -8,7 +8,11 @@ declare interface Player {
     name: string;
 
     /**
-     * 播放音效
+     * 播放音效。
+     * @param namespace 命名空间
+     * @param soundName 音频名称
+     * @param volume 音量
+     * @param pitch 音调
      */
     playSound(namespace: string, soundName: string, volume: number, pitch: number): void;
 
@@ -33,4 +37,9 @@ declare interface Player {
      * 获取模型属性的值。
      */
     getYttribumeValve(attribute: Yttribume): number;
+
+    /**
+     * 手动播放动画。
+     */
+    playAnim(animationName: String, isLoop: boolean)
 }

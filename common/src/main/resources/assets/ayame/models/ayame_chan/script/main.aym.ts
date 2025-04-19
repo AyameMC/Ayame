@@ -36,7 +36,7 @@ PlayerTickEvent.register((event) => {
 
 KeyPressEvent.register((event) => {
 
-    const { player,key } = event;
+    const { player, key } = event;
     if (key === 0) {
         // 增大scale
         let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
@@ -67,12 +67,18 @@ AttackEntityEvent.register((event) => {
     player.sendChatMessage(`你攻击了下${name}`)
 })
 
-RouletteOption.add("坐下动画","minecraft:textures/item/diamond.png",(event)=>{
+RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
     const { player } = event
-    player.playAnim("state.sit",true)
+    
+    player.playSound('minecraft', 'entity.panda.hurt', 1.0, 1.0);
+
+    player.playAnim("special.death", false)
+
 })
 
-RouletteOption.add("awsl","minecraft:textures/blocks/tnt.png",(event)=>{
+RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
     const { player } = event
-    player.playAnim("special.death",false)
+    player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0);
+    player.playAnim("state.sit", true)
 })
+
