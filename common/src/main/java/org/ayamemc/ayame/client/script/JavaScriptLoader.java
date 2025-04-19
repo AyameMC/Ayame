@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.event.*;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.FileUtil;
@@ -31,8 +32,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import static net.minecraft.client.Minecraft.getInstance;
-import static org.ayamemc.ayame.Ayame.LOGGER;
-import static org.ayamemc.ayame.Ayame.withAyamePath;
+import static org.ayamemc.ayame.Ayame.*;
 
 public class JavaScriptLoader {
     public static void runJs() {
@@ -43,11 +43,12 @@ public class JavaScriptLoader {
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             context.setInterpretedMode(false); // 禁用优化以支持动态特性
             final Scriptable scope = context.initStandardObjects();
+            String mainScript = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getMainScript();
             String tsc = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.js");
             context.evaluateString(scope, tsc, "typeScript.js", 1, null);
             Function compileTsFunc = (Function) scope.get("compileTs", scope);
             Object compiledJs = compileTsFunc.call(context, scope, scope, new Object[]{
-                    FileUtil.getAyameBuiltinFileResourceAsString("models/ayame_chan/script/main.aym.ts")
+                    mainScript
             });
             final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
             final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);

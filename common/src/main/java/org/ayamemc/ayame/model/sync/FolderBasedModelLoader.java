@@ -43,7 +43,7 @@ public class FolderBasedModelLoader implements IModelLoader{
         try {
             Files.walkFileTree(folder, new SimpleFileVisitor<>() {
                 @Override
-                public @NotNull FileVisitResult visitFile(Path file, @NotNull BasicFileAttributes attrs) throws IOException {
+                public @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs) throws IOException {
                     final String relativePath = folder.relativize(file).toString();
                     final byte[] data = Files.readAllBytes(file);
 
