@@ -44,8 +44,6 @@ public interface ModelSelection {
 
     String getId();
 
-    String getMainScript();
-
     AyameModelData.ScriptData scriptData();
 
     ModelSelection withArm(ResourceLocation location);

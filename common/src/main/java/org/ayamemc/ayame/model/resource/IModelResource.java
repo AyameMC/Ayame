@@ -34,6 +34,8 @@ public interface IModelResource {
     // TODO 完成
     AyameModelData.MetaData getMetaData();
 
+    AyameModelData.ScriptData getScriptData();
+
     String getId();
 
     List<AyameModelData.ModelData> getModels();

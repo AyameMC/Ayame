@@ -114,6 +114,7 @@ public class AyameCommandManager {
                                     }
 
                                     AyameClient.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
+                                    sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
                                     return 0;
                                 })
                         )

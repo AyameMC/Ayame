@@ -97,7 +97,5 @@ public class AyameModelData {
     public static class ScriptData {
         @SerializedName("main")
         public String main;
-        @SerializedName("config")
-        public String config;
     }
 }

@@ -29,27 +29,33 @@ import org.mozilla.javascript.annotations.JSGetter;
 
 public class JsEntity {
     public final Entity entity;
+
     public JsEntity(Entity entity) {
         this.entity = entity;
     }
+
     public Entity getEntity() {
         return entity;
     }
+
     @JSFunction
     public JsWorld getWorld() {
         Level world = entity.level(); // 获取所在的Level对象
         return new JsWorld(world);    // 返回JsWorld实例
     }
+
     @JSFunction
-    public void sendChatMessage(String message) {
-        entity.sendSystemMessage(Component.nullToEmpty(message));
+    public void sendClientMessage(String message) {
+        entity.sendSystemMessage(Component.literal(message));
     }
+
     @JSGetter
-    public String getType(){
+    public String getType() {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
     }
+
     @JSGetter
-    public String getName(){
+    public String getName() {
         return entity.getName().getString();
     }
 }

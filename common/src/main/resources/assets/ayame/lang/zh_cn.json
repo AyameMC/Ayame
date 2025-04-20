@@ -28,6 +28,7 @@
   "message.ayame.command.model.set.successes": "§d[§aAYAME§d] §b已将模型设置为 %s§b（作者：§e@%s§b）",
   "message.ayame.command.yttribume.help": "§d[§aAYAME§d] §b/yttribume 帮助\n§e/yttribume help §b我相信你一定知道这个命令的作用\n§e/yttribume set <属性> <值> §b设置属性的值\n§e/yttribume get <属性> §b获取属性的值\n§e/yttribume reset <属性> §b重设属性的值\n§e/yttribume unlock §b解除属性值限制（单人模式有效，多人模式需服务器允许）",
   "message.ayame.command.model.rescan.successes": "§d[§aAYAME§d] §b已重新扫描模型！",
+  "message.ayame.command.model.reload.successes": "§d[§aAYAME§d] §b已重新加载模型！",
   "message.ayame.command.model.list": "§d[§aAYAME§d] §b当前模型如下：\n%s",
   "message.ayame.command.reload.failed": "§d[§aAYAME§d] §c无法重载模型，因为无法读取当前模型。",
 

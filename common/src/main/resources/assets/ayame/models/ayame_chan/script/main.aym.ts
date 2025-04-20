@@ -19,13 +19,6 @@
  */
 
 
-function _main() {
-    logger.info(`Version: ${Ayame.version}`);
-
-}
-
-_main()
-
 
 PlayerTickEvent.register((event) => {
     const { player } = event;
@@ -64,12 +57,12 @@ KeyPressEvent.register((event) => {
 AttackEntityEvent.register((event) => {
     const { player, target } = event
     let name = target.getName()
-    player.sendChatMessage(`你攻击了下${name}`)
+    player.sendChatMessage(`我攻击了下${name}`)
 })
 
 RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
     const { player } = event
-    
+    player.sendClientMessage("aswl！");
     player.playSound('minecraft', 'entity.panda.hurt', 1.0, 1.0);
 
     player.playAnim("special.death", false)
@@ -78,6 +71,7 @@ RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
 
 RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
     const { player } = event
+    player.sendChatMessage("坐下")
     player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0);
     player.playAnim("state.sit", true)
 })

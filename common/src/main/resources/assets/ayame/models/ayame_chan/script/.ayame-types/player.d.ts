@@ -29,6 +29,12 @@ declare interface Player {
     sendCommand(command: string): void;
 
     /**
+     * 是玩家客户端显示一条消息。
+     * @param message 要发送的消息
+     */
+    sendClientMessage(message: string): void;
+
+    /**
      * 设置模型属性。
      */
     setYttribume(attribute: Yttribume, valve: number): void;

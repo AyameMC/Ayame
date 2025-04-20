@@ -22,11 +22,9 @@ package org.ayamemc.ayame;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.util.ConfigUtil;
-import org.ayamemc.ayame.util.ModLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +34,12 @@ public final class Ayame {
     public static final String MOD_NAME = "Ayame";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
-    public static ModLoader modLoader;
+    public static String modLoader;
 
     /**
      * @see org.ayamemc.ayame.client.AyameClient
      */
-    public static void init(ModLoader modLoader) {
+    public static void init(String modLoader) {
         Ayame.modLoader = modLoader;
         ConfigUtil.init();
         Yttribumes.init();

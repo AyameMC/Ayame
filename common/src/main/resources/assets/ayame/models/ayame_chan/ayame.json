@@ -27,7 +27,6 @@
     }
   ],
   "script": {
-    "main": "script/main.aym.js",
-    "config": "script/jsconfig.json"
+    "main": "script/main.aym.ts"
   }
 }

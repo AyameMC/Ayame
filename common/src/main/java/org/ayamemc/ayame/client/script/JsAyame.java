@@ -24,6 +24,6 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.ModLoader;
 
 public class JsAyame {
-    public static final String VERSION = Ayame.VERSION;
-    public static final ModLoader modLoader = Ayame.modLoader;
+    public static final String version = Ayame.VERSION;
+    public static final String modLoader = Ayame.modLoader;
 }

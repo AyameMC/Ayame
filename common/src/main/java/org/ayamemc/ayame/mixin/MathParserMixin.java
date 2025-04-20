@@ -38,85 +38,85 @@ import java.util.function.DoubleSupplier;
 
 @Mixin(value = MathParser.class, remap = false)
 public abstract class MathParserMixin {
-    @Unique
-    private static final MochaEngine<?> ayame$mocha = MochaEngine.createStandard();
-
-    /**
-     * Overwrites the original setVariable method to set variables in MochaEngine's scope.
-     *
-     * @param name  The name of the variable
-     * @param value The value of the variable
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public static void setVariable(String name, DoubleSupplier value) {
-        ayame$mocha.scope().set(name, Value.of(value));
-    }
-
-    /**
-     * Wraps the compileMolang method to use MochaEngine for expression evaluation.
-     *
-     * @param expression The Molang expression to compile
-     * @param original   The original compileMolang method
-     * @return The result of the expression as a MathValue
-     */
-    @WrapMethod(method = "compileMolang")
-    private static MathValue selectMolangEngine(String expression, Operation<MathValue> original) {
-        // Check if MochaEngine should be used (e.g., via configuration)
-        if (shouldUseMochaEngine()) {
-            try {
-                // Compile the expression
-                MochaFunction function = ayame$mocha.prepareEval(expression);
-
-                // Evaluate the compiled function
-                Object result = function.evaluate();
-
-                // Convert the result to MathValue
-                return ayame$convertToMathValue(result);
-            } catch (Exception e) {
-                Ayame.LOGGER.error("Failed to evaluate expression: {}", expression, e);
-                throw new CompoundException("Failed to evaluate expression: " + expression);
-            }
-        }
-
-        // Fallback to the original method
-        return original.call(expression);
-    }
-
-    /**
-     * Converts a MochaEngine result to a MathValue.
-     *
-     * @param result The result from MochaEngine
-     * @return The result as a MathValue
-     * @throws IllegalArgumentException If the result type is unsupported
-     */
-    @Unique
-    private static MathValue ayame$convertToMathValue(Object result) {
-        if (result instanceof Number number) {
-            // Convert numbers to Constant
-            return new Constant(number.doubleValue());
-        } else if (result instanceof Boolean bool) {
-            // Convert booleans to Constant (1.0 for true, 0.0 for false)
-            return new Constant(bool ? 1.0 : 0.0);
-        } else if (result instanceof MathValue mathValue) {
-            // If the result is already a MathValue, return it directly
-            return mathValue;
-        } else {
-            // Throw an exception for unsupported types
-            throw new IllegalArgumentException("Unsupported result type: " + result.getClass().getSimpleName());
-        }
-    }
-
-    /**
-     * Determines whether to use MochaEngine for expression evaluation.
-     *
-     * @return True if MochaEngine should be used, false otherwise
-     */
-    @Unique
-    private static boolean shouldUseMochaEngine() {
-        // Add logic to determine whether to use MochaEngine
-        // For example, check a configuration flag or system property
-        return true; // Default to true for now
-    }
+//    @Unique
+//    private static final MochaEngine<?> ayame$mocha = MochaEngine.createStandard();
+//
+//    /**
+//     * Overwrites the original setVariable method to set variables in MochaEngine's scope.
+//     *
+//     * @param name  The name of the variable
+//     * @param value The value of the variable
+//     * @author
+//     * @reason
+//     */
+//    @Overwrite
+//    public static void setVariable(String name, DoubleSupplier value) {
+//        ayame$mocha.scope().set(name, Value.of(value));
+//    }
+//
+//    /**
+//     * Wraps the compileMolang method to use MochaEngine for expression evaluation.
+//     *
+//     * @param expression The Molang expression to compile
+//     * @param original   The original compileMolang method
+//     * @return The result of the expression as a MathValue
+//     */
+//    @WrapMethod(method = "compileMolang")
+//    private static MathValue selectMolangEngine(String expression, Operation<MathValue> original) {
+//        // Check if MochaEngine should be used (e.g., via configuration)
+//        if (shouldUseMochaEngine()) {
+//            try {
+//                // Compile the expression
+//                MochaFunction function = ayame$mocha.prepareEval(expression);
+//
+//                // Evaluate the compiled function
+//                Object result = function.evaluate();
+//
+//                // Convert the result to MathValue
+//                return ayame$convertToMathValue(result);
+//            } catch (Exception e) {
+//                Ayame.LOGGER.error("Failed to evaluate expression: {}", expression, e);
+//                throw new CompoundException("Failed to evaluate expression: " + expression);
+//            }
+//        }
+//
+//        // Fallback to the original method
+//        return original.call(expression);
+//    }
+//
+//    /**
+//     * Converts a MochaEngine result to a MathValue.
+//     *
+//     * @param result The result from MochaEngine
+//     * @return The result as a MathValue
+//     * @throws IllegalArgumentException If the result type is unsupported
+//     */
+//    @Unique
+//    private static MathValue ayame$convertToMathValue(Object result) {
+//        if (result instanceof Number number) {
+//            // Convert numbers to Constant
+//            return new Constant(number.doubleValue());
+//        } else if (result instanceof Boolean bool) {
+//            // Convert booleans to Constant (1.0 for true, 0.0 for false)
+//            return new Constant(bool ? 1.0 : 0.0);
+//        } else if (result instanceof MathValue mathValue) {
+//            // If the result is already a MathValue, return it directly
+//            return mathValue;
+//        } else {
+//            // Throw an exception for unsupported types
+//            throw new IllegalArgumentException("Unsupported result type: " + result.getClass().getSimpleName());
+//        }
+//    }
+//
+//    /**
+//     * Determines whether to use MochaEngine for expression evaluation.
+//     *
+//     * @return True if MochaEngine should be used, false otherwise
+//     */
+//    @Unique
+//    private static boolean shouldUseMochaEngine() {
+//        // Add logic to determine whether to use MochaEngine
+//        // For example, check a configuration flag or system property
+//        return true; // Default to true for now
+//    }
 }

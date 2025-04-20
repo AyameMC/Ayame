@@ -23,10 +23,8 @@ package org.ayamemc.ayame.model.sync.data;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.sync.ModelSelection;
-import org.ayamemc.ayame.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,7 +41,6 @@ public record DefaultModelSelection(ResourceLocation geoModel,
                                     ResourceLocation texture,
                                     ResourceLocation arm,
                                     String id,
-                                    String mainScript,
                                     AyameModelData.ScriptData scriptData
 ) implements ModelSelection {
 
@@ -59,7 +56,6 @@ public record DefaultModelSelection(ResourceLocation geoModel,
 
         final CompoundTag scriptData = new CompoundTag();
 
-        scriptData.putString("config", this.scriptData.config);
         scriptData.putString("main", this.scriptData.main);
 
         built.put("script_data", scriptData);
@@ -73,7 +69,6 @@ public record DefaultModelSelection(ResourceLocation geoModel,
 
         final AyameModelData.ScriptData scriptData = new AyameModelData.ScriptData();
 
-        scriptData.config = scriptDataNbt.getString("config");
         scriptData.main = scriptDataNbt.getString("main");
 
         return new DefaultModelSelection(
@@ -82,7 +77,6 @@ public record DefaultModelSelection(ResourceLocation geoModel,
                 ResourceLocation.parse(tag.getString("texture")),
                 ResourceLocation.parse(tag.getString("arm")),
                 tag.getString("model_id"),
-                FileUtil.getFileAsString(Constants.MODELS_DIR.resolve(this.mainScript)),
                 scriptData
         );
     }
@@ -113,13 +107,8 @@ public record DefaultModelSelection(ResourceLocation geoModel,
     }
 
     @Override
-    public String getMainScript() {
-        return mainScript;
-    }
-
-    @Override
     public ModelSelection withArm(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.id, this.mainScript, this.scriptData);
+        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.id, this.scriptData);
     }
 
     @Override

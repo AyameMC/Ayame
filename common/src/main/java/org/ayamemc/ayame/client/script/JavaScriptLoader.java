@@ -20,16 +20,23 @@
 
 package org.ayamemc.ayame.client.script;
 
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.client.sounds.SoundManager;
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.event.*;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
+import org.jetbrains.annotations.Nullable;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+
+import java.nio.file.Path;
 
 import static net.minecraft.client.Minecraft.getInstance;
 import static org.ayamemc.ayame.Ayame.*;
@@ -43,16 +50,21 @@ public class JavaScriptLoader {
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             context.setInterpretedMode(false); // 禁用优化以支持动态特性
             final Scriptable scope = context.initStandardObjects();
-            String mainScript = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getMainScript();
+            final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getId();
+            final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.
+                    getModel(modelId);
             String tsc = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.js");
             context.evaluateString(scope, tsc, "typeScript.js", 1, null);
             Function compileTsFunc = (Function) scope.get("compileTs", scope);
+            Path mainScriptPath = Constants.MODELS_DIR.resolve(modelSelection.getId()).resolve(modelSelection.getScriptData().main);
+            LOGGER.info(mainScriptPath.toString());
             Object compiledJs = compileTsFunc.call(context, scope, scope, new Object[]{
-                    mainScript
+
+                    FileUtil.getFileAsString(mainScriptPath)
             });
             final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
             final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);
-            final Object wrappedModLoader = Context.javaToJS(ModLoader.class, scope);
+            final Object wrappedModLoader = Context.javaToJS(new ModLoader(), scope);
             final Object wrappedPlayerTickEvent = Context.javaToJS(new JsPlayerTickEvent(), scope);
             final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
             final Object wrappedAttackEntityEvent = Context.javaToJS(new JsAttackEntityEvent(), scope);
@@ -63,7 +75,7 @@ public class JavaScriptLoader {
             ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
             ScriptableObject.putProperty(scope, "AttackEntityEvent", wrappedAttackEntityEvent);
             ScriptableObject.putProperty(scope, "KeyPressEvent", wrappedKeyPressEvent);
-            ScriptableObject.putProperty(scope, "RouletteOption",wrappedRouletteOption);
+            ScriptableObject.putProperty(scope, "RouletteOption", wrappedRouletteOption);
             ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
             ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));

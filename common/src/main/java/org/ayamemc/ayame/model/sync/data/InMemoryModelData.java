@@ -118,6 +118,11 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
     }
 
     @Override
+    public AyameModelData.ScriptData getScriptData() {
+        return this.modelMetaData.script;
+    }
+
+    @Override
     public String getId() {
         return this.modelMetaData.metadata.id;
     }
