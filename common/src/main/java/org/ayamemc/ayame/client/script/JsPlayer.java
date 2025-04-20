@@ -21,10 +21,13 @@
 package org.ayamemc.ayame.client.script;
 
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.Ayame;
 import org.mozilla.javascript.annotations.JSFunction;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
@@ -64,6 +67,16 @@ public class JsPlayer extends JsEntity{
     public void playSound(String id,String sound, float volume, float pitch) {
 //        player.level().playLocalSound();
         player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id,sound)), SoundSource.PLAYERS, volume, pitch);
+    }
+
+    @JSFunction
+    public void playSound(String location, float volume, float pitch) {
+        MINECRAFT.getSoundManager().play(new AbstractSoundInstance() {
+            @Override
+            public ResourceLocation getLocation() {
+                return Ayame.withAyamePath("models/ayame_chan/zufolo_impazzito.ogg");
+            }
+        });
     }
 
     @JSFunction

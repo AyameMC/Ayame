@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.script;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
 import org.ayamemc.ayame.Ayame;
