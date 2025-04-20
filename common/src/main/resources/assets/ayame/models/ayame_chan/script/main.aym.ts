@@ -72,7 +72,7 @@ RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
 RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
     const { player } = event
     player.sendChatMessage("坐下")
-    player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0);
+    player.playSound('ayame', 'models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.playAnim("state.sit", true)
 })
 

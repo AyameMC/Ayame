@@ -62,7 +62,8 @@ public class JsPlayer extends JsEntity{
     }
     @JSFunction
     public void playSound(String id,String sound, float volume, float pitch) {
-        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.read()), SoundSource.PLAYERS, volume, pitch);
+//        player.level().playLocalSound();
+        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id,sound)), SoundSource.PLAYERS, volume, pitch);
     }
 
     @JSFunction

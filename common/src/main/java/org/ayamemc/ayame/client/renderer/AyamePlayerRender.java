@@ -50,6 +50,8 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
+
 
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     private static final int BOOT_SLOT = 0;
