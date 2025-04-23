@@ -22,19 +22,17 @@ package org.ayamemc.ayame.util;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.ayamemc.ayame.Ayame;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class FileUtil {
     /**
@@ -174,20 +172,20 @@ public class FileUtil {
     }
 
     /**
-     * 将包内文件资源复制到外部目录
+     * 将包内文件资源复制到外部目录，并保留原始路径结构
      *
-     * @param sourcePath 包内文件的源路径
-     * @param targetPath 外部目标目录
+     * @param sourcePath 包内文件的源路径（需包含完整子目录结构，如 "models/ayame_chan/default/model.json"）
+     * @param targetDir  外部目标目录（父目录，如 "config/ayame/models/ayame_chan"）
      */
-    public static void copyBuiltinFileToDirectory(String sourcePath, String targetPath) {
-        final Path targetPathDir = Path.of(targetPath);
+    public static void copyBuiltinFileToDirectory(String sourcePath, String targetDir) {
+        final Path sourceFilePath = Path.of(sourcePath);
+        final Path targetParentDir = Path.of(targetDir);
 
         try (final InputStream inputStream = getBuiltinFileResourceAsStream(sourcePath)) {
             if (inputStream != null) {
-                final Path targetFile = targetPathDir.resolve(Path.of(sourcePath).getFileName().toString());
-
-                Files.createDirectories(targetFile.getParent());
-
+                // 保留原始路径结构（如将 "default/model.json" 复制到目标目录的 "default" 子目录下）
+                final Path targetFile = targetParentDir.resolve(sourceFilePath);  // 关键修改：直接拼接完整路径
+                Files.createDirectories(targetFile.getParent());  // 确保父目录存在
                 Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
             } else {
                 throw new RuntimeException("File not found at: " + sourcePath);
@@ -197,102 +195,32 @@ public class FileUtil {
         }
     }
 
-    public static @NotNull String getTruncatedJarPath(@NotNull String input) {
-        // 查找 .jar 出现的起始位置
-        int jarIndex = input.indexOf(".jar");
-
-        if (jarIndex != -1) {
-            // 因为要包含 .jar 整个字符串，所以需要加上4（".jar" 的长度）
-            return input.substring(0, jarIndex + 4);
-        } else {
-            // 如果没有找到 .jar，则返回原始字符串或根据需要处理
-            return input;
-        }
-    }
-
     /**
-     * 将包内目录资源复制到外部目录
+     * 将包内的多个文件复制到外部目录
      *
-     * @param sourcePath 包内目录的源路径
-     * @param targetPathDir 目标目录
+     * @param sourcePaths 源文件数组
+     * @param targetDir  外部目标目录
      */
-    public static void copyBuiltinDirectoryToDirectory(String sourcePath, Path targetPathDir) {
-        try {
-            try (JarFile targetFile = getCurrentJarFile()) {
-                final Enumeration<JarEntry> entries = targetFile.entries();
-                while (entries.hasMoreElements()) {
-                    final JarEntry entry = entries.nextElement();
-                    final String name = entry.getName();
-
-                    if (name.startsWith(sourcePath)) {
-                        final String relativePath = name.substring(sourcePath.length() + 1);
-                        final File target = targetPathDir.resolve(relativePath).toFile();
-
-                        if (entry.isDirectory()) {
-                            target.mkdirs();
-                            continue;
-                        }
-
-                        try (
-                                InputStream is = targetFile.getInputStream(entry);
-                                FileOutputStream fos = new FileOutputStream(target)
-                        ) {
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = is.read(buffer)) > 0) {
-                                fos.write(buffer, 0, len);
-                            }
-                            fos.flush();
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(String.format("Error copying built-in directory %s to %s.", sourcePath, targetPathDir), e);
+    public static void copyBuiltinFilesToDirectory(String[] sourcePaths, Path targetDir) {
+        for (String sourcePath : sourcePaths) {
+            LOGGER.info("Copying file {} to {}...", sourcePath, targetDir);
+            copyBuiltinFileToDirectory(sourcePath, targetDir.toString());
         }
     }
+
+
 
     /**
-     * 获取当前 Jar 文件
-     * @return JarFile
-     * @throws URISyntaxException URI 语法错误
-     * @throws IOException IO 异常
+     * 将Ayame包内的多个文件复制到外部目录
+     *
+     * @param sourcePaths 源文件数组
+     * @param targetDir  外部目标目录
      */
-    public static JarFile getCurrentJarFile() throws URISyntaxException, IOException {
-        final URI target = FileUtil.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-        JarFile targetFile;
-
-        final String scheme = target.getScheme();
-
-        switch (scheme) {
-            case "file" -> targetFile = new JarFile(target.getRawSchemeSpecificPart());
-
-            case "jar" -> targetFile = ((JarURLConnection) target.toURL().openConnection()).getJarFile();
-
-            // This is neoforge's black magic
-            case "union" -> {
-                String spec = target.getRawSchemeSpecificPart();
-
-                int sep = spec.indexOf("!/");
-                if (sep != -1) {
-                    spec = spec.substring(0, sep);
-                }
-
-                // Remove the key which is generated by the union file system
-                spec = spec.replaceAll("%.*", "");
-
-                return new JarFile(spec);
-            }
-
-            default -> throw new RuntimeException("Unknown scheme " + target);
-        }
-
-        return targetFile;
+    public static void copyAyameBuiltinFilesToDirectory(String[] sourcePaths, Path targetDir) {
+        String[] fullPaths = Arrays.stream(sourcePaths)
+                .map(file -> "assets/ayame/" + file)
+                .toArray(String[]::new);
+        copyBuiltinFilesToDirectory(fullPaths, targetDir);
     }
-
-    public static void copyAyameBuiltinDirectoryToDirectory(String sourcePath, Path target) {
-        copyBuiltinDirectoryToDirectory("assets/ayame/" + sourcePath, target);
-    }
-
 
 }

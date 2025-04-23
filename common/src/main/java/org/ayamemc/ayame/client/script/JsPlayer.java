@@ -20,19 +20,15 @@
 
 package org.ayamemc.ayame.client.script;
 
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.resources.sounds.AbstractSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.Ayame;
 import org.mozilla.javascript.annotations.JSFunction;
 
 import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
-public class JsPlayer extends JsEntity{
+public class JsPlayer extends JsEntity {
     private final Player player;
 
     public JsPlayer(Player player) {
@@ -41,42 +37,34 @@ public class JsPlayer extends JsEntity{
     }
 
     @Override
-    public Player getEntity(){
+    public Player getEntity() {
         return player;
     }
 
     @JSFunction
-    public void sendCommand(String command){
+    public void sendCommand(String command) {
         MINECRAFT.player.connection.sendCommand(command);
     }
 
     @JSFunction
-    public void sendChatMessage(String message){
+    public void sendChatMessage(String message) {
         MINECRAFT.player.connection.sendChat(message);
     }
 
     @JSFunction
-    public float getYttribumeValve(JsYttribume yttribume){
+    public float getYttribumeValve(JsYttribume yttribume) {
         return player.ayame$getYttribume(yttribume.yttribume);
-    }
-    @JSFunction
-    public void setYttribume(JsYttribume yttribume,float value){
-        player.ayame$setYttribume(yttribume.yttribume,value);
-    }
-    @JSFunction
-    public void playSound(String id,String sound, float volume, float pitch) {
-//        player.level().playLocalSound();
-        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id,sound)), SoundSource.PLAYERS, volume, pitch);
     }
 
     @JSFunction
-    public void playSound(String location, float volume, float pitch) {
-        MINECRAFT.getSoundManager().play(new AbstractSoundInstance() {
-            @Override
-            public ResourceLocation getLocation() {
-                return Ayame.withAyamePath("models/ayame_chan/zufolo_impazzito.ogg");
-            }
-        });
+    public void setYttribume(JsYttribume yttribume, float value) {
+        player.ayame$setYttribume(yttribume.yttribume, value);
+    }
+
+    @JSFunction
+    public void playSound(String id, String sound, float volume, float pitch) {
+//        player.level().playLocalSound();
+        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id, sound)), SoundSource.PLAYERS, volume, pitch);
     }
 
     @JSFunction

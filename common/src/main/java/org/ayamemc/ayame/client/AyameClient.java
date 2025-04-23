@@ -30,24 +30,25 @@ import org.ayamemc.ayame.model.sync.client.ClientModelManager;
 import org.ayamemc.ayame.util.ConfigUtil;
 import org.ayamemc.ayame.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.cache.GeckoLibCache;
-import team.unnamed.mocha.MochaEngine;
-import team.unnamed.mocha.runtime.MochaFunction;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 
 public class AyameClient {
     public static final ExecutorService modWorker = Executors.newCachedThreadPool();
     public static final ModelCacheDatabase cacheDatabase;
     public static final ClientModelManager modelManagerClient = new ClientModelManager();
-    public static KeyMappingRegistry keyMappingRegistry ;
+    public static KeyMappingRegistry keyMappingRegistry;
 
     static {
         try {
@@ -69,26 +70,34 @@ public class AyameClient {
         loadAllDefaultModels();
     }
 
-    public static void registerDefaultModeLoaders(){
+    public static void registerDefaultModeLoaders() {
         for (IModelLoader modelLoader : Constants.DEFAULT_MODEL_LOADERS) {
             modelLoaderClient.registerModelLoader(modelLoader);
         }
     }
 
     private static void exportDefaultModels() {
-        for (String defaultModel : Constants.DEFAULT_MODELS) {
-            FileUtil.copyAyameBuiltinDirectoryToDirectory("models/" + defaultModel, Constants.MODELS_DIR.resolve(defaultModel));
+        for (Map.Entry<String, List<String>> entry : Constants.DEFAULT_MODELS.entrySet()) {
+            String modelId = entry.getKey();
+            List<String> filePaths = entry.getValue();
+            final Path modelDir = Constants.MODELS_DIR.resolve(modelId);
+            FileUtil.copyAyameBuiltinFilesToDirectory(
+                    filePaths.toArray(new String[0]),
+                    modelDir
+            );
         }
     }
 
     public static void loadAllDefaultModels() {
         LogUtils.getLogger().info("Register default models");
 
-        for (String defaultModelName : Constants.DEFAULT_MODELS) {
-            final Path targetPath = Constants.MODELS_DIR.resolve(defaultModelName);
-
-            modelLoaderClient.loadModelSync(targetPath.toFile(), Constants.DEFAULT_MODEL_DATA_MODIFIER);
-        }
+        Constants.DEFAULT_MODELS.keySet().forEach(modelId -> {
+            final Path targetPath = Constants.MODELS_DIR.resolve(modelId);
+            modelLoaderClient.loadModelSync(
+                    targetPath.toFile(),
+                    Constants.DEFAULT_MODEL_DATA_MODIFIER
+            );
+        });
     }
 
     public static CompletableFuture<Boolean> tryLoadModelCacheFromServer(String hash) {

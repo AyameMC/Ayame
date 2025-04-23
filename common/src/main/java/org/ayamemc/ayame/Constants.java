@@ -26,6 +26,7 @@ import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class Constants {
@@ -38,7 +39,25 @@ public class Constants {
     public static final Path MODELS_DIR = BASE_DIR.resolve("models");
 
     // Our default models
-    public static final List<String> DEFAULT_MODELS = List.of("ayame_chan");
+    @SuppressWarnings("SpellCheckingInspection")
+    public static final Map<String, List<String>> DEFAULT_MODELS = Map.of(
+            "ayame_chan", List.of(
+                    "models/ayame_chan/default/animation.json",
+                    "models/ayame_chan/default/arm.json",
+                    "models/ayame_chan/default/model.json",
+                    "models/ayame_chan/default/texture.png",
+                    "models/ayame_chan/script/.ayame-types/ayame.d.ts",
+                    "models/ayame_chan/script/.ayame-types/entity.d.ts",
+                    "models/ayame_chan/script/.ayame-types/events.d.ts",
+                    "models/ayame_chan/script/.ayame-types/logger.d.ts",
+                    "models/ayame_chan/script/.ayame-types/player.d.ts",
+                    "models/ayame_chan/script/.ayame-types/yttribume.d.ts",
+                    "models/ayame_chan/script/main.aym.ts",
+                    "models/ayame_chan/script/tsconfig.json",
+                    "models/ayame_chan/ayame.json",
+                    "models/ayame_chan/zufolo_impazzito.ogg"
+            )
+    );
 
     public static Consumer<ModelDataComponent> DEFAULT_MODEL_DATA_MODIFIER = data -> {
         data.setCanUnload(false);
