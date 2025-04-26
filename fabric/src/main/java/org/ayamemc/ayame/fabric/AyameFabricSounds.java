@@ -18,32 +18,22 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script.event;
+package org.ayamemc.ayame.fabric;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import org.ayamemc.ayame.Ayame;
 
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.annotations.JSStaticFunction;
+public class AyameFabricSounds {
+    public static final SoundEvent AYAME_SOUND = registerSound("ayame_sound");
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
-
-public class JsPlayerTickEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
-
-    @JSStaticFunction
-    public static void tick(Function callback) {
-        callbacks.add(callback);
+    public static void init() {
     }
 
-    public static void trigger(JsPlayer player) {
-        Scriptable event = new NativeObject();
-        event.put("player", event, player);
-        JsEventHelper.executeCallbacks(callbacks, event);
-    }
-
-    public static void clearCallbacks() {
-        callbacks.clear();
+    private static SoundEvent registerSound(String name) {
+        ResourceLocation location = Ayame.withAyamePath(name);
+        return Registry.register(BuiltInRegistries.SOUND_EVENT, location, SoundEvent.createVariableRangeEvent(location));
     }
 }

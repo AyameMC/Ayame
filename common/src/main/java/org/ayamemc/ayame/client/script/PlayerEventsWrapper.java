@@ -18,32 +18,27 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script.event;
+package org.ayamemc.ayame.client.script;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.*;
+import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
+import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
+import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
+import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
-
-public class JsPlayerTickEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
-
+public class PlayerEventsWrapper {
     @JSStaticFunction
     public static void tick(Function callback) {
-        callbacks.add(callback);
+        JsPlayerTickEvent.tick(callback);
     }
 
-    public static void trigger(JsPlayer player) {
-        Scriptable event = new NativeObject();
-        event.put("player", event, player);
-        JsEventHelper.executeCallbacks(callbacks, event);
+    @JSStaticFunction
+    public static void keyPress(Function callback) {
+        JsKeyPressEvent.keyPress(callback);
     }
 
-    public static void clearCallbacks() {
-        callbacks.clear();
+    @JSStaticFunction
+    public static void attackEntity(Function callback) {
+        JsAttackEntityEvent.attackEntity(callback);
     }
 }

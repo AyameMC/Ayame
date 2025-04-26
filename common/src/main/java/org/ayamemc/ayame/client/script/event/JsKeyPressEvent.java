@@ -33,12 +33,11 @@ public class JsKeyPressEvent {
     private static final List<Function> callbacks = new ArrayList<>();
 
     @JSStaticFunction
-    public static void register(Function callback) {
-        callbacks.add(callback); // 将回调函数添加到列表中
+    public static void keyPress(Function callback) {
+        callbacks.add(callback);
     }
 
-    // 触发所有注册的回调函数
-    public static void triggerEvent(int key, JsPlayer player) {
+    public static void trigger(JsPlayer player, int key) {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("key", event, key);

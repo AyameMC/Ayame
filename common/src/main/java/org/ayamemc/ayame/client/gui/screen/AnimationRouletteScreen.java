@@ -223,7 +223,7 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
             actions.add(new DefaultRouletteAction(
                     iconRes,
                     Component.literal(option),
-                    () -> JsRouletteOption.trigger(option, new JsPlayer(getInstance().player))
+                    () -> JsRouletteOption.trigger(new JsPlayer(getInstance().player), option)
             ));
         }
         Minecraft.getInstance().setScreen(new AnimationRouletteScreen(actions));

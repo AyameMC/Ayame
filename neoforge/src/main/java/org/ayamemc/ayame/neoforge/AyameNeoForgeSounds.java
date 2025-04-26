@@ -18,32 +18,20 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script.event;
+package org.ayamemc.ayame.neoforge;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import org.ayamemc.ayame.Ayame;
 
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.annotations.JSStaticFunction;
+public class AyameNeoForgeSounds {
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Ayame.MOD_ID);
+    public static final DeferredHolder<SoundEvent, SoundEvent> AYAME_SOUND = SOUND_EVENTS.register(
+            "ayame_sound",
+            (location) -> SoundEvent.createVariableRangeEvent(Ayame.withAyamePath("ayame_sound"))
+    );
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
-
-public class JsPlayerTickEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
-
-    @JSStaticFunction
-    public static void tick(Function callback) {
-        callbacks.add(callback);
-    }
-
-    public static void trigger(JsPlayer player) {
-        Scriptable event = new NativeObject();
-        event.put("player", event, player);
-        JsEventHelper.executeCallbacks(callbacks, event);
-    }
-
-    public static void clearCallbacks() {
-        callbacks.clear();
-    }
 }

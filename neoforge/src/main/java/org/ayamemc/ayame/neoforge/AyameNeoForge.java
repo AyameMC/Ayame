@@ -28,7 +28,8 @@ import org.ayamemc.ayame.util.ModLoader;
 @Mod(Ayame.MOD_ID)
 public final class AyameNeoForge {
     public AyameNeoForge(IEventBus modBus) {
+        AyameNeoForgeSounds.SOUND_EVENTS.register(modBus);
         // Run our common setup.
-        Ayame.init(ModLoader.NEOFORGE);
+        Ayame.init(ModLoader.NEOFORGE, AyameNeoForgeSounds.AYAME_SOUND.get());
     }
 }

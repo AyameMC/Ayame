@@ -20,14 +20,15 @@
 
 
 
-PlayerTickEvent.register((event) => {
+PlayerEvents.tick((event) => {
     const { player } = event;
     let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
+
     // player.setYttribume(scale, 2);
 })
 
-KeyPressEvent.register((event) => {
+PlayerEvents.keyPress((event) => {
 
     const { player, key } = event;
     if (key === 0) {
@@ -54,9 +55,12 @@ KeyPressEvent.register((event) => {
     }
 })
 
-AttackEntityEvent.register((event) => {
+PlayerEvents.attackEntity((event) => {
     const { player, target } = event
     let name = target.getName()
+    // if (name === "狐狸"){
+    player.playSound("A!");
+    // }
     player.sendChatMessage(`我攻击了下${name}`)
 })
 

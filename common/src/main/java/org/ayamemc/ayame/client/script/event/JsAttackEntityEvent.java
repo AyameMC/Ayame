@@ -32,24 +32,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsAttackEntityEvent {
-    private static final List<Function> tickCallbacks = new ArrayList<>();
+    private static final List<Function> callbacks = new ArrayList<>();
 
-    // 注册回调函数
     @JSStaticFunction
-    public static void register(Function callback) {
-        tickCallbacks.add(callback);
+    public static void attackEntity(Function callback) {
+        callbacks.add(callback);
     }
 
-    // 触发所有注册的回调函数
     public static void trigger(JsPlayer player, JsWorld world, JsEntity target) {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("world", event, world);
         event.put("target", event, target);
-        JsEventHelper.executeCallbacks(tickCallbacks, event);
+        JsEventHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {
-        tickCallbacks.clear();
+        callbacks.clear();
     }
 }
+

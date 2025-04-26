@@ -20,9 +20,6 @@
 
 package org.ayamemc.ayame.client.script;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.SoundEngine;
-import net.minecraft.client.sounds.SoundManager;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.AyameClient;
@@ -44,54 +41,54 @@ import static org.ayamemc.ayame.Ayame.*;
 
 public class JavaScriptLoader {
     public static void runJs() {
-        Context context = Context.enter();
-        try {
-            // 清理脚本事件
-            JsEventHelper.clearAllCallbacks();
-            context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
-            context.setInterpretedMode(false); // 禁用优化以支持动态特性
-            final Scriptable scope = context.initStandardObjects();
-            final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getId();
-            final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.
-                    getModel(modelId);
-            String tsc = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.js");
-            context.evaluateString(scope, tsc, "typeScript.js", 1, null);
-            Function compileTsFunc = (Function) scope.get("compileTs", scope);
-            Path mainScriptPath = Constants.MODELS_DIR.resolve(modelSelection.getId()).resolve(modelSelection.getScriptData().main);
-            LOGGER.info(mainScriptPath.toString());
-            Object compiledJs = compileTsFunc.call(context, scope, scope, new Object[]{
+        new Thread(() -> {
+            Context context = Context.enter();
+            try {
+                // 清理脚本事件
+                JsEventHelper.clearAllCallbacks();
+                context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
+                context.setInterpretedMode(false); // 禁用优化以支持动态特性
+                final Scriptable scope = context.initStandardObjects();
+                final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getId();
+                final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.
+                        getModel(modelId);
+                String tsc = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.js");
+                context.evaluateString(scope, tsc, "typeScript.js", 1, null);
+                Function compileTsFunc = (Function) scope.get("compileTs", scope);
+                Path mainScriptPath = Constants.MODELS_DIR.resolve(modelSelection.getId()).resolve(modelSelection.getScriptData().main);
+                LOGGER.info(mainScriptPath.toString());
+                Object compiledJs = compileTsFunc.call(context, scope, scope, new Object[]{
 
-                    FileUtil.getFileAsString(mainScriptPath)
-            });
-            final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
-            final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);
-            final Object wrappedModLoader = Context.javaToJS(new ModLoader(), scope);
-            final Object wrappedPlayerTickEvent = Context.javaToJS(new JsPlayerTickEvent(), scope);
-            final Object wrappedKeyPressEvent = Context.javaToJS(new JsKeyPressEvent(), scope);
-            final Object wrappedAttackEntityEvent = Context.javaToJS(new JsAttackEntityEvent(), scope);
-            final Object wrappedRouletteOption = Context.javaToJS(new JsRouletteOption(), scope);
-            ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
-            ScriptableObject.putProperty(scope, "logger", wrappedLogger);
-            ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
-            ScriptableObject.putProperty(scope, "PlayerTickEvent", wrappedPlayerTickEvent);
-            ScriptableObject.putProperty(scope, "AttackEntityEvent", wrappedAttackEntityEvent);
-            ScriptableObject.putProperty(scope, "KeyPressEvent", wrappedKeyPressEvent);
-            ScriptableObject.putProperty(scope, "RouletteOption", wrappedRouletteOption);
-            ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
-            ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
-            ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
-            ScriptableObject.putProperty(scope, "yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));
+                        FileUtil.getFileAsString(mainScriptPath)
+                });
+                final Object wrappedAyame = Context.javaToJS(new JsAyame(), scope);
+                final Object wrappedLogger = Context.javaToJS(new JsLogger(), scope);
+                final Object wrappedModLoader = Context.javaToJS(new ModLoader(), scope);
 
+                // 事件注册部分
+                final Object wrappedPlayerEvents = Context.javaToJS(new PlayerEventsWrapper(), scope);
+                final Object wrappedRouletteOption = Context.javaToJS(new JsRouletteOption(), scope);
 
-            String js = Context.toString(compiledJs);
-            // 加载并运行脚本
-            // TODO: 在模型格式中包含脚本
-            context.evaluateString(scope, js, "main.aym.js", 1, null);
+                // 注册所有事件相关对象
+                ScriptableObject.putProperty(scope, "Ayame", wrappedAyame);
+                ScriptableObject.putProperty(scope, "logger", wrappedLogger);
+                ScriptableObject.putProperty(scope, "ModLoader", wrappedModLoader);
+                ScriptableObject.putProperty(scope, "PlayerEvents", wrappedPlayerEvents);
+                ScriptableObject.putProperty(scope, "RouletteOption", wrappedRouletteOption);
+                ScriptableObject.putProperty(scope, "Entity", Context.javaToJS(new JsEntity(getInstance().player), scope));
+                ScriptableObject.putProperty(scope, "Player", Context.javaToJS(new JsPlayer(getInstance().player), scope));
+                ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(getInstance().level), scope));
+                ScriptableObject.putProperty(scope, "yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));
 
-        } catch (Exception e) {
-            Ayame.LOGGER.error("Failed to run ayame model script", e);
-        } finally {
-            Context.exit();
-        }
+                String js = Context.toString(compiledJs);
+                // 加载并运行脚本
+                context.evaluateString(scope, js, "main.aym.js", 1, null);
+
+            } catch (Exception e) {
+                Ayame.LOGGER.error("Failed to run ayame model script", e);
+            } finally {
+                Context.exit();
+            }
+        }, "Ayame-Script-Loader thread").start();
     }
 }

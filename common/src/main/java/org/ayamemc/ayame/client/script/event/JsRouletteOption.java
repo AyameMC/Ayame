@@ -36,17 +36,19 @@ public class JsRouletteOption {
     private static final Map<String, String> optionIcons = new HashMap<>();
 
     @JSStaticFunction
-    public static void add(String name,String icon, Function callback) {
+    public static void add(String name, String icon, Function callback) {
         optionCallbacks.computeIfAbsent(name, k -> new ArrayList<>()).add(callback);
         optionIcons.put(name, icon);
     }
 
-    public static void trigger(String optionName, JsPlayer player) {
+    public static void trigger(JsPlayer player, String optionName) {
         List<Function> callbacks = optionCallbacks.get(optionName);
         if (callbacks == null || callbacks.isEmpty()) return;
 
         Scriptable event = new NativeObject();
         event.put("player", event, player);
+        event.put("optionName", event, optionName);
+        event.put("iconTexture", event, optionIcons.get(optionName));
 
         JsEventHelper.executeCallbacks(callbacks, event);
     }
@@ -54,6 +56,7 @@ public class JsRouletteOption {
     public static List<String> getOptions() {
         return new ArrayList<>(optionCallbacks.keySet());
     }
+
     public static String getIcon(String optionName) {
         return optionIcons.get(optionName);
     }

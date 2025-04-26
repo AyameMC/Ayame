@@ -20,6 +20,9 @@
 
 package org.ayamemc.ayame;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import org.ayamemc.ayame.model.sync.FolderBasedModelLoader;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.data.ModelDataComponent;

@@ -20,13 +20,13 @@
 
 package org.ayamemc.ayame.client.script;
 
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.music.AyameSoundMusic;
 import org.mozilla.javascript.annotations.JSFunction;
-
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
 
 public class JsPlayer extends JsEntity {
     private final Player player;
@@ -43,12 +43,12 @@ public class JsPlayer extends JsEntity {
 
     @JSFunction
     public void sendCommand(String command) {
-        MINECRAFT.player.connection.sendCommand(command);
+        ((LocalPlayer) player).connection.sendCommand(command);
     }
 
     @JSFunction
     public void sendChatMessage(String message) {
-        MINECRAFT.player.connection.sendChat(message);
+        ((LocalPlayer) player).connection.sendChat(message);
     }
 
     @JSFunction
@@ -72,4 +72,8 @@ public class JsPlayer extends JsEntity {
         player.ayame$playAnimation(animationName, isLoop);
     }
 
+    @JSFunction
+    public void playSound(String soundName) {
+        AyameSoundMusic.play("", soundName, url -> new  AyameSoundMusic());
+    }
 }

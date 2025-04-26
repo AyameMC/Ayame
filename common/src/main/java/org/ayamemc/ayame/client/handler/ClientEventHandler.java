@@ -42,6 +42,7 @@ import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
+import org.ayamemc.ayame.client.script.event.JsEventHelper;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.TaskManager;
@@ -110,7 +111,7 @@ public class ClientEventHandler {
 
     public static void tick(Minecraft minecraft) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-        JsPlayerTickEvent.triggerTick(); // 执行脚本
+        JsPlayerTickEvent.trigger(new JsPlayer(minecraft.player)); // 执行脚本
     }
 
     public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
@@ -133,9 +134,9 @@ public class ClientEventHandler {
     }
 
     public static void quiltWorld() {
+        JsEventHelper.clearAllCallbacks();
         // 停止执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
-
         AyameClient.unloadAllModels();
     }
 }

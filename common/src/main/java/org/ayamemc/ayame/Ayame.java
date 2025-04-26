@@ -22,6 +22,7 @@ package org.ayamemc.ayame;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.AyameMolangVars;
 import org.ayamemc.ayame.util.ConfigUtil;
@@ -35,12 +36,14 @@ public final class Ayame {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
     public static String modLoader;
+    public static SoundEvent ayameSound;
 
     /**
      * @see org.ayamemc.ayame.client.AyameClient
      */
-    public static void init(String modLoader) {
+    public static void init(String modLoader, SoundEvent ayameSound) {
         Ayame.modLoader = modLoader;
+        Ayame.ayameSound = ayameSound;
         ConfigUtil.init();
         Yttribumes.init();
         AyameMolangVars.registerMolangVars();
