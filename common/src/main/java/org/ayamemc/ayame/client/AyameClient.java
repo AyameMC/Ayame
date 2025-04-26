@@ -41,8 +41,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
-
 
 public class AyameClient {
     public static final ExecutorService modWorker = Executors.newCachedThreadPool();
@@ -77,11 +75,12 @@ public class AyameClient {
     }
 
     private static void exportDefaultModels() {
-        for (Map.Entry<String, List<String>> entry : Constants.DEFAULT_MODELS.entrySet()) {
+        for (Map.Entry<String, Constants.DefaultModelInfo> entry : Constants.DEFAULT_MODELS.entrySet()) {
             String modelId = entry.getKey();
-            List<String> filePaths = entry.getValue();
+            List<String> filePaths = entry.getValue().files();
             final Path modelDir = Constants.MODELS_DIR.resolve(modelId);
             FileUtil.copyAyameBuiltinFilesToDirectory(
+                    entry.getValue().prefix(),
                     filePaths.toArray(new String[0]),
                     modelDir
             );

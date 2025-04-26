@@ -146,7 +146,7 @@ public class FileUtil {
      * @param targetPath 外部目标目录
      */
     public static void copyAyameBuiltinFileToDirectory(String sourcePath, String targetPath) {
-        copyBuiltinFileToDirectory("assets/ayame/" + sourcePath, targetPath);
+        copyBuiltinFileToDirectory("", "assets/ayame/" + sourcePath, targetPath);
     }
 
     /**
@@ -177,16 +177,28 @@ public class FileUtil {
      * @param sourcePath 包内文件的源路径（需包含完整子目录结构，如 "models/ayame_chan/default/model.json"）
      * @param targetDir  外部目标目录（父目录，如 "config/ayame/models/ayame_chan"）
      */
-    public static void copyBuiltinFileToDirectory(String sourcePath, String targetDir) {
+    public static void copyBuiltinFileToDirectory(String prefix, String sourcePath, String targetDir) {
         final Path sourceFilePath = Path.of(sourcePath);
         final Path targetParentDir = Path.of(targetDir);
 
         try (final InputStream inputStream = getBuiltinFileResourceAsStream(sourcePath)) {
+
             if (inputStream != null) {
-                // 保留原始路径结构（如将 "default/model.json" 复制到目标目录的 "default" 子目录下）
-                final Path targetFile = targetParentDir.resolve(sourceFilePath);  // 关键修改：直接拼接完整路径
+                // 安全剥离，确保不会出绝对路径
+                Path relativePath;
+                if (sourcePath.startsWith(prefix)) {
+                    String relativeStr = sourcePath.substring(prefix.length());
+                    relativePath = Path.of(relativeStr);
+                } else {
+                    relativePath = sourceFilePath;
+                }
+
+                // 这里保证 relativePath 是相对路径，拼接后是 config/ayame/xxx
+                Path targetFile = targetParentDir.resolve(relativePath);
+
                 Files.createDirectories(targetFile.getParent());  // 确保父目录存在
                 Files.copy(inputStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+
             } else {
                 throw new RuntimeException("File not found at: " + sourcePath);
             }
@@ -195,32 +207,32 @@ public class FileUtil {
         }
     }
 
+
     /**
      * 将包内的多个文件复制到外部目录
      *
      * @param sourcePaths 源文件数组
-     * @param targetDir  外部目标目录
+     * @param targetDir   外部目标目录
      */
-    public static void copyBuiltinFilesToDirectory(String[] sourcePaths, Path targetDir) {
+    public static void copyBuiltinFilesToDirectory(String prefix,String[] sourcePaths, Path targetDir) {
         for (String sourcePath : sourcePaths) {
             LOGGER.info("Copying file {} to {}...", sourcePath, targetDir);
-            copyBuiltinFileToDirectory(sourcePath, targetDir.toString());
+            copyBuiltinFileToDirectory(prefix,sourcePath, targetDir.toString());
         }
     }
-
 
 
     /**
      * 将Ayame包内的多个文件复制到外部目录
      *
      * @param sourcePaths 源文件数组
-     * @param targetDir  外部目标目录
+     * @param targetDir   外部目标目录
      */
-    public static void copyAyameBuiltinFilesToDirectory(String[] sourcePaths, Path targetDir) {
+    public static void copyAyameBuiltinFilesToDirectory(String prefix,String[] sourcePaths, Path targetDir) {
         String[] fullPaths = Arrays.stream(sourcePaths)
                 .map(file -> "assets/ayame/" + file)
                 .toArray(String[]::new);
-        copyBuiltinFilesToDirectory(fullPaths, targetDir);
+        copyBuiltinFilesToDirectory(prefix, fullPaths, targetDir);
     }
 
 }

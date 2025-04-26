@@ -40,24 +40,28 @@ public class Constants {
 
     // Our default models
     @SuppressWarnings("SpellCheckingInspection")
-    public static final Map<String, List<String>> DEFAULT_MODELS = Map.of(
-            "ayame_chan", List.of(
-                    "models/ayame_chan/default/animation.json",
-                    "models/ayame_chan/default/arm.json",
-                    "models/ayame_chan/default/model.json",
-                    "models/ayame_chan/default/texture.png",
-                    "models/ayame_chan/script/.ayame-types/ayame.d.ts",
-                    "models/ayame_chan/script/.ayame-types/entity.d.ts",
-                    "models/ayame_chan/script/.ayame-types/events.d.ts",
-                    "models/ayame_chan/script/.ayame-types/logger.d.ts",
-                    "models/ayame_chan/script/.ayame-types/player.d.ts",
-                    "models/ayame_chan/script/.ayame-types/yttribume.d.ts",
-                    "models/ayame_chan/script/main.aym.ts",
-                    "models/ayame_chan/script/tsconfig.json",
-                    "models/ayame_chan/ayame.json",
-                    "models/ayame_chan/zufolo_impazzito.ogg"
+    public static final Map<String, DefaultModelInfo> DEFAULT_MODELS = Map.of(
+            "ayame_chan", new DefaultModelInfo(
+                    "assets/ayame/models/ayame_chan/",
+                    List.of(
+                            "models/ayame_chan/default/animation.json",
+                            "models/ayame_chan/default/arm.json",
+                            "models/ayame_chan/default/model.json",
+                            "models/ayame_chan/default/texture.png",
+                            "models/ayame_chan/script/.ayame-types/ayame.d.ts",
+                            "models/ayame_chan/script/.ayame-types/entity.d.ts",
+                            "models/ayame_chan/script/.ayame-types/events.d.ts",
+                            "models/ayame_chan/script/.ayame-types/logger.d.ts",
+                            "models/ayame_chan/script/.ayame-types/player.d.ts",
+                            "models/ayame_chan/script/.ayame-types/yttribume.d.ts",
+                            "models/ayame_chan/script/main.aym.ts",
+                            "models/ayame_chan/script/tsconfig.json",
+                            "models/ayame_chan/ayame.json",
+                            "models/ayame_chan/zufolo_impazzito.ogg"
+                    )
             )
     );
+
 
     public static Consumer<ModelDataComponent> DEFAULT_MODEL_DATA_MODIFIER = data -> {
         data.setCanUnload(false);
@@ -65,4 +69,8 @@ public class Constants {
     };
 
     public static List<IModelLoader> DEFAULT_MODEL_LOADERS = List.of(new FolderBasedModelLoader());
+
+    public record DefaultModelInfo(String prefix, List<String> files) {
+    }
+
 }

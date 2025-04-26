@@ -68,7 +68,12 @@ public class ModelDataComponent{
 
     @Contract("_ -> new")
     public static @NotNull ModelDataComponent fromMapBuffer(@NotNull Map<String, byte[]> buffer) {
-        final String metaJsonContent = new String(buffer.get("ayame.json"));
+        String metaJsonContent;
+        try {
+            metaJsonContent = new String(buffer.get("ayame.json"));
+        } catch (NullPointerException e) {
+            throw new RuntimeException("ayame.json not found!", e.getCause());
+        }
         final AyameModelData parsed = AyameModelData.parse(metaJsonContent);
 
         final Map<String, byte[]> remaining = new HashMap<>();
