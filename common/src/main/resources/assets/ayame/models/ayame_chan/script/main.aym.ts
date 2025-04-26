@@ -19,10 +19,11 @@
  */
 
 
+let shakeValue = 0;
 
 PlayerEvents.tick((event) => {
     const { player } = event;
-    let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
+    let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
 
     // player.setYttribume(scale, 2);
@@ -33,19 +34,19 @@ PlayerEvents.keyPress((event) => {
     const { player, key } = event;
     if (key === 0) {
         // 增大scale
-        let scale: Yttribume = yttribume.get('ayame', 'model.scale') // Yttribume对象
+        let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
         let value: number = player.getYttribumeValve(scale) // 属性值
         player.setYttribume(scale, value + 0.1)
     }
     if (key === 1) {
         // 减小alpha
-        let alpha = yttribume.get('ayame', 'model.alpha')
+        let alpha = yttribume.get('ayame:model.alpha')
         let value = player.getYttribumeValve(alpha)
         player.setYttribume(alpha, value - 0.01)
     }
     if (key === 2) {
         // 抖起来
-        let shake = yttribume.get('ayame', 'global.screen.shake')
+        let shake = yttribume.get('ayame:global.screen.shake')
         let value = player.getYttribumeValve(shake)
         player.setYttribume(shake, value + 0.01)
     }
@@ -57,26 +58,32 @@ PlayerEvents.keyPress((event) => {
 
 PlayerEvents.attackEntity((event) => {
     const { player, target } = event
-    let name = target.getName()
-    // if (name === "狐狸"){
-    player.playSound("A!");
-    // }
-    player.sendChatMessage(`我攻击了下${name}`)
+    const type = target.getType();
+    logger.info(shakeValue.toString());
+
+    let shake = yttribume.get('ayame:global.screen.shake');
+    shakeValue = shakeValue + 1;
+    player.setYttribume(shake, shakeValue);
+    if (shakeValue > 3) {
+        player.sendClientMessage(`§d晕晕晕...`)
+    } else {
+        player.sendClientMessage(`§a晕晕晕aaa...`)
+    }
+
+
 })
 
 RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
     const { player } = event
     player.sendClientMessage("aswl！");
-    player.playSound('minecraft', 'entity.panda.hurt', 1.0, 1.0);
-
+    player.playSound('minecraft:entity.panda.hurt', 1.0, 1.0);
     player.playAnim("special.death", false)
-
-})
+});
 
 RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
     const { player } = event
     player.sendChatMessage("坐下")
-    player.playSound('ayame', 'models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
+    player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.playAnim("state.sit", true)
-})
+});
 

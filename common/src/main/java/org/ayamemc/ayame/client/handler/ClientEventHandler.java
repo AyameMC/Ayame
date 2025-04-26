@@ -25,6 +25,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.world.InteractionHand;
@@ -115,7 +116,7 @@ public class ClientEventHandler {
     }
 
     public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
-        JsAttackEntityEvent.trigger(new JsPlayer(player), new JsWorld(level), new JsEntity(target));
+        JsAttackEntityEvent.trigger(new JsPlayer((LocalPlayer) player), new JsWorld(level), new JsEntity(target));
     }
 
     public static void johnWorld() {

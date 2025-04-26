@@ -55,7 +55,7 @@ public class JsEntity {
     }
 
     @JSGetter
-    public String getName() {
+    public String getLocalizedName() {
         return entity.getName().getString();
     }
 }

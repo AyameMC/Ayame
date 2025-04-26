@@ -9,12 +9,11 @@ declare interface Player {
 
     /**
      * 播放音效。
-     * @param namespace 命名空间
-     * @param soundName 音频名称
+     * @param location 资源位置
      * @param volume 音量
      * @param pitch 音调
      */
-    playSound(namespace: string, soundName: string, volume: number, pitch: number): void;
+    playSound<T extends string>(location: ResourceLocationString<T>, volume: number, pitch: number): void;
 
     /**
      * 使玩家向服务器发送一条聊天消息。
@@ -47,5 +46,5 @@ declare interface Player {
     /**
      * 手动播放动画。
      */
-    playAnim(animationName: String, isLoop: boolean)
+    playAnim(animationName: string, isLoop: boolean): void;
 }

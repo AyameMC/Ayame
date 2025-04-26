@@ -63,8 +63,8 @@ public class JsYttribume {
     }
 
     @JSStaticFunction
-    public static JsYttribume get(String namespace, String path) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, path); // 创建ResourceLocation
+    public static JsYttribume get(String location) {
+        ResourceLocation id = ResourceLocation.parse(location); // 创建ResourceLocation
         Yttribume yttribume = Yttribumes.get(id); // 获取Yttribume对象
         return new JsYttribume(id, yttribume); // 返回JsYttribume对象
     }

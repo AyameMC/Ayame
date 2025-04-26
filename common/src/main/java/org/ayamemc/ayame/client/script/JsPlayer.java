@@ -29,9 +29,9 @@ import org.ayamemc.ayame.music.AyameSoundMusic;
 import org.mozilla.javascript.annotations.JSFunction;
 
 public class JsPlayer extends JsEntity {
-    private final Player player;
+    private final LocalPlayer player;
 
-    public JsPlayer(Player player) {
+    public JsPlayer(LocalPlayer player) {
         super(player);
         this.player = player;
     }
@@ -43,12 +43,12 @@ public class JsPlayer extends JsEntity {
 
     @JSFunction
     public void sendCommand(String command) {
-        ((LocalPlayer) player).connection.sendCommand(command);
+        player.connection.sendCommand(command);
     }
 
     @JSFunction
     public void sendChatMessage(String message) {
-        ((LocalPlayer) player).connection.sendChat(message);
+        player.connection.sendChat(message);
     }
 
     @JSFunction
@@ -62,9 +62,8 @@ public class JsPlayer extends JsEntity {
     }
 
     @JSFunction
-    public void playSound(String id, String sound, float volume, float pitch) {
-//        player.level().playLocalSound();
-        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(id, sound)), SoundSource.PLAYERS, volume, pitch);
+    public void playSound(String location, float volume, float pitch) {
+        player.playNotifySound(SoundEvent.createVariableRangeEvent(ResourceLocation.parse(location)), SoundSource.PLAYERS, volume, pitch);
     }
 
     @JSFunction

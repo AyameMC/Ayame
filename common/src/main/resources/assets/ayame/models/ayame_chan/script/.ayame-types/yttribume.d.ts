@@ -5,21 +5,26 @@ declare interface Yttribume {
     /**
      * 获取完整的 ResourceLocation 字符串
      */
-    getId(): string;
+    getId(): ResourceLocation;
 
     getMinValue(): number;
 
     getMaxValve(): number;
 }
 
+type BuiltinYttribumeLocation =
+    | "ayame:global.screen.shake"
+    | "ayame:effect.bloom"
+    | "ayame:ui.button.hover" // 举例
+    | "ayame:player.glow"     // 举例
+    
 /**
  * Yttribume
  */
 declare namespace yttribume {
     /**
      * 获取模型属性对象。
-     * @param namespace 命名空间
-     * @param attribute 属性名称
+     * @param location 资源路径
      */
-    function get(namespace: string, attribute: string): Yttribume;
+    function get<T extends string>(location: ResourceLocationString<T>): Yttribume;
 }
