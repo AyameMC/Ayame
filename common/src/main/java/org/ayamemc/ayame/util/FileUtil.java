@@ -217,7 +217,6 @@ public class FileUtil {
      * @param targetDir  外部目标目录
      */
     public static void copyAyameBuiltinFilesToDirectory(String[] sourcePaths, Path targetDir) {
-        // TODO 增加删除目标路径参数
         String[] fullPaths = Arrays.stream(sourcePaths)
                 .map(file -> "assets/ayame/" + file)
                 .toArray(String[]::new);
