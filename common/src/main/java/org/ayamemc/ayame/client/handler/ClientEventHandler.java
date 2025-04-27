@@ -50,8 +50,7 @@ import org.ayamemc.ayame.util.TaskManager;
 
 import java.util.Random;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 public class ClientEventHandler {
     public static final int TOOLTIP_BACKGROUND_COLOR = 0xCC_5f5f5f;

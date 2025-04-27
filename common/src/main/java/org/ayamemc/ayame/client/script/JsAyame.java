@@ -20,10 +20,44 @@
 
 package org.ayamemc.ayame.client.script;
 
+import com.mojang.datafixers.types.Func;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.util.ModLoader;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.annotations.JSStaticFunction;
+import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.MathValue;
+import software.bernie.geckolib.loading.math.function.MathFunction;
 
 public class JsAyame {
     public static final String version = Ayame.VERSION;
     public static final String modLoader = Ayame.modLoader;
+
+    @JSStaticFunction
+    public static void registerMolangFunction(String name, Function callback) {
+        MathParser.registerFunction(
+                name,
+                values -> new MathFunction() {
+                    @Override
+                    public String getName() {
+                        return name;
+                    }
+
+                    @Override
+                    public double compute() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getMinArgs() {
+                        return 0;
+                    }
+
+                    @Override
+                    public MathValue[] getArgs() {
+                        return new MathValue[0];
+                    }
+                }
+        );
+    }
 }

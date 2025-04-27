@@ -21,8 +21,11 @@
 package org.ayamemc.ayame.client;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
+import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.ayamemc.ayame.model.AyameMolangs;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.client.ClientModelLoader;
@@ -46,6 +49,7 @@ public class AyameClient {
     public static final ExecutorService modWorker = Executors.newCachedThreadPool();
     public static final ModelCacheDatabase cacheDatabase;
     public static final ClientModelManager modelManagerClient = new ClientModelManager();
+    public static final Minecraft MINECRAFT = Minecraft.getInstance();
     public static KeyMappingRegistry keyMappingRegistry;
 
     static {
@@ -62,6 +66,9 @@ public class AyameClient {
     public static void init(@NotNull KeyMappingRegistry keyMappingRegistry) {
         AyameClient.keyMappingRegistry = keyMappingRegistry;
         ConfigUtil.init();
+        AyameMolangs.registerMolangs();
+
+        Yttribumes.init();
 
         registerDefaultModeLoaders();
         exportDefaultModels();

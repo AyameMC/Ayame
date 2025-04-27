@@ -15,7 +15,16 @@ public class JsEventHelper {
         try {
             Scriptable scope = context.initStandardObjects();
 
-            for (Function callback : callbacks) {
+            /*
+            java.util.ConcurrentModificationException
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1095)
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:1049)
+	at knot//org.ayamemc.ayame.client.script.event.JsEventHelper.executeCallbacks(JsEventHelper.java:18)
+	at knot//org.ayamemc.ayame.client.script.event.JsPlayerTickEvent.trigger(JsPlayerTickEvent.java:41)
+	at knot//org.ayamemc.ayame.client.handler.ClientEventHandler.tick(ClientEventHandler.java:114)
+	at knot//net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.lambda$static$0(ClientTickEvents.java:34)
+             */
+            for (Function callback : callbacks) { // TODO: 这里多人游戏有些情况会崩溃，待排查
                 try {
                     Object[] jsArgs = new Object[args.length];
                     for (int i = 0; i < args.length; i++) {

@@ -35,7 +35,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameMolangVars;
+import org.ayamemc.ayame.model.AyameMolangs;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,8 +49,6 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.ayamemc.ayame.Ayame.LOGGER;
 
 
 public class AyamePlayerRender extends GeoEntityRenderer<Player> {
@@ -203,33 +201,33 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             final Player player = animationState.getAnimatable();
 
             MathParser.setVariable(
-                    AyameMolangVars.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
+                    AyameMolangs.HAS_MAINHAND, () -> player.getMainHandItem() != ItemStack.EMPTY ? 0 : 1
             );
 
             MathParser.setVariable(
-                    AyameMolangVars.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
+                    AyameMolangs.HAS_OFFHAND, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
 
             MathParser.setVariable(
-                    AyameMolangVars.IS_RIPTIDE, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
+                    AyameMolangs.IS_RIPTIDE, () -> player.getOffhandItem() != ItemStack.EMPTY ? 0 : 1
             );
 
-            MathParser.setVariable(AyameMolangVars.HAS_BOOTS, () ->
+            MathParser.setVariable(AyameMolangs.HAS_BOOTS, () ->
                     // 玩家是否穿鞋
                     player.getInventory().getArmor(BOOT_SLOT).isEmpty() ? 0 : 1
             );
 
-            MathParser.setVariable(AyameMolangVars.HAS_LEGGINGS, () ->
+            MathParser.setVariable(AyameMolangs.HAS_LEGGINGS, () ->
                     // 玩家是否穿裤子
                     player.getInventory().getArmor(LEGGINGS_SLOT).isEmpty() ? 0 : 1
             );
 
-            MathParser.setVariable(AyameMolangVars.HAS_CHEST_PLATE, () ->
+            MathParser.setVariable(AyameMolangs.HAS_CHEST_PLATE, () ->
                     // 玩家是否穿胸甲
                     player.getInventory().getArmor(CHEST_PLATE_SLOT).isEmpty() ? 0 : 1
             );
 
-            MathParser.setVariable(AyameMolangVars.HAS_HELMET, () ->
+            MathParser.setVariable(AyameMolangs.HAS_HELMET, () ->
                     // 玩家是否穿头盔
                     player.getInventory().getArmor(HELMET_SLOT).isEmpty() ? 0 : 1
             );

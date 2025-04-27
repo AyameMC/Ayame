@@ -49,7 +49,7 @@ public class JavaScriptLoader {
                 context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
                 context.setInterpretedMode(false); // 禁用优化以支持动态特性
                 final Scriptable scope = context.initStandardObjects();
-                final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID()).getId();
+                final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(AyameClient.MINECRAFT.player.getUUID()).getId();
                 final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.
                         getModel(modelId);
                 String tsc = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.js");

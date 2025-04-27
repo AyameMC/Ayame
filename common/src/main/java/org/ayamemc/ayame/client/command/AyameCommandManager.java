@@ -44,7 +44,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 
 @SuppressWarnings("unchecked")

@@ -25,12 +25,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.util.MolangUtil;
 import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.MolangQueries;
+import software.bernie.geckolib.loading.math.function.MathFunction;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.function.ToDoubleFunction;
 
-public class AyameMolangVars {
+public class AyameMolangs {
     /**
      * 护甲值（0-20）。
      */
@@ -98,18 +100,16 @@ public class AyameMolangVars {
      */
     public static final String BODY_HEAD_DIFF = "aym.body_head_diff";
 
-    public static void registerMolangVars() {
-        MolangQueries.<Player>setActorVariable(WHICH_PERSON, new ToDoubleFunction<MolangQueries.Actor<Player>>() {
-            @Override
-            public double applyAsDouble(MolangQueries.Actor<Player> actor) {
-                final Minecraft minecraft = actor.mc();
-                final CameraType person = minecraft.options.getCameraType();
-                return switch (person) {
-                    case FIRST_PERSON -> 0;
-                    case THIRD_PERSON_BACK -> 1;
-                    case THIRD_PERSON_FRONT -> 2;
-                };
-            }
+    public static void registerMolangs() {
+
+        MolangQueries.setActorVariable(WHICH_PERSON, (ToDoubleFunction<MolangQueries.Actor<Player>>) actor -> {
+            final Minecraft minecraft = actor.mc();
+            final CameraType person = minecraft.options.getCameraType();
+            return switch (person) {
+                case FIRST_PERSON -> 0;
+                case THIRD_PERSON_BACK -> 1;
+                case THIRD_PERSON_FRONT -> 2;
+            };
         });
 
         MolangUtil.<Player>setActorVariable(BODY_HEAD_DIFF,
@@ -121,18 +121,18 @@ public class AyameMolangVars {
 
 
         MathParser.registerVariable(
-                new Variable(AyameMolangVars.HAS_BOOTS, 0)
+                new Variable(AyameMolangs.HAS_BOOTS, 0)
         );
         MathParser.registerVariable(
-                new Variable(AyameMolangVars.HAS_LEGGINGS, 0)
+                new Variable(AyameMolangs.HAS_LEGGINGS, 0)
         );
         MathParser.registerVariable(
-                new Variable(AyameMolangVars.HAS_CHEST_PLATE, 0)
+                new Variable(AyameMolangs.HAS_CHEST_PLATE, 0)
         );
         MathParser.registerVariable(
-                new Variable(AyameMolangVars.HAS_HELMET, 0)
+                new Variable(AyameMolangs.HAS_HELMET, 0)
         );
-        MathParser.registerVariable(new Variable(AyameMolangVars.HAS_MAINHAND, 0));
+        MathParser.registerVariable(new Variable(AyameMolangs.HAS_MAINHAND, 0));
     }
 
 }

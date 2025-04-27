@@ -35,7 +35,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 import static org.ayamemc.ayame.client.command.AyameCommandManager.sendMessageToClient;
 
 public class YttribumeCommand {

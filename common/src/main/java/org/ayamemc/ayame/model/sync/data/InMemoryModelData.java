@@ -38,7 +38,6 @@ import org.ayamemc.ayame.util.JsonInterpreter;
 import org.ayamemc.ayame.util.MainThreadUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.loading.json.raw.Model;
 import software.bernie.geckolib.loading.json.typeadapter.KeyFramesAdapter;
@@ -51,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
 
 public class InMemoryModelData implements ISerializableModelResource, IRegistrableModel {

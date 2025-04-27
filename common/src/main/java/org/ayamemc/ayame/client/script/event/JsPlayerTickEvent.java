@@ -27,8 +27,6 @@ import org.ayamemc.ayame.client.script.JsPlayer;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
-import static org.ayamemc.ayame.Ayame.MINECRAFT;
-
 public class JsPlayerTickEvent {
     private static final List<Function> callbacks = new ArrayList<>();
 
