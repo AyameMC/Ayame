@@ -18,30 +18,24 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.script.event;
+package org.ayamemc.ayame.mixin.accessor;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.function.MathFunction;
 
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.annotations.JSStaticFunction;
+import java.util.Map;
 
-public class JsPlayerTickEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
-
-    @JSStaticFunction
-    public static void tick(Function callback) {
-        callbacks.add(callback);
+@Mixin(value = MathParser.class, remap = false)
+public interface MathParserAccessor {
+    @Accessor("FUNCTION_FACTORIES")
+    static void setFunctionFactories(Map<String, MathFunction.Factory<?>> map) {
+        throw new AssertionError();
     }
 
-    public static void trigger(JsPlayer player) {
-        Scriptable event = new NativeObject();
-        event.put("player", event, player);
-        JsHelper.executeCallbacks(callbacks, event);
-    }
-
-    public static void clearCallbacks() {
-        callbacks.clear();
+    @Accessor("FUNCTION_FACTORIES")
+    static Map<String, MathFunction.Factory<?>> getFunctionFactories() {
+        throw new AssertionError();
     }
 }

@@ -41,7 +41,7 @@ public class JsKeyPressEvent {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("key", event, key);
-        JsEventHelper.executeCallbacks(callbacks, event);
+        JsHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {

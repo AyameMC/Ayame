@@ -20,24 +20,42 @@
 
 package org.ayamemc.ayame.client.script;
 
-import com.mojang.datafixers.types.Func;
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.util.ModLoader;
+import org.ayamemc.ayame.client.script.event.JsHelper;
+import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.function.MathFunction;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
+
 public class JsAyame {
     public static final String version = Ayame.VERSION;
     public static final String modLoader = Ayame.modLoader;
 
     @JSStaticFunction
-    public static void registerMolangFunction(String name, Function callback) {
+    public static String[] listRegisteredMolangFunctions() {
+        Set<String> functions = MathParserAccessor.getFunctionFactories().keySet();
+        return functions.toArray(new String[0]);
+    }
+
+    @JSStaticFunction
+    public static void unregisterMolangFunction(String name) {
+        MathParserAccessor.getFunctionFactories().remove(name);
+    }
+
+    @JSStaticFunction
+    public static void registerMolangFunction(String name, Function compute) {
+        // 获取参数数量
+        int paramCount = ((Number) compute.get("length", compute)).intValue();
+
         MathParser.registerFunction(
                 name,
-                values -> new MathFunction() {
+                values -> new MathFunction(values) {
                     @Override
                     public String getName() {
                         return name;
@@ -45,19 +63,24 @@ public class JsAyame {
 
                     @Override
                     public double compute() {
-                        return 0;
+                        Object[] jsArgs = Arrays.stream(values)
+                                .map(MathValue::get)
+                                .toArray();
+                        return ((Number) Objects.requireNonNull(JsHelper.executeCallback(compute, jsArgs))).doubleValue();
                     }
 
                     @Override
                     public int getMinArgs() {
-                        return 0;
+                        return paramCount;
                     }
 
                     @Override
                     public MathValue[] getArgs() {
-                        return new MathValue[0];
+                        return values;
                     }
                 }
         );
     }
+
+
 }

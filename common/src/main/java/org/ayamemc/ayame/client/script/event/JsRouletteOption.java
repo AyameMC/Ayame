@@ -50,7 +50,7 @@ public class JsRouletteOption {
         event.put("optionName", event, optionName);
         event.put("iconTexture", event, optionIcons.get(optionName));
 
-        JsEventHelper.executeCallbacks(callbacks, event);
+        JsHelper.executeCallbacks(callbacks, event);
     }
 
     public static List<String> getOptions() {

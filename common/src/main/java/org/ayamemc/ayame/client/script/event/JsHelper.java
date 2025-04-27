@@ -7,7 +7,7 @@ import org.mozilla.javascript.Scriptable;
 
 import java.util.List;
 
-public class JsEventHelper {
+public class JsHelper {
     public static void executeCallbacks(List<Function> callbacks, Object... args) {
         if (callbacks.isEmpty()) return;
 
@@ -39,6 +39,32 @@ public class JsEventHelper {
             Context.exit();
         }
     }
+
+    public static Object executeCallback(Function callback, Object... args) {
+        Context context = Context.getCurrentContext();
+        boolean newContext = false;
+
+        if (context == null) {
+            context = Context.enter();
+            newContext = true;
+        }
+        try {
+            Scriptable scope = callback.getParentScope();
+            Object[] jsArgs = new Object[args.length];
+            for (int i = 0; i < args.length; i++) {
+                jsArgs[i] = Context.javaToJS(args[i], scope);
+            }
+            return callback.call(context, scope, scope, jsArgs);
+        } catch (Exception e) {
+            Ayame.LOGGER.error("Error triggering callback: ", e);
+        } finally {
+            if (newContext) {
+                Context.exit();
+            }
+        }
+        return null;
+    }
+
 
     public static void clearAllCallbacks() {
         JsAttackEntityEvent.clearCallbacks();

@@ -21,6 +21,9 @@
 
 let shakeValue = 0;
 
+// 示例：注册自定义 Molang 函数
+Ayame.registerMolangFunction('aym.math.parabola', (x: number) =>  x * x);
+
 PlayerEvents.tick((event) => {
     const { player } = event;
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
@@ -52,7 +55,7 @@ PlayerEvents.keyPress((event) => {
     }
     if (key == 3) {
         // 播放猫叫
-        player.playSound('minecraft', 'entity.cat.ambient', 1.0, 1.0);
+        player.playSound('minecraft:entity.cat.ambient', 1.0, 1.0);
     }
 })
 

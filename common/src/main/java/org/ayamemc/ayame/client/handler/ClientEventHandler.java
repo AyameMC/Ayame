@@ -43,7 +43,7 @@ import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
-import org.ayamemc.ayame.client.script.event.JsEventHelper;
+import org.ayamemc.ayame.client.script.event.JsHelper;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.util.TaskManager;
@@ -134,7 +134,7 @@ public class ClientEventHandler {
     }
 
     public static void quiltWorld() {
-        JsEventHelper.clearAllCallbacks();
+        JsHelper.clearAllCallbacks();
         // 停止执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
         AyameClient.unloadAllModels();

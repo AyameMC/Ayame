@@ -44,7 +44,7 @@ public class JsAttackEntityEvent {
         event.put("player", event, player);
         event.put("world", event, world);
         event.put("target", event, target);
-        JsEventHelper.executeCallbacks(callbacks, event);
+        JsHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {

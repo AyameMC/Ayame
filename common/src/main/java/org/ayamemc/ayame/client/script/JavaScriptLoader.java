@@ -45,7 +45,7 @@ public class JavaScriptLoader {
             Context context = Context.enter();
             try {
                 // 清理脚本事件
-                JsEventHelper.clearAllCallbacks();
+                JsHelper.clearAllCallbacks();
                 context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
                 context.setInterpretedMode(false); // 禁用优化以支持动态特性
                 final Scriptable scope = context.initStandardObjects();
