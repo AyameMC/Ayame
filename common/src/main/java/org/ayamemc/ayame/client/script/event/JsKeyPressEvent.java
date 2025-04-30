@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.script.event;
 
+import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
@@ -41,7 +42,7 @@ public class JsKeyPressEvent {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("key", event, key);
-        JsHelper.executeCallbacks(callbacks, event);
+        JavaScriptHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {

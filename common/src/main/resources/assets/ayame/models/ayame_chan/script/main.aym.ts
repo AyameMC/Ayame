@@ -22,13 +22,12 @@
 let shakeValue = 0;
 
 // 示例：注册自定义 Molang 函数
-Ayame.registerMolangFunction('aym.math.parabola', (x: number) =>  x * x);
+Ayame.registerMolangFunction('aym.math.parabola', (x: number) => x * x);
 
 PlayerEvents.tick((event) => {
     const { player } = event;
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
-
     // player.setYttribume(scale, 2);
 })
 

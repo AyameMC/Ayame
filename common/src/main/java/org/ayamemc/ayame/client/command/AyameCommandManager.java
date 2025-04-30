@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -27,21 +28,19 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
@@ -56,16 +55,9 @@ public class AyameCommandManager {
         return builder.buildFuture();
     };
 
-    public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext context) {
+    public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext cx) {
         // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
-                .then(LiteralArgumentBuilder.<T>literal("benchmark-compiled")
-                        .executes(AyameCommandManager::benchmarkCompiled)
-                )
-
-                .then(LiteralArgumentBuilder.<T>literal("benchmark-interpreted")
-                        .executes(AyameCommandManager::benchmarkInterpreted)
-                )
                 .then(LiteralArgumentBuilder.<T>literal("animation")
                         .then(LiteralArgumentBuilder.<T>literal("play")
                                 .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
@@ -74,7 +66,7 @@ public class AyameCommandManager {
                                                     MINECRAFT.player.ayame$playAnimation(context1.getArgument("animation_name", String.class), context1.getArgument("is_loop", Boolean.class));
 
                                                     Ayame.LOGGER.info("Play animation {}", context1.getArgument("animation_name", String.class));
-                                                    return 1;
+                                                    return Command.SINGLE_SUCCESS;
                                                 })
                                         )
 
@@ -83,15 +75,50 @@ public class AyameCommandManager {
                         .then(LiteralArgumentBuilder.<T>literal("reset")
                                 .executes(context1 -> {
                                     MINECRAFT.player.ayame$resetAnimation();
-                                    return 1;
+                                    return Command.SINGLE_SUCCESS;
                                 })
                         )
+                )
+
+                .then(LiteralArgumentBuilder.<T>literal("typescript")
+                        .then(LiteralArgumentBuilder.<T>literal("execJs").then(
+                                        RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
+                                                .executes(context -> {
+                                                    String code = StringArgumentType.getString(context, "code");
+
+                                                    Object result = JavaScriptLoader.runCode(code);
+                                                    if (result instanceof Exception e) {
+                                                        sendMessageToClient(Component.translatable("message.ayame.command.ts.exec.error", e.getMessage()));
+                                                    } else if (result != null) {
+                                                        sendMessageToClient(Component.translatable("message.ayame.command.ts.exec.result", Context.toString(result)));
+                                                    }
+
+
+                                                    return Command.SINGLE_SUCCESS;
+                                                })
+                                )
+
+                        )
+
+                        .then(LiteralArgumentBuilder.<T>literal("version")
+                                .executes((context -> {
+                                    new Thread(() -> {
+                                        final String tsVersion = JavaScriptLoader.getTscVersion();
+                                        if (tsVersion == null) {
+                                            return;
+                                        }
+                                        sendMessageToClient(Component.translatable("message.ayame.command.ts.version", tsVersion));
+                                    }, "Ayame-TSC-Version").start();
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+                        )
+
                 )
 
                 .then(LiteralArgumentBuilder.<T>literal("model")
                         .then(LiteralArgumentBuilder.<T>literal("set")
                                 .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
-                                        .executes(context1 -> setModel(context1))
+                                        .executes(AyameCommandManager::setModel)
                                         .suggests((SuggestionProvider<T>) MODEL_LIST)
                                 ))
 
@@ -100,7 +127,7 @@ public class AyameCommandManager {
                                     AyameClient.loadAllModelLocal().whenComplete((r, ex) -> {
                                         sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
                                     });
-                                    return 1;
+                                    return Command.SINGLE_SUCCESS;
                                 }))
 
                         .then(LiteralArgumentBuilder.<T>literal("reload")
@@ -110,12 +137,12 @@ public class AyameCommandManager {
 
                                     if (modelRes == null) {
                                         sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
-                                        return 1;
+                                        return 0;
                                     }
 
                                     AyameClient.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
                                     sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
-                                    return 0;
+                                    return Command.SINGLE_SUCCESS;
                                 })
                         )
 
@@ -131,7 +158,7 @@ public class AyameCommandManager {
                                             .collect(Collectors.joining("\n"));
 
                                     sendMessageToClient(Component.translatable("message.ayame.command.model.list", allModels));
-                                    return 0;
+                                    return Command.SINGLE_SUCCESS;
                                 })
                         )
                 )
@@ -139,7 +166,7 @@ public class AyameCommandManager {
 
 
         // -----------------------------------------------------------------------------------------------
-        YttribumeCommand.init(dispatcher, context);
+        YttribumeCommand.init(dispatcher, cx);
 
         // 重定向到
         dispatcher.register(LiteralArgumentBuilder.<T>literal("aym").redirect(dispatcher.getRoot().getChild("ayame")));
@@ -170,68 +197,12 @@ public class AyameCommandManager {
                 )
         );
 
-        return 1;
-    }
-
-    private static <T extends SharedSuggestionProvider> int benchmarkTest(CommandContext<T> tCommandContext, boolean useInterpretedMode) {
-        final var minecraft = Minecraft.getInstance();
-        int numRuns = 10;
-        final double[] totalTime = {0};
-        String mode = useInterpretedMode ? "解释模式" : "编译模式";
-
-        // 异步执行基准测试
-        CompletableFuture.runAsync(() -> {
-            sendMessageToClient(Component.literal("Rhino" + mode + "测试开始！"));
-
-            for (int i = 0; i < numRuns; i++) {
-                double elapsedTime = rhinoBenchmark(useInterpretedMode);
-                totalTime[0] += elapsedTime;
-                int runIndex = i + 1;
-
-                minecraft.execute(() -> {
-                    sendMessageToClient(Component.literal("（Rhino" + mode + "）第" + runIndex + "次 - 耗时: " + elapsedTime + " ms"));
-                });
-            }
-
-            double averageTime = totalTime[0] / numRuns;
-
-            minecraft.execute(() -> {
-                sendMessageToClient(Component.literal("（Rhino" + mode + "）平均时间: " + averageTime + " ms"));
-                sendMessageToClient(Component.literal("Rhino" + mode + "基准测试完成！"));
-            });
-        });
-
-        return 1;
+        return Command.SINGLE_SUCCESS;
     }
 
     @SuppressWarnings("DataFlowIssue")
     public static void sendMessageToClient(Component message) {
         MINECRAFT.player.displayClientMessage(message, false);
-    }
-
-    public static double rhinoBenchmark(boolean useInterpretedMode) {
-        Context context = Context.enter();
-        context.setInterpretedMode(useInterpretedMode);
-        Scriptable scope = context.initStandardObjects();
-
-        String script = "function fibonacci(n) { " +
-                "if (n <= 1) return n; " +
-                "return fibonacci(n - 1) + fibonacci(n - 2); } " +
-                "fibonacci(35);";
-
-        long startTime = System.nanoTime();
-        context.evaluateString(scope, script, "<cmd>", 1, null);
-        long endTime = System.nanoTime();
-
-        return (endTime - startTime) / 1e6; // 转换为毫秒
-    }
-
-    private static <T extends SharedSuggestionProvider> int benchmarkInterpreted(CommandContext<T> tCommandContext) {
-        return benchmarkTest(tCommandContext, true);
-    }
-
-    private static <T extends SharedSuggestionProvider> int benchmarkCompiled(CommandContext<T> tCommandContext) {
-        return benchmarkTest(tCommandContext, false);
     }
 
 

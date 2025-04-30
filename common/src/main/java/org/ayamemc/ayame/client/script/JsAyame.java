@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.script.event.JsHelper;
 import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
@@ -30,12 +29,18 @@ import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.function.MathFunction;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class JsAyame {
     public static final String version = Ayame.VERSION;
     public static final String modLoader = Ayame.modLoader;
+
+    // 记录由 JS 注册的函数
+    private static final Set<String> userDefinedFunctions = new HashSet<>();
 
     @JSStaticFunction
     public static String[] listRegisteredMolangFunctions() {
@@ -44,15 +49,9 @@ public class JsAyame {
     }
 
     @JSStaticFunction
-    public static void unregisterMolangFunction(String name) {
-        MathParserAccessor.getFunctionFactories().remove(name);
-    }
-
-    @JSStaticFunction
     public static void registerMolangFunction(String name, Function compute) {
-        // 获取参数数量
         int paramCount = ((Number) compute.get("length", compute)).intValue();
-
+        LOGGER.info("Registering Molang Function '{}'", name);
         MathParser.registerFunction(
                 name,
                 values -> new MathFunction(values) {
@@ -66,7 +65,7 @@ public class JsAyame {
                         Object[] jsArgs = Arrays.stream(values)
                                 .map(MathValue::get)
                                 .toArray();
-                        return ((Number) Objects.requireNonNull(JsHelper.executeCallback(compute, jsArgs))).doubleValue();
+                        return ((Number) Objects.requireNonNull(JavaScriptHelper.executeCallback(compute, jsArgs))).doubleValue();
                     }
 
                     @Override
@@ -80,7 +79,16 @@ public class JsAyame {
                     }
                 }
         );
+
+        userDefinedFunctions.add(name);
     }
 
-
+    @SuppressWarnings("RedundantOperationOnEmptyContainer")
+    @JSStaticFunction
+    public static void clearFunctions() {
+        for (String name : userDefinedFunctions) {
+            MathParserAccessor.getFunctionFactories().remove(name);
+        }
+        userDefinedFunctions.clear();
+    }
 }

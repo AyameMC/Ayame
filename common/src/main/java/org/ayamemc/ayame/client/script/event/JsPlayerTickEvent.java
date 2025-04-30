@@ -23,6 +23,7 @@ package org.ayamemc.ayame.client.script.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.annotations.JSStaticFunction;
@@ -38,7 +39,7 @@ public class JsPlayerTickEvent {
     public static void trigger(JsPlayer player) {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
-        JsHelper.executeCallbacks(callbacks, event);
+        JavaScriptHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {

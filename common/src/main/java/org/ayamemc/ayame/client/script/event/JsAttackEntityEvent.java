@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.script.event;
 
+import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
@@ -44,7 +45,7 @@ public class JsAttackEntityEvent {
         event.put("player", event, player);
         event.put("world", event, world);
         event.put("target", event, target);
-        JsHelper.executeCallbacks(callbacks, event);
+        JavaScriptHelper.executeCallbacks(callbacks, event);
     }
 
     public static void clearCallbacks() {

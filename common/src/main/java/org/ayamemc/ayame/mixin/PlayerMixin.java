@@ -79,7 +79,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
     private boolean ayame$isLoopAnimation;
 
     @Unique
-    private boolean ayame$isrResetAnimation = false;
+//    private boolean ayame$isrResetAnimation = false;
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -231,11 +231,6 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
         }));
         controllers.add(new AnimationController<>(this, "animation_player", 2, state -> {
             state.resetCurrentAnimation();
-            if (this.ayame$isrResetAnimation){
-                state.setAnimation(null);
-                this.ayame$isrResetAnimation = false;
-                state.resetCurrentAnimation();
-            }
             if (this.ayame$playAnimationName != null) {
                 state.setAnimation(AyameAnimations.create(ayame$playAnimationName, ayame$isLoopAnimation));
                 this.ayame$playAnimationName = null;
@@ -320,6 +315,6 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
     @Override
     public void ayame$resetAnimation() {
-        this.ayame$isrResetAnimation = true;
+        this.ayame$playAnimation("", false);
     }
 }
