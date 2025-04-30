@@ -87,6 +87,8 @@ public class JsAyame {
     @JSStaticFunction
     public static void clearFunctions() {
         for (String name : userDefinedFunctions) {
+            LOGGER.info("UnRegistering Molang Function '{}'", name);
+
             MathParserAccessor.getFunctionFactories().remove(name);
         }
         userDefinedFunctions.clear();

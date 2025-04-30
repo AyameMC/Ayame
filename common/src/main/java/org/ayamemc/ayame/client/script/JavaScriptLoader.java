@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.client.script;
 
+import net.minecraft.server.packs.resources.Resource;
 import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.event.JsRouletteOption;
@@ -32,8 +33,11 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import software.bernie.geckolib.loading.math.MathParser;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
@@ -41,13 +45,17 @@ import static org.ayamemc.ayame.Ayame.withAyamePath;
 import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 public class JavaScriptLoader {
-    private static final String tsCompilerSourceCode = FileUtil.getAyameBuiltinFileResourceAsString("script_lib/typescript.min.js");
-    private static final String compileTsFuncStr = "function compileTs(tsCode){var options={target:ts.ScriptTarget.ES5,module:ts.ModuleKind.CommonJS,removeComments:true};var result=ts.transpileModule(tsCode,{compilerOptions:options});return result.outputText}";
+    private static final String COMPILE_TS_FUNC_STR = "function compileTs(tsCode){var options={target:ts.ScriptTarget.ES5,module:ts.ModuleKind.CommonJS,removeComments:true};var result=ts.transpileModule(tsCode,{compilerOptions:options});return result.outputText}";
+    private static final Optional<Resource> OPTIONAL_TS_COMPILER_SOURCE_CODE = MINECRAFT.getResourceManager().getResource(withAyamePath("script_lib/typescript.min.js"));
 
-    private static Context sharedContext;
     private static Scriptable sharedScope;
+    private static Function compileTsFunc;
 
     public static void runJs() {
+        if (OPTIONAL_TS_COMPILER_SOURCE_CODE.isEmpty()) {
+            throw new RuntimeException("No compiler source code found");
+        }
+
         new Thread(() -> {
             final Context context = Context.enter();
             try {
@@ -64,14 +72,14 @@ public class JavaScriptLoader {
                 }
 
                 JavaScriptHelper.clearAllCallbacks();
-
                 final Scriptable scope = createExecutionScope(context);
-                context.evaluateString(scope, tsCompilerSourceCode + compileTsFuncStr, "typeScript.js", 1, null);
-                Function compileTsFunc = (Function) scope.get("compileTs", scope);
+                final String tscCode = FileUtil.convertInputStreamToString(OPTIONAL_TS_COMPILER_SOURCE_CODE.get().open());
+                context.evaluateString(scope, tscCode + COMPILE_TS_FUNC_STR, "typeScript.js", 1, null);
+
+                compileTsFunc = (Function) scope.get("compileTs", scope);
                 Path mainScriptPath = Constants.MODELS_DIR.resolve(modelSelection.getId()).resolve(modelSelection.getScriptData().main).normalize();
 
                 LOGGER.info("Running Ayame model script: {}", mainScriptPath);
-
                 String scriptSource = FileUtil.getFileAsString(mainScriptPath);
                 Object compiledJs = compileTsFunc.call(context, scope, scope, new Object[]{scriptSource});
                 if (!(compiledJs instanceof String jsCode)) {
@@ -79,29 +87,77 @@ public class JavaScriptLoader {
                 }
 
                 context.evaluateString(scope, jsCode, "main.aym.js", 1, null);
-
-                // 共享上下文
-                sharedContext = context;
                 sharedScope = scope;
-
             } catch (Exception e) {
                 LOGGER.error("Failed to run ayame model script", e);
-                Context.exit(); // 必须在异常中退出
+            } finally {
+                Context.exit();
             }
         }, "Ayame-Script-Loader").start();
+    }
+
+    public static void reload() {
+        sharedScope = null;
+        compileTsFunc = null;
+        runJs();
     }
 
     public static @Nullable Scriptable getSharedScope() {
         return sharedScope;
     }
 
-    public static @Nullable Context getSharedContext() {
-        return sharedContext;
+    public static @Nullable Function getCompileTsFunc() {
+        return compileTsFunc;
+    }
+
+    public static @Nullable String getTscVersion() {
+        if (OPTIONAL_TS_COMPILER_SOURCE_CODE.isEmpty()) {
+            throw new RuntimeException("No compiler source code found");
+        }
+
+        final Context context = Context.enter();
+        try {
+            context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
+            Scriptable scope = context.initStandardObjects();
+            final String tscCode = FileUtil.convertInputStreamToString(OPTIONAL_TS_COMPILER_SOURCE_CODE.get().open());
+            context.evaluateString(scope, tscCode, "ts.version.eval", 1, null);
+
+            Object tsObject = scope.get("ts", scope);
+            if (tsObject instanceof Scriptable tsScope) {
+                Object version = tsScope.get("version", tsScope);
+                if (version != Scriptable.NOT_FOUND) {
+                    return Context.toString(version);
+                }
+            }
+
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading tsc code", e);
+        } finally {
+            Context.exit();
+        }
+    }
+
+    public static @Nullable Object runCode(String code) {
+        Scriptable scope = getSharedScope();
+        if (scope == null) return null;
+
+        final Context context = Context.enter();
+        try {
+            context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
+            return context.evaluateString(scope, code, "<command>", 1, null);
+        } catch (Exception e) {
+            LOGGER.error("Error running inline script code", e);
+            return e;
+        } finally {
+            Context.exit();
+        }
     }
 
     private static Scriptable createExecutionScope(Context context) {
         Scriptable scope = context.initStandardObjects();
         injectAyameGlobals(scope);
+
         return scope;
     }
 
@@ -116,41 +172,6 @@ public class JavaScriptLoader {
         ScriptableObject.putProperty(scope, "World", Context.javaToJS(new JsWorld(MINECRAFT.level), scope));
         ScriptableObject.putProperty(scope, "yttribume", Context.javaToJS(new JsYttribume(withAyamePath("empty"), Yttribumes.EMPTY), scope));
     }
-
-    public static @Nullable String getTscVersion() {
-
-        final Context context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
-
-        Scriptable scope = context.initStandardObjects();
-        context.evaluateString(scope, tsCompilerSourceCode, "ts.version.eval", 1, null);
-
-        Object tsObject = scope.get("ts", scope);
-        if (tsObject instanceof Scriptable tsScope) {
-            Object version = tsScope.get("version", tsScope);
-            if (version != Scriptable.NOT_FOUND) {
-                return Context.toString(version);
-            }
-        }
-
-        return null;
-    }
-
-    public static @Nullable Object runCode(String code) {
-        Context context = getSharedContext();
-        Scriptable scope = getSharedScope();
-        if (context == null || scope == null) return null;
-
-        Context.enter();
-        try {
-            return context.evaluateString(scope, code, "<command>", 1, null);
-        } catch (Exception e) {
-            LOGGER.error("Error running inline script code", e);
-            return e;
-        } finally {
-            Context.exit();
-        }
-    }
-
 }
+
 

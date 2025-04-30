@@ -22,7 +22,9 @@
 let shakeValue = 0;
 
 // 示例：注册自定义 Molang 函数
-Ayame.registerMolangFunction('aym.math.parabola', (x: number) => x * x);
+Ayame.registerMolangFunction('aym.math.parabola', (x: number) => {
+    return x * x;
+});
 
 PlayerEvents.tick((event) => {
     const { player } = event;
