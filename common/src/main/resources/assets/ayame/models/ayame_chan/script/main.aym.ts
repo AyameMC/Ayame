@@ -21,13 +21,17 @@
 
 let shakeValue = 0;
 
+
+
 // 示例：注册自定义 Molang 函数
-Ayame.registerMolangFunction('aym.math.parabola', (x: number) => {
-    return x * x;
+Molang.registerFunction('aym.math.parabola', (x: number) => {
+    return Math.sin(x * (Math.PI / 180));
 });
 
 PlayerEvents.tick((event) => {
-    const { player } = event;
+    const headRRotation = Molang.exec("query.head_x_rotation") as number;
+    logger.info(headRRotation)
+    const {player} = event;
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
     // player.setYttribume(scale, 2);
@@ -35,7 +39,7 @@ PlayerEvents.tick((event) => {
 
 PlayerEvents.keyPress((event) => {
 
-    const { player, key } = event;
+    const {player, key} = event;
     if (key === 0) {
         // 增大scale
         let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
@@ -61,7 +65,7 @@ PlayerEvents.keyPress((event) => {
 })
 
 PlayerEvents.attackEntity((event) => {
-    const { player, target } = event
+    const {player, target} = event
     const type = target.getType();
     logger.info(shakeValue.toString());
 
@@ -78,14 +82,14 @@ PlayerEvents.attackEntity((event) => {
 })
 
 RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
-    const { player } = event
+    const {player} = event
     player.sendClientMessage("aswl！");
     player.playSound('minecraft:entity.panda.hurt', 1.0, 1.0);
     player.playAnim("special.death", false)
 });
 
 RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
-    const { player } = event
+    const {player} = event
     player.sendChatMessage("坐下")
     player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.playAnim("state.sit", true)

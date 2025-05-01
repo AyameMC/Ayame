@@ -33,8 +33,8 @@
   "message.ayame.command.load.success": "§d[§aAYAME§d] §b模型已设置为%s§b!",
   "message.ayame.command.model.list": "§d[§aAYAME§d] §b当前模型如下：\n%s",
   "message.ayame.command.reload.failed": "§d[§aAYAME§d] §c无法重载模型，因为无法读取当前模型。",
-  "message.ayame.command.ts.exec.error": "§d[§aAYAME§d] §c执行失败：%s",
-  "message.ayame.command.ts.exec.result": "§d[§aAYAME§d] §b> %s",
+  "message.ayame.command.script.exec.error": "§d[§aAYAME§d] §c执行失败：%s",
+  "message.ayame.command.script.exec.result": "§d[§aAYAME§d] §b> %s",
   "message.ayame.command.ts.version": "§d[§aAYAME§d] §9TypeScript §b版本：%s",
 
   "yttribume.ayame.empty": "空",

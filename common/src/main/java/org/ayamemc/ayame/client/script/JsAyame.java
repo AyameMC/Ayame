@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
@@ -38,59 +39,4 @@ import static org.ayamemc.ayame.Ayame.LOGGER;
 public class JsAyame {
     public static final String version = Ayame.VERSION;
     public static final String modLoader = Ayame.modLoader;
-
-    // 记录由 JS 注册的函数
-    private static final Set<String> userDefinedFunctions = new HashSet<>();
-
-    @JSStaticFunction
-    public static String[] listRegisteredMolangFunctions() {
-        Set<String> functions = MathParserAccessor.getFunctionFactories().keySet();
-        return functions.toArray(new String[0]);
-    }
-
-    @JSStaticFunction
-    public static void registerMolangFunction(String name, Function compute) {
-        int paramCount = ((Number) compute.get("length", compute)).intValue();
-        LOGGER.info("Registering Molang Function '{}'", name);
-        MathParser.registerFunction(
-                name,
-                values -> new MathFunction(values) {
-                    @Override
-                    public String getName() {
-                        return name;
-                    }
-
-                    @Override
-                    public double compute() {
-                        Object[] jsArgs = Arrays.stream(values)
-                                .map(MathValue::get)
-                                .toArray();
-                        return ((Number) Objects.requireNonNull(JavaScriptHelper.executeCallback(compute, jsArgs))).doubleValue();
-                    }
-
-                    @Override
-                    public int getMinArgs() {
-                        return paramCount;
-                    }
-
-                    @Override
-                    public MathValue[] getArgs() {
-                        return values;
-                    }
-                }
-        );
-
-        userDefinedFunctions.add(name);
-    }
-
-    @SuppressWarnings("RedundantOperationOnEmptyContainer")
-    @JSStaticFunction
-    public static void clearFunctions() {
-        for (String name : userDefinedFunctions) {
-            LOGGER.info("UnRegistering Molang Function '{}'", name);
-
-            MathParserAccessor.getFunctionFactories().remove(name);
-        }
-        userDefinedFunctions.clear();
-    }
 }

@@ -91,7 +91,7 @@ public class JavaScriptHelper {
 
 
     public static void clearAllCallbacks() {
-        JsAyame.clearFunctions();
+        JsMolang.clearFunctions();
         JsAttackEntityEvent.clearCallbacks();
         JsPlayerTickEvent.clearCallbacks();
         JsKeyPressEvent.clearCallbacks();

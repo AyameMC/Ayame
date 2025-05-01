@@ -33,8 +33,8 @@
   "message.ayame.command.model.reload.successes": "§d[§aAYAME§d] §bModels reloaded successfully!",
   "message.ayame.command.reload.failed": "§d[§aAYAME§d] §cFailed to reload models",
   "message.ayame.command.yttribume.help": "§d[§aAYAME§d] §b/yttribume help\n§e/yttribume help §bShow this help\n§e/yttribume set <attribute> <value> §bSet attribute value\n§e/yttribume get <attribute> §bGet attribute value\n§e/yttribume reset <attribute> §bReset attribute value\n§e/yttribume unlock §bLift attribute restrictions (Single-player only)",
-  "message.ayame.command.ts.exec.error": "§d[§aAYAME§d] §c执行失败：%s",
-  "message.ayame.command.ts.exec.result": "§d[§aAYAME§d] §b> %s",
+  "message.ayame.command.script.exec.error": "§d[§aAYAME§d] §c执行失败：%s",
+  "message.ayame.command.script.exec.result": "§d[§aAYAME§d] §b> %s",
   "message.ayame.command.ts.version": "§d[§aAYAME§d] §9TypeScript §b版本：%s",
 
   "yttribume.ayame.empty": "Empty",

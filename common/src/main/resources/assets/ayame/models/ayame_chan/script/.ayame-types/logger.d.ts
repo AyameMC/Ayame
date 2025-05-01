@@ -6,25 +6,25 @@ declare namespace logger {
      * 输出调试级别的日志信息。
      * @param message 要输出的日志消息
      */
-    function debug(message: string): void;
+    function debug(message: unknown): void;
 
     /**
      * 输出信息级别的日志信息。
      * @param message 要输出的日志消息
      */
-    function info(message: string): void;
+    function info(message: unknown): void;
 
     /**
      * 输出警告级别的日志信息。
      * @param message 要输出的日志消息
      */
-    function warn(message: string): void;
+    function warn(message: unknown): void;
 
     /**
      * 输出错误级别的日志信息。
      * @param message 要输出的日志消息
      */
-    function error(message: string): void;
+    function error(message: unknown): void;
 
     /**
      * 输出错误级别的日志信息并使 JVM 抛出一个异常。
@@ -34,5 +34,5 @@ declare namespace logger {
      *
      * @param message 要输出的日志消息
      */
-    function fatal(message: string): void;
+    function fatal(message: unknown): void;
 }

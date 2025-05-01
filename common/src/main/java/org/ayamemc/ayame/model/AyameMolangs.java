@@ -101,7 +101,6 @@ public class AyameMolangs {
     public static final String BODY_HEAD_DIFF = "aym.body_head_diff";
 
     public static void registerMolangs() {
-
         MolangQueries.setActorVariable(WHICH_PERSON, (ToDoubleFunction<MolangQueries.Actor<Player>>) actor -> {
             final Minecraft minecraft = actor.mc();
             final CameraType person = minecraft.options.getCameraType();

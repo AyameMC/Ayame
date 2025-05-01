@@ -33,13 +33,14 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.mozilla.javascript.Context;
-import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.util.CompoundException;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -86,12 +87,15 @@ public class AyameCommandManager {
                                         .then(LiteralArgumentBuilder.<T>literal("exec").then(
                                                 RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
                                                         .executes(context -> {
-                                                            String code = StringArgumentType.getString(context, "code");
-                                                            double result = MathParser.compileMolang(code).get();
-                                                            sendMessageToClient(Component.translatable("message.ayame.command.ts.exec.result", result));
-//
+                                                            try {
+                                                                final String code = StringArgumentType.getString(context, "code");
+                                                                final double result = AyamePlayerRender.execMolang(code);
 
+                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", result));
 
+                                                            } catch (CompoundException e) {
+                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e));
+                                                            }
                                                             return Command.SINGLE_SUCCESS;
                                                         })
                                         ))
@@ -105,9 +109,9 @@ public class AyameCommandManager {
 
                                                             Object result = JavaScriptLoader.runCode(code);
                                                             if (result instanceof Exception e) {
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.ts.exec.error", e.getMessage()));
+                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e.getMessage()));
                                                             } else if (result != null) {
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.ts.exec.result", Context.toString(result)));
+                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", Context.toString(result)));
                                                             }
 
 
@@ -120,7 +124,7 @@ public class AyameCommandManager {
                                 .then(LiteralArgumentBuilder.<T>literal("version")
                                         .executes((context -> {
                                             new Thread(() -> {
-                                                final String tsVersion = JavaScriptLoader.getTscVersion();
+                                                final String tsVersion = JavaScriptLoader.getTsVersion();
                                                 if (tsVersion == null) {
                                                     return;
                                                 }
@@ -128,6 +132,12 @@ public class AyameCommandManager {
                                             }, "Ayame-TSC-Version").start();
                                             return Command.SINGLE_SUCCESS;
                                         }))
+                                )
+                                .then(LiteralArgumentBuilder.<T>literal("reload")
+                                        .executes(context -> {
+                                            JavaScriptLoader.reloadTs();
+                                            return Command.SINGLE_SUCCESS;
+                                        })
                                 )
 
                         )

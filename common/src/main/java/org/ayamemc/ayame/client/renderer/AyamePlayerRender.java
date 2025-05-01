@@ -44,8 +44,10 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.util.CompoundException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -83,6 +85,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         // 先渲染玩家模型
         RenderType translucentRenderType = RenderType.entityTranslucent(getTextureLocation(player));
         VertexConsumer translucentBuffer = bufferSource.getBuffer(translucentRenderType);
+
 
         int a = (int) (player.ayame$getYttribume(Yttribumes.MODEL_ALPHA) * 255);
         int modifiedColour = (a << 24) | (colour & 0x00FFFFFF);
@@ -178,7 +181,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         poseStack.popPose();
     }
 
+
     protected static class GeoPlayerModel extends GeoModel<Player> {
+        private static AnimationState<Player> animationState;
+        private static double aniTime;
+
+
         private ModelSelection getPlayerModelSelectionOrFallback(@NotNull Player player) {
             final UUID playerUUID = player.getUUID();
 
@@ -198,6 +206,9 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
         @Override
         public void applyMolangQueries(@NotNull AnimationState<Player> animationState, double animTime) {
+            GeoPlayerModel.animationState = animationState;
+            GeoPlayerModel.aniTime = animTime;
+
             final Player player = animationState.getAnimatable();
 
             MathParser.setVariable(
@@ -251,6 +262,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         public ResourceLocation getAnimationResource(Player animatable) {
             return this.getPlayerModelSelectionOrFallback(animatable).getAnimation();
         }
+    }
+
+    public static double execMolang(String molangCode) throws CompoundException {
+        MolangQueries.updateActor(GeoPlayerModel.animationState, GeoPlayerModel.aniTime);
+        final double result = MathParser.compileMolang(molangCode).get();
+        MolangQueries.clearActor();
+        return result;
     }
 
 }

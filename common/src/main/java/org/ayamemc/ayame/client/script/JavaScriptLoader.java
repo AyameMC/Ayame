@@ -33,7 +33,6 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import software.bernie.geckolib.loading.math.MathParser;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -46,13 +45,18 @@ import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 public class JavaScriptLoader {
     private static final String COMPILE_TS_FUNC_STR = "function compileTs(tsCode){var options={target:ts.ScriptTarget.ES5,module:ts.ModuleKind.CommonJS,removeComments:true};var result=ts.transpileModule(tsCode,{compilerOptions:options});return result.outputText}";
-    private static final Optional<Resource> OPTIONAL_TS_COMPILER_SOURCE_CODE = MINECRAFT.getResourceManager().getResource(withAyamePath("script_lib/typescript.min.js"));
+    private static Optional<Resource> optionalTsCompilerSourceCode = getTsSourceCode();
+
+    private static Optional<Resource> getTsSourceCode() {
+        return MINECRAFT.getResourceManager().getResource(withAyamePath("script_lib/typescript.min.js"));
+    }
 
     private static Scriptable sharedScope;
     private static Function compileTsFunc;
 
     public static void runJs() {
-        if (OPTIONAL_TS_COMPILER_SOURCE_CODE.isEmpty()) {
+
+        if (optionalTsCompilerSourceCode.isEmpty()) {
             throw new RuntimeException("No compiler source code found");
         }
 
@@ -73,7 +77,7 @@ public class JavaScriptLoader {
 
                 JavaScriptHelper.clearAllCallbacks();
                 final Scriptable scope = createExecutionScope(context);
-                final String tscCode = FileUtil.convertInputStreamToString(OPTIONAL_TS_COMPILER_SOURCE_CODE.get().open());
+                final String tscCode = FileUtil.convertInputStreamToString(optionalTsCompilerSourceCode.get().open());
                 context.evaluateString(scope, tscCode + COMPILE_TS_FUNC_STR, "typeScript.js", 1, null);
 
                 compileTsFunc = (Function) scope.get("compileTs", scope);
@@ -96,10 +100,13 @@ public class JavaScriptLoader {
         }, "Ayame-Script-Loader").start();
     }
 
-    public static void reload() {
-        sharedScope = null;
-        compileTsFunc = null;
-        runJs();
+    //    public static void reload() {
+//        sharedScope = null;
+//        compileTsFunc = null;
+//        runJs();
+//    }
+    public static void reloadTs() {
+        optionalTsCompilerSourceCode = getTsSourceCode();
     }
 
     public static @Nullable Scriptable getSharedScope() {
@@ -110,8 +117,9 @@ public class JavaScriptLoader {
         return compileTsFunc;
     }
 
-    public static @Nullable String getTscVersion() {
-        if (OPTIONAL_TS_COMPILER_SOURCE_CODE.isEmpty()) {
+    public static @Nullable String getTsVersion() {
+
+        if (optionalTsCompilerSourceCode.isEmpty()) {
             throw new RuntimeException("No compiler source code found");
         }
 
@@ -119,7 +127,7 @@ public class JavaScriptLoader {
         try {
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             Scriptable scope = context.initStandardObjects();
-            final String tscCode = FileUtil.convertInputStreamToString(OPTIONAL_TS_COMPILER_SOURCE_CODE.get().open());
+            final String tscCode = FileUtil.convertInputStreamToString(optionalTsCompilerSourceCode.get().open());
             context.evaluateString(scope, tscCode, "ts.version.eval", 1, null);
 
             Object tsObject = scope.get("ts", scope);
@@ -163,6 +171,7 @@ public class JavaScriptLoader {
 
     private static void injectAyameGlobals(Scriptable scope) {
         ScriptableObject.putProperty(scope, "Ayame", Context.javaToJS(new JsAyame(), scope));
+        ScriptableObject.putProperty(scope, "Molang", Context.javaToJS(new JsMolang(), scope));
         ScriptableObject.putProperty(scope, "logger", Context.javaToJS(new JsLogger(), scope));
         ScriptableObject.putProperty(scope, "ModLoader", Context.javaToJS(new ModLoader(), scope));
         ScriptableObject.putProperty(scope, "PlayerEvents", Context.javaToJS(new PlayerEventsWrapper(), scope));

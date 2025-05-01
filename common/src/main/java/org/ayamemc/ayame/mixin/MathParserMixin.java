@@ -20,18 +20,18 @@
 
 package org.ayamemc.ayame.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import org.ayamemc.ayame.Ayame;
+import org.apache.logging.log4j.Level;
+import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
+import software.bernie.geckolib.GeckoLibConstants;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
+import software.bernie.geckolib.loading.math.function.MathFunction;
 import software.bernie.geckolib.loading.math.value.Constant;
-import software.bernie.geckolib.util.CompoundException;
 import team.unnamed.mocha.MochaEngine;
-import team.unnamed.mocha.runtime.MochaFunction;
+import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.function.DoubleSupplier;
@@ -42,46 +42,29 @@ public abstract class MathParserMixin {
 //    private static final MochaEngine<?> ayame$mocha = MochaEngine.createStandard();
 //
 //    /**
-//     * Overwrites the original setVariable method to set variables in MochaEngine's scope.
-//     *
-//     * @param name  The name of the variable
-//     * @param value The value of the variable
-//     * @author
-//     * @reason
+//     * @author a
+//     * @reason a
 //     */
 //    @Overwrite
-//    public static void setVariable(String name, DoubleSupplier value) {
-//        ayame$mocha.scope().set(name, Value.of(value));
+//    public static void registerFunction(String name, MathFunction.Factory<?> factory) {
+//        ayame$mocha.scope().setFunction(name, new ObjectValue.DoubleFunction1() {
+//            @Override
+//            public double apply(double n) {
+//                return ((MathFunction) factory).compute();
+//            }
+//        });
+////            GeckoLibConstants.LOGGER.log(Level.WARN, "Duplicate registration of MathFunction: '" + name + "'. Ignore if intentional override");
+////
+////        GeckoLibConstants.LOGGER.log(Level.DEBUG, "Registered MathFunction '" + name + "'");
 //    }
 //
 //    /**
-//     * Wraps the compileMolang method to use MochaEngine for expression evaluation.
-//     *
-//     * @param expression The Molang expression to compile
-//     * @param original   The original compileMolang method
-//     * @return The result of the expression as a MathValue
+//     * @author a
+//     * @reason a
 //     */
-//    @WrapMethod(method = "compileMolang")
-//    private static MathValue selectMolangEngine(String expression, Operation<MathValue> original) {
-//        // Check if MochaEngine should be used (e.g., via configuration)
-//        if (shouldUseMochaEngine()) {
-//            try {
-//                // Compile the expression
-//                MochaFunction function = ayame$mocha.prepareEval(expression);
-//
-//                // Evaluate the compiled function
-//                Object result = function.evaluate();
-//
-//                // Convert the result to MathValue
-//                return ayame$convertToMathValue(result);
-//            } catch (Exception e) {
-//                Ayame.LOGGER.error("Failed to evaluate expression: {}", expression, e);
-//                throw new CompoundException("Failed to evaluate expression: " + expression);
-//            }
-//        }
-//
-//        // Fallback to the original method
-//        return original.call(expression);
+//    @Overwrite
+//    public static MathValue compileExpression(String expression) {
+//       return ayame$convertToMathValue(ayame$mocha.eval(expression));
 //    }
 //
 //    /**
@@ -92,20 +75,8 @@ public abstract class MathParserMixin {
 //     * @throws IllegalArgumentException If the result type is unsupported
 //     */
 //    @Unique
-//    private static MathValue ayame$convertToMathValue(Object result) {
-//        if (result instanceof Number number) {
-//            // Convert numbers to Constant
-//            return new Constant(number.doubleValue());
-//        } else if (result instanceof Boolean bool) {
-//            // Convert booleans to Constant (1.0 for true, 0.0 for false)
-//            return new Constant(bool ? 1.0 : 0.0);
-//        } else if (result instanceof MathValue mathValue) {
-//            // If the result is already a MathValue, return it directly
-//            return mathValue;
-//        } else {
-//            // Throw an exception for unsupported types
-//            throw new IllegalArgumentException("Unsupported result type: " + result.getClass().getSimpleName());
-//        }
+//    private static MathValue ayame$convertToMathValue(double result) {
+//        return () -> result;
 //    }
 //
 //    /**

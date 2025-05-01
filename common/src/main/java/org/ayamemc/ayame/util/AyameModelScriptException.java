@@ -22,6 +22,6 @@ package org.ayamemc.ayame.util;
 
 public class AyameModelScriptException extends RuntimeException {
     public AyameModelScriptException(String message) {
-        super("a Ayame Model Script crashed: " + message);
+        super("a Ayame Model Script throws a exception: " + message);
     }
 }
