@@ -124,16 +124,16 @@ public class AyameKeyRegister {
             ClientEventHandler.plusCameraYOffset(0.0f, true);
         }
         while (CUSTOM_KEY_0.consumeClick()) {
-            JsKeyPressEvent.trigger(new JsPlayer(getInstance().player), 0);
+            JsKeyPressEvent.INSTANCE.trigger(new JsPlayer(getInstance().player), 0);
         }
         while (CUSTOM_KEY_1.consumeClick()) {
-            JsKeyPressEvent.trigger(new JsPlayer(getInstance().player), 1);
+            JsKeyPressEvent.INSTANCE.trigger(new JsPlayer(getInstance().player), 1);
         }
         while (CUSTOM_KEY_2.consumeClick()) {
-            JsKeyPressEvent.trigger(new JsPlayer(getInstance().player), 2);
+            JsKeyPressEvent.INSTANCE.trigger(new JsPlayer(getInstance().player), 2);
         }
         while (CUSTOM_KEY_3.consumeClick()) {
-            JsKeyPressEvent.trigger(new JsPlayer(getInstance().player), 3);
+            JsKeyPressEvent.INSTANCE.trigger(new JsPlayer(getInstance().player), 3);
         }
         while (OPEN_ROULETTE.consumeClick()) {
             ClientEventHandler.openRouletteScreen();

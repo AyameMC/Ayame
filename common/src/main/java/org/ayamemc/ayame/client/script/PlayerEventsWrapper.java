@@ -26,19 +26,27 @@ import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
+
 public class PlayerEventsWrapper {
     @JSStaticFunction
     public static void tick(Function callback) {
-        JsPlayerTickEvent.tick(callback);
+        JsPlayerTickEvent.INSTANCE.register(callback);
     }
 
     @JSStaticFunction
     public static void keyPress(Function callback) {
-        JsKeyPressEvent.keyPress(callback);
+        JsKeyPressEvent.INSTANCE.register(callback);
     }
 
     @JSStaticFunction
     public static void attackEntity(Function callback) {
-        JsAttackEntityEvent.attackEntity(callback);
+        JsAttackEntityEvent.INSTANCE.register(callback);
+    }
+
+    @JSStaticFunction
+    public static void clearAllEventCallbacks() {
+        JsPlayerTickEvent.INSTANCE.clearCallbacks();
+        JsKeyPressEvent.INSTANCE.clearCallbacks();
+        JsAttackEntityEvent.INSTANCE.clearCallbacks();
     }
 }

@@ -32,24 +32,15 @@ import org.mozilla.javascript.annotations.JSStaticFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsAttackEntityEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
+public class JsAttackEntityEvent extends JsEvent {
+    public static final JsAttackEntityEvent INSTANCE = new JsAttackEntityEvent();
+    private JsAttackEntityEvent() {}
 
-    @JSStaticFunction
-    public static void attackEntity(Function callback) {
-        callbacks.add(callback);
-    }
-
-    public static void trigger(JsPlayer player, JsWorld world, JsEntity target) {
+    public void trigger(JsPlayer player, JsWorld world, JsEntity target) {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("world", event, world);
         event.put("target", event, target);
-        JavaScriptHelper.executeCallbacks(callbacks, event);
-    }
-
-    public static void clearCallbacks() {
-        callbacks.clear();
+        super.trigger(event);
     }
 }
-

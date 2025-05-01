@@ -108,11 +108,11 @@ public class ClientEventHandler {
 
     public static void tick(Minecraft minecraft) {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-        JsPlayerTickEvent.trigger(new JsPlayer(minecraft.player)); // 执行脚本
+        JsPlayerTickEvent.INSTANCE.trigger(new JsPlayer(minecraft.player)); // 执行脚本
     }
 
     public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
-        JsAttackEntityEvent.trigger(new JsPlayer((LocalPlayer) player), new JsWorld(level), new JsEntity(target));
+        JsAttackEntityEvent.INSTANCE.trigger(new JsPlayer((LocalPlayer) player), new JsWorld(level), new JsEntity(target));
     }
 
     public static void johnWorld() {

@@ -21,9 +21,6 @@
 package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.Ayame;
-import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
-import org.ayamemc.ayame.client.script.event.JsKeyPressEvent;
-import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.script.event.JsRouletteOption;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -92,9 +89,7 @@ public class JavaScriptHelper {
 
     public static void clearAllCallbacks() {
         JsMolang.clearFunctions();
-        JsAttackEntityEvent.clearCallbacks();
-        JsPlayerTickEvent.clearCallbacks();
-        JsKeyPressEvent.clearCallbacks();
+        PlayerEventsWrapper.clearAllEventCallbacks();
         JsRouletteOption.clearCallbacks();
     }
 }

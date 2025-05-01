@@ -57,6 +57,7 @@ public class Constants {
                             "models/ayame_chan/script/.ayame-types/logger.d.ts",
                             "models/ayame_chan/script/.ayame-types/player.d.ts",
                             "models/ayame_chan/script/.ayame-types/yttribume.d.ts",
+                            "models/ayame_chan/script/.ayame-types/molang.d.ts",
                             "models/ayame_chan/script/main.aym.ts",
                             "models/ayame_chan/script/tsconfig.json",
                             "models/ayame_chan/ayame.json",

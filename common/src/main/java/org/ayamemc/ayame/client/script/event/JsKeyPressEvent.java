@@ -30,22 +30,14 @@ import org.mozilla.javascript.annotations.JSStaticFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsKeyPressEvent {
-    private static final List<Function> callbacks = new ArrayList<>();
+public class JsKeyPressEvent extends JsEvent {
+    public static final JsKeyPressEvent INSTANCE = new JsKeyPressEvent();
+    private JsKeyPressEvent() {}
 
-    @JSStaticFunction
-    public static void keyPress(Function callback) {
-        callbacks.add(callback);
-    }
-
-    public static void trigger(JsPlayer player, int key) {
+    public void trigger(JsPlayer player, int key) {
         Scriptable event = new NativeObject();
         event.put("player", event, player);
         event.put("key", event, key);
-        JavaScriptHelper.executeCallbacks(callbacks, event);
-    }
-
-    public static void clearCallbacks() {
-        callbacks.clear();
+        super.trigger(event);
     }
 }
