@@ -20,12 +20,16 @@
 
 package org.ayamemc.ayame.client.script;
 
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.mozilla.javascript.annotations.JSFunction;
 import org.mozilla.javascript.annotations.JSGetter;
+
+import java.util.Objects;
 
 public class JsEntity {
     public final Entity entity;
@@ -57,5 +61,23 @@ public class JsEntity {
     @JSGetter
     public String getLocalizedName() {
         return entity.getName().getString();
+    }
+
+    @JSGetter
+    public double getX() {
+        return entity.getX();
+    }
+    @JSGetter
+    public double getY() {
+        return entity.getY();
+    }
+    @JSGetter
+    public double getZ() {
+        return entity.getZ();
+    }
+
+    @JSFunction
+    public void spawnParticle(String id, float xSpeed, float ySpeed, float zSpeed) {
+        entity.level().addParticle(()-> Objects.requireNonNull(BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(id))), getX(), getY(), getZ(), xSpeed, ySpeed, zSpeed);
     }
 }

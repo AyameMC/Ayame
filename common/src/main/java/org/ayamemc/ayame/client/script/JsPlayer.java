@@ -27,7 +27,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.music.AyameSoundMusic;
 import org.mozilla.javascript.annotations.JSFunction;
+import org.mozilla.javascript.annotations.JSStaticFunction;
 
+import static net.minecraft.client.Minecraft.getInstance;
 public class JsPlayer extends JsEntity {
     private final LocalPlayer player;
 
@@ -39,6 +41,11 @@ public class JsPlayer extends JsEntity {
     @Override
     public Player getEntity() {
         return player;
+    }
+
+    @JSStaticFunction
+    public static JsPlayer getPlayer() {
+        return new JsPlayer(getInstance().player);
     }
 
     @JSFunction

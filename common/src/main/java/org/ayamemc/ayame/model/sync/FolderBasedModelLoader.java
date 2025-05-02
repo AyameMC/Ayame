@@ -61,6 +61,11 @@ public class FolderBasedModelLoader implements IModelLoader{
 
     @Override
     public boolean wantLoad(File modelFile) {
-        return !modelFile.isFile();
+        if (!modelFile.isFile()) {
+            // 检查文件夹中是否包含ayame.json配置文件
+            File configFile = new File(modelFile, "ayame.json");
+            return configFile.exists();
+        }
+        return false;
     }
 }
