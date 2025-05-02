@@ -21,6 +21,7 @@
 package org.ayamemc.ayame.model.sync.client;
 
 import com.google.common.collect.Maps;
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
@@ -33,11 +34,14 @@ import java.util.stream.Stream;
 
 /**
  * 用于管理已经加载的模型和服务端发给客户端的实体数据
+ *
  * @see ModelSelection
  * @see InMemoryModelData
  */
 public class ClientModelManager {
     private final Map<UUID, ModelSelection> playerModelSelections = Maps.newHashMap();
+
+
     // 已经加载的模型
     private final Set<InMemoryModelData> loadedModels = ConcurrentHashMap.newKeySet();
 
@@ -63,6 +67,11 @@ public class ClientModelManager {
 
         return false;
     }
+
+//    public void reloadModel(@NotNull InMemoryModelData model) {
+//        model.deregister();
+//        this.loadedModels.remove(model);
+//    }
 
     /**
      * 卸载并删除掉可以卸载的模型
@@ -99,12 +108,20 @@ public class ClientModelManager {
         }
     }
 
+
+    public void updateAndReloadModelOfPlayer(UUID playerUUID, ModelSelection modelSelection) {
+        AyameClient.unloadAllModels();
+        AyameClient.loadAllModelLocal();
+        updateModelOfPlayer(playerUUID, modelSelection);
+    }
+
     /**
      * 更新玩家的客户端侧的实体数据
-     * @param playerUUID 玩家uuid
+     *
+     * @param playerUUID     玩家uuid
      * @param modelSelection 实体数据
      */
-    public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection){
+    public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection) {
         this.playerModelSelections.put(playerUUID, modelSelection);
         // 同时加载脚本,调用脚本的onStart()
         JavaScriptLoader.runJs();
@@ -116,6 +133,7 @@ public class ClientModelManager {
 
     /**
      * 获取默认模型的实体数据
+     *
      * @return 在第一位的默认模型的实体数据
      */
     public ModelSelection getDefaultModelFallback() {
@@ -132,10 +150,11 @@ public class ClientModelManager {
 
     /**
      * 获取或临时创建玩家的实体数据
+     *
      * @param playerUUID 玩家uuid
      * @return 新的或者已经发给客户端的实体数据
      */
-    public ModelSelection getModelOfPlayer(UUID playerUUID){
+    public ModelSelection getModelOfPlayer(UUID playerUUID) {
         final Optional<InMemoryModelData> defaultModelResource = this.filterOutDefaultModel().findFirst();
 
         if (defaultModelResource.isEmpty()) {
@@ -147,8 +166,9 @@ public class ClientModelManager {
 
     /**
      * 检查是否有某个模型
+     *
      * @param id 模型id
-     * @return 有为true,无为false
+     * @return 有为true, 无为false
      */
     public boolean hasModel(String id) {
         for (InMemoryModelData loaded : this.loadedModels) {
@@ -162,8 +182,9 @@ public class ClientModelManager {
 
     /**
      * 获取某个模型
+     *
      * @param id 模型id
-     * @return 模型的内存中数据,如果没有这个模型则返回null
+     * @return 模型的内存中数据, 如果没有这个模型则返回null
      */
     @Nullable
     public InMemoryModelData getModel(String id) {
@@ -178,6 +199,7 @@ public class ClientModelManager {
 
     /**
      * 获取全部模型
+     *
      * @return 全部模型的复制
      */
     public Collection<InMemoryModelData> getAllModels() {

@@ -160,16 +160,16 @@ public class AyameCommandManager {
                                 .then(LiteralArgumentBuilder.<T>literal("reload")
                                         .executes(commandContext -> {
                                             final ModelSelection selection = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
-                                            final IModelResource modelRes = AyameClient.modelManagerClient.getModel(selection.getId());
+                                            final InMemoryModelData modelRes = AyameClient.modelManagerClient.getModel(selection.getId());
+
 
                                             if (modelRes == null) {
                                                 sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
                                                 return 0;
                                             }
 
-                                            AyameClient.unloadAllModels();
-                                            AyameClient.loadAllModelLocal();
-                                            AyameClient.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
+                                            // TODO: 只重载特定模型
+                                            AyameClient.modelManagerClient.updateAndReloadModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
                                             sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
                                             return Command.SINGLE_SUCCESS;
                                         })
@@ -216,9 +216,8 @@ public class AyameCommandManager {
 
         // TODO - ???
         // TODO - 这东西怎么设置玩家模型的到底?
-        AyameClient.unloadAllModels();
-        AyameClient.loadAllModelLocal();
-        AyameClient.modelManagerClient.updateModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
+        // TODO: 只重载特定模型
+        AyameClient.modelManagerClient.updateAndReloadModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
 
         sendMessageToClient(
                 Component.translatable(
