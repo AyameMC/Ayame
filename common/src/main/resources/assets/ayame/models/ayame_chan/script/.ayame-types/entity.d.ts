@@ -15,4 +15,31 @@ declare interface Entity {
      * @example 'minecraft:fox', 'twilightforest:naga'
      */
     getType(): ResourceLocation;
+
+    /**
+     * 获取实体的 X 坐标。
+     * @return 坐标
+     */
+    getX(): number;
+
+    /**
+     * 获取实体的 Y 坐标。
+     * @return 坐标
+     */
+    getY(): number;
+
+    /**
+     * 获取实体的 Z 坐标。
+     * @return 坐标
+     */
+    getZ(): number;
+
+    /**
+     * 生成粒子效果。
+     * @param location  粒子效果路径
+     * @param xSpeed 
+     * @param ySpeed 
+     * @param zSpeed 
+     */
+    spawnParticle<T extends string>(location: ResourceLocationString<T>, xSpeed: number, ySpeed: number, zSpeed: number);
 }

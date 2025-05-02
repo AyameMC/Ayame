@@ -24,13 +24,13 @@ let shakeValue = 0;
 
 
 // 示例：注册自定义 Molang 函数
-Molang.registerFunction('aym.math.parabola', (x: number) => {
+Molang.registerFunction('aym.math.example.sin', (x: number) => {
     return Math.sin(x * (Math.PI / 180));
 });
 
 PlayerEvents.tick((event) => {
     const headRRotation = Molang.exec("query.head_x_rotation") as number;
-    logger.info(headRRotation)
+    // logger.info(headRRotation)
     const {player} = event;
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);

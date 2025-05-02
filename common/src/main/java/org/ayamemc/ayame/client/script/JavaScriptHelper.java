@@ -32,7 +32,8 @@ public class JavaScriptHelper {
     public static void executeCallbacks(List<Function> callbacks, Object... args) {
         if (callbacks.isEmpty()) return;
 
-        Context context = Context.enter();
+        final Context context = Context.enter();
+        context.setClassShutter(AyameClassShutter.getInstance());
         try {
             Scriptable scope = context.initStandardObjects();
 
@@ -62,13 +63,8 @@ public class JavaScriptHelper {
     }
 
     public static Object executeCallback(Function callback, Object... args) {
-        Context context = Context.getCurrentContext();
-        boolean newContext = false;
-
-        if (context == null) {
-            context = Context.enter();
-            newContext = true;
-        }
+        final Context context = Context.enter();
+        context.setClassShutter(AyameClassShutter.getInstance());
         try {
             Scriptable scope = callback.getParentScope();
             Object[] jsArgs = new Object[args.length];
@@ -79,9 +75,7 @@ public class JavaScriptHelper {
         } catch (Exception e) {
             Ayame.LOGGER.error("Error triggering callback: ", e);
         } finally {
-            if (newContext) {
-                Context.exit();
-            }
+            Context.exit();
         }
         return null;
     }

@@ -29,10 +29,7 @@ import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
 import org.jetbrains.annotations.Nullable;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Function;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -62,9 +59,9 @@ public class JavaScriptLoader {
 
         new Thread(() -> {
             final Context context = Context.enter();
+            context.setClassShutter(AyameClassShutter.getInstance());
             try {
                 context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
-                context.setInterpretedMode(false);
 
                 final UUID playerUUID = MINECRAFT.player.getUUID();
                 final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(playerUUID).getId();
@@ -77,6 +74,7 @@ public class JavaScriptLoader {
 
                 JavaScriptHelper.clearAllCallbacks();
                 final Scriptable scope = createExecutionScope(context);
+                scope.delete("getClass");
                 final String tscCode = FileUtil.convertInputStreamToString(optionalTsCompilerSourceCode.get().open());
                 context.evaluateString(scope, tscCode + COMPILE_TS_FUNC_STR, "typeScript.js", 1, null);
 
@@ -124,6 +122,7 @@ public class JavaScriptLoader {
         }
 
         final Context context = Context.enter();
+        context.setClassShutter(fullClassName -> false);
         try {
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             Scriptable scope = context.initStandardObjects();
@@ -151,6 +150,7 @@ public class JavaScriptLoader {
         if (scope == null) return null;
 
         final Context context = Context.enter();
+        context.setClassShutter(AyameClassShutter.getInstance());
         try {
             context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
             return context.evaluateString(scope, code, "<command>", 1, null);
