@@ -167,6 +167,8 @@ public class AyameCommandManager {
                                                 return 0;
                                             }
 
+                                            AyameClient.unloadAllModels();
+                                            AyameClient.loadAllModelLocal();
                                             AyameClient.modelManagerClient.updateModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
                                             sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
                                             return Command.SINGLE_SUCCESS;
@@ -214,6 +216,8 @@ public class AyameCommandManager {
 
         // TODO - ???
         // TODO - 这东西怎么设置玩家模型的到底?
+        AyameClient.unloadAllModels();
+        AyameClient.loadAllModelLocal();
         AyameClient.modelManagerClient.updateModelOfPlayer(targetPlayer, modelData.getFallbackModelSelection());
 
         sendMessageToClient(

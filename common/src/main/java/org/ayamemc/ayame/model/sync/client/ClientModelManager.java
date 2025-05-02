@@ -107,7 +107,7 @@ public class ClientModelManager {
     public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection){
         this.playerModelSelections.put(playerUUID, modelSelection);
         // 同时加载脚本,调用脚本的onStart()
-        JavaScriptLoader.runJs(); // TODO: 可能需要异步?
+        JavaScriptLoader.runJs();
     }
 
     public Stream<InMemoryModelData> filterOutDefaultModel() {

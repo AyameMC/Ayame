@@ -24,7 +24,7 @@ let shakeValue = 0;
 
 
 // 示例：注册自定义 Molang 函数
-Molang.registerFunction('aym.math.example.sin', (x: number) => {
+Molang.registerFunction('aym.math.parabola', (x: number) => {
     return Math.sin(x * (Math.PI / 180));
 });
 
@@ -93,5 +93,11 @@ RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
     player.sendChatMessage("坐下")
     player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.playAnim("state.sit", true)
+});
+
+RouletteOption.add("抱头蹲防", "minecraft:textures/item/diamond.png", (event) => {
+    const {player} = event
+    player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
+    player.playAnim("抱头蹲防", true)
 });
 
