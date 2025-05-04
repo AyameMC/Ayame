@@ -216,7 +216,6 @@ public class FileUtil {
      */
     public static void copyBuiltinFilesToDirectory(String prefix,String[] sourcePaths, Path targetDir) {
         for (String sourcePath : sourcePaths) {
-            LOGGER.info("Copying file {} to {}...", sourcePath, targetDir);
             copyBuiltinFileToDirectory(prefix,sourcePath, targetDir.toString());
         }
     }

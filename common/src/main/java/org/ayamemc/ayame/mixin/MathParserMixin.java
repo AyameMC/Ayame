@@ -21,18 +21,19 @@
 package org.ayamemc.ayame.mixin;
 
 import com.mojang.datafixers.util.Either;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
-import software.bernie.geckolib.loading.math.value.CompoundValue;
 import software.bernie.geckolib.loading.math.value.Ternary;
 import software.bernie.geckolib.util.CompoundException;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 @Mixin(value = MathParser.class, remap = false)
 public abstract class MathParserMixin {
@@ -47,7 +48,8 @@ public abstract class MathParserMixin {
      */
     @Overwrite
     @Nullable
-    protected static Ternary compileTernary(List<Either<String, List<MathValue>>> symbols) throws CompoundException  {
+    protected static Ternary compileTernary(List<Either<String, List<MathValue>>> symbols) throws CompoundException {
+        LOGGER.info("Compile Ternary: {}", symbols);
         final int symbolCount = symbols.size();
 
         if (symbolCount < 3)
@@ -67,8 +69,7 @@ public abstract class MathParserMixin {
                     condition = () -> parseSymbols(symbols.subList(0, i2));
 
                 ternaryState++;
-            }
-            else if (":".equals(string)) {
+            } else if (":".equals(string)) {
                 if (ternaryState == 1 && ifTrue == null)
                     ifTrue = () -> parseSymbols(symbols.subList(0, i2));
 
@@ -80,6 +81,8 @@ public abstract class MathParserMixin {
         if (ternaryState == 0 && condition != null && ifTrue != null && lastColon < symbolCount - 1)
             return new Ternary(condition.get(), ifTrue.get(), parseSymbols(symbols.subList(lastColon + 1, symbolCount)));
 
+
+        LOGGER.info("null {}", symbols);
         return null;
     }
 }

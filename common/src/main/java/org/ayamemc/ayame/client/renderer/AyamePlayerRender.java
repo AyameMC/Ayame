@@ -73,6 +73,9 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         // 实体缩放
         float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
+//        if (animatable.isCrouching()) {
+//            poseStack.translate(0.0D, -0.9D, 0.0D);
+//        }
 
         poseStack.scale(scale, scale, scale);
 //        poseStack.popPose();
