@@ -98,6 +98,7 @@ RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
 RouletteOption.add("抱头蹲防", "minecraft:textures/item/diamond.png", (event) => {
     const {player} = event
     player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
+    player.spawnParticle("minecraft:landing_obsidian_tear", 1,1,1)
     player.playAnim("抱头蹲防", true)
 });
 

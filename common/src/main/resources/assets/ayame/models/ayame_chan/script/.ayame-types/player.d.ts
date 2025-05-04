@@ -1,7 +1,7 @@
 /**
  * 玩家
  */
-declare interface Player {
+declare interface Player extends Entity {
     /**
      * 玩家名称
      */
