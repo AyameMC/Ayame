@@ -46,43 +46,43 @@ public abstract class MathParserMixin {
      * @author a
      * @reason a
      */
-    @Overwrite
-    @Nullable
-    protected static Ternary compileTernary(List<Either<String, List<MathValue>>> symbols) throws CompoundException {
-        LOGGER.info("Compile Ternary: {}", symbols);
-        final int symbolCount = symbols.size();
-
-        if (symbolCount < 3)
-            return null;
-
-        Supplier<MathValue> condition = null;
-        Supplier<MathValue> ifTrue = null;
-        int ternaryState = 0;
-        int lastColon = -1;
-
-        for (int i = 0; i < symbolCount; i++) {
-            final int i2 = i;
-            final String string = symbols.get(i).left().orElse(null);
-
-            if ("?".equals(string)) {
-                if (condition == null)
-                    condition = () -> parseSymbols(symbols.subList(0, i2));
-
-                ternaryState++;
-            } else if (":".equals(string)) {
-                if (ternaryState == 1 && ifTrue == null)
-                    ifTrue = () -> parseSymbols(symbols.subList(0, i2));
-
-                ternaryState--;
-                lastColon = i;
-            }
-        }
-
-        if (ternaryState == 0 && condition != null && ifTrue != null && lastColon < symbolCount - 1)
-            return new Ternary(condition.get(), ifTrue.get(), parseSymbols(symbols.subList(lastColon + 1, symbolCount)));
-
-
-        LOGGER.info("null {}", symbols);
-        return null;
-    }
+//    @Overwrite
+//    @Nullable
+//    protected static Ternary compileTernary(List<Either<String, List<MathValue>>> symbols) throws CompoundException {
+//        LOGGER.info("Compile Ternary: {}", symbols);
+//        final int symbolCount = symbols.size();
+//
+//        if (symbolCount < 3)
+//            return null;
+//
+//        Supplier<MathValue> condition = null;
+//        Supplier<MathValue> ifTrue = null;
+//        int ternaryState = 0;
+//        int lastColon = -1;
+//
+//        for (int i = 0; i < symbolCount; i++) {
+//            final int i2 = i;
+//            final String string = symbols.get(i).left().orElse(null);
+//
+//            if ("?".equals(string)) {
+//                if (condition == null)
+//                    condition = () -> parseSymbols(symbols.subList(0, i2));
+//
+//                ternaryState++;
+//            } else if (":".equals(string)) {
+//                if (ternaryState == 1 && ifTrue == null)
+//                    ifTrue = () -> parseSymbols(symbols.subList(0, i2));
+//
+//                ternaryState--;
+//                lastColon = i;
+//            }
+//        }
+//
+//        if (ternaryState == 0 && condition != null && ifTrue != null && lastColon < symbolCount - 1)
+//            return new Ternary(condition.get(), ifTrue.get(), parseSymbols(symbols.subList(lastColon + 1, symbolCount)));
+//
+//
+//        LOGGER.info("null {}", symbols);
+//        return null;
+//    }
 }
