@@ -36,17 +36,12 @@ import java.util.function.Function;
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
 public class AyameSoundMusic extends AbstractTickableSoundInstance {
-    public AyameSoundMusic() {
-        super(Ayame.ayameSound, SoundSource.MUSIC, SoundInstance.createUnseededRandom());
-    }
-
     private static final String ERROR_404 = "http://music.163.com/404";
     private static final String MUSIC_163_URL = "https://music.163.com/";
     private static final String LOCAL_FILE_PROTOCOL = "file";
 
-    @Override
-    public void tick() {
-
+    public AyameSoundMusic() {
+        super(Ayame.ayameSound, SoundSource.MUSIC, SoundInstance.createUnseededRandom());
     }
 
     public static void play(String url, String songName, Function<URL, SoundInstance> sound) {
@@ -55,7 +50,7 @@ public class AyameSoundMusic extends AbstractTickableSoundInstance {
 //
 //        }
 //        if (url != null && !url.equals(ERROR_404)) {
-            playMusic(url, songName, sound);
+        playMusic(url, songName, sound);
 //        }
     }
 
@@ -80,5 +75,10 @@ public class AyameSoundMusic extends AbstractTickableSoundInstance {
         } catch (MalformedURLException | URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void tick() {
+
     }
 }

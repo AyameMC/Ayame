@@ -20,21 +20,17 @@
 
 package org.ayamemc.ayame.client.script.event;
 
-import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsEntity;
 import org.ayamemc.ayame.client.script.JsPlayer;
 import org.ayamemc.ayame.client.script.JsWorld;
-import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.annotations.JSStaticFunction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JsAttackEntityEvent extends JsEvent {
     public static final JsAttackEntityEvent INSTANCE = new JsAttackEntityEvent();
-    private JsAttackEntityEvent() {}
+
+    private JsAttackEntityEvent() {
+    }
 
     public void trigger(JsPlayer player, JsWorld world, JsEntity target) {
         Scriptable event = new NativeObject();

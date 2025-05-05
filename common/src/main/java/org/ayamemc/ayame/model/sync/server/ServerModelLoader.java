@@ -23,7 +23,6 @@ package org.ayamemc.ayame.model.sync.server;
 import org.ayamemc.ayame.model.sync.AbstractModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
-import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.concurrent.ExecutorService;
 

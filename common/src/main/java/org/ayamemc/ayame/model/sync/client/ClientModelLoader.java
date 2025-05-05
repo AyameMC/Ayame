@@ -57,7 +57,7 @@ public class ClientModelLoader extends AbstractModelLoader {
                 this.onModelLoaded(modelData);
 
                 return true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 Ayame.LOGGER.error("Failed to load ayame model", e);
                 return false;
             }

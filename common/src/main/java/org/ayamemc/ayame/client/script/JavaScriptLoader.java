@@ -29,7 +29,10 @@ import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
 import org.jetbrains.annotations.Nullable;
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,13 +46,12 @@ import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 public class JavaScriptLoader {
     private static final String COMPILE_TS_FUNC_STR = "function compileTs(tsCode){var options={target:ts.ScriptTarget.ES5,module:ts.ModuleKind.CommonJS,removeComments:true};var result=ts.transpileModule(tsCode,{compilerOptions:options});return result.outputText}";
     private static Optional<Resource> optionalTsCompilerSourceCode = getTsSourceCode();
+    private static Scriptable sharedScope;
+    private static Function compileTsFunc;
 
     private static Optional<Resource> getTsSourceCode() {
         return MINECRAFT.getResourceManager().getResource(withAyamePath("script_lib/typescript.min.js"));
     }
-
-    private static Scriptable sharedScope;
-    private static Function compileTsFunc;
 
     public static void runJs() {
 

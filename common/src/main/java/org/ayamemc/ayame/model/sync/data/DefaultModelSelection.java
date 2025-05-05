@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * @param geoModel  模型文件
  * @param animation 动画文件
  * @param texture   贴图文件
- * @param id  模型id
+ * @param id        模型id
  */
 
 public record DefaultModelSelection(ResourceLocation geoModel,

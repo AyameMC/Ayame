@@ -25,13 +25,16 @@ import org.mozilla.javascript.annotations.JSFunction;
 
 public class JsWorld {
     private final Level world;
+
     public JsWorld(Level world) {
         this.world = world;
     }
+
     @JSFunction
     public boolean isNight() {
         return world.isNight();
     }
+
     @JSFunction
     public long getDayTime() {
         return world.getDayTime();

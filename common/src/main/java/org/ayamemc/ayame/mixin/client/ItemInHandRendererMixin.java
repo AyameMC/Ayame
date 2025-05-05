@@ -27,7 +27,6 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.HumanoidArm;
-import org.ayamemc.ayame.client.renderer.AyamePlayerHandRenderer;
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

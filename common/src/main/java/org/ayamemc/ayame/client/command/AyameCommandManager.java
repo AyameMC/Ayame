@@ -36,7 +36,6 @@ import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import org.ayamemc.ayame.model.AyameModelData;
-import org.ayamemc.ayame.model.resource.IModelResource;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.mozilla.javascript.Context;
@@ -60,137 +59,137 @@ public class AyameCommandManager {
     public static <T extends SharedSuggestionProvider> void createCommands(CommandDispatcher<T> dispatcher, CommandBuildContext cx) {
         // ------------------------------------------ ayame -------------------------------------------------------------------------
         dispatcher.register(LiteralArgumentBuilder.<T>literal("ayame")
-                        .then(LiteralArgumentBuilder.<T>literal("animation")
-                                .then(LiteralArgumentBuilder.<T>literal("play")
-                                        .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
-                                                .then(RequiredArgumentBuilder.<T, Boolean>argument("is_loop", BoolArgumentType.bool())
-                                                        .executes(context1 -> {
-                                                            MINECRAFT.player.ayame$playAnimation(context1.getArgument("animation_name", String.class), context1.getArgument("is_loop", Boolean.class));
+                .then(LiteralArgumentBuilder.<T>literal("animation")
+                        .then(LiteralArgumentBuilder.<T>literal("play")
+                                .then(RequiredArgumentBuilder.<T, String>argument("animation_name", StringArgumentType.string())
+                                        .then(RequiredArgumentBuilder.<T, Boolean>argument("is_loop", BoolArgumentType.bool())
+                                                .executes(context1 -> {
+                                                    MINECRAFT.player.ayame$playAnimation(context1.getArgument("animation_name", String.class), context1.getArgument("is_loop", Boolean.class));
 
-                                                            Ayame.LOGGER.info("Play animation {}", context1.getArgument("animation_name", String.class));
-                                                            return Command.SINGLE_SUCCESS;
-                                                        })
-                                                )
-
-                                        )
-                                )
-                                .then(LiteralArgumentBuilder.<T>literal("reset")
-                                        .executes(context1 -> {
-                                            MINECRAFT.player.ayame$resetAnimation();
-                                            return Command.SINGLE_SUCCESS;
-                                        })
-                                )
-                        )
-
-
-                        .then(LiteralArgumentBuilder.<T>literal("molang")
-                                        .then(LiteralArgumentBuilder.<T>literal("exec").then(
-                                                RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
-                                                        .executes(context -> {
-                                                            try {
-                                                                final String code = StringArgumentType.getString(context, "code");
-                                                                final double result = AyamePlayerRender.execMolang(code);
-
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", result));
-
-                                                            } catch (CompoundException e) {
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e));
-                                                            }
-                                                            return Command.SINGLE_SUCCESS;
-                                                        })
-                                        ))
-                        )
-
-                        .then(LiteralArgumentBuilder.<T>literal("typescript")
-                                .then(LiteralArgumentBuilder.<T>literal("execJs").then(
-                                                RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
-                                                        .executes(context -> {
-                                                            String code = StringArgumentType.getString(context, "code");
-
-                                                            Object result = JavaScriptLoader.runCode(code);
-                                                            if (result instanceof Exception e) {
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e.getMessage()));
-                                                            } else if (result != null) {
-                                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", Context.toString(result)));
-                                                            }
-
-
-                                                            return Command.SINGLE_SUCCESS;
-                                                        })
+                                                    Ayame.LOGGER.info("Play animation {}", context1.getArgument("animation_name", String.class));
+                                                    return Command.SINGLE_SUCCESS;
+                                                })
                                         )
 
                                 )
+                        )
+                        .then(LiteralArgumentBuilder.<T>literal("reset")
+                                .executes(context1 -> {
+                                    MINECRAFT.player.ayame$resetAnimation();
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+                )
 
-                                .then(LiteralArgumentBuilder.<T>literal("version")
-                                        .executes((context -> {
-                                            new Thread(() -> {
-                                                final String tsVersion = JavaScriptLoader.getTsVersion();
-                                                if (tsVersion == null) {
-                                                    return;
-                                                }
-                                                sendMessageToClient(Component.translatable("message.ayame.command.ts.version", tsVersion));
-                                            }, "Ayame-TSC-Version").start();
-                                            return Command.SINGLE_SUCCESS;
-                                        }))
-                                )
-                                .then(LiteralArgumentBuilder.<T>literal("reload")
+
+                .then(LiteralArgumentBuilder.<T>literal("molang")
+                        .then(LiteralArgumentBuilder.<T>literal("exec").then(
+                                RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
                                         .executes(context -> {
-                                            JavaScriptLoader.reloadTs();
-                                            return Command.SINGLE_SUCCESS;
-                                        })
-                                )
+                                            try {
+                                                final String code = StringArgumentType.getString(context, "code");
+                                                final double result = AyamePlayerRender.execMolang(code);
 
-                        )
+                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", result));
 
-                        .then(LiteralArgumentBuilder.<T>literal("model")
-                                .then(LiteralArgumentBuilder.<T>literal("set")
-                                        .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
-                                                .executes(AyameCommandManager::setModel)
-                                                .suggests((SuggestionProvider<T>) MODEL_LIST)
-                                        ))
-
-                                .then(LiteralArgumentBuilder.<T>literal("rescan")
-                                        .executes(commandContext -> {
-                                            AyameClient.loadAllModelLocal().whenComplete((r, ex) -> {
-                                                sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
-                                            });
-                                            return Command.SINGLE_SUCCESS;
-                                        }))
-
-                                .then(LiteralArgumentBuilder.<T>literal("reload")
-                                        .executes(commandContext -> {
-                                            final ModelSelection selection = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
-                                            final InMemoryModelData modelRes = AyameClient.modelManagerClient.getModel(selection.getId());
-
-
-                                            if (modelRes == null) {
-                                                sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
-                                                return 0;
+                                            } catch (CompoundException e) {
+                                                sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e));
                                             }
-
-                                            // TODO: 只重载特定模型
-                                            AyameClient.modelManagerClient.updateAndReloadModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
-                                            sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
                                             return Command.SINGLE_SUCCESS;
                                         })
+                        ))
+                )
+
+                .then(LiteralArgumentBuilder.<T>literal("typescript")
+                        .then(LiteralArgumentBuilder.<T>literal("execJs").then(
+                                        RequiredArgumentBuilder.<T, String>argument("code", StringArgumentType.string())
+                                                .executes(context -> {
+                                                    String code = StringArgumentType.getString(context, "code");
+
+                                                    Object result = JavaScriptLoader.runCode(code);
+                                                    if (result instanceof Exception e) {
+                                                        sendMessageToClient(Component.translatable("message.ayame.command.script.exec.error", e.getMessage()));
+                                                    } else if (result != null) {
+                                                        sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", Context.toString(result)));
+                                                    }
+
+
+                                                    return Command.SINGLE_SUCCESS;
+                                                })
                                 )
 
-                                .then(LiteralArgumentBuilder.<T>literal("list")
-                                        .executes(commandContext -> {
-                                            final String allModels = AyameClient.modelManagerClient.getAllModels().stream()
-                                                    .map(resource -> {
-                                                                final AyameModelData.MetaData metaData = resource.getMetaData();
-
-                                                                return "§e" + metaData.id + " " + "(" + metaData.name + ")";
-                                                            }
-                                                    )
-                                                    .collect(Collectors.joining("\n"));
-
-                                            sendMessageToClient(Component.translatable("message.ayame.command.model.list", allModels));
-                                            return Command.SINGLE_SUCCESS;
-                                        })
-                                )
                         )
+
+                        .then(LiteralArgumentBuilder.<T>literal("version")
+                                .executes((context -> {
+                                    new Thread(() -> {
+                                        final String tsVersion = JavaScriptLoader.getTsVersion();
+                                        if (tsVersion == null) {
+                                            return;
+                                        }
+                                        sendMessageToClient(Component.translatable("message.ayame.command.ts.version", tsVersion));
+                                    }, "Ayame-TSC-Version").start();
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+                        )
+                        .then(LiteralArgumentBuilder.<T>literal("reload")
+                                .executes(context -> {
+                                    JavaScriptLoader.reloadTs();
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                )
+
+                .then(LiteralArgumentBuilder.<T>literal("model")
+                        .then(LiteralArgumentBuilder.<T>literal("set")
+                                .then(RequiredArgumentBuilder.<T, String>argument("model_id", StringArgumentType.string())
+                                        .executes(AyameCommandManager::setModel)
+                                        .suggests((SuggestionProvider<T>) MODEL_LIST)
+                                ))
+
+                        .then(LiteralArgumentBuilder.<T>literal("rescan")
+                                .executes(commandContext -> {
+                                    AyameClient.loadAllModelLocal().whenComplete((r, ex) -> {
+                                        sendMessageToClient(Component.translatable("message.ayame.command.model.rescan.successes"));
+                                    });
+                                    return Command.SINGLE_SUCCESS;
+                                }))
+
+                        .then(LiteralArgumentBuilder.<T>literal("reload")
+                                .executes(commandContext -> {
+                                    final ModelSelection selection = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
+                                    final InMemoryModelData modelRes = AyameClient.modelManagerClient.getModel(selection.getId());
+
+
+                                    if (modelRes == null) {
+                                        sendMessageToClient(Component.translatable("message.ayame.command.reload.failed"));
+                                        return 0;
+                                    }
+
+                                    // TODO: 只重载特定模型
+                                    AyameClient.modelManagerClient.updateAndReloadModelOfPlayer(MINECRAFT.player.getUUID(), modelRes.getFallbackModelSelection());
+                                    sendMessageToClient(Component.translatable("message.ayame.command.model.reload.successes"));
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                        .then(LiteralArgumentBuilder.<T>literal("list")
+                                .executes(commandContext -> {
+                                    final String allModels = AyameClient.modelManagerClient.getAllModels().stream()
+                                            .map(resource -> {
+                                                        final AyameModelData.MetaData metaData = resource.getMetaData();
+
+                                                        return "§e" + metaData.id + " " + "(" + metaData.name + ")";
+                                                    }
+                                            )
+                                            .collect(Collectors.joining("\n"));
+
+                                    sendMessageToClient(Component.translatable("message.ayame.command.model.list", allModels));
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+                )
         );
 
 

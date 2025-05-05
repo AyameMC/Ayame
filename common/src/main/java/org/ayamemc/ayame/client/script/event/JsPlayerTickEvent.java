@@ -20,17 +20,15 @@
 
 package org.ayamemc.ayame.client.script.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.*;
-import org.mozilla.javascript.annotations.JSStaticFunction;
+import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Scriptable;
 
 public class JsPlayerTickEvent extends JsEvent {
     public static final JsPlayerTickEvent INSTANCE = new JsPlayerTickEvent();
-    private JsPlayerTickEvent() {}
+
+    private JsPlayerTickEvent() {
+    }
 
     public void trigger(JsPlayer player) {
         Scriptable event = new NativeObject();

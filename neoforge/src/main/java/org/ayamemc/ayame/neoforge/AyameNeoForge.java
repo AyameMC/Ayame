@@ -31,6 +31,6 @@ public final class AyameNeoForge {
         // AyameNeoForgeSounds.SOUND_EVENTS.register(modBus);
         // Run our common setup.
         // TODO：解决注册过晚问题
-        Ayame.init(ModLoader.NEOFORGE,null);
+        Ayame.init(ModLoader.NEOFORGE, null);
     }
 }

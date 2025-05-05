@@ -21,19 +21,13 @@
 package org.ayamemc.ayame.mixin;
 
 import com.mojang.datafixers.util.Either;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
-import software.bernie.geckolib.loading.math.value.Ternary;
 import software.bernie.geckolib.util.CompoundException;
 
 import java.util.List;
-import java.util.function.Supplier;
-
-import static org.ayamemc.ayame.Ayame.LOGGER;
 
 @Mixin(value = MathParser.class, remap = false)
 public abstract class MathParserMixin {

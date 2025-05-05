@@ -50,6 +50,7 @@ public class AyameClient {
     public static final ModelCacheDatabase cacheDatabase;
     public static final ClientModelManager modelManagerClient = new ClientModelManager();
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
+    private static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
     public static KeyMappingRegistry keyMappingRegistry;
 
     static {
@@ -59,9 +60,6 @@ public class AyameClient {
             throw new RuntimeException(e);
         }
     }
-
-    private static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
-
 
     public static void init(@NotNull KeyMappingRegistry keyMappingRegistry) {
         AyameClient.keyMappingRegistry = keyMappingRegistry;

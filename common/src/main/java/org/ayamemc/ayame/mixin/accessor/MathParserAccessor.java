@@ -30,12 +30,12 @@ import java.util.Map;
 @Mixin(value = MathParser.class, remap = false)
 public interface MathParserAccessor {
     @Accessor("FUNCTION_FACTORIES")
-    static void setFunctionFactories(Map<String, MathFunction.Factory<?>> map) {
+    static Map<String, MathFunction.Factory<?>> getFunctionFactories() {
         throw new AssertionError();
     }
 
     @Accessor("FUNCTION_FACTORIES")
-    static Map<String, MathFunction.Factory<?>> getFunctionFactories() {
+    static void setFunctionFactories(Map<String, MathFunction.Factory<?>> map) {
         throw new AssertionError();
     }
 }

@@ -50,21 +50,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 import static org.ayamemc.ayame.Ayame.MOD_ID;
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 public class InMemoryModelData implements ISerializableModelResource, IRegistrableModel {
     private static final int DATA_HEADER = 0x4D524D44;
     private static final int VERSION = 0x0001;
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
+    private final Map<String, byte[]> internalDataStorage = new HashMap<>();
+    private final Registrar registrar = new Registrar(this); // Only used on client side
     private AyameModelData modelMetaData;
     private boolean canUnload = true;
     private boolean isDefaultModel = false;
-
-    private final Map<String, byte[]> internalDataStorage = new HashMap<>();
-    private final Registrar registrar = new Registrar(this); // Only used on client side
 
     public InMemoryModelData(boolean canUnload, boolean isDefaultModel) {
         this.canUnload = canUnload;
@@ -234,38 +232,6 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
             this.modelResource = modelResource;
         }
 
-        public void register() {
-            final Runnable scheduledRegister = () -> {
-                addBakedModel(this.modelResource.createModelResourceLocation(), this.modelResource);
-                addBakedModel(this.modelResource.createArmResourceLocation(), this.modelResource);
-                addBakedAnimationFromModelResource(this.modelResource.createAnimationResourceLocation(), this.modelResource);
-                registerTextureDynamically(this.modelResource.createTextureResourceLocation(), this.modelResource);
-            };
-
-            if (!MainThreadUtil.runningOnClientMain()) {
-                MINECRAFT.execute(scheduledRegister);
-                return;
-            }
-
-            scheduledRegister.run();
-        }
-
-        public void deregister() {
-            final Runnable scheduledDeregister = () -> {
-                removeBakedModel(this.modelResource.createModelResourceLocation());
-                removeBakedModel(this.modelResource.createArmResourceLocation());
-                removeBakedAnimation(this.modelResource.createAnimationResourceLocation());
-                deregisterTextureDynamically(this.modelResource.createTextureResourceLocation());
-            };
-
-            if (!MainThreadUtil.runningOnClientMain()) {
-                MINECRAFT.execute(scheduledDeregister);
-                return;
-            }
-
-            scheduledDeregister.run();
-        }
-
         public static void removeBakedAnimation(ResourceLocation location) {
             final Map<ResourceLocation, BakedAnimations> animations = getInjectedAnimationsMap();
 
@@ -319,7 +285,6 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
             }
         }
 
-
         // Our black magic of GeckoLib
         public static Map<ResourceLocation, BakedGeoModel> getInjectedModelsMap() {
             final Map<ResourceLocation, BakedGeoModel> GECKO_MODELS = GeckoLibCacheAccessor.getModels();
@@ -346,6 +311,38 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
             GeckoLibCacheAccessor.setAnimations(newValue);
             return newValue;
+        }
+
+        public void register() {
+            final Runnable scheduledRegister = () -> {
+                addBakedModel(this.modelResource.createModelResourceLocation(), this.modelResource);
+                addBakedModel(this.modelResource.createArmResourceLocation(), this.modelResource);
+                addBakedAnimationFromModelResource(this.modelResource.createAnimationResourceLocation(), this.modelResource);
+                registerTextureDynamically(this.modelResource.createTextureResourceLocation(), this.modelResource);
+            };
+
+            if (!MainThreadUtil.runningOnClientMain()) {
+                MINECRAFT.execute(scheduledRegister);
+                return;
+            }
+
+            scheduledRegister.run();
+        }
+
+        public void deregister() {
+            final Runnable scheduledDeregister = () -> {
+                removeBakedModel(this.modelResource.createModelResourceLocation());
+                removeBakedModel(this.modelResource.createArmResourceLocation());
+                removeBakedAnimation(this.modelResource.createAnimationResourceLocation());
+                deregisterTextureDynamically(this.modelResource.createTextureResourceLocation());
+            };
+
+            if (!MainThreadUtil.runningOnClientMain()) {
+                MINECRAFT.execute(scheduledDeregister);
+                return;
+            }
+
+            scheduledDeregister.run();
         }
     }
 }

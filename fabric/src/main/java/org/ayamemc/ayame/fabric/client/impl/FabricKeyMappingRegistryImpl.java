@@ -30,12 +30,14 @@ import org.jetbrains.annotations.Nullable;
 public class FabricKeyMappingRegistryImpl implements KeyMappingRegistry {
     @Nullable
     private final KeyMappingRegistry TMS_KEY_MAPPING_REGISTRY = createTmsKeyMappingRegistry();
+
     private KeyMappingRegistry createTmsKeyMappingRegistry() {
-        if (ClassUtil.isClassPresent("dev.kingtux.tms.api.TMSKeyBinding")){
+        if (ClassUtil.isClassPresent("dev.kingtux.tms.api.TMSKeyBinding")) {
             return new TMSKeyMappingRegistryImpl();
         }
         return null;
     }
+
     @Override
     public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
         if (TMS_KEY_MAPPING_REGISTRY == null || modifierKey == ModifierKey.NONE) {

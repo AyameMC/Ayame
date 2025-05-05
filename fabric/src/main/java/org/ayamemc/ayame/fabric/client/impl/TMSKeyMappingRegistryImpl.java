@@ -38,6 +38,7 @@ public class TMSKeyMappingRegistryImpl implements KeyMappingRegistry {
         }
         return modifiers;
     }
+
     @Override
     public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
         return new TMSKeyBinding(

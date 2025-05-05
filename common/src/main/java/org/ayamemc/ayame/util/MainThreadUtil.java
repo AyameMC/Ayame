@@ -32,7 +32,7 @@ public class MainThreadUtil {
         Class<?> temp;
         try {
             temp = Class.forName("ca.spottedleaf.moonrise.common.util.TickThread");
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             temp = null;
         }
         MOONRISE_TICK_THREAD_CLASS = temp;
@@ -40,6 +40,7 @@ public class MainThreadUtil {
 
     /**
      * Check current if it is running on the main thread of the client
+     *
      * @return true if it is running on the main thread of the client
      */
     public static boolean runningOnClientMain() {
@@ -68,6 +69,7 @@ public class MainThreadUtil {
 
     /**
      * Check current if it is running on the main thread of the server
+     *
      * @return true if it is running on the main thread of the server
      */
     public static boolean runningOnServerMain() {

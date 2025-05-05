@@ -26,14 +26,6 @@ import java.util.List;
 
 public class AyameClassShutter implements ClassShutter {
     private static final AyameClassShutter INSTANCE = new AyameClassShutter();
-
-    private AyameClassShutter() {
-    }
-
-    public static AyameClassShutter getInstance() {
-        return INSTANCE;
-    }
-
     // 允许访问的类名前缀
     private static final List<String> ALLOWED_PREFIXES = List.of(
             "org.ayamemc.ayame.client.script",
@@ -41,6 +33,12 @@ public class AyameClassShutter implements ClassShutter {
             "java.lang"
     );
 
+    private AyameClassShutter() {
+    }
+
+    public static AyameClassShutter getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean visibleToScripts(String fullClassName) {

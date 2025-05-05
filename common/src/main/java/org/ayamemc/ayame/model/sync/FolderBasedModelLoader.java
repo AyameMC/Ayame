@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.model.sync;
 
 import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
-import org.ayamemc.ayame.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,7 +33,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FolderBasedModelLoader implements IModelLoader{
+public class FolderBasedModelLoader implements IModelLoader {
     @Override
     public ModelDataComponent loadModel(File modelFile) {
         final Path folder = modelFile.toPath();
@@ -52,7 +51,7 @@ public class FolderBasedModelLoader implements IModelLoader{
                     return FileVisitResult.CONTINUE;
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

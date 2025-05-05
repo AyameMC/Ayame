@@ -30,6 +30,7 @@ import org.mozilla.javascript.annotations.JSFunction;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 
 import static net.minecraft.client.Minecraft.getInstance;
+
 public class JsPlayer extends JsEntity {
     private final LocalPlayer player;
 
@@ -38,14 +39,14 @@ public class JsPlayer extends JsEntity {
         this.player = player;
     }
 
-    @Override
-    public Player getEntity() {
-        return player;
-    }
-
     @JSStaticFunction
     public static JsPlayer getPlayer() {
         return new JsPlayer(getInstance().player);
+    }
+
+    @Override
+    public Player getEntity() {
+        return player;
     }
 
     @JSFunction
@@ -80,6 +81,6 @@ public class JsPlayer extends JsEntity {
 
     @JSFunction
     public void playSound(String soundName) {
-        AyameSoundMusic.play("", soundName, url -> new  AyameSoundMusic());
+        AyameSoundMusic.play("", soundName, url -> new AyameSoundMusic());
     }
 }

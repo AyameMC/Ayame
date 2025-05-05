@@ -39,7 +39,6 @@ declare interface RouletteOptionEvent extends EventContext {
 }
 
 
-
 /**
  * 玩家相关的事件集合。
  */

@@ -11,10 +11,12 @@
     // "disableReferencedProjectLoad": true,             /* 减少 TypeScript 自动加载的项目数量。 */
     "noImplicitAny": true,
     /* 语言和环境 */
-    "target": "ES5", /* 设置生成的 JavaScript 语言版本，并包含兼容的库声明。 */
+    "target": "ES5",
+    /* 设置生成的 JavaScript 语言版本，并包含兼容的库声明。 */
     "lib": [
       "ES2024"
-    ], /* 指定描述目标运行时环境的一组库声明文件。 */
+    ],
+    /* 指定描述目标运行时环境的一组库声明文件。 */
     // "jsx": "preserve",                                /* 指定生成的 JSX 代码格式。 */
     // "libReplacement": true,                           /* 启用库替换。 */
     // "experimentalDecorators": true,                   /* 启用对实验性装饰器的支持。 */
@@ -28,15 +30,19 @@
     // "moduleDetection": "auto",                        /* 控制检测模块格式的方式。 */
 
     /* 模块 */
-    "module": "commonjs", /* 指定生成的模块代码格式。 */
-    "rootDir": ".", /* 指定源文件的根文件夹。 */
+    "module": "commonjs",
+    /* 指定生成的模块代码格式。 */
+    "rootDir": ".",
+    /* 指定源文件的根文件夹。 */
     // "moduleResolution": "node10",                     /* 指定 TypeScript 如何根据模块路径查找文件。 */
-    "baseUrl": "./.ayame/ayame-types", /* 指定解析非相对模块名称的基本目录。 */
+    "baseUrl": "./.ayame/ayame-types",
+    /* 指定解析非相对模块名称的基本目录。 */
     // "paths": {},                                      /* 指定一组条目，用于将导入重定向到其他查找位置。 */
     // "rootDirs": [],                                   /* 允许将多个文件夹视为一个，以便解析模块。 */
     "typeRoots": [
       "./.ayame/ayame-types"
-    ], /* 指定多个文件夹，作用类似 './node_modules/@types'。 */
+    ],
+    /* 指定多个文件夹，作用类似 './node_modules/@types'。 */
     // "types": [],                                      /* 指定不需要显式引用的类型包名称。 */
     // "allowUmdGlobalAccess": true,                     /* 允许从模块中访问 UMD 全局变量。 */
     // "moduleSuffixes": [],                             /* 指定解析模块时搜索的文件名后缀列表。 */
@@ -51,8 +57,10 @@
     // "noResolve": true,                                /* 禁止 'import'、'require' 或 '<reference>' 扩展文件数量。 */
 
     /* JavaScript 支持 */
-    "allowJs": true, /* 允许 JavaScript 文件成为项目的一部分。 */
-    "checkJs": true, /* 在 JavaScript 文件中启用类型检查。 */
+    "allowJs": true,
+    /* 允许 JavaScript 文件成为项目的一部分。 */
+    "checkJs": true,
+    /* 在 JavaScript 文件中启用类型检查。 */
     // "maxNodeModuleJsDepth": 1,                        /* 指定检查 node_modules 中 JavaScript 文件的最大深度，仅适用于 'allowJs'。 */
 
     /* 输出 */
@@ -64,7 +72,8 @@
     // "noEmit": true,                                   /* 禁止生成任何输出文件。 */
     // "outFile": "./",                                  /* 指定将所有输出捆绑到一个 JavaScript 文件中。 */
     // "outDir": "./",                                   /* 指定所有输出文件的输出目录。 */
-    "removeComments": true, /* 禁止在输出文件中包含注释。 */
+    "removeComments": true,
+    /* 禁止在输出文件中包含注释。 */
     // "importHelpers": true,                            /* 允许从 tslib 中引入帮助函数，而不是每个文件都生成。 */
     // "downlevelIteration": true,                       /* 生成兼容但更冗长的迭代代码。 */
     // "sourceRoot": "",                                 /* 为调试器指定源代码路径。 */
@@ -84,13 +93,17 @@
     // "isolatedDeclarations": true,                     /* 要求为导出内容添加足够的注释，以便生成声明文件。 */
     // "erasableSyntaxOnly": true,                       /* 禁止使用非 ECMAScript 规范的语法。 */
     // "allowSyntheticDefaultImports": true,             /* 允许在没有默认导出的模块中使用默认导入。 */
-    "esModuleInterop": true, /* 生成额外的 JavaScript 代码以支持 CommonJS 模块导入。 */
+    "esModuleInterop": true,
+    /* 生成额外的 JavaScript 代码以支持 CommonJS 模块导入。 */
     // "preserveSymlinks": true,                         /* 禁止解析符号链接的真实路径。 */
-    "forceConsistentCasingInFileNames": true, /* 强制文件名导入大小写一致。 */
+    "forceConsistentCasingInFileNames": true,
+    /* 强制文件名导入大小写一致。 */
 
     /* 类型检查 */
-    "strict": true, /* 启用所有严格类型检查选项。 */
-    "skipLibCheck": true /* 跳过所有 .d.ts 文件的类型检查。 */
+    "strict": true,
+    /* 启用所有严格类型检查选项。 */
+    "skipLibCheck": true
+    /* 跳过所有 .d.ts 文件的类型检查。 */
   },
   "include": [
     ".ayame-types/*.d.ts",

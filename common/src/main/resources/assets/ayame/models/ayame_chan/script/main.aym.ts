@@ -22,7 +22,6 @@
 let shakeValue = 0;
 
 
-
 // 示例：注册自定义 Molang 函数
 Molang.registerFunction('aym.math.parabola', (x: number) => {
     return Math.sin(x * (Math.PI / 180));
@@ -98,7 +97,7 @@ RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
 RouletteOption.add("抱头蹲防", "minecraft:textures/item/diamond.png", (event) => {
     const {player} = event
     // player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
-    player.spawnParticle("minecraft:landing_obsidian_tear", 0.0,0.0,0.0)
+    player.spawnParticle("minecraft:landing_obsidian_tear", player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, 0.0, 0.0, 0.0)
     player.playAnim("抱头蹲防", true)
 });
 

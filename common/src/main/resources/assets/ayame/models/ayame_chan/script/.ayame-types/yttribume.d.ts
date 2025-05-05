@@ -17,7 +17,7 @@ type BuiltinYttribumeLocation =
     | "ayame:effect.bloom"
     | "ayame:ui.button.hover" // 举例
     | "ayame:player.glow"     // 举例
-    
+
 /**
  * Yttribume
  */

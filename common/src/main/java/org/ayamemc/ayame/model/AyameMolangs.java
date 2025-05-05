@@ -25,9 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.util.MolangUtil;
 import software.bernie.geckolib.loading.math.MathParser;
-import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.MolangQueries;
-import software.bernie.geckolib.loading.math.function.MathFunction;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.function.ToDoubleFunction;

@@ -20,12 +20,12 @@
 
 package org.ayamemc.ayame.model.sync;
 
-import org.ayamemc.ayame.model.sync.client.ClientModelManager;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;

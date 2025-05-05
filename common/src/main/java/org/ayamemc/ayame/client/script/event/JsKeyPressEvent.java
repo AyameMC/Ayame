@@ -20,19 +20,15 @@
 
 package org.ayamemc.ayame.client.script.event;
 
-import org.ayamemc.ayame.client.script.JavaScriptHelper;
 import org.ayamemc.ayame.client.script.JsPlayer;
-import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.annotations.JSStaticFunction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JsKeyPressEvent extends JsEvent {
     public static final JsKeyPressEvent INSTANCE = new JsKeyPressEvent();
-    private JsKeyPressEvent() {}
+
+    private JsKeyPressEvent() {
+    }
 
     public void trigger(JsPlayer player, int key) {
         Scriptable event = new NativeObject();

@@ -51,5 +51,5 @@ public interface AnimationControllerInvoker {
 
     @Invoker("getAnimationPointAtTick")
     AnimationPoint invokeGetAnimationPointAtTick(List<Keyframe<MathValue>> frames, double tick, boolean isRotation,
-                                           Direction.Axis axis);
+                                                 Direction.Axis axis);
 }

@@ -25,7 +25,10 @@ import org.ayamemc.ayame.util.HashUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -79,6 +82,6 @@ public class ModelCacheDatabase {
             return;
         }
 
-        Files.write(target ,data);
+        Files.write(target, data);
     }
 }

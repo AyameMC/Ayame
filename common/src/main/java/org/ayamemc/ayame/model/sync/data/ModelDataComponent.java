@@ -28,7 +28,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModelDataComponent{
+public class ModelDataComponent {
     private static final String SPECTOR = "/";
 
     public final AyameModelData modelMeta;
@@ -40,30 +40,6 @@ public class ModelDataComponent{
     public ModelDataComponent(AyameModelData modelMeta, Map<String, byte[]> byteStorage) {
         this.modelMeta = modelMeta;
         this.byteStorage = byteStorage;
-    }
-
-    public AyameModelData modelMeta() {
-        return this.modelMeta;
-    }
-
-    public Map<String, byte[]> byteStorage() {
-        return this.byteStorage;
-    }
-
-    public boolean canUnload() {
-        return this.canUnload;
-    }
-
-    public boolean loadAsDefaultModel() {
-        return this.loadAsDefaultModel;
-    }
-
-    public void setCanUnload(boolean value) {
-        this.canUnload = value;
-    }
-
-    public void setLoadAsDefaultModel(boolean value) {
-        this.loadAsDefaultModel = value;
     }
 
     @Contract("_ -> new")
@@ -88,5 +64,29 @@ public class ModelDataComponent{
         }
 
         return new ModelDataComponent(parsed, remaining);
+    }
+
+    public AyameModelData modelMeta() {
+        return this.modelMeta;
+    }
+
+    public Map<String, byte[]> byteStorage() {
+        return this.byteStorage;
+    }
+
+    public boolean canUnload() {
+        return this.canUnload;
+    }
+
+    public boolean loadAsDefaultModel() {
+        return this.loadAsDefaultModel;
+    }
+
+    public void setCanUnload(boolean value) {
+        this.canUnload = value;
+    }
+
+    public void setLoadAsDefaultModel(boolean value) {
+        this.loadAsDefaultModel = value;
     }
 }

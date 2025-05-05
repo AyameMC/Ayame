@@ -1,7 +1,7 @@
 declare namespace Molang {
     /**
-    * 以玩家对象执行 Molang。
-    */
+     * 以玩家对象执行 Molang。
+     */
     function exec(molangCode: string): string | number;
 
     /**

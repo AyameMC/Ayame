@@ -29,6 +29,15 @@ import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 
 public class NeoForgeKeyMappingRegistryImpl implements KeyMappingRegistry {
 
+    private static KeyModifier toNeoForgeKeyModifier(ModifierKey modifierKey) {
+        return switch (modifierKey) {
+            case ALT -> KeyModifier.ALT;
+            case SHIFT -> KeyModifier.SHIFT;
+            case CONTROL -> KeyModifier.CONTROL;
+            case NONE -> KeyModifier.NONE;
+        };
+    }
+
     @Override
     public KeyMapping registerKey(String name, ModifierKey modifierKey, InputConstants.Type inputType, int keyCode, String category) {
         return new KeyMapping(
@@ -39,14 +48,5 @@ public class NeoForgeKeyMappingRegistryImpl implements KeyMappingRegistry {
                 keyCode,
                 category
         );
-    }
-
-    private static KeyModifier toNeoForgeKeyModifier(ModifierKey modifierKey) {
-        return switch (modifierKey) {
-            case ALT -> KeyModifier.ALT;
-            case SHIFT -> KeyModifier.SHIFT;
-            case CONTROL -> KeyModifier.CONTROL;
-            case NONE -> KeyModifier.NONE;
-        };
     }
 }

@@ -32,8 +32,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
-import static org.ayamemc.ayame.Ayame.LOGGER;
-
 public class FileUtil {
     /**
      * 将文件作为字符串获取
@@ -214,9 +212,9 @@ public class FileUtil {
      * @param sourcePaths 源文件数组
      * @param targetDir   外部目标目录
      */
-    public static void copyBuiltinFilesToDirectory(String prefix,String[] sourcePaths, Path targetDir) {
+    public static void copyBuiltinFilesToDirectory(String prefix, String[] sourcePaths, Path targetDir) {
         for (String sourcePath : sourcePaths) {
-            copyBuiltinFileToDirectory(prefix,sourcePath, targetDir.toString());
+            copyBuiltinFileToDirectory(prefix, sourcePath, targetDir.toString());
         }
     }
 
@@ -227,7 +225,7 @@ public class FileUtil {
      * @param sourcePaths 源文件数组
      * @param targetDir   外部目标目录
      */
-    public static void copyAyameBuiltinFilesToDirectory(String prefix,String[] sourcePaths, Path targetDir) {
+    public static void copyAyameBuiltinFilesToDirectory(String prefix, String[] sourcePaths, Path targetDir) {
         String[] fullPaths = Arrays.stream(sourcePaths)
                 .map(file -> "assets/ayame/" + file)
                 .toArray(String[]::new);

@@ -47,11 +47,9 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
     private static final int OPTION_SIZE = 24;
 
     private final List<IRouletteAction> rouletteActions;
+    private final ClientMusicPlayer clientMusicPlayer = new ClientMusicPlayer();
     private int selectedIndex;
     private long lastInputTime;
-
-    private final ClientMusicPlayer clientMusicPlayer = new ClientMusicPlayer();
-
     // 关闭计时
     private int closeCountdown = -10;
 
@@ -59,6 +57,36 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
         super(Component.empty());
         this.rouletteActions = rouletteActions;
         this.selectedIndex = 0; // 默认选中选项
+    }
+
+    public static void open() {
+        // TODO 获取动画
+        List<IRouletteAction> actions = new ArrayList<>();
+        actions.add(new DefaultRouletteAction(
+                ResourceLocation.withDefaultNamespace("textures/item/barrier.png"),
+                Component.translatable("gui.back"),
+                () -> Minecraft.getInstance().setScreen(null)
+        ));
+        for (String option : JsRouletteOption.getOptions()) {
+            String icon = JsRouletteOption.getIcon(option);
+            ResourceLocation iconRes;
+            // 默认使用apple的图标
+            if (icon == null) {
+                iconRes = ResourceLocation.withDefaultNamespace("textures/item/apple.png");
+            } else {
+                iconRes = ResourceLocation.tryParse(icon);
+                if (iconRes == null) {
+                    // 解析失败则使用屏障图标
+                    iconRes = ResourceLocation.withDefaultNamespace("textures/item/barrier.png");
+                }
+            }
+            actions.add(new DefaultRouletteAction(
+                    iconRes,
+                    Component.literal(option),
+                    () -> JsRouletteOption.trigger(new JsPlayer(getInstance().player), option)
+            ));
+        }
+        Minecraft.getInstance().setScreen(new AnimationRouletteScreen(actions));
     }
 
     @Override
@@ -73,8 +101,8 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
             int index = Math.floorMod(selectedIndex + offset, rouletteActions.size());
             double angle = Math.toRadians(90 - offset * 30);
 
-            int x = centerX + (int)(Math.cos(angle) * RADIUS);
-            int y = centerY - (int)(Math.sin(angle) * RADIUS);
+            int x = centerX + (int) (Math.cos(angle) * RADIUS);
+            int y = centerY - (int) (Math.sin(angle) * RADIUS);
 
             boolean isSelected = offset == 0;
             drawOption(guiGraphics, x, y, rouletteActions.get(index), isSelected);
@@ -93,7 +121,7 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
     public void tick() {
         super.tick();
         closeCountdown++;
-        if (closeCountdown>=5){
+        if (closeCountdown >= 5) {
             // 5tick后自动执行并关闭
             executeSelected();
         }
@@ -102,20 +130,20 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
     private void drawOption(GuiGraphics guiGraphics, int x, int y, IRouletteAction action, boolean selected) {
         // 绘制背景
         int color = selected ? 0x8000FF00 : 0x80808080;
-        guiGraphics.fill(x - OPTION_SIZE/2, y - OPTION_SIZE/2,
-                x + OPTION_SIZE/2, y + OPTION_SIZE/2, color);
+        guiGraphics.fill(x - OPTION_SIZE / 2, y - OPTION_SIZE / 2,
+                x + OPTION_SIZE / 2, y + OPTION_SIZE / 2, color);
 
         // 绘制图标（需要实现纹理加载）
         guiGraphics.blit(action.getIcon(), x - 8, y - 8, 0, 0, 16, 16, 16, 16);
 
         // 绘制名称
         Component name = action.getName();
-        guiGraphics.drawCenteredString(font, name, x, y + OPTION_SIZE/2 + 2, 0xFFFFFF);
+        guiGraphics.drawCenteredString(font, name, x, y + OPTION_SIZE / 2 + 2, 0xFFFFFF);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_X){
+        if (keyCode == GLFW.GLFW_KEY_X) {
             // 重置关闭计时
             closeCountdown = 0;
         }
@@ -127,7 +155,7 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
             navigate(1);
             return true;
         }
-        if (keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_DOWN){ // 上下键
+        if (keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_DOWN) { // 上下键
             clientMusicPlayer.randomSwitchMusic();
         }
         if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_SPACE) { // 空格或回车
@@ -195,44 +223,28 @@ public class AnimationRouletteScreen extends Screen implements ClientMusicPlayer
 
     public interface IRouletteAction {
         ResourceLocation getIcon();
+
         Component getName();
+
         void rouletteAction();
     }
 
-    public static void open() {
-        // TODO 获取动画
-        List<IRouletteAction> actions = new ArrayList<>();
-        actions.add(new DefaultRouletteAction(
-                ResourceLocation.withDefaultNamespace("textures/item/barrier.png"),
-                Component.translatable("gui.back"),
-                () -> Minecraft.getInstance().setScreen(null)
-        ));
-        for (String option: JsRouletteOption.getOptions()){
-            String icon = JsRouletteOption.getIcon(option);
-            ResourceLocation iconRes;
-            // 默认使用apple的图标
-            if (icon == null){
-                iconRes = ResourceLocation.withDefaultNamespace("textures/item/apple.png");
-            }else {
-                iconRes = ResourceLocation.tryParse(icon);
-                if (iconRes == null){
-                    // 解析失败则使用屏障图标
-                    iconRes = ResourceLocation.withDefaultNamespace("textures/item/barrier.png");
-                }
-            }
-            actions.add(new DefaultRouletteAction(
-                    iconRes,
-                    Component.literal(option),
-                    () -> JsRouletteOption.trigger(new JsPlayer(getInstance().player), option)
-            ));
+    private record DefaultRouletteAction(ResourceLocation icon, Component name,
+                                         Runnable action) implements IRouletteAction {
+        @Override
+        public ResourceLocation getIcon() {
+            return icon;
         }
-        Minecraft.getInstance().setScreen(new AnimationRouletteScreen(actions));
-    }
 
-    private record DefaultRouletteAction(ResourceLocation icon, Component name, Runnable action) implements IRouletteAction {
-        @Override public ResourceLocation getIcon() { return icon; }
-        @Override public Component getName() { return name; }
-        @Override public void rouletteAction() { action.run(); }
+        @Override
+        public Component getName() {
+            return name;
+        }
+
+        @Override
+        public void rouletteAction() {
+            action.run();
+        }
     }
 
 }

@@ -20,9 +20,6 @@
 
 package org.ayamemc.ayame;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import org.ayamemc.ayame.model.sync.FolderBasedModelLoader;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.data.ModelDataComponent;
@@ -33,14 +30,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Constants {
-    private static final Path BASE_DIR = Path.of("config/ayame");
-
-    public static final Path CACHE_DIR = BASE_DIR.resolve("cache");
-    public static final Path CACHE_DIR_SERVER = CACHE_DIR.resolve("server");
-    public static final Path CACHE_DIR_CLIENT = CACHE_DIR.resolve("client");
-
-    public static final Path MODELS_DIR = BASE_DIR.resolve("models");
-
     // Our default models
     @SuppressWarnings("SpellCheckingInspection")
     public static final Map<String, DefaultModelInfo> DEFAULT_MODELS = Map.of(
@@ -65,8 +54,11 @@ public class Constants {
                     )
             )
     );
-
-
+    private static final Path BASE_DIR = Path.of("config/ayame");
+    public static final Path CACHE_DIR = BASE_DIR.resolve("cache");
+    public static final Path CACHE_DIR_SERVER = CACHE_DIR.resolve("server");
+    public static final Path CACHE_DIR_CLIENT = CACHE_DIR.resolve("client");
+    public static final Path MODELS_DIR = BASE_DIR.resolve("models");
     public static Consumer<ModelDataComponent> DEFAULT_MODEL_DATA_MODIFIER = data -> {
         data.setCanUnload(false);
         data.setLoadAsDefaultModel(true);

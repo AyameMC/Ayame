@@ -37,9 +37,12 @@ declare interface Entity {
     /**
      * 生成粒子效果。
      * @param location  粒子效果路径
-     * @param xSpeed 
-     * @param ySpeed 
-     * @param zSpeed 
+     * @param x
+     * @param y
+     * @param z
+     * @param xSpeed
+     * @param ySpeed
+     * @param zSpeed
      */
-    spawnParticle<T extends string>(location: ResourceLocationString<T>, xSpeed: number, ySpeed: number, zSpeed: number);
+    spawnParticle<T extends string>(location: ResourceLocationString<T>, x: number, y: number, z: number, xSpeed: number, ySpeed: number, zSpeed: number);
 }

@@ -68,6 +68,13 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         this.itemInHandRenderer = context.getItemInHandRenderer();
     }
 
+    public static double execMolang(String molangCode) throws CompoundException {
+        MolangQueries.updateActor(GeoPlayerModel.animationState, GeoPlayerModel.aniTime);
+        final double result = MathParser.compileMolang(molangCode).get();
+        MolangQueries.clearActor();
+        return result;
+    }
+
     @Override
     public void preRender(PoseStack poseStack, Player animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
 //        poseStack.pushPose();
@@ -100,7 +107,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         // 渲染手持物品
         renderHeldItems(poseStack, bufferSource, packedLight, player, partialTick);
     }
-
 
     private void renderHeldItems(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
                                  Player player, float partialTick) {
@@ -154,7 +160,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             }
 
 
-
             itemInHandRenderer.renderItem(
                     entity,
                     itemStack,
@@ -181,7 +186,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         handRenderer.render(poseStack, new AyameHand(), buffer, null, null, packedLight, 0);
         poseStack.popPose();
     }
-
 
     protected static class GeoPlayerModel extends GeoModel<Player> {
         private static AnimationState<Player> animationState;
@@ -263,13 +267,6 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         public ResourceLocation getAnimationResource(Player animatable) {
             return this.getPlayerModelSelectionOrFallback(animatable).getAnimation();
         }
-    }
-
-    public static double execMolang(String molangCode) throws CompoundException {
-        MolangQueries.updateActor(GeoPlayerModel.animationState, GeoPlayerModel.aniTime);
-        final double result = MathParser.compileMolang(molangCode).get();
-        MolangQueries.clearActor();
-        return result;
     }
 
 }

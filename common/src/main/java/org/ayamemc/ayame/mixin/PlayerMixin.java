@@ -59,9 +59,6 @@ import java.util.function.Supplier;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IYttribumable {
-    @Shadow
-    protected abstract boolean freeAt(BlockPos pos);
-
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
     @Unique
@@ -72,12 +69,13 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
     private boolean ayame$isSitting = false;
     @Unique
     private boolean ayame$isHurting = false;
-
     @Unique
     private String ayame$playAnimationName;
-
     @Unique
     private boolean ayame$isLoopAnimation;
+
+    @Shadow
+    protected abstract boolean freeAt(BlockPos pos);
 
     @Unique
 //    private boolean ayame$isrResetAnimation = false;

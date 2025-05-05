@@ -36,11 +36,17 @@ public class JsYttribume {
         this.yttribume = yttribume;
     }
 
+    @JSStaticFunction
+    public static JsYttribume get(String location) {
+        ResourceLocation id = ResourceLocation.parse(location); // 创建ResourceLocation
+        Yttribume yttribume = Yttribumes.get(id); // 获取Yttribume对象
+        return new JsYttribume(id, yttribume); // 返回JsYttribume对象
+    }
+
     @JSGetter
     public String getId() {
         return id.toString(); // 返回完整的ResourceLocation字符串
     }
-
 
     @JSGetter
     public float getMinValue() {
@@ -58,14 +64,7 @@ public class JsYttribume {
     }
 
     @JSFunction
-    public boolean isRegal(float value,JsPlayer player) {
+    public boolean isRegal(float value, JsPlayer player) {
         return yttribume.isRegal(value, player.getEntity()); // 返回是否合法
-    }
-
-    @JSStaticFunction
-    public static JsYttribume get(String location) {
-        ResourceLocation id = ResourceLocation.parse(location); // 创建ResourceLocation
-        Yttribume yttribume = Yttribumes.get(id); // 获取Yttribume对象
-        return new JsYttribume(id, yttribume); // 返回JsYttribume对象
     }
 }

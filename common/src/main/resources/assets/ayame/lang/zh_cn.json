@@ -36,7 +36,6 @@
   "message.ayame.command.script.exec.error": "§d[§aAYAME§d] §c执行失败：%s",
   "message.ayame.command.script.exec.result": "§d[§aAYAME§d] §b> %s",
   "message.ayame.command.ts.version": "§d[§aAYAME§d] §9TypeScript §b版本：%s",
-
   "yttribume.ayame.empty": "空",
   "yttribume.ayame.model.scale": "模型渲染缩放",
   "yttribume.ayame.model.alpha": "模型透明度",
