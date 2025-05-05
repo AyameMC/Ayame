@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -136,33 +137,29 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
             int packedLight
     ) {
         if (!itemStack.isEmpty()) {
+            // 应用实体朝向
+            poseStack.mulPose(Axis.YP.rotationDegrees(-entity.getYRot()));
+
+            itemInHandRenderer.applyItemArmTransform(poseStack, arm, 0.0F);
+
             poseStack.pushPose();
 
-            // 获取手部骨骼并应用变换
             Optional<GeoBone> handBone = getGeoModel().getBone(
                     arm == HumanoidArm.RIGHT ? "RightHand" : "LeftHand"
             );
 
             if (handBone.isPresent()) {
-                // 应用骨骼的模型空间变换
                 Matrix4f boneMatrix = handBone.get().getModelSpaceMatrix();
                 poseStack.last().pose().mul(boneMatrix);
             }
 
-            // 调整物品方向
-//            poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
-//            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
-            // 调整位置偏移
-            boolean isLeft = arm == HumanoidArm.LEFT;
-//            poseStack.translate((isLeft ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
-            // 渲染物品
             itemInHandRenderer.renderItem(
                     entity,
                     itemStack,
                     displayContext,
-                    isLeft,
+                    arm == HumanoidArm.LEFT,
                     poseStack,
                     buffer,
                     packedLight
@@ -170,6 +167,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 
             poseStack.popPose();
         }
+
     }
 
     public void renderRightHand(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player) {
