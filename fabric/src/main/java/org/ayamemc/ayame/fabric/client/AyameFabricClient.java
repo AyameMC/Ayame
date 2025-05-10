@@ -24,7 +24,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.AyameKeyRegister;
+import org.ayamemc.ayame.fabric.AyameFabricSounds;
 import org.ayamemc.ayame.fabric.client.impl.FabricKeyMappingRegistryImpl;
+import org.ayamemc.ayame.util.ModLoader;
 
 /**
  * Fabric客户端初始化所使用的类
@@ -36,11 +38,12 @@ public final class AyameFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        AyameClient.init(new FabricKeyMappingRegistryImpl());
+        AyameClient.init(new FabricKeyMappingRegistryImpl(), ModLoader.FABRIC, AyameFabricSounds.AYAME_SOUND);
         FabricClientEventHandler.init();
 
         initKeyBinding();
     }
+
 
     private void initKeyBinding() {
         KeyBindingHelper.registerKeyBinding(AyameKeyRegister.MODEL_SELECT_MENU);
