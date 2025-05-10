@@ -18,19 +18,22 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// 做个卖萌轮盘，根据情绪系统改变，做全局变量
 
 let shakeValue = 0;
 
 
-// 示例：注册自定义 Molang 函数
-Molang.registerFunction('aym.math.parabola', (x: number) => {
-    return Math.sin(x * (Math.PI / 180));
+
+// 注册自定义 Molang 函数
+Molang.registerFunction('math.sinp2', (x: number) => {
+    const molangSin = Molang.exec(`math.sin(${x})`) as number;
+    return molangSin + Math.sin(x * (Math.PI / 180));
 });
 
 PlayerEvents.tick((event) => {
     const headRRotation = Molang.exec("query.head_x_rotation") as number;
     // logger.info(headRRotation)
-    const {player} = event;
+    const { player } = event;
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
     // player.setYttribume(scale, 2);
@@ -38,7 +41,7 @@ PlayerEvents.tick((event) => {
 
 PlayerEvents.keyPress((event) => {
 
-    const {player, key} = event;
+    const { player, key } = event;
     if (key === 0) {
         // 增大scale
         let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
@@ -64,7 +67,7 @@ PlayerEvents.keyPress((event) => {
 })
 
 PlayerEvents.attackEntity((event) => {
-    const {player, target} = event
+    const { player, target } = event
     const type = target.getType();
     logger.info(shakeValue.toString());
 
@@ -81,23 +84,25 @@ PlayerEvents.attackEntity((event) => {
 })
 
 RouletteOption.add("awsl", "minecraft:textures/block/tnt_side.png", (event) => {
-    const {player} = event
+    const { player } = event
     player.sendClientMessage("aswl！");
     player.playSound('minecraft:entity.panda.hurt', 1.0, 1.0);
     player.playAnim("special.death", false)
 });
 
 RouletteOption.add("坐下", "minecraft:textures/item/diamond.png", (event) => {
-    const {player} = event
+    const { player } = event
     player.sendChatMessage("坐下")
     player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.playAnim("state.sit", true)
 });
 
 RouletteOption.add("抱头蹲防", "minecraft:textures/item/diamond.png", (event) => {
-    const {player} = event
+    const { player } = event
     // player.playSound('ayame:models/ayame_chan/zufolo_impazzito.ogg', 1.0, 1.0);
     player.spawnParticle("minecraft:landing_obsidian_tear", player.getX() + 0.5, player.getY() + 0.5, player.getZ() + 0.5, 0.0, 0.0, 0.0)
     player.playAnim("抱头蹲防", true)
 });
+
+
 

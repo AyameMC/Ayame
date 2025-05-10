@@ -33,14 +33,18 @@ import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.IAyameClientEvents;
 import org.ayamemc.ayame.client.gui.screen.SettingsScreen;
+import org.ayamemc.ayame.neoforge.AyameNeoForgeSounds;
 import org.ayamemc.ayame.neoforge.client.event.NeoForgeClientEventHandler;
 import org.ayamemc.ayame.neoforge.client.impl.AyameClientEventsNeoForgeImpl;
 import org.ayamemc.ayame.neoforge.client.impl.NeoForgeKeyMappingRegistryImpl;
+import org.ayamemc.ayame.util.ModLoader;
 
 @Mod(value = Ayame.MOD_ID, dist = Dist.CLIENT)
 public class AyameNeoForgeClient {
     public AyameNeoForgeClient(IEventBus modBus) {
-        AyameClient.init(new NeoForgeKeyMappingRegistryImpl());
+        AyameNeoForgeSounds.SOUND_EVENTS.register(modBus);
+
+        AyameClient.init(new NeoForgeKeyMappingRegistryImpl(), ModLoader.NEOFORGE, AyameNeoForgeSounds.AYAME_SOUND.get());
 
         NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
 

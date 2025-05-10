@@ -25,7 +25,7 @@ import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
-import org.ayamemc.ayame.Ayame;
+import org.ayamemc.ayame.client.AyameClient;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -41,7 +41,7 @@ public class AyameSoundMusic extends AbstractTickableSoundInstance {
     private static final String LOCAL_FILE_PROTOCOL = "file";
 
     public AyameSoundMusic() {
-        super(Ayame.ayameSound, SoundSource.MUSIC, SoundInstance.createUnseededRandom());
+        super(AyameClient.ayameSound, SoundSource.MUSIC, SoundInstance.createUnseededRandom());
     }
 
     public static void play(String url, String songName, Function<URL, SoundInstance> sound) {

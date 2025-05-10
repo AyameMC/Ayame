@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.sounds.SoundEvent;
 import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
@@ -52,6 +53,8 @@ public class AyameClient {
     public static final Minecraft MINECRAFT = Minecraft.getInstance();
     private static final ClientModelLoader modelLoaderClient = new ClientModelLoader(modWorker, cacheDatabase, modelManagerClient);
     public static KeyMappingRegistry keyMappingRegistry;
+    public static String modLoader;
+    public static SoundEvent ayameSound;
 
     static {
         try {
@@ -61,8 +64,13 @@ public class AyameClient {
         }
     }
 
-    public static void init(@NotNull KeyMappingRegistry keyMappingRegistry) {
+    public static void init(@NotNull KeyMappingRegistry keyMappingRegistry,
+                            @NotNull String modLoader,
+                            @NotNull SoundEvent ayameSound) {
         AyameClient.keyMappingRegistry = keyMappingRegistry;
+        AyameClient.modLoader = modLoader;
+        AyameClient.ayameSound = ayameSound;
+
         ConfigUtil.init();
         AyameMolangs.registerMolangs();
 

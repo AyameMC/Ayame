@@ -30,7 +30,7 @@ public class AyameHand implements GeoAnimatable {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-
+        //
     }
 
     @Override
