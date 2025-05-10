@@ -19,29 +19,26 @@
  */
 
 architectury {
-    common rootProject.enabled_platforms.split(',')
+    common(rootProject.property("enabled_platforms").toString().split(','))
 }
 
 dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    modImplementation("net.fabricmc:fabric-loader:$rootProject.fabric_loader_version")
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.property("fabric_loader_version")}")
 
     // GeckoLib
-    modImplementation("software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}")
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${rootProject.property("minecraft_version")}:${rootProject.property("geckolib_version")}")
     // Ayame PaperDoll
-    modImplementation("maven.modrinth:ayame-paperdoll:${ayame_paperdoll_version}-fabric")
+    modImplementation("maven.modrinth:ayame-paperdoll:${rootProject.property("ayame_paperdoll_version")}-fabric")
     // Rhino库
-    implementation("org.mozilla:rhino:${rhino_version}")
+    implementation("org.mozilla:rhino:${rootProject.property("rhino_version")}")
     // Mocha 库
-    implementation("team.unnamed:mocha:${mocha_version}")
-    // include("org.mozilla:rhino:${rhino_version}")
-}
+    implementation("team.unnamed:mocha:${rootProject.property("mocha_version")}")
 
-repositories {
-    mavenCentral()
 }
 loom {
-    accessWidenerPath = file("${mod_access_widener_path}")
+    accessWidenerPath = file("${rootProject.property("mod_access_widener_path")}")
 }
+

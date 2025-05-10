@@ -35,7 +35,7 @@ public final class AyameFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         AyameFabricSounds.init();
-        Ayame.init(ModLoader.FABRIC, AyameFabricSounds.AYAME_SOUND);
+        Ayame.init();
         IAyameClientEvents.Instance.INSTANCE = new AyameClientEventsFabricImpl();
     }
 }
