@@ -20,6 +20,13 @@
 
 package org.ayamemc.ayame.client.script;
 
+import com.mojang.brigadier.StringReader;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.commands.arguments.ParticleArgument;
+import net.minecraft.core.particles.ParticleGroup;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -77,6 +84,7 @@ public class JsEntity {
 
     @JSFunction
     public void spawnParticle(String id, double x, double y, double z, float xSpeed, float ySpeed, float zSpeed) {
-        entity.level().addParticle(() -> BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(id)), x, y, z, xSpeed, ySpeed, zSpeed);
+        entity.level().addParticle((ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(ResourceLocation.parse(id)), x, y, z, xSpeed, ySpeed, zSpeed);
     }
+
 }

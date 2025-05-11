@@ -18,14 +18,17 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.model;
+package org.ayamemc.ayame.model.molang;
 
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.model.molang.function.MinAngleFunction;
 import org.ayamemc.ayame.util.MolangUtil;
 import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.MolangQueries;
+import software.bernie.geckolib.loading.math.function.MathFunction;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.function.ToDoubleFunction;
@@ -98,7 +101,17 @@ public class AyameMolangs {
      */
     public static final String BODY_HEAD_DIFF = "aym.body_head_diff";
 
+    // Functions
+    public static final String MIN_ANGLE = "math.min_angle";
+
     public static void registerMolangs() {
+
+        MathParser.registerFunction(
+                "math.min_angle",
+                MinAngleFunction::new
+        );
+
+
         MolangQueries.setActorVariable(WHICH_PERSON, (ToDoubleFunction<MolangQueries.Actor<Player>>) actor -> {
             final Minecraft minecraft = actor.mc();
             final CameraType person = minecraft.options.getCameraType();

@@ -36,7 +36,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameMolangs;
+import org.ayamemc.ayame.model.molang.AyameMolangs;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

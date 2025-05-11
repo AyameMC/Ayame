@@ -26,7 +26,7 @@ import net.minecraft.sounds.SoundEvent;
 import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.api.KeyMappingRegistry;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.AyameMolangs;
+import org.ayamemc.ayame.model.molang.AyameMolangs;
 import org.ayamemc.ayame.model.sync.IModelLoader;
 import org.ayamemc.ayame.model.sync.ModelCacheDatabase;
 import org.ayamemc.ayame.model.sync.client.ClientModelLoader;
