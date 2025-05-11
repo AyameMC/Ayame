@@ -11,6 +11,7 @@
   "mixins": [
     "AnimationControllerMixin",
     "GeckoLibCacheMixin",
+    "GeoModelMixin",
     "MathParserMixin",
     "PlayerMixin",
     "accessor.AnimationControllerAccessor",
