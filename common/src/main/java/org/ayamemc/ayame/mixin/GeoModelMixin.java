@@ -26,13 +26,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import software.bernie.geckolib.GeckoLibConstants;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.AnimationProcessor;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
 
-@Mixin(GeoModel.class)
-public abstract class GeoModelMixin {
+@Mixin(value = GeoModel.class, remap = false)
+public abstract class GeoModelMixin<T extends GeoAnimatable> {
     @Shadow private BakedGeoModel currentModel;
 
     @Shadow @Final private AnimationProcessor<T> processor;
