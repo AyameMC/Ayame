@@ -1,28 +1,3 @@
-/*
-    neoForge("net.neoforged:neoforge:${project.findProperty("neoforge_version")}")
-
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
-
-    // 不要使用modImplementation，否则IO会爆炸
-    // GeckoLib
-    implementation("software.bernie.geckolib:geckolib-neoforge-${project.findProperty("minecraft_version")}:${project.findProperty("geckolib_version")}")
-    // Ayame PaperDoll
-    implementation("maven.modrinth:ayame-paperdoll:${project.findProperty("ayame_paperdoll_version")}-neoforge")
-
-    // Rhino库
-    implementation("org.mozilla:rhino:${project.findProperty("rhino_version")}")
-    forgeRuntimeLibrary("org.mozilla:rhino:${project.findProperty("rhino_version")}")
-    include("org.mozilla:rhino:${project.findProperty("rhino_version")}")
-
-    // Mocha 库
-    implementation("team.unnamed:mocha:${project.findProperty("mocha_version")}")
-    forgeRuntimeLibrary("team.unnamed:mocha:${project.findProperty("mocha_version")}")
-    include("team.unnamed:mocha:${project.findProperty("mocha_version")}")
-
-    // Mocha库额外依赖
-    include("org.javassist:javassist:${project.findProperty("javassist_version")}")
- */
 
 plugins {
     id("com.github.johnrengelman.shadow")
@@ -140,7 +115,7 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
 tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     dependsOn("shadowJar")
     val shadowJarTask = tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar")
-    input.set(shadowJarTask.flatMap { it.archiveFile })
+    inputFile.set(shadowJarTask.get().archiveFile)
     injectAccessWidener.set(true)
     atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 }
