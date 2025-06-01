@@ -46,6 +46,7 @@ import software.bernie.geckolib.loading.object.BakedModelFactory;
 import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +71,10 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
     public InMemoryModelData(Map<String, byte[]> dataStorage, boolean canUnload, boolean isDefaultModel) {
         this.internalDataStorage.putAll(dataStorage);
-        this.modelMetaData = AyameModelData.parse(this.getIndexJson().toString());
+        byte[] jsonData = this.internalDataStorage.get("ayame.json");
+        if (jsonData == null) throw new IllegalStateException("ayame.json not found!");
+        String jsonString = new String(jsonData, StandardCharsets.UTF_8);
+        this.modelMetaData = AyameModelData.parse(jsonString);
         this.canUnload = canUnload;
         this.isDefaultModel = isDefaultModel;
     }
@@ -91,6 +95,11 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
     public void restoreFrom(Map<String, byte[]> data) {
         this.internalDataStorage.putAll(data);
+        byte[] jsonData = this.internalDataStorage.get("ayame.json");
+        if (jsonData != null) {
+            String jsonString = new String(jsonData, StandardCharsets.UTF_8);
+            this.modelMetaData = AyameModelData.parse(jsonString);
+        }
     }
 
     @Override
@@ -148,6 +157,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
         return new ByteArrayInputStream(target);
     }
 
+    // TODO: 修复model null问题
     @Override
     public JsonInterpreter getModelJson(AyameModelData.@NotNull ModelData model) {
         return JsonInterpreter.of(this.getDataAsStream(model.model));
@@ -181,7 +191,6 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
                 .setId(this.getId())
                 .build();
     }
-
 
 
     @Override

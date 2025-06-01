@@ -61,6 +61,8 @@ public class AyameModelData {
         public String name;
         @SerializedName("scale")
         public float scale;
+        @SerializedName("model")
+        public String model;
         @SerializedName("animation")
         public String animation;
         @SerializedName("texture")
