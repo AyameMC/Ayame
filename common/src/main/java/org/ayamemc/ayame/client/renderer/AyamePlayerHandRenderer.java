@@ -39,13 +39,11 @@ public class AyamePlayerHandRenderer extends GeoObjectRenderer<AyameHand> {
 
     public static class GeoHandModel extends GeoModel<AyameHand> {
 
-        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getModelResource(AyameHand animatable) {
             return Ayame.withAyamePath("geo/ayame/ayame_chan_hand.json");
         }
 
-        @SuppressWarnings("removal")
         @Override
         public ResourceLocation getTextureResource(AyameHand animatable) {
             return Ayame.withAyamePath("textures/ayame/ayame_chan.png");

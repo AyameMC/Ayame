@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.model.sync.data;
 
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.ayamemc.ayame.model.AyameModelData;
@@ -29,106 +28,108 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * 默认模型类型，适用于Ayame模型
- *
- * @param geoModel  模型文件
- * @param animation 动画文件
- * @param texture   贴图文件
- * @param id        模型id
+ * 统一持有 ModelData
  */
+public class DefaultModelSelection implements ModelSelection {
+    private final ModelData data;
 
-public record DefaultModelSelection(ResourceLocation geoModel,
-                                    ResourceLocation animation,
-                                    ResourceLocation texture,
-                                    ResourceLocation arm,
-                                    String id,
-                                    AyameModelData.ScriptData scriptData
-) implements ModelSelection {
+    public DefaultModelSelection(ModelData data) {
+        this.data = data;
+    }
 
     @Override
     public @NotNull CompoundTag serializeToNbt() {
         final CompoundTag built = new CompoundTag();
-
-        built.putString("geo_model", this.geoModel.toString());
-        built.putString("animation", this.animation.toString());
-        built.putString("texture", this.texture.toString());
-        built.putString("arm", this.arm.toString());
-        built.putString("model_id", this.id);
-
+        built.putString("geo_model", data.geoModel().toString());
+        built.putString("animation", data.animation().toString());
+        built.putString("texture", data.texture().toString());
+        built.putString("arm", data.arm().toString());
+        built.putString("model_id", data.id());
+        built.putFloat("scale", data.scale());
         final CompoundTag scriptData = new CompoundTag();
-
-        scriptData.putString("main", this.scriptData.main);
-
+        scriptData.putString("main", data.scriptData().main);
         built.put("script_data", scriptData);
-
         return built;
     }
 
     @Override
     public ModelSelection fromNbt(CompoundTag tag) {
         final CompoundTag scriptDataNbt = (CompoundTag) tag.get("script_data");
-
         final AyameModelData.ScriptData scriptData = new AyameModelData.ScriptData();
-
         scriptData.main = scriptDataNbt.getString("main");
-
-        return new DefaultModelSelection(
+        ModelData modelData = new ModelData(
                 ResourceLocation.parse(tag.getString("geo_model")),
                 ResourceLocation.parse(tag.getString("animation")),
                 ResourceLocation.parse(tag.getString("texture")),
                 ResourceLocation.parse(tag.getString("arm")),
                 tag.getString("model_id"),
-                scriptData
+                scriptData,
+                tag.contains("scale") ? tag.getFloat("scale") : 1.0f
         );
+        return new DefaultModelSelection(modelData);
     }
 
     @Override
     public ResourceLocation getGeoModel() {
-        return geoModel;
+        return data.geoModel();
     }
 
     @Override
     public ResourceLocation getTexture() {
-        return texture;
+        return data.texture();
     }
 
     @Override
     public ResourceLocation getAnimation() {
-        return animation;
+        return data.animation();
     }
 
     @Override
     public ResourceLocation getArm() {
-        return arm;
+        return data.arm();
     }
 
     @Override
     public String getId() {
-        return this.id;
+        return data.id();
+    }
+
+    @Override
+    public AyameModelData.ScriptData scriptData() {
+        return data.scriptData();
+    }
+
+    public float getScale() {
+        return data.scale();
+    }
+
+    public ModelData getModelData() {
+        return data;
     }
 
     @Override
     public ModelSelection withArm(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, location, this.id, this.scriptData);
+        return new DefaultModelSelection(new ModelData(data.geoModel(), data.animation(), data.texture(), location, data.id(), data.scriptData(), data.scale()));
     }
 
     @Override
     public ModelSelection withGeoModel(ResourceLocation location) {
-        return new DefaultModelSelection(location, this.animation, this.texture, this.arm, this.id, this.scriptData);
+        return new DefaultModelSelection(new ModelData(location, data.animation(), data.texture(), data.arm(), data.id(), data.scriptData(), data.scale()));
     }
 
     @Override
     public ModelSelection withTexture(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, this.animation, location, this.arm, this.id, this.scriptData);
+        return new DefaultModelSelection(new ModelData(data.geoModel(), data.animation(), location, data.arm(), data.id(), data.scriptData(), data.scale()));
     }
 
     @Override
     public ModelSelection withAnimation(ResourceLocation location) {
-        return new DefaultModelSelection(this.geoModel, location, this.texture, this.arm, this.id, this.scriptData);
+        return new DefaultModelSelection(new ModelData(data.geoModel(), location, data.texture(), data.arm(), data.id(), data.scriptData(), data.scale()));
     }
 
     @Override
     public ModelSelection withScriptData(AyameModelData.ScriptData scriptData) {
-        return new DefaultModelSelection(this.geoModel, this.animation, this.texture, this.arm, this.id, scriptData);
+        return new DefaultModelSelection(new ModelData(data.geoModel(), data.animation(), data.texture(), data.arm(), data.id(), scriptData, data.scale()));
     }
 
     public static class Builder {
@@ -138,7 +139,7 @@ public record DefaultModelSelection(ResourceLocation geoModel,
         private ResourceLocation arm;
         private String id;
         private AyameModelData.ScriptData scriptData;
-
+        private float scale = 1.0f;
 
         public static Builder create() {
             return new Builder();
@@ -174,8 +175,13 @@ public record DefaultModelSelection(ResourceLocation geoModel,
             return this;
         }
 
+        public Builder setScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
         public DefaultModelSelection build() {
-            return new DefaultModelSelection(geoModel, animation, texture, arm, this.id, scriptData);
+            return new DefaultModelSelection(new ModelData(geoModel, animation, texture, arm, this.id, scriptData, scale));
         }
     }
 }

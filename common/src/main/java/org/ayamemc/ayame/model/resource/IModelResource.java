@@ -27,7 +27,6 @@ import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.util.JsonInterpreter;
 
 import java.io.InputStream;
-import java.util.List;
 
 public interface IModelResource {
 
@@ -38,7 +37,7 @@ public interface IModelResource {
 
     String getId();
 
-    List<AyameModelData.ModelData> getModels();
+    AyameModelData.ModelData getDefaultModel();
 
     JsonInterpreter getModelJson(AyameModelData.ModelData model);
 
@@ -52,7 +51,6 @@ public interface IModelResource {
 
     AyameModelData.ModelData getModelData(String modelName);
 
-     AyameModelData.ModelData getDefault();
 
     default ResourceLocation createModelResourceLocation() {
         return Ayame.withAyamePath("geo/" + getId() + ".json");

@@ -47,7 +47,6 @@ import software.bernie.geckolib.loading.object.GeometryTree;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.ayamemc.ayame.Ayame.MOD_ID;
@@ -117,7 +116,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
     @Override
     public AyameModelData.ModelData getModelData(String modelName) {
         // Find the model data by name
-        return this.modelMetaData.models.stream()
+        return this.modelMetaData.model.subModels.stream()
                 .filter(modelData -> modelData.name.equals(modelName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Model data not found for name: " + modelName));
@@ -134,8 +133,8 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
     }
 
     @Override
-    public List<AyameModelData.ModelData> getModels() {
-        return this.modelMetaData.models;
+    public AyameModelData.ModelData getDefaultModel() {
+        return this.modelMetaData.model;
     }
 
     @Contract("_ -> new")
@@ -183,10 +182,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
                 .build();
     }
 
-    @Override
-    public AyameModelData.ModelData getDefault() {
-        return getModels().getFirst();
-    }
+
 
     @Override
     public boolean isDefaultModel() {
@@ -275,14 +271,14 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
         public static BakedGeoModel instanceBakedModel(@NotNull IModelResource resource) {
             Model m = KeyFramesAdapter.GEO_GSON
-                    .fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON, resource.getModelJson(resource.getDefault()).toString(), JsonObject.class), Model.class);
+                    .fromJson(GsonHelper.fromJson(KeyFramesAdapter.GEO_GSON, resource.getModelJson(resource.getDefaultModel()).toString(), JsonObject.class), Model.class);
 
             return BakedModelFactory.getForNamespace(MOD_ID).constructGeoModel(GeometryTree.fromModel(m));
         }
 
         public static BakedAnimations instanceBakedAnimation(@NotNull IModelResource resource) {
             return KeyFramesAdapter.GEO_GSON
-                    .fromJson(GsonHelper.getAsJsonObject(resource.getAnimationJson(resource.getDefault()).toGson(), "animations"), BakedAnimations.class);
+                    .fromJson(GsonHelper.getAsJsonObject(resource.getAnimationJson(resource.getDefaultModel()).toGson(), "animations"), BakedAnimations.class);
         }
 
         public static void addBakedAnimationFromModelResource(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
@@ -296,7 +292,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
         public static void registerTextureDynamically(ResourceLocation resourceLocation, @NotNull IModelResource modelRes) {
             try {
-                MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefault()))));
+                MINECRAFT.getTextureManager().register(resourceLocation, new DynamicTexture(NativeImage.read(modelRes.getTexture(modelRes.getDefaultModel()))));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

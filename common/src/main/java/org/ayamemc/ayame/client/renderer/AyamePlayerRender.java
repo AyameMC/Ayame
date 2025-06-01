@@ -11,8 +11,7 @@
  *
  *     Ayame is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU Lesser General Public License for more details.
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
  *
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
@@ -85,7 +84,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.getModel(modelId);
 
         final float yttribumeScale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
-        final float jsonScale = modelSelection.getDefault().scale;
+        final float jsonScale = modelSelection != null ? modelSelection.getDefaultModel().scale : 1.0f;
         final float scale = yttribumeScale * jsonScale;
 //        if (animatable.isCrouching()) {
 //            poseStack.translate(0.0D, -0.9D, 0.0D);
@@ -276,3 +275,4 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
     }
 
 }
+

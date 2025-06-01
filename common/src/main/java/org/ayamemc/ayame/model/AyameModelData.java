@@ -24,6 +24,7 @@ package org.ayamemc.ayame.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class AyameModelData {
     public short version;
     @SerializedName("metadata")
     public MetaData metadata;
-    @SerializedName("models")
-    public List<ModelData> models;
+    @SerializedName("model")
+    public ModelData model;
     @SerializedName("script")
     public ScriptData script;
 
@@ -56,20 +57,20 @@ public class AyameModelData {
      */
     public static class ModelData {
         @SerializedName("name")
+        @Nullable
         public String name;
-        @SerializedName("model")
-        public String model;
+        @SerializedName("scale")
+        public float scale;
         @SerializedName("animation")
         public String animation;
         @SerializedName("texture")
         public String texture;
         @SerializedName("arm")
         public String arm;
-        @SerializedName("scale")
-        public float scale;
+        @SerializedName("sub_models")
+        public List<ModelData> subModels = new ArrayList<>();
         @SerializedName("controllers")
         public List<String> controllers = new ArrayList<>();
-
     }
 
     /**
@@ -92,8 +93,6 @@ public class AyameModelData {
         public List<String> links;
         @SerializedName("tags")
         public List<String> tags;
-
-
     }
 
     public static class ScriptData {

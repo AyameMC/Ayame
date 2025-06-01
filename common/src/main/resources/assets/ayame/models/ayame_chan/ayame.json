@@ -17,16 +17,16 @@
       "girl"
     ]
   },
-  "models": [
-    {
-      "name": "默认",
-      "scale": 0.65,
-      "model": "default/model.json",
-      "animation": "default/animation.json",
-      "texture": "default/texture.png",
-      "arm": "default/arm.json"
-    }
-  ],
+  "model": {
+    "scale": 0.65,
+    "model": "default/model.json",
+    "animation": "default/animation.json",
+    "texture": "default/texture.png",
+    "arm": "default/arm.json",
+    "sub_models": [
+
+    ]
+  },
   "script": {
     "main": "script/main.aym.ts"
   }
