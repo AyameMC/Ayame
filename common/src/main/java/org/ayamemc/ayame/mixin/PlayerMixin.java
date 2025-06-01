@@ -21,16 +21,14 @@
 package org.ayamemc.ayame.mixin;
 
 
+import com.google.common.math.DoubleMath;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.phys.Vec3;
-import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.api.PlayerMixinInterface;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
@@ -54,8 +52,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 
 /**
@@ -133,13 +129,13 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
                             state.setAndContinue(AyameAnimations.MOVE_FLY) : null,
 
                     // 潜行，不动，有效
-                    () -> (!ayame$isWalking(player) && (pose == Pose.CROUCHING)) ?
+                    () -> (!ayame$isMoving(player) && (pose == Pose.CROUCHING)) ?
                             state.setAndContinue(AyameAnimations.MOVE_SNEAK_STILL) : null,
                     // 潜行，移动，有效
                     () -> ((pose == Pose.CROUCHING)) ?
                             state.setAndContinue(AyameAnimations.MOVE_SNEAKING) : null,
                     // 游泳，不动（直立），有效
-                    () -> (!ayame$isWalking(player) && (pose == Pose.SWIMMING)) ?
+                    () -> (!ayame$isMoving(player) && (pose == Pose.SWIMMING)) ?
                             state.setAndContinue(AyameAnimations.MOVE_SWIM_STAND) : null,
                     // 游泳，移动，有效
                     () -> ((pose == Pose.SWIMMING)) ?
@@ -147,7 +143,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
 
                     // 在活版门状态，todo 修复无效问题
-                    () -> ((pose == Pose.SWIMMING) && !ayame$isWalking(player) && player.hasLandedInLiquid()) ?
+                    () -> ((pose == Pose.SWIMMING) && !ayame$isMoving(player) && player.hasLandedInLiquid()) ?
                             state.setAndContinue(AyameAnimations.MOVE_CLIMB_STILL) : null,
                     // 在活版门状态，todo 修复无效问题
                     () -> ((pose == Pose.SWIMMING) && !player.isInLiquid()) ?
@@ -156,10 +152,10 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
                     () -> (pose == Pose.FALL_FLYING) ?
                             state.setAndContinue(AyameAnimations.MOVE_ELYTRA_FLY) : null,
                     // 朴实无华地走，有效
-                    () -> (ayame$isWalking(player) && !player.isSprinting()) ?
+                    () -> (ayame$isMoving(player) && !player.isSprinting()) ?
                             state.setAndContinue(AyameAnimations.MOVE_WALK) : null,
                     // 疾跑，有效
-                    () -> (ayame$isWalking(player) && player.isSprinting()) ?
+                    () -> (ayame$isMoving(player) && player.isSprinting()) ?
                             state.setAndContinue(AyameAnimations.MOVE_RUN) : null,
 
 
@@ -173,10 +169,10 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
                     //  玩家的一些移动状态
                     // 坐着，船有效，todo 修复无效问题 比如，马不行
-                    () -> ((!ayame$isWalking(player) && (pose == Pose.SITTING)) || (player.getVehicle() != null)) ?
+                    () -> ((!ayame$isMoving(player) && (pose == Pose.SITTING)) || (player.getVehicle() != null)) ?
                             state.setAndContinue(AyameAnimations.STATE_SIT) : null,
                     // 禁止不动，有效
-                    () -> (!ayame$isWalking(player)) ?
+                    () -> (!ayame$isMoving(player)) ?
                             state.setAndContinue(AyameAnimations.STATE_IDLE) : null
 
             );
@@ -319,8 +315,9 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
 
     @Unique
-    public boolean ayame$isWalking(Player player) {
-        return player.onGround()
-                && player.getDeltaMovement().horizontalDistanceSqr() > 0.0001;
+    public boolean ayame$isMoving(Player player) {
+        return !(DoubleMath.fuzzyEquals(player.getX(), player.xOld, 0.0001)
+                && DoubleMath.fuzzyEquals(player.getZ(), player.zOld, 0.0001));
     }
+
 }

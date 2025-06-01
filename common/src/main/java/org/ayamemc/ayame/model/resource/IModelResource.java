@@ -50,9 +50,9 @@ public interface IModelResource {
 
     ModelSelection getFallbackModelSelection();
 
-    default AyameModelData.ModelData getDefault() {
-        return getModels().getFirst();
-    }
+    AyameModelData.ModelData getModelData(String modelName);
+
+     AyameModelData.ModelData getDefault();
 
     default ResourceLocation createModelResourceLocation() {
         return Ayame.withAyamePath("geo/" + getId() + ".json");

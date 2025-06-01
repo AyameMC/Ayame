@@ -71,14 +71,14 @@ PlayerEvents.attackEntity((event) => {
     const type = target.getType();
     logger.info(shakeValue.toString());
 
-    let shake = yttribume.get('ayame:global.screen.shake');
-    shakeValue = shakeValue + 1;
-    player.setYttribume(shake, shakeValue);
-    if (shakeValue > 3) {
-        player.sendClientMessage(`§d晕晕晕...`)
-    } else {
-        player.sendClientMessage(`§a晕晕晕aaa...`)
-    }
+    // let shake = yttribume.get('ayame:global.screen.shake');
+    // shakeValue = shakeValue + 1;
+    // player.setYttribume(shake, shakeValue);
+    // if (shakeValue > 3) {
+    //     player.sendClientMessage(`§d晕晕晕...`)
+    // } else {
+    //     player.sendClientMessage(`§a晕晕晕aaa...`)
+    // }
 
 
 })

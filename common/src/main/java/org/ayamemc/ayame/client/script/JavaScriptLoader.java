@@ -66,7 +66,7 @@ public class JavaScriptLoader {
                 context.setLanguageVersion(Context.VERSION_ECMASCRIPT);
 
                 final UUID playerUUID = MINECRAFT.player.getUUID();
-                final String modelId = AyameClient.modelManagerClient.getModelOfPlayer(playerUUID).getId();
+                final String modelId = AyameClient.modelManagerClient.getLocalPlayerModel().getId();
                 final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.getModel(modelId);
 
                 if (modelSelection == null) {

@@ -20,6 +20,7 @@
   "models": [
     {
       "name": "默认",
+      "scale": 0.65,
       "model": "default/model.json",
       "animation": "default/animation.json",
       "texture": "default/texture.png",

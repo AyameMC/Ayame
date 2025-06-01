@@ -20,40 +20,8 @@
 
 package org.ayamemc.ayame.client.yttribume;
 
-public class Yttribume {
-    private final float defaultValue;
-    private final float min;
-    private final float max;
-    private final AttributeType type;
-    private final boolean hideInGui;
-
-    public Yttribume(float defaultValue, float min, float max, AttributeType type, boolean hideInGui) {
-        this.defaultValue = defaultValue;
-        this.min = min;
-        this.max = max;
-        this.type = type;
-        this.hideInGui = hideInGui;
-    }
-
-    public float defaultValue() {
-        return defaultValue;
-    }
-
-    public float min() {
-        return min;
-    }
-
-    public float max() {
-        return max;
-    }
-
-    public AttributeType type() {
-        return type;
-    }
-
-    public boolean hideInGui() {
-        return hideInGui;
-    }
+public record Yttribume(float defaultValue, float min, float max,
+                        org.ayamemc.ayame.client.yttribume.Yttribume.AttributeType type, boolean hideInGui) {
 
     //判断是否在范围内
     public boolean isRegal(float value, IYttribumable yttribumable) {

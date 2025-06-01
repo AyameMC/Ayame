@@ -45,6 +45,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
+
 
 public class AyameClient {
     public static final ExecutorService modWorker = Executors.newCachedThreadPool();
@@ -140,7 +142,7 @@ public class AyameClient {
         for (File targetFile : files) {
             modelLoaderClient.loadModelAsync(targetFile, null).whenComplete((unused, ex) -> {
                 if (ex != null) {
-                    ex.printStackTrace();
+                    LOGGER.error(ex.getMessage(), ex);
                 }
 
                 final int curr = taskCountDown.decrementAndGet();

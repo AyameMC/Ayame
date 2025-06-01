@@ -65,6 +65,8 @@ public class AyameModelData {
         public String texture;
         @SerializedName("arm")
         public String arm;
+        @SerializedName("scale")
+        public float scale;
         @SerializedName("controllers")
         public List<String> controllers = new ArrayList<>();
 

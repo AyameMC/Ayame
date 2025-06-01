@@ -38,6 +38,7 @@ import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.molang.AyameMolangs;
 import org.ayamemc.ayame.model.sync.ModelSelection;
+import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -80,7 +81,12 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
 //        poseStack.pushPose();
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         // 实体缩放
-        float scale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
+        final String modelId = AyameClient.modelManagerClient.getLocalPlayerModel().getId();
+        final @Nullable InMemoryModelData modelSelection = AyameClient.modelManagerClient.getModel(modelId);
+
+        final float yttribumeScale = animatable.ayame$getYttribume(Yttribumes.MODEL_SCALE);
+        final float jsonScale = modelSelection.getDefault().scale;
+        final float scale = yttribumeScale * jsonScale;
 //        if (animatable.isCrouching()) {
 //            poseStack.translate(0.0D, -0.9D, 0.0D);
 //        }
@@ -195,7 +201,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         private ModelSelection getPlayerModelSelectionOrFallback(@NotNull Player player) {
             final UUID playerUUID = player.getUUID();
 
-            ModelSelection ret = AyameClient.modelManagerClient.getModelOfPlayer(playerUUID);
+            ModelSelection ret = AyameClient.modelManagerClient.getLocalPlayerModel();
 
             final String selectedModelId = ret.getId();
 

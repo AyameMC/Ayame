@@ -32,6 +32,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
+
 /**
  * 用于管理已经加载的模型和服务端发给客户端的实体数据
  *
@@ -163,6 +165,12 @@ public class ClientModelManager {
 
         return this.playerModelSelections.computeIfAbsent(playerUUID, unused -> defaultModelResource.get().getFallbackModelSelection());
     }
+
+    public ModelSelection getLocalPlayerModel() {
+        final UUID playerUUID = MINECRAFT.player.getUUID();
+        return this.getModelOfPlayer(playerUUID);
+    }
+
 
     /**
      * 检查是否有某个模型

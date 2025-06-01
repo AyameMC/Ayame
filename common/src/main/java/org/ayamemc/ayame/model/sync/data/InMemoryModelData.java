@@ -115,6 +115,15 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
     }
 
     @Override
+    public AyameModelData.ModelData getModelData(String modelName) {
+        // Find the model data by name
+        return this.modelMetaData.models.stream()
+                .filter(modelData -> modelData.name.equals(modelName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Model data not found for name: " + modelName));
+    }
+
+    @Override
     public AyameModelData.ScriptData getScriptData() {
         return this.modelMetaData.script;
     }
@@ -145,6 +154,7 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
         return JsonInterpreter.of(this.getDataAsStream(model.model));
     }
 
+
     @Override
     public JsonInterpreter getAnimationJson(AyameModelData.@NotNull ModelData model) {
         return JsonInterpreter.of(this.getDataAsStream(model.animation));
@@ -155,10 +165,12 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
         return this.getDataAsStream(model.texture);
     }
 
+
     @Override
     public JsonInterpreter getArmJson(AyameModelData.@NotNull ModelData model) {
         return JsonInterpreter.of(this.getDataAsStream(model.arm));
     }
+
 
     @Override
     public ModelSelection getFallbackModelSelection() {
@@ -169,6 +181,11 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
                 .setTexture(this.createTextureResourceLocation())
                 .setId(this.getId())
                 .build();
+    }
+
+    @Override
+    public AyameModelData.ModelData getDefault() {
+        return getModels().getFirst();
     }
 
     @Override

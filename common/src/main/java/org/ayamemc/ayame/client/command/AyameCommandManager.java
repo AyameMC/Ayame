@@ -158,7 +158,7 @@ public class AyameCommandManager {
 
                         .then(LiteralArgumentBuilder.<T>literal("reload")
                                 .executes(commandContext -> {
-                                    final ModelSelection selection = AyameClient.modelManagerClient.getModelOfPlayer(MINECRAFT.player.getUUID());
+                                    final ModelSelection selection = AyameClient.modelManagerClient.getLocalPlayerModel();
                                     final InMemoryModelData modelRes = AyameClient.modelManagerClient.getModel(selection.getId());
 
 
