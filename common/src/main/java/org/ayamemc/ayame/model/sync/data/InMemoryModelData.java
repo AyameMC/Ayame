@@ -159,8 +159,8 @@ public class InMemoryModelData implements ISerializableModelResource, IRegistrab
 
     // TODO: 修复model null问题
     @Override
-    public JsonInterpreter getModelJson(AyameModelData.@NotNull ModelData model) {
-        return JsonInterpreter.of(this.getDataAsStream(model.model));
+    public JsonInterpreter getModelJson(AyameModelData.@NotNull ModelData modelData) {
+        return JsonInterpreter.of(this.getDataAsStream(modelData.model));
     }
 
 
