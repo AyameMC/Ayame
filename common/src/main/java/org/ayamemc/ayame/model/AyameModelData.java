@@ -58,7 +58,7 @@ public class AyameModelData {
     public static class ModelData {
         @SerializedName("name")
         @Nullable
-        public String name;
+        public String name = "default";
         @SerializedName("scale")
         public float scale;
         @SerializedName("model")

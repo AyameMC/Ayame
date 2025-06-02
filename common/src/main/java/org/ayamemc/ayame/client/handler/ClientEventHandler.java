@@ -34,6 +34,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.ayamemc.ayame.client.AyameClient;
+import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AnimationRouletteScreen;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
@@ -105,9 +106,9 @@ public class ClientEventHandler {
         getPlayer().ayame$setYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET, getPlayer().ayame$getYttribume(Yttribumes.GLOBAL_CAMERA_Y_OFFSET) + offset);
     }
 
-    public static void tick(Minecraft minecraft) {
+    public static void onClientTickStart() {
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
-        JsPlayerTickEvent.INSTANCE.trigger(new JsPlayer(minecraft.player)); // 执行脚本
+        JsPlayerTickEvent.INSTANCE.trigger(new JsPlayer(MINECRAFT.player)); // 执行脚本
     }
 
     public static void attackEntity(Player player, Level level, InteractionHand hand, Entity target) {
@@ -134,5 +135,9 @@ public class ClientEventHandler {
         // 停止执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(false);
         AyameClient.unloadAllModels();
+    }
+
+    public static void onClientTickEnd() {
+        AyameKeyRegister.processKeyPressed();
     }
 }

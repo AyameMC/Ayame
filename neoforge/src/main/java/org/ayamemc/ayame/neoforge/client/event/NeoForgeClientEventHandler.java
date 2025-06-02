@@ -39,9 +39,15 @@ public class NeoForgeClientEventHandler {
      * 按下按键后打开{@link ModelSelectMenuScreen}屏幕
      */
     @SubscribeEvent
-    public static void onClientClick(ClientTickEvent.Post event) {
-        AyameKeyRegister.processKeyPressed();
+    public static void onClientTickEnd(ClientTickEvent.Post event) {
+        ClientEventHandler.onClientTickEnd();
     }
+
+    @SubscribeEvent
+    public static void onClientTickStart(ClientTickEvent.Pre event) {
+        ClientEventHandler.onClientTickStart();
+    }
+
 
     @SubscribeEvent
     public static void onPlayerLeave(EntityLeaveLevelEvent event) {

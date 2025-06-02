@@ -46,6 +46,7 @@ public class JsMolang {
     }
 
     // string || number (double)
+
     @JSStaticFunction
     public static Object exec(String molangCode) {
         return AyamePlayerRender.execMolang(molangCode);

@@ -44,7 +44,7 @@ public class AyameNeoForgeClient {
     public AyameNeoForgeClient(IEventBus modBus) {
         AyameNeoForgeSounds.SOUND_EVENTS.register(modBus);
 
-        AyameClient.init(new NeoForgeKeyMappingRegistryImpl(), ModLoader.NEOFORGE, AyameNeoForgeSounds.AYAME_SOUND.get());
+        AyameClient.init(new NeoForgeKeyMappingRegistryImpl(), ModLoader.NEOFORGE, null);
 
         NeoForge.EVENT_BUS.register(NeoForgeClientEventHandler.class);
 

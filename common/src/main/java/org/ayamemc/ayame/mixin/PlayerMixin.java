@@ -125,7 +125,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
                     //  玩家移动动画
                     // 普通开创飞，有效
-                    () -> (player.getAbilities().flying) ?
+                    () -> (player.getAbilities().flying || !player.onGround()) ?
                             state.setAndContinue(AyameAnimations.MOVE_FLY) : null,
 
                     // 潜行，不动，有效

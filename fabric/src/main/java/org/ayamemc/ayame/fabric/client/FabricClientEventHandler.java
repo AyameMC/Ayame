@@ -31,7 +31,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.client.handler.ClientEventHandler;
 
 
@@ -46,7 +45,7 @@ public class FabricClientEventHandler {
      * 注册Fabric事件
      */
     public static void init() {
-        ClientTickEvents.START_CLIENT_TICK.register(ClientEventHandler::tick);
+        ClientTickEvents.START_CLIENT_TICK.register(client -> ClientEventHandler.onClientTickStart());
         ClientTickEvents.END_CLIENT_TICK.register(FabricClientEventHandler::endClientTickEvent);
         ClientEntityEvents.ENTITY_LOAD.register(FabricClientEventHandler::joinWorld);
         ClientEntityEvents.ENTITY_UNLOAD.register(FabricClientEventHandler::quitWorld);
@@ -77,7 +76,7 @@ public class FabricClientEventHandler {
 
 
     private static void endClientTickEvent(Minecraft minecraft) {
-        AyameKeyRegister.processKeyPressed();
+        ClientEventHandler.onClientTickEnd();
     }
 
 }
