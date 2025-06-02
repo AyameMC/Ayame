@@ -43,6 +43,7 @@ import org.ayamemc.ayame.client.script.*;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.ayamemc.ayame.model.molang.LazyMathValue;
 import org.ayamemc.ayame.util.TaskManager;
 
 import java.util.Random;
@@ -116,8 +117,7 @@ public class ClientEventHandler {
     }
 
     public static void johnWorld() {
-        JavaScriptLoader.runJs();
-
+    //    JavaScriptLoader.runJs();
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();

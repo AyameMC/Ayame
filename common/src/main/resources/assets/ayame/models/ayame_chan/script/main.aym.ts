@@ -19,15 +19,84 @@
  */
 
 // 做个卖萌轮盘，根据情绪系统改变，做全局变量
+class EyeBlinker {
+    private ticksUntilNextBlink: number;
+    private blinkingTicksLeft: number = 0;
+    private isBlinkingNow: boolean = false;
+    private pendingDoubleBlink: boolean = false;
+
+    constructor(
+        private readonly minInterval: number = 60,
+        private readonly maxInterval: number = 99,
+        private readonly minDuration: number = 3,
+        private readonly maxDuration: number = 6,
+        private readonly doubleBlinkChance: number = 0.1,   // 10% 概率连续眨眼
+        private readonly skipBlinkChance: number = 0.05     // 5% 概率跳过这次眨眼
+    ) {
+        this.ticksUntilNextBlink = this.getNextBlinkInterval();
+    }
+
+    tick() {
+        if (this.isBlinkingNow) {
+            this.blinkingTicksLeft--;
+            if (this.blinkingTicksLeft <= 0) {
+                this.isBlinkingNow = false;
+
+                if (this.pendingDoubleBlink) {
+                    this.pendingDoubleBlink = false;
+                    // 双眨眼的第二次眨眼必须等待至少 3 ticks（约 0.15 秒），模拟眼睛短暂睁开
+                    this.ticksUntilNextBlink = Math.max(3, 13 + Math.floor(Math.random() * 4));
+                } else {
+                    this.ticksUntilNextBlink = this.getNextBlinkInterval();
+                }
+            }
+        } else {
+            this.ticksUntilNextBlink--;
+            if (this.ticksUntilNextBlink <= 0) {
+                if (Math.random() < this.skipBlinkChance) {
+                    this.ticksUntilNextBlink = this.getNextBlinkInterval() + 40;
+                    return;
+                }
+                this.isBlinkingNow = true;
+                this.blinkingTicksLeft = this.getBlinkDuration();
+                this.pendingDoubleBlink = Math.random() < this.doubleBlinkChance;
+            }
+        }
+    }
+
+    isBlinking(): boolean {
+        return this.isBlinkingNow;
+    }
+
+    private getNextBlinkInterval(): number {
+        return this.minInterval + Math.floor(Math.random() * (this.maxInterval - this.minInterval + 1));
+    }
+
+    private getBlinkDuration(): number {
+        return this.minDuration + Math.floor(Math.random() * (this.maxDuration - this.minDuration + 1));
+    }
+}
+
+
 
 let shakeValue = 0;
 
+const blinker = new EyeBlinker(
+    40, 60,   // 眨眼间隔：2~3 秒
+    12, 14,   // 眨眼持续时间：≈0.67 秒
+    0.1,      // 10% 概率双眨眼
+    0.3      // 30% 概率跳过眨眼
+);
 
 
 // 注册自定义 Molang 函数
 Molang.registerFunction('math.sinp2', (x: number) => {
     const molangSin = Molang.exec(`math.sin(${x})`) as number;
     return molangSin + Math.sin(x * (Math.PI / 180));
+});
+
+Molang.registerFunction('cus.is_blinking', () => {
+    return blinker.isBlinking() ? 1 : 0;
 });
 
 PlayerEvents.tick((event) => {
@@ -37,7 +106,11 @@ PlayerEvents.tick((event) => {
     let scale: Yttribume = yttribume.get('ayame:model.scale') // Yttribume对象
     let value = player.getYttribumeValve(scale);
     // player.setYttribume(scale, 2);
+    blinker.tick();
 })
+
+
+
 
 PlayerEvents.keyPress((event) => {
 

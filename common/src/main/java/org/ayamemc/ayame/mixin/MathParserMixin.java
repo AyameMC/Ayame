@@ -20,63 +20,109 @@
 
 package org.ayamemc.ayame.mixin;
 
-import com.mojang.datafixers.util.Either;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
+import org.ayamemc.ayame.model.molang.LazyMathValue;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
+import software.bernie.geckolib.loading.math.value.CompoundValue;
+import software.bernie.geckolib.loading.math.value.Constant;
 import software.bernie.geckolib.util.CompoundException;
 
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.ayamemc.ayame.Ayame.LOGGER;
 
 @Mixin(value = MathParser.class, remap = false)
 public abstract class MathParserMixin {
+
+
     @Shadow
-    public static MathValue parseSymbols(List<Either<String, List<MathValue>>> symbols) throws CompoundException {
+    @Final
+    private static Pattern VALID_DOUBLE;
+
+    @Shadow
+    public static MathValue compileExpression(String expression) {
         return null;
     }
+
+    @Shadow
+    @Final
+    private static String MOLANG_RETURN;
+
+    @Shadow
+    @Final
+    private static String STATEMENT_DELIMITER;
+
+//    /**
+//     * @author
+//     * @reason
+//     */
+//    @Overwrite
+//    public static MathValue compileMolang(String expression) {
+//        if (expression.startsWith(MOLANG_RETURN)) {
+//            expression = expression.substring(MOLANG_RETURN.length());
+//
+//            if (expression.contains(STATEMENT_DELIMITER))
+//                expression = expression.substring(0, expression.indexOf(STATEMENT_DELIMITER));
+//        } else if (expression.contains(STATEMENT_DELIMITER)) {
+//            final String[] subExpressions = expression.split(STATEMENT_DELIMITER);
+//            final List<MathValue> subValues = new ObjectArrayList<>(subExpressions.length);
+//
+//            for (String subExpression : subExpressions) {
+//                boolean isReturn = subExpression.startsWith(MOLANG_RETURN);
+//
+//                if (isReturn)
+//                    subExpression = subExpression.substring(MOLANG_RETURN.length());
+//
+//                subValues.add(compileExpression(subExpression));
+//
+//                if (isReturn)
+//                    break;
+//            }
+//
+//            return new CompoundValue(subValues.toArray(new MathValue[0]));
+//        }
+//
+//        LOGGER.info("compileMolang: {}", expression);
+//        return compileExpression(expression);
+//    }
+
 
     /**
      * @author a
      * @reason a
      */
-//    @Overwrite
-//    @Nullable
-//    protected static Ternary compileTernary(List<Either<String, List<MathValue>>> symbols) throws CompoundException {
-//        LOGGER.info("Compile Ternary: {}", symbols);
-//        final int symbolCount = symbols.size();
+    @Overwrite
+    public static MathValue parseJson(JsonElement element) {
+        if (!(element instanceof JsonPrimitive primitive))
+            throw new CompoundException("Invalid Molang expression format: " + element);
 //
-//        if (symbolCount < 3)
-//            return null;
-//
-//        Supplier<MathValue> condition = null;
-//        Supplier<MathValue> ifTrue = null;
-//        int ternaryState = 0;
-//        int lastColon = -1;
-//
-//        for (int i = 0; i < symbolCount; i++) {
-//            final int i2 = i;
-//            final String string = symbols.get(i).left().orElse(null);
-//
-//            if ("?".equals(string)) {
-//                if (condition == null)
-//                    condition = () -> parseSymbols(symbols.subList(0, i2));
-//
-//                ternaryState++;
-//            } else if (":".equals(string)) {
-//                if (ternaryState == 1 && ifTrue == null)
-//                    ifTrue = () -> parseSymbols(symbols.subList(0, i2));
-//
-//                ternaryState--;
-//                lastColon = i;
-//            }
-//        }
-//
-//        if (ternaryState == 0 && condition != null && ifTrue != null && lastColon < symbolCount - 1)
-//            return new Ternary(condition.get(), ifTrue.get(), parseSymbols(symbols.subList(lastColon + 1, symbolCount)));
-//
-//
-//        LOGGER.info("null {}", symbols);
-//        return null;
-//    }
+//        if (primitive.isBoolean()) // 无意义
+//            throw new CompoundException("Boolean not allowed in Molang keyframes");
+
+        if (primitive.isNumber())
+            return new Constant(primitive.getAsDouble());
+
+        if (primitive.isString()) {
+            String value = primitive.getAsString();
+
+            if (MathParserAccessor.getValidDouble().matcher(value).matches()) {
+                return new Constant(Double.parseDouble(value));
+            }
+
+            return new LazyMathValue(value); // 核心修改
+        }
+
+        return new Constant(0);
+    }
+
+
 }

@@ -64,7 +64,8 @@ public class JavaScriptHelper {
 
     public static Object executeCallback(Function callback, Object... args) {
         final Context context = Context.enter();
-        context.setClassShutter(AyameClassShutter.getInstance());
+
+       // context.setClassShutter(AyameClassShutter.getInstance());
         try {
             Scriptable scope = callback.getParentScope();
             Object[] jsArgs = new Object[args.length];

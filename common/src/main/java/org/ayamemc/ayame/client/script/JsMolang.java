@@ -27,11 +27,13 @@ import org.mozilla.javascript.annotations.JSStaticFunction;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.function.MathFunction;
+import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.ToDoubleFunction;
 
 import static org.ayamemc.ayame.Ayame.LOGGER;
 
@@ -55,6 +57,17 @@ public class JsMolang {
     @JSStaticFunction
     public static String listFunctionsAsString() {
         return Arrays.toString(listFunctions());
+    }
+
+    @JSStaticFunction
+    public static void registerVariable(String name, double value) {
+        MathParser.registerVariable(new Variable(name, () -> value));
+    }
+
+
+    @JSStaticFunction
+    public static void setVariable(String name,double value) {
+        MathParser.setVariable(name, () -> value);
     }
 
     @JSStaticFunction

@@ -25,6 +25,7 @@ import org.ayamemc.ayame.Constants;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.event.JsRouletteOption;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
+import org.ayamemc.ayame.model.molang.LazyMathValue;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.ayamemc.ayame.util.FileUtil;
 import org.ayamemc.ayame.util.ModLoader;
@@ -59,7 +60,7 @@ public class JavaScriptLoader {
             throw new RuntimeException("No compiler source code found");
         }
 
-        new Thread(() -> {
+     //   new Thread(() -> {
             final Context context = Context.enter();
             context.setClassShutter(AyameClassShutter.getInstance());
             try {
@@ -97,7 +98,7 @@ public class JavaScriptLoader {
             } finally {
                 Context.exit();
             }
-        }, "Ayame-Script-Loader").start();
+  //      }, "Ayame-Script-Loader").start();
     }
 
     //    public static void reload() {

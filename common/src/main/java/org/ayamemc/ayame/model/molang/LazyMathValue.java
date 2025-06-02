@@ -18,30 +18,32 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.mixin.accessor;
+package org.ayamemc.ayame.model.molang;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import software.bernie.geckolib.loading.math.MathParser;
-import software.bernie.geckolib.loading.math.function.MathFunction;
+import software.bernie.geckolib.loading.math.MathValue;
 
-import java.util.Map;
-import java.util.regex.Pattern;
+public class LazyMathValue implements MathValue {
+    private final String expression;
+    private MathValue delegate;
 
-@Mixin(value = MathParser.class, remap = false)
-public interface MathParserAccessor {
-    @Accessor("FUNCTION_FACTORIES")
-    static Map<String, MathFunction.Factory<?>> getFunctionFactories() {
-        throw new AssertionError();
+    public static boolean firstRunOrReloadJs = true;
+
+    public LazyMathValue(String expression) {
+        this.expression = expression;
     }
 
-    @Accessor("FUNCTION_FACTORIES")
-    static void setFunctionFactories(Map<String, MathFunction.Factory<?>> map) {
-        throw new AssertionError();
-    }
-
-    @Accessor("VALID_DOUBLE")
-    static Pattern getValidDouble() {
-        throw new AssertionError();
+    @Override
+    public double get() {
+        // 懒编译：首次调用时才解析 Molang 表达式
+        if (delegate == null) {
+            if (firstRunOrReloadJs) {
+                JavaScriptLoader.runJs();
+                firstRunOrReloadJs = false;
+            }
+            delegate = MathParser.compileMolang(expression);
+        }
+        return delegate.get();
     }
 }

@@ -23,6 +23,7 @@ package org.ayamemc.ayame.model.sync.client;
 import com.google.common.collect.Maps;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
+import org.ayamemc.ayame.model.molang.LazyMathValue;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.jetbrains.annotations.NotNull;
@@ -126,7 +127,8 @@ public class ClientModelManager {
     public void updateModelOfPlayer(UUID playerUUID, ModelSelection modelSelection) {
         this.playerModelSelections.put(playerUUID, modelSelection);
         // 同时加载脚本,调用脚本的onStart()
-        JavaScriptLoader.runJs();
+         JavaScriptLoader.runJs();
+        LazyMathValue.firstRunOrReloadJs = true;
     }
 
     public Stream<InMemoryModelData> filterOutDefaultModel() {
