@@ -78,7 +78,7 @@ class EyeBlinker {
 }
 
 
-
+Molang.registerVariable('cus.is_blinking', 0); 
 let shakeValue = 0;
 
 const blinker = new EyeBlinker(
@@ -95,9 +95,9 @@ Molang.registerFunction('math.sinp2', (x: number) => {
     return molangSin + Math.sin(x * (Math.PI / 180));
 });
 
-Molang.registerFunction('cus.is_blinking', () => {
-    return blinker.isBlinking() ? 1 : 0;
-});
+// Molang.registerFunction('cus.is_blinking', () => {
+//     return blinker.isBlinking() ? 1 : 0;
+// });
 
 PlayerEvents.tick((event) => {
     const headRRotation = Molang.exec("query.head_x_rotation") as number;
@@ -107,6 +107,7 @@ PlayerEvents.tick((event) => {
     let value = player.getYttribumeValve(scale);
     // player.setYttribume(scale, 2);
     blinker.tick();
+    Molang.setVariable('cus.is_blinking', blinker.isBlinking() ? 1 : 0);
 })
 
 
