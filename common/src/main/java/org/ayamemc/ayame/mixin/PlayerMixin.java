@@ -22,13 +22,19 @@ package org.ayamemc.ayame.mixin;
 
 
 import com.google.common.math.DoubleMath;
-import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import org.ayamemc.ayame.client.api.PlayerMixinInterface;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
 import org.ayamemc.ayame.client.yttribume.IYttribumable;
@@ -39,6 +45,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -59,7 +66,53 @@ import java.util.function.Supplier;
  */
 
 @Mixin(Player.class)
-public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IYttribumable {
+public abstract class PlayerMixin extends LivingEntity implements GeoEntity, PlayerMixinInterface, IYttribumable {
+    @Shadow
+    public abstract Abilities getAbilities();
+
+    @SuppressWarnings("WrongEntityDataParameterClass")
+    @Unique
+    private static final EntityDataAccessor<Boolean> DATA_ID_IS_FLYING = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    @SuppressWarnings("WrongEntityDataParameterClass")
+    private static final EntityDataAccessor<Boolean> DATA_ID_IS_JUMPING = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BOOLEAN);
+
+    protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
+        super(entityType, level);
+    }
+
+    @Inject(method = "defineSynchedData", at = @At("TAIL"))
+    private void ayame$defineSynchedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+        builder.define(DATA_ID_IS_FLYING, false);
+        builder.define(DATA_ID_IS_JUMPING, false);
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void ayame$tick(CallbackInfo ci) {
+        final Player player = (Player) (Object) this;
+        if (!this.level().isClientSide()) {
+
+            boolean isJumping = !this.onGround() && this.getDeltaMovement().y > 0.1 && !ayame$isJumping(player);
+            this.getEntityData().set(DATA_ID_IS_JUMPING, isJumping);
+
+            this.getEntityData().set(DATA_ID_IS_FLYING, this.getAbilities().flying);
+        }
+
+
+    }
+
+
+    @Unique
+    private boolean ayame$isFlying(Player player) {
+        return player.getEntityData().get(DATA_ID_IS_FLYING);
+    }
+
+    @Unique
+    private boolean ayame$isJumping(Player player) {
+        return player.getEntityData().get(DATA_ID_IS_JUMPING);
+    }
+
+
     @Unique
     private final AnimatableInstanceCache ayame$geoCache = GeckoLibUtil.createInstanceCache(this);
     @Unique
@@ -75,11 +128,6 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
     @Unique
     private boolean ayame$isLoopAnimation;
 
-    @Shadow
-    protected abstract boolean freeAt(BlockPos pos);
-
-    @Unique
-//    private boolean ayame$isrResetAnimation = false;
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -89,6 +137,8 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
 
         controllers.add(new AnimationController<>(this, 2, state -> {
+
+
             // 动画任务处理
             if (AnimationTask.shouldAnimationProcess(player)) {
                 return AnimationTask.handle(player, state.getController());
@@ -125,7 +175,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
                     //  玩家移动动画
                     // 普通开创飞，有效
-                    () -> (player.getAbilities().flying || !player.onGround()) ?
+                    () -> (ayame$isFlying(player)) ?
                             state.setAndContinue(AyameAnimations.MOVE_FLY) : null,
 
                     // 潜行，不动，有效
@@ -160,7 +210,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
 
                     // 跳跃，有效
-                    () -> (player.jumping) ?
+                    () -> (ayame$isJumping(player)) ?
                             state.setAndContinue(AyameAnimations.MOVE_JUMP) : null,
 
                     // 睡觉，有效
@@ -315,7 +365,7 @@ public abstract class PlayerMixin implements GeoEntity, PlayerMixinInterface, IY
 
 
     @Unique
-    public boolean ayame$isMoving(Player player) {
+    private boolean ayame$isMoving(Player player) {
         return !(DoubleMath.fuzzyEquals(player.getX(), player.xOld, 0.0001)
                 && DoubleMath.fuzzyEquals(player.getZ(), player.zOld, 0.0001));
     }
