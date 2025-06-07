@@ -25,6 +25,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.world.entity.player.Player;
 import org.ayamemc.ayame.mixin.accessor.MolangQueriesInvoker;
+import org.ayamemc.ayame.model.molang.MochaContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -49,17 +50,21 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
     private void preAnimationSetupWrap(AnimationState<T> animationState, double animTime, Operation<Void> original) {
         final T animatable = animationState.getAnimatable();
 
-        if (animatable instanceof Player) {
+        if (animatable instanceof Player player) {
             final MochaEngine<?> mocha = ayame$createOrGetMocha(animationState);
 
             final Map<String, Variable> geckoVariablesMap = MolangQueriesInvoker.getVariables();
             final Map<String, Variable> filteredVariablesMap = ayame$filterVariables(geckoVariablesMap, ayame$molangActorVariables);
 
-            filteredVariablesMap.forEach((key, variable) -> mocha.scope().set(key, Value.of(variable.get())));
+            filteredVariablesMap.forEach((key, variable) -> mocha.scope().set("query." + key, Value.of(variable.get())));
+
+            // 关键注入上下文
+            MochaContext.set(mocha);
         } else {
             original.call(animationState, animTime);
         }
     }
+
 
     @Unique
     private MochaEngine<?> ayame$createOrGetMocha(AnimationState<T> animationState) {

@@ -25,8 +25,6 @@ import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import software.bernie.geckolib.loading.math.MathValue;
 import team.unnamed.mocha.MochaEngine;
 
-import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
-
 public class LazyMathValue implements MathValue {
     private final String expression;
     private MathValue delegate;
@@ -42,20 +40,26 @@ public class LazyMathValue implements MathValue {
 
     @Override
     public double get() {
-        // 懒编译：首次调用时才解析 Molang 表达式
         if (delegate == null) {
             if (firstRunOrReloadJs) {
                 JavaScriptLoader.runJs();
                 firstRunOrReloadJs = false;
             }
 
-            delegate = () -> {
-                if (MINECRAFT.player.ayame$getMochaEngine() != null) {
-                    return MINECRAFT.player.ayame$getMochaEngine().eval(expression);
-                } else {
-                    return 0;
-                }
-            };
+            MochaEngine<?> engine = MochaContext.get();
+            if (engine == null) {
+                delegate = () -> 0;
+                return 0;
+            }
+
+            try {
+                double value = engine.eval(expression);
+                delegate = () -> value;
+                return value;
+            } catch (Exception e) {
+                delegate = () -> 0;
+                return 0;
+            }
         }
         return delegate.get();
     }
