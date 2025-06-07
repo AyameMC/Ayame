@@ -35,9 +35,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import org.ayamemc.ayame.client.api.IYttribumable;
 import org.ayamemc.ayame.client.api.PlayerMixinInterface;
 import org.ayamemc.ayame.client.renderer.AnimationTask;
-import org.ayamemc.ayame.client.yttribume.IYttribumable;
 import org.ayamemc.ayame.client.yttribume.Yttribume;
 import org.ayamemc.ayame.model.AyameAnimations;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,6 +54,7 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationProcessor;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import team.unnamed.mocha.MochaEngine;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,8 @@ public abstract class PlayerMixin extends LivingEntity implements GeoEntity, Pla
     @Shadow
     public abstract Abilities getAbilities();
 
+    @Unique
+    private MochaEngine<?> ayame$mochaEngine;
     @SuppressWarnings("WrongEntityDataParameterClass")
     @Unique
     private static final EntityDataAccessor<Boolean> DATA_ID_IS_FLYING = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BOOLEAN);
@@ -368,6 +371,16 @@ public abstract class PlayerMixin extends LivingEntity implements GeoEntity, Pla
     private boolean ayame$isMoving(Player player) {
         return !(DoubleMath.fuzzyEquals(player.getX(), player.xOld, 0.0001)
                 && DoubleMath.fuzzyEquals(player.getZ(), player.zOld, 0.0001));
+    }
+
+    @Override
+    public MochaEngine<?> ayame$getMochaEngine() {
+        return this.ayame$mochaEngine;
+    }
+
+    @Override
+    public void ayame$setMochaEngine(MochaEngine<?> engine) {
+        this.ayame$mochaEngine = engine;
     }
 
 }

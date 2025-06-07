@@ -20,6 +20,8 @@
 
 package org.ayamemc.ayame.client.yttribume;
 
+import org.ayamemc.ayame.client.api.IYttribumable;
+
 public record Yttribume(float defaultValue, float min, float max,
                         org.ayamemc.ayame.client.yttribume.Yttribume.AttributeType type, boolean hideInGui) {
 

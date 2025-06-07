@@ -21,9 +21,14 @@
 package org.ayamemc.ayame.mixin.accessor;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Mixin(value = MolangQueries.class, remap = false)
 public interface MolangQueriesInvoker {
@@ -34,6 +39,11 @@ public interface MolangQueriesInvoker {
 
     @Invoker(value = "getActor")
     static MolangQueries.Actor<?> invokeGetActor() {
+        throw new AssertionError();
+    }
+
+    @Accessor("VARIABLES")
+    static Map<String, Variable> getVariables() {
         throw new AssertionError();
     }
 }

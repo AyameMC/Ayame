@@ -4,7 +4,7 @@
     "net/minecraft/class_1657": [
       "software/bernie/geckolib/animatable/GeoEntity",
       "org/ayamemc/ayame/client/api/PlayerMixinInterface",
-      "org/ayamemc/ayame/client/yttribume/IYttribumable"
+      "org/ayamemc/ayame/client/api/IYttribumable"
     ]
   }
 }

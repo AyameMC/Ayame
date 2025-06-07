@@ -61,40 +61,6 @@ public abstract class MathParserMixin {
     @Final
     private static String STATEMENT_DELIMITER;
 
-//    /**
-//     * @author
-//     * @reason
-//     */
-//    @Overwrite
-//    public static MathValue compileMolang(String expression) {
-//        if (expression.startsWith(MOLANG_RETURN)) {
-//            expression = expression.substring(MOLANG_RETURN.length());
-//
-//            if (expression.contains(STATEMENT_DELIMITER))
-//                expression = expression.substring(0, expression.indexOf(STATEMENT_DELIMITER));
-//        } else if (expression.contains(STATEMENT_DELIMITER)) {
-//            final String[] subExpressions = expression.split(STATEMENT_DELIMITER);
-//            final List<MathValue> subValues = new ObjectArrayList<>(subExpressions.length);
-//
-//            for (String subExpression : subExpressions) {
-//                boolean isReturn = subExpression.startsWith(MOLANG_RETURN);
-//
-//                if (isReturn)
-//                    subExpression = subExpression.substring(MOLANG_RETURN.length());
-//
-//                subValues.add(compileExpression(subExpression));
-//
-//                if (isReturn)
-//                    break;
-//            }
-//
-//            return new CompoundValue(subValues.toArray(new MathValue[0]));
-//        }
-//
-//        LOGGER.info("compileMolang: {}", expression);
-//        return compileExpression(expression);
-//    }
-
 
     /**
      * @author a

@@ -18,7 +18,9 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.client.yttribume;
+package org.ayamemc.ayame.client.api;
+
+import org.ayamemc.ayame.client.yttribume.Yttribume;
 
 public interface IYttribumable {
     default void ayame$setYttribume(Yttribume yttribume, float value) {
@@ -26,16 +28,19 @@ public interface IYttribumable {
     }
 
     default void ayame$setYttribume(Yttribume yttribume, float value, boolean ignoredLimit) {
+        throw new AssertionError();
     }
 
     default float ayame$getYttribume(Yttribume yttribume) {
-        return yttribume.defaultValue();
+        throw new AssertionError();
     }
 
     default boolean ayame$isRestricted() {
-        return true;
+        throw new AssertionError();
     }
 
     default void ayame$setRestriction(boolean restricted) {
+        throw new AssertionError();
     }
 }
+

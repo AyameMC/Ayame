@@ -20,9 +20,12 @@
 
 package org.ayamemc.ayame.model.molang;
 
+import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
-import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
+import team.unnamed.mocha.MochaEngine;
+
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 public class LazyMathValue implements MathValue {
     private final String expression;
@@ -31,6 +34,9 @@ public class LazyMathValue implements MathValue {
     public static boolean firstRunOrReloadJs = true;
 
     public LazyMathValue(String expression) {
+        if (AyameClient.mocha != null) {
+            AyameClient.mocha = MochaEngine.createStandard();
+        }
         this.expression = expression;
     }
 
@@ -42,7 +48,14 @@ public class LazyMathValue implements MathValue {
                 JavaScriptLoader.runJs();
                 firstRunOrReloadJs = false;
             }
-            delegate = MathParser.compileMolang(expression);
+
+            delegate = () -> {
+                if (MINECRAFT.player.ayame$getMochaEngine() != null) {
+                    return MINECRAFT.player.ayame$getMochaEngine().eval(expression);
+                } else {
+                    return 0;
+                }
+            };
         }
         return delegate.get();
     }
