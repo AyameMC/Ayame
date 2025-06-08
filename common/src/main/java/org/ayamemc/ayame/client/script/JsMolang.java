@@ -22,6 +22,7 @@ package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
+import org.ayamemc.ayame.model.molang.MochaContext;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 import software.bernie.geckolib.loading.math.MathParser;
@@ -51,7 +52,7 @@ public class JsMolang {
 
     @JSStaticFunction
     public static Object exec(String molangCode) {
-        return 1;
+        return MochaContext.get().eval(molangCode);
     }
 
     @JSStaticFunction
@@ -74,33 +75,33 @@ public class JsMolang {
     public static void registerFunction(String name, Function compute) {
         int paramCount = ((Number) compute.get("length", compute)).intValue();
         LOGGER.info("Registering Molang Function '{}'", name);
-        MathParser.registerFunction(
-                name,
-                values -> new MathFunction(values) {
-                    @Override
-                    public String getName() {
-                        return name;
-                    }
-
-                    @Override
-                    public double compute() {
-                        Object[] jsArgs = Arrays.stream(values)
-                                .map(MathValue::get)
-                                .toArray();
-                        return ((Number) Objects.requireNonNull(JavaScriptHelper.executeCallback(compute, jsArgs))).doubleValue();
-                    }
-
-                    @Override
-                    public int getMinArgs() {
-                        return paramCount;
-                    }
-
-                    @Override
-                    public MathValue[] getArgs() {
-                        return values;
-                    }
-                }
-        );
+//        MathParser.registerFunction(
+//                name,
+//                values -> new MathFunction(values) {
+//                    @Override
+//                    public String getName() {
+//                        return name;
+//                    }
+//
+//                    @Override
+//                    public double compute() {
+//                        Object[] jsArgs = Arrays.stream(values)
+//                                .map(MathValue::get)
+//                                .toArray();
+//                        return ((Number) Objects.requireNonNull(JavaScriptHelper.executeCallback(compute, jsArgs))).doubleValue();
+//                    }
+//
+//                    @Override
+//                    public int getMinArgs() {
+//                        return paramCount;
+//                    }
+//
+//                    @Override
+//                    public MathValue[] getArgs() {
+//                        return values;
+//                    }
+//                }
+//        );
 
         userDefinedFunctions.add(name);
     }

@@ -8202,7 +8202,7 @@
 			"animation_length": 4,
 			"bones": {
 				"Root": {
-					"position": [0, "aym.has_boots ? 1 : 0", 0]
+					"position": [0, "has_boots ? 1 : 0", 0]
 				},
 				"tail": {
 					"rotation": [-42.5, 0, 0]

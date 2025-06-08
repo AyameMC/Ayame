@@ -35,6 +35,7 @@ import org.ayamemc.ayame.Ayame;
 import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
+import org.ayamemc.ayame.client.script.JsMolang;
 import org.ayamemc.ayame.model.AyameModelData;
 import org.ayamemc.ayame.model.sync.ModelSelection;
 import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
@@ -88,7 +89,7 @@ public class AyameCommandManager {
                                         .executes(context -> {
                                             try {
                                                 final String code = StringArgumentType.getString(context, "code");
-                                                final double result = AyamePlayerRender.execMolang(code);
+                                                final double result = (double) JsMolang.exec(code);
 
                                                 sendMessageToClient(Component.translatable("message.ayame.command.script.exec.result", result));
 

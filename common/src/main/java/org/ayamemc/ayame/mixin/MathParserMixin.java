@@ -20,22 +20,16 @@
 
 package org.ayamemc.ayame.mixin;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
-import org.ayamemc.ayame.model.molang.LazyMathValue;
 import org.ayamemc.ayame.model.molang.MochaContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MathValue;
-import software.bernie.geckolib.loading.math.value.Constant;
-import software.bernie.geckolib.util.CompoundException;
+import software.bernie.geckolib.loading.math.value.CompoundValue;
 
 import java.util.regex.Pattern;
 
@@ -61,45 +55,15 @@ public abstract class MathParserMixin {
     private static String STATEMENT_DELIMITER;
 
 
-    @Inject(method = "parseJson", at = @At("RETURN"), cancellable = true)
-    private static void parseJsonPost(JsonElement element, CallbackInfoReturnable<MathValue> cir) {
-        if (MochaContext.get() == null) {
-            return;
-        }
-
-        MathValue returnValue = cir.getReturnValue();
-        if (returnValue instanceof MathValue && !(returnValue instanceof Constant)) {
-            cir.setReturnValue(new LazyMathValue(element.getAsString()));
+    @Inject(method = "compileMolang", at = @At("RETURN"), cancellable = true)
+    private static void compileMolangPost(String expression, CallbackInfoReturnable<MathValue> cir) {
+        var returnValue = cir.getReturnValue();
+        var mocha = MochaContext.get();
+        if (returnValue instanceof MathValue && !(returnValue instanceof CompoundValue) && (mocha != null)) {
+            cir.setReturnValue(() -> mocha.eval(expression));
         }
     }
 
-//    /**
-//     * @author a
-//     * @reason a
-//     */
-//    @Overwrite
-//    public static MathValue parseJson(JsonElement element) {
-//        if (!(element instanceof JsonPrimitive primitive))
-//            throw new CompoundException("Invalid Molang expression format: " + element);
-////
-////        if (primitive.isBoolean()) // 无意义
-////            throw new CompoundException("Boolean not allowed in Molang keyframes");
-//
-//        if (primitive.isNumber())
-//            return new Constant(primitive.getAsDouble());
-//
-//        if (primitive.isString()) {
-//            String value = primitive.getAsString();
-//
-//            if (MathParserAccessor.getValidDouble().matcher(value).matches()) {
-//                return new Constant(Double.parseDouble(value));
-//            }
-//
-//            return new LazyMathValue(value); // 核心修改
-//        }
-//
-//        return new Constant(0);
-//    }
 
 
 }

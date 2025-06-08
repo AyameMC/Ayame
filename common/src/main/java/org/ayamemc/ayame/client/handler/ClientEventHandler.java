@@ -21,9 +21,9 @@
 package org.ayamemc.ayame.client.handler;
 
 import com.mojang.brigadier.CommandDispatcher;
+import javafx.beans.binding.ObjectBinding;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandBuildContext;
@@ -39,12 +39,17 @@ import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AnimationRouletteScreen;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.script.*;
+import org.ayamemc.ayame.client.script.JavaScriptHelper;
+import org.ayamemc.ayame.client.script.JsEntity;
+import org.ayamemc.ayame.client.script.JsPlayer;
+import org.ayamemc.ayame.client.script.JsWorld;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.molang.LazyMathValue;
+import org.ayamemc.ayame.model.molang.MochaContext;
 import org.ayamemc.ayame.util.TaskManager;
+import team.unnamed.mocha.runtime.value.ObjectValue;
+import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.Random;
 
@@ -117,7 +122,7 @@ public class ClientEventHandler {
     }
 
     public static void johnWorld() {
-    //    JavaScriptLoader.runJs();
+        //    JavaScriptLoader.runJs();
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();
@@ -139,5 +144,21 @@ public class ClientEventHandler {
 
     public static void onClientTickEnd() {
         AyameKeyRegister.processKeyPressed();
+
+
+        var mocha = MochaContext.get();
+        if (mocha == null) {
+            return;
+        }
+
+        var player = MINECRAFT.player;
+        if (player == null) {
+            return;
+        }
+
+        boolean hasBoots = !player.getInventory().getArmor(0).isEmpty();
+        mocha.scope().
+                set("has_boots", Value.of(hasBoots));
+
     }
 }

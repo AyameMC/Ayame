@@ -23,7 +23,9 @@ package org.ayamemc.ayame.mixin;
 import com.google.common.collect.Sets;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import org.ayamemc.ayame.client.AyameKeyRegister;
 import org.ayamemc.ayame.mixin.accessor.MolangQueriesInvoker;
 import org.ayamemc.ayame.model.molang.MochaContext;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,11 +36,14 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 import team.unnamed.mocha.MochaEngine;
+import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.ayamemc.ayame.client.AyameClient.MINECRAFT;
 
 @Mixin(value = AnimationProcessor.class, remap = false)
 public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
@@ -116,7 +121,13 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
             "query.time_of_day",
             "query.time_stamp",
             "query.vertical_speed",
-            "query.yaw_speed");
+            "aym.has_boots",
+            "aym.has_leggings",
+            "query.yaw_speed"
+    );
+    private static final Map<String, Function<Minecraft, Value>> m = Map.of(
+            "has_boots", mc -> Value.of(!Objects.requireNonNull(mc.player).getInventory().getArmor(0).isEmpty())
+    );
 
     @WrapMethod(method = "preAnimationSetup")
     private void preAnimationSetupWrap(AnimationState<T> animationState, double animTime, Operation<Void> original) {
@@ -128,11 +139,31 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
             final Map<String, Variable> geckoVariablesMap = MolangQueriesInvoker.getVariables();
             final Map<String, Variable> filteredVariablesMap = ayame$filterVariables(geckoVariablesMap, ayame$molangActorVariables);
 
-            for (Map.Entry<String, Variable> entry : filteredVariablesMap.entrySet()) {
-                String key = entry.getKey();
-                Variable variable = entry.getValue();
-                mocha.scope().set("query." + key, Value.of(variable));
+
+
+            if (player == null) {
+                return;
             }
+
+            boolean hasBoots = !player.getInventory().getArmor(0).isEmpty();
+            mocha.scope().
+                    set("has_boots", Value.of(hasBoots));
+
+
+//            for (Map.Entry<String, Function<Minecraft, Value>> entry : m.entrySet()) {
+//                String varName = entry.getKey();
+//                Function<Minecraft, Value> variable = entry.getValue();
+//                Value value = variable.apply(Minecraft.getInstance());
+//
+//                mocha.scope().set(varName, value);
+//            }
+
+
+//            for (Map.Entry<String, Variable> entry : filteredVariablesMap.entrySet()) {
+//                String key = entry.getKey();
+//                Variable variable = entry.getValue();
+//                mocha.scope().set("query." + key, Value.of(variable));
+//            }
 
             // 关键注入上下文
             MochaContext.set(mocha);

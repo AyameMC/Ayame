@@ -15,6 +15,7 @@
     "GeoModelMixin",
     "MathParserMixin",
     "PlayerMixin",
+    "VariableMixin",
     "accessor.AnimationControllerAccessor",
     "accessor.AnimationControllerInvoker",
     "accessor.GeckoLibCacheAccessor",
