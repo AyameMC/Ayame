@@ -51,7 +51,7 @@ public class JsMolang {
 
     @JSStaticFunction
     public static Object exec(String molangCode) {
-        return AyamePlayerRender.execMolang(molangCode);
+        return 1;
     }
 
     @JSStaticFunction
