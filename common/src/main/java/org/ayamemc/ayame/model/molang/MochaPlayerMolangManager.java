@@ -22,14 +22,18 @@ package org.ayamemc.ayame.model.molang;
 
 
 import team.unnamed.mocha.MochaEngine;
+import team.unnamed.mocha.runtime.MochaFunction;
 
-public class MochaContext {
+public class MochaPlayerMolangManager {
     private static final ThreadLocal<MochaEngine<?>> current = new ThreadLocal<>();
 
     public static void set(MochaEngine<?> engine) {
         current.set(engine);
     }
 
+    public static boolean isPresent() {
+        return current.get() != null;
+    }
     public static MochaEngine<?> get() {
         return current.get();
     }
@@ -38,7 +42,15 @@ public class MochaContext {
         current.remove();
     }
 
-    public static boolean isPresent() {
-        return current.get() != null;
+
+    public static double execMolang(String molangCode){
+        MochaFunction result;
+        MochaEngine<?> mocha = get();
+        try {
+            result = mocha.compile(molangCode);
+        } catch (IllegalStateException e) {
+            result = mocha.prepareEval(molangCode);
+        }
+        return result.evaluate();
     }
 }

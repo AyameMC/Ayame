@@ -20,7 +20,6 @@
 
 package org.ayamemc.ayame.model.molang;
 
-import org.ayamemc.ayame.client.AyameClient;
 import org.ayamemc.ayame.client.script.JavaScriptLoader;
 import software.bernie.geckolib.loading.math.MathValue;
 import team.unnamed.mocha.MochaEngine;
@@ -32,9 +31,6 @@ public class LazyMathValue implements MathValue {
     public static boolean firstRunOrReloadJs = true;
 
     public LazyMathValue(String expression) {
-        if (AyameClient.mocha != null) {
-            AyameClient.mocha = MochaEngine.createStandard();
-        }
         this.expression = expression;
     }
 
@@ -46,7 +42,7 @@ public class LazyMathValue implements MathValue {
                 firstRunOrReloadJs = false;
             }
 
-            MochaEngine<?> engine = MochaContext.get();
+            MochaEngine<?> engine = MochaPlayerMolangManager.get();
             if (engine == null) {
                 delegate = () -> 0;
                 return 0;

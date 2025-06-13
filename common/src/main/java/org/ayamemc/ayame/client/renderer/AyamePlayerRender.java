@@ -41,17 +41,14 @@ import org.ayamemc.ayame.model.sync.data.InMemoryModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.constant.dataticket.DataTicket;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.util.CompoundException;
-import team.unnamed.mocha.MochaEngine;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -71,7 +68,7 @@ public class AyamePlayerRender extends GeoEntityRenderer<Player> {
         this.itemInHandRenderer = context.getItemInHandRenderer();
     }
 
-    public static double execMolang(String molangCode) throws CompoundException {
+    public static double execMolangInGecko(String molangCode) throws CompoundException {
         MolangQueries.updateActor(GeoPlayerModel.animationState, GeoPlayerModel.aniTime);
         final double result = MathParser.compileMolang(molangCode).get();
         MolangQueries.clearActor();

@@ -21,7 +21,6 @@
 package org.ayamemc.ayame.client.handler;
 
 import com.mojang.brigadier.CommandDispatcher;
-import javafx.beans.binding.ObjectBinding;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
@@ -46,9 +45,8 @@ import org.ayamemc.ayame.client.script.JsWorld;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
-import org.ayamemc.ayame.model.molang.MochaContext;
+import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
 import org.ayamemc.ayame.util.TaskManager;
-import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.Random;
@@ -146,7 +144,7 @@ public class ClientEventHandler {
         AyameKeyRegister.processKeyPressed();
 
 
-        var mocha = MochaContext.get();
+        var mocha = MochaPlayerMolangManager.get();
         if (mocha == null) {
             return;
         }
@@ -156,9 +154,10 @@ public class ClientEventHandler {
             return;
         }
 
+
         boolean hasBoots = !player.getInventory().getArmor(0).isEmpty();
         mocha.scope().
-                set("has_boots", Value.of(hasBoots));
+                set("aym.has_boots", Value.of(hasBoots));
 
     }
 }

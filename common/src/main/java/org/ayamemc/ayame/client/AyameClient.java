@@ -57,7 +57,7 @@ public class AyameClient {
     public static KeyMappingRegistry keyMappingRegistry;
     public static String modLoader;
     public static SoundEvent ayameSound;
-    public static MochaEngine<?> mocha;
+
 
 
 
