@@ -20,9 +20,21 @@
 
 package org.ayamemc.ayame.mixin.accessor;
 
+import net.minecraft.core.Direction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationProcessor;
+import software.bernie.geckolib.animation.keyframe.AnimationPoint;
+import software.bernie.geckolib.animation.keyframe.Keyframe;
+import software.bernie.geckolib.animation.state.BoneSnapshot;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.loading.math.MathValue;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Mixin(value = AnimationController.class, remap = false)
 public interface AnimationControllerAccessor {
@@ -31,4 +43,20 @@ public interface AnimationControllerAccessor {
 
     @Accessor("justStopped")
     void setJustStopped(boolean justStopped);
+
+    @Invoker("createInitialQueues")
+    void invokeCreateInitialQueues(Collection<GeoBone> modelRendererList);
+
+    @Invoker("processCurrentAnimation")
+    void invokeProcessCurrentAnimation(double adjustedTick, double seekTime, boolean crashWhenCantFindBone);
+
+    @Invoker("resetEventKeyFrames")
+    void invokeResetEventKeyFrames();
+
+    @Invoker("saveSnapshotsForAnimation")
+    void invokeSaveSnapshotsForAnimation(AnimationProcessor.QueuedAnimation animation, Map<String, BoneSnapshot> snapshots);
+
+    @Invoker("getAnimationPointAtTick")
+    AnimationPoint invokeGetAnimationPointAtTick(List<Keyframe<MathValue>> frames, double tick, boolean isRotation,
+                                                 Direction.Axis axis);
 }

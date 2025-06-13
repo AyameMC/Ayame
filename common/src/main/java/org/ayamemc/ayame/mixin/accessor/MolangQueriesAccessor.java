@@ -27,11 +27,9 @@ import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 @Mixin(value = MolangQueries.class, remap = false)
-public interface MolangQueriesInvoker {
+public interface MolangQueriesAccessor {
     @Invoker(value = "getVariableFor")
     static Variable invokeGetVariableFor(String name) {
         throw new AssertionError();

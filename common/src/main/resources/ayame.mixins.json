@@ -17,12 +17,11 @@
     "PlayerMixin",
     "VariableMixin",
     "accessor.AnimationControllerAccessor",
-    "accessor.AnimationControllerInvoker",
     "accessor.GeckoLibCacheAccessor",
     "accessor.KeyframeAccessor",
     "accessor.KeyframeStackAccessor",
     "accessor.MathParserAccessor",
-    "accessor.MolangQueriesInvoker",
+    "accessor.MolangQueriesAccessor",
     "server.MinecraftServerMixin"
   ],
   "injectors": {

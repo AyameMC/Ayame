@@ -25,10 +25,8 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.mixin.accessor.MolangQueriesInvoker;
+import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -38,8 +36,6 @@ import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 import team.unnamed.mocha.MochaEngine;
 import team.unnamed.mocha.runtime.value.MutableObjectBinding;
-import team.unnamed.mocha.runtime.value.ObjectProperty;
-import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.*;
@@ -137,7 +133,7 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
         if (animatable instanceof Player player) {
             final MochaEngine<?> mocha = ayame$createOrGetMocha(animationState);
 
-            final Map<String, Variable> geckoVariablesMap = MolangQueriesInvoker.getVariables();
+            final Map<String, Variable> geckoVariablesMap = MolangQueriesAccessor.getVariables();
             final Map<String, Variable> filteredVariablesMap = ayame$filterVariables(geckoVariablesMap, ayame$molangActorVariables);
 
 

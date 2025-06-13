@@ -20,13 +20,13 @@
 
 package org.ayamemc.ayame.util;
 
-import org.ayamemc.ayame.mixin.accessor.MolangQueriesInvoker;
+import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
 import software.bernie.geckolib.loading.math.MolangQueries;
 
 import java.util.function.ToDoubleFunction;
 
 public class MolangUtil {
     public static <T> void setActorVariable(String name, ToDoubleFunction<MolangQueries.Actor<T>> value) {
-        MolangQueriesInvoker.invokeGetVariableFor(name).set(() -> value.applyAsDouble((MolangQueries.Actor) MolangQueriesInvoker.invokeGetActor()));
+        MolangQueriesAccessor.invokeGetVariableFor(name).set(() -> value.applyAsDouble((MolangQueries.Actor) MolangQueriesAccessor.invokeGetActor()));
     }
 }
