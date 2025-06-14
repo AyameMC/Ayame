@@ -20,111 +20,29 @@
 
 package org.ayamemc.ayame.mixin;
 
-import com.google.common.collect.Sets;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
+import org.ayamemc.ayame.model.molang.MochaUtil;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.AnimationProcessor;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.loading.math.MolangQueries;
-import software.bernie.geckolib.loading.math.value.Variable;
+import software.bernie.geckolib.model.GeoModel;
 import team.unnamed.mocha.MochaEngine;
-import team.unnamed.mocha.runtime.value.MutableObjectBinding;
-import team.unnamed.mocha.runtime.value.Value;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Mixin(value = AnimationProcessor.class, remap = false)
 public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
 
-    @Unique
-    private static final List<String> ayame$molangActorVariables = List.of(
-            MolangQueries.ACTOR_COUNT,
-            "query.anim_time",
-            "query.blocking",
-            "query.block_state",
-            "query.body_x_rotation",
-            "query.body_y_rotation",
-            "query.cardinal_facing",
-            "query.cardinal_facing_2d",
-            "query.cardinal_player_facing",
-            "query.controller_speed",
-            "query.day",
-            "query.death_ticks",
-            "query.distance_from_camera",
-            "query.equipment_count",
-            "query.frame_alpha",
-            "query.get_actor_info_id",
-            "query.ground_speed",
-            "query.has_cape",
-            "query.has_collision",
-            "query.has_gravity",
-            "query.has_head_gear",
-            "query.has_owner",
-            "query.has_player_rider",
-            "query.has_rider",
-            "query.head_x_rotation",
-            "query.head_y_rotation",
-            "query.health",
-            "query.hurt_time",
-            "query.invulnerable_ticks",
-            "query.is_alive",
-            "query.is_angry",
-            "query.is_baby",
-            "query.is_breathing",
-            "query.is_fire_immune",
-            "query.is_first_person",
-            "query.is_invisible",
-            "query.is_in_contact_with_water",
-            "query.is_in_lava",
-            "query.is_in_water",
-            "query.is_in_water_or_rain",
-            "query.is_leashed",
-            "query.is_moving",
-            "query.is_on_fire",
-            "query.is_on_ground",
-            "query.is_powered",
-            "query.is_riding",
-            "query.is_saddled",
-            "query.is_silent",
-            "query.is_sleeping",
-            "query.is_sneaking",
-            "query.is_sprinting",
-            "query.is_swimming",
-            "query.is_using_item",
-            "query.is_wall_climbing",
-            "query.life_time",
-            "query.main_hand_item_max_duration",
-            "query.main_hand_item_use_duration",
-            "query.max_health",
-            "query.moon_brightness",
-            "query.moon_phase",
-            "query.movement_direction",
-            "query.player_level",
-            "query.rider_body_x_rotation",
-            "query.rider_body_y_rotation",
-            "query.rider_head_x_rotation",
-            "query.rider_head_y_rotation",
-            "query.scale",
-            "query.sleep_rotation",
-            "query.time_of_day",
-            "query.time_stamp",
-            "query.vertical_speed",
-            "aym.has_boots",
-            "aym.has_leggings",
-            "query.yaw_speed"
-    );
-    private static final Map<String, Function<Minecraft, Value>> m = Map.of(
-            "has_boots", mc -> Value.of(!Objects.requireNonNull(mc.player).getInventory().getArmor(0).isEmpty())
-    );
+
+    @Shadow
+    @Final
+    private GeoModel<T> model;
 
     @WrapMethod(method = "preAnimationSetup")
     private void preAnimationSetupWrap(AnimationState<T> animationState, double animTime, Operation<Void> original) {
@@ -133,27 +51,15 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
         if (animatable instanceof Player player) {
             final MochaEngine<?> mocha = ayame$createOrGetMocha(animationState);
 
-            final Map<String, Variable> geckoVariablesMap = MolangQueriesAccessor.getVariables();
-            final Map<String, Variable> filteredVariablesMap = ayame$filterVariables(geckoVariablesMap, ayame$molangActorVariables);
+            MolangQueries.updateActor(animationState, animTime);
+            this.model.applyMolangQueries(animationState, animTime);
 
+            MochaUtil.createMolangVars(mocha);
 
-            if (player == null) {
-                return;
-            }
-
-            boolean hasBoots = !player.getInventory().getArmor(0).isEmpty();
-
-
-            MutableObjectBinding aym = new MutableObjectBinding();
-            aym.set("has_boots", Value.of(hasBoots));
-
-            mocha.scope().set("aym", aym);
-            // 关键注入上下文
             MochaPlayerMolangManager.set(mocha);
 
-            // 原来的别完全删了
-            original.call(animationState, animTime);
         } else {
+            // 非 Player 模型保持原逻辑
             original.call(animationState, animTime);
         }
     }
@@ -168,9 +74,4 @@ public abstract class AnimationProcessorMixin<T extends GeoAnimatable> {
         return player.ayame$getMochaEngine();
     }
 
-    @Unique
-    private static Map<String, Variable> ayame$filterVariables(Map<String, Variable> map, Collection<String> allowedKeys) {
-        final Set<String> allowedSet = new HashSet<>(allowedKeys);
-        return Sets.intersection(map.keySet(), allowedSet).stream().collect(Collectors.toMap(Function.identity(), map::get));
-    }
 }

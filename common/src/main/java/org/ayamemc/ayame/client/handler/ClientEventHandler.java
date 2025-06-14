@@ -46,8 +46,9 @@ import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
+import org.ayamemc.ayame.model.molang.MochaUtil;
 import org.ayamemc.ayame.util.TaskManager;
-import team.unnamed.mocha.runtime.value.Value;
+import team.unnamed.mocha.MochaEngine;
 
 import java.util.Random;
 
@@ -143,21 +144,11 @@ public class ClientEventHandler {
     public static void onClientTickEnd() {
         AyameKeyRegister.processKeyPressed();
 
-
-        var mocha = MochaPlayerMolangManager.get();
-        if (mocha == null) {
-            return;
+        MochaEngine<?> mocha = MochaPlayerMolangManager.get();
+        if (mocha != null) {
+            MochaUtil.createMolangVars(mocha);
         }
-
-        var player = MINECRAFT.player;
-        if (player == null) {
-            return;
-        }
-
-
-        boolean hasBoots = !player.getInventory().getArmor(0).isEmpty();
-        mocha.scope().
-                set("aym.has_boots", Value.of(hasBoots));
-
     }
+
+
 }

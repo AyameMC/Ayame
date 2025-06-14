@@ -46,8 +46,11 @@ public abstract class VariableMixin {
     @WrapMethod(method = "get")
     private double get(Operation<Double> original) {
         if (MochaPlayerMolangManager.isPresent()) {
-            return MochaPlayerMolangManager.execMolang(this.name);
-        } else {
+            var r = MochaPlayerMolangManager.execMolang(this.name);
+            return
+                   r;
+        }
+        else {
             return original.call();
         }
     }
