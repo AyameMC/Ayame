@@ -26,6 +26,7 @@ import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 import team.unnamed.mocha.MochaEngine;
+import team.unnamed.mocha.runtime.MochaFunction;
 import team.unnamed.mocha.runtime.value.MutableObjectBinding;
 import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
@@ -127,7 +128,9 @@ public class MochaUtil {
 
             if (parts.length == 1) {
                 // 直接设为顶层变量
-                mocha.scope().set(parts[0], Value.of(AyamePlayerRender.execMolangInGecko(fullVarName)));
+                mocha.scope().set(parts[0], Value.of(
+                        (MochaFunction) () -> AyamePlayerRender.execMolangInGecko(fullVarName)
+                ));
                 continue;
             }
 
@@ -151,7 +154,17 @@ public class MochaUtil {
 
             // 设置最终属性
             if (currentScope instanceof MutableObjectBinding mut) {
-                mut.set(parts[parts.length - 1], Value.of(AyamePlayerRender.execMolangInGecko(fullVarName)));
+                var a =  AyamePlayerRender.execMolangInGecko(fullVarName);
+                // TODO 修复 gekco 没有与mocha和谐共处的问题
+                mut.set(parts[parts.length - 1], Value.of(
+                        new MochaFunction() {
+                            @Override
+                            public double evaluate() {
+                                return a;
+                            }
+                        }
+
+                ));
             }
         }
     }
