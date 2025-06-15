@@ -18,15 +18,10 @@
  *     along with Ayame.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.ayamemc.ayame.util;
+package org.ayamemc.ayame.client.api;
 
-import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
-import software.bernie.geckolib.loading.math.MolangQueries;
-
-import java.util.function.ToDoubleFunction;
-
-public class MolangUtil {
-    public static <T> void setActorVariable(String name, ToDoubleFunction<MolangQueries.Actor<T>> value) {
-        MolangQueriesAccessor.invokeGetVariableFor(name).set(() -> value.applyAsDouble((MolangQueries.Actor) MolangQueriesAccessor.invokeGetActor()));
+public interface VariableMixinInterface {
+    default double ayame$getInGecko() {
+        throw new AssertionError();
     }
 }

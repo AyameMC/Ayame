@@ -22,10 +22,11 @@ package org.ayamemc.ayame.client.script;
 
 import org.ayamemc.ayame.mixin.accessor.MathParserAccessor;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
+import org.ayamemc.ayame.model.molang.MochaUtil;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.annotations.JSStaticFunction;
 import software.bernie.geckolib.loading.math.MathParser;
-import software.bernie.geckolib.loading.math.value.Variable;
+import team.unnamed.mocha.runtime.value.Value;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class JsMolang {
 
     @JSStaticFunction
     public static String[] listFunctions() {
-        Set<String> functions = MathParserAccessor.getFunctionFactories().keySet();
+        Set<String> functions = MochaPlayerMolangManager.get().scope().entries().keySet();
         return functions.toArray(new String[0]);
     }
 
@@ -47,7 +48,7 @@ public class JsMolang {
 
     @JSStaticFunction
     public static Object exec(String molangCode) {
-        return MochaPlayerMolangManager.execMolang(molangCode);
+        return MochaPlayerMolangManager.get().eval(molangCode);
     }
 
     @JSStaticFunction
@@ -56,50 +57,20 @@ public class JsMolang {
     }
 
     @JSStaticFunction
-    public static void registerVariable(String name, double value) {
-        MathParser.registerVariable(new Variable(name, () -> value));
-    }
+    public static void setVariable(String name, double value) {
+        var mocha = MochaPlayerMolangManager.get();
+        MochaUtil.setNestedVariable(mocha.scope(), name, Value.of(value));
 
-
-    @JSStaticFunction
-    public static void setVariable(String name,double value) {
-        MathParser.setVariable(name, () -> value);
     }
 
     @JSStaticFunction
     public static void registerFunction(String name, Function compute) {
-        int paramCount = ((Number) compute.get("length", compute)).intValue();
-        LOGGER.info("Registering Molang Function '{}'", name);
-//        MathParser.registerFunction(
-//                name,
-//                values -> new MathFunction(values) {
-//                    @Override
-//                    public String getName() {
-//                        return name;
-//                    }
-//
-//                    @Override
-//                    public double compute() {
-//                        Object[] jsArgs = Arrays.stream(values)
-//                                .map(MathValue::get)
-//                                .toArray();
-//                        return ((Number) Objects.requireNonNull(JavaScriptHelper.executeCallback(compute, jsArgs))).doubleValue();
-//                    }
-//
-//                    @Override
-//                    public int getMinArgs() {
-//                        return paramCount;
-//                    }
-//
-//                    @Override
-//                    public MathValue[] getArgs() {
-//                        return values;
-//                    }
-//                }
-//        );
+        LOGGER.info("Registering dynamic Molang Function '{}'", name);
+
 
         userDefinedFunctions.add(name);
     }
+
 
     @SuppressWarnings("RedundantOperationOnEmptyContainer")
     @JSStaticFunction

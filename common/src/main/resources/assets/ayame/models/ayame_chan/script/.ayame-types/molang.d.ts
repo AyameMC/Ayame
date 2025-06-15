@@ -33,17 +33,7 @@ declare namespace Molang {
     ): void;
 
     /**
-     * 注册一个新的 Molang 变量。
-     * @param name 变量名称
-     * @param value 变量的值
-     */
-    function registerVariable(
-        name: string,
-        value: number
-    ): void;
-
-    /**
-     * 设置一个 Molang 变量，如果变量已存在，则覆盖其值。
+     * 设置一个 Molang 变量，如果变量已存在，则覆盖其值，如果不存在，则自动创建。
      * @param name 变量名称
      * @param value 变量的值
      */

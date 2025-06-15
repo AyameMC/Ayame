@@ -38,10 +38,7 @@ import org.ayamemc.ayame.client.command.AyameCommandManager;
 import org.ayamemc.ayame.client.gui.screen.AnimationRouletteScreen;
 import org.ayamemc.ayame.client.gui.screen.AyameScreen;
 import org.ayamemc.ayame.client.gui.screen.ModelSelectMenuScreen;
-import org.ayamemc.ayame.client.script.JavaScriptHelper;
-import org.ayamemc.ayame.client.script.JsEntity;
-import org.ayamemc.ayame.client.script.JsPlayer;
-import org.ayamemc.ayame.client.script.JsWorld;
+import org.ayamemc.ayame.client.script.*;
 import org.ayamemc.ayame.client.script.event.JsAttackEntityEvent;
 import org.ayamemc.ayame.client.script.event.JsPlayerTickEvent;
 import org.ayamemc.ayame.client.yttribume.Yttribumes;
@@ -121,7 +118,7 @@ public class ClientEventHandler {
     }
 
     public static void johnWorld() {
-        //    JavaScriptLoader.runJs();
+            JavaScriptLoader.runJs();
         // 执行玩家进入世界的任务
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.setCanExecute(true);
         TaskManager.TaskManagerImpls.CLIENT_IN_WORLD_TASKS.executeAll();

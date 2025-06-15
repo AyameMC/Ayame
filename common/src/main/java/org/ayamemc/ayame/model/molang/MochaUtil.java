@@ -21,12 +21,12 @@
 package org.ayamemc.ayame.model.molang;
 
 import com.google.common.collect.Sets;
-import org.ayamemc.ayame.client.renderer.AyamePlayerRender;
+import org.ayamemc.ayame.client.api.VariableMixinInterface;
 import org.ayamemc.ayame.mixin.accessor.MolangQueriesAccessor;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.loading.math.MolangQueries;
 import software.bernie.geckolib.loading.math.value.Variable;
 import team.unnamed.mocha.MochaEngine;
-import team.unnamed.mocha.runtime.MochaFunction;
 import team.unnamed.mocha.runtime.value.MutableObjectBinding;
 import team.unnamed.mocha.runtime.value.ObjectValue;
 import team.unnamed.mocha.runtime.value.Value;
@@ -119,53 +119,43 @@ public class MochaUtil {
     }
 
     public static void createMolangVars(MochaEngine<?> mocha) {
-         Map<String, Variable> geckoVariablesMap = MolangQueriesAccessor.getVariables();
-         Map<String, Variable> filteredVariablesMap = filterMolangVariables(geckoVariablesMap, AYAME_MOLANG_ACTOR_VARIABLES);
+        Map<String, Variable> geckoVariablesMap = MolangQueriesAccessor.getVariables();
+        Map<String, Variable> filteredVariablesMap = filterMolangVariables(geckoVariablesMap, AYAME_MOLANG_ACTOR_VARIABLES);
 
         for (Map.Entry<String, Variable> entry : filteredVariablesMap.entrySet()) {
             final String fullVarName = entry.getKey();
-            final String[] parts = fullVarName.split("\\.");
+            final Variable variable = entry.getValue();
+            final VariableMixinInterface mixinedVariable = (VariableMixinInterface) (Object) variable;
 
-            if (parts.length == 1) {
-                // 直接设为顶层变量
-                mocha.scope().set(parts[0], Value.of(
-                        (MochaFunction) () -> AyamePlayerRender.execMolangInGecko(fullVarName)
-                ));
-                continue;
-            }
-
-            // 多级结构时，逐层构建对象
-            ObjectValue currentScope = mocha.scope();
-            for (int i = 0; i < parts.length - 1; i++) {
-                String key = parts[i];
-
-                // 尝试取现有对象，否则创建新对象
-                Value childValue = currentScope.get(key);
-                ObjectValue childScope;
-                if (childValue instanceof ObjectValue obj) {
-                    childScope = obj;
-                } else {
-                    childScope = new MutableObjectBinding();
-                    currentScope.set(key, childScope);
-                }
-
-                currentScope = childScope;
-            }
-
-            // 设置最终属性
-            if (currentScope instanceof MutableObjectBinding mut) {
-                var a =  AyamePlayerRender.execMolangInGecko(fullVarName);
-                // TODO 修复 gekco 没有与mocha和谐共处的问题
-                mut.set(parts[parts.length - 1], Value.of(
-                        new MochaFunction() {
-                            @Override
-                            public double evaluate() {
-                                return a;
-                            }
-                        }
-
-                ));
-            }
+            setNestedVariable(mocha.scope(), fullVarName, Value.of(mixinedVariable.ayame$getInGecko()));
         }
     }
+
+
+    public static void setNestedVariable(ObjectValue scope, String fullVarName, Value value) {
+        String[] parts = fullVarName.split("\\.");
+        if (parts.length == 0) return;
+
+        ObjectValue current = scope;
+        for (int i = 0; i < parts.length - 1; i++) {
+            String key = parts[i];
+            Value child = current.get(key);
+            ObjectValue next;
+            if (child instanceof ObjectValue obj) {
+                next = obj;
+            } else {
+                next = new MutableObjectBinding();
+                current.set(key, next);
+            }
+            current = next;
+        }
+
+        if (current instanceof MutableObjectBinding mut) {
+            mut.set(parts[parts.length - 1], value);
+        }
+    }
+
+
+
+
 }

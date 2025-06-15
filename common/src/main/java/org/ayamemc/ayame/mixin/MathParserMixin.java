@@ -20,6 +20,7 @@
 
 package org.ayamemc.ayame.mixin;
 
+import org.ayamemc.ayame.model.molang.LazyMathValue;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,7 +60,7 @@ public abstract class MathParserMixin {
     private static void compileMolangPost(String expression, CallbackInfoReturnable<MathValue> cir) {
         var returnValue = cir.getReturnValue();
         if (returnValue instanceof MathValue && !(returnValue instanceof CompoundValue) && MochaPlayerMolangManager.isPresent()) {
-            cir.setReturnValue(() -> MochaPlayerMolangManager.execMolang(expression));
+            cir.setReturnValue(new LazyMathValue(expression));
         }
     }
 

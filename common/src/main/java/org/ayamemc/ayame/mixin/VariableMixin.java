@@ -23,17 +23,30 @@ package org.ayamemc.ayame.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import org.ayamemc.ayame.client.api.VariableMixinInterface;
 import org.ayamemc.ayame.model.molang.MochaPlayerMolangManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import software.bernie.geckolib.GeckoLibConstants;
 import software.bernie.geckolib.loading.math.value.Variable;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 
+import static org.ayamemc.ayame.Ayame.LOGGER;
+
 @Mixin(value = Variable.class, remap = false)
-public abstract class VariableMixin {
+public abstract class VariableMixin implements VariableMixinInterface {
+    @Override
+    public double ayame$getInGecko() {
+        try {
+            return this.value.get().getAsDouble();
+        } catch (Exception ex) {
+//            GeckoLibConstants.LOGGER.error("Attempted to use Molang variable for incompatible animatable type ({}). An animation json needs to be fixed", this.name, ex.getMessage());
+            return 0;
+        }
+    }
 
     @Shadow
     public abstract AtomicReference<DoubleSupplier> value();
@@ -41,16 +54,22 @@ public abstract class VariableMixin {
     @Shadow
     public abstract String name();
 
-    @Shadow @Final private String name;
+    @Shadow
+    @Final
+    private String name;
+
+    @Shadow
+    @Final
+    private AtomicReference<DoubleSupplier> value;
+
+    @Shadow
+    public abstract double get();
 
     @WrapMethod(method = "get")
     private double get(Operation<Double> original) {
         if (MochaPlayerMolangManager.isPresent()) {
-            var r = MochaPlayerMolangManager.execMolang(this.name);
-            return
-                   r;
-        }
-        else {
+            return MochaPlayerMolangManager.execMolang(this.name);
+        } else {
             return original.call();
         }
     }

@@ -5,6 +5,9 @@
       "software/bernie/geckolib/animatable/GeoEntity",
       "org/ayamemc/ayame/client/api/PlayerMixinInterface",
       "org/ayamemc/ayame/client/api/IYttribumable"
+    ],
+    "software/bernie/geckolib/loading/math/value/Variable": [
+        "org/ayamemc/ayame/client/api/VariableMixinInterface"
     ]
   }
 }

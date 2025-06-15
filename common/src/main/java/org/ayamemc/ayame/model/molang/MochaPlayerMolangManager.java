@@ -44,13 +44,7 @@ public class MochaPlayerMolangManager {
 
 
     public static double execMolang(String molangCode){
-        MochaFunction result;
         MochaEngine<?> mocha = get();
-        try {
-            result = mocha.compile(molangCode);
-        } catch (IllegalStateException e) {
-            result = mocha.prepareEval(molangCode);
-        }
-        return result.evaluate();
+        return mocha.eval(molangCode);
     }
 }
